@@ -1,0 +1,182 @@
+.feidou {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.feidoubanner {
+	width: 100%;
+	margin-top: 40px;
+}
+
+.feidoubanner img {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.part {
+	width: 100%;
+	margin-top: 60px;
+	text-align: center;
+}
+
+.part h2 {
+	width: 100%;
+	height: 110px;
+	text-align: center;
+	line-height: 110px;
+	font-size: 28px;
+	color: #fff;
+	background: url(../images/feidou/icn_bg_2.png) no-repeat center center transparent;
+}
+
+.part p {
+	width: 100%;
+	line-height: 26px;
+	text-align: center;
+	color: #333;
+}
+
+.feidou-100 {
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	height: 26px;
+	line-height: 26px;
+	color: #17a0f1;
+}
+
+.part1-img {
+	margin-top: 10px;
+	margin-bottom: 20px;
+	display: inline-block;
+}
+
+.part2-h2 {
+	background: url(../images/feidou/icn_bg2.png) no-repeat center center transparent;
+}
+
+.typeone {
+	display: inline-block;
+	height: 30px;
+	padding: 0 20px;
+	background: #7ecbf7;
+	color: #fff;
+	font-size: 18px;
+	line-height: 30px;
+	border-radius: 3px;
+	margin-top: 40px;
+}
+
+.typeoneimg {
+	margin-top: 20px;
+}
+
+.ewm {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.part2-img {
+	margin-top: 40px;
+	margin-bottom: 25px;
+}
+
+.row h3 {
+	width: 100%;
+	margin-top: 25px;
+	height: 40px;
+	line-height: 40px;
+	color: #119ef0;
+	text-align: center;
+	font-size: 26px;
+}
+
+.secordtype {
+	margin-top: 30px;
+	margin-bottom: 40px;
+}
+
+.moreguize {
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+	line-height: 26px;
+	margin-bottom: 20px;
+	text-decoration: underline;
+	display: inline-block;
+	color: #fbcf67;
+	cursor: pointer;
+}
+
+.feibotongs {
+	width: 100%;
+	text-align: center;
+	margin-bottom: 75px;
+	color: #969696;
+	display: inline-block;
+	font-size: 14px;
+}
+
+.feidoumask {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(0,0,0,0.5);
+	display: none;
+	z-index: 9999999;
+}
+
+.feidou-content {
+	width: 1000px;
+	height: 640px;
+	background: #fff;
+	position: absolute;
+	left: 50%;
+	top: 50%; 
+	margin: -320px 0 0 -500px;
+}
+
+.header-feidou {
+	width: 100%;
+	height: 90px;
+	background: #fabd02;
+	display: inline-block;
+}
+
+.header-feidou h2{
+	width: 910px;
+	height: 90px;
+	line-height: 90px;
+	color: #fff;
+	font-size: 32px;
+	text-align: center;
+	float: left;
+}
+.header-feidou img {
+	float: left;
+	cursor: pointer;
+}
+
+.feidou-cont {
+	width: 880px;
+	padding: 0 60px;
+	padding-top: 40px;
+}
+
+.feidou-cont h3 {
+	font-size: 16px;
+	font-weight: bold;
+	height: 35px;
+	line-height: 35px;
+	color: #636363;
+	margin-top: 5px;
+}
+
+.feidou-cont p {
+	font-size: 16px;
+	line-height: 26px;
+	color: #636363;
+}

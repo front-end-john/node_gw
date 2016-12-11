@@ -1,0 +1,91 @@
+.noScroll {
+	overflow:scroll;
+	overflow-y:hidden;
+}
+
+.header {
+	width: 100%;
+	height: 3.5rem;
+	background: #f8f8f8;
+	position: fixed;
+	z-index: 999;
+	border-bottom: 1px solid #f9be00;
+}
+
+.header-cont {
+	width: 90%;
+	padding: 0 5%;
+}
+
+.user-icn {
+	height: 2rem;
+	float: left;
+	margin-top: 0.75rem;
+}
+
+.header-cont h2 {
+	float: left;
+	line-height: 3.5rem;
+	text-align: center;
+	width: 77%;
+	color: #323232;
+	font-size: 1.2rem;
+}
+
+.nav {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	padding-top: 3.5rem;
+	z-index: 99;
+	left: -100%;
+	transition: all .5s;
+	-moz-transition: all .5s;
+	-webkit-transition: all .5s;
+	-o-transition: all .5s;
+}
+
+.show {
+	left: 0;
+}
+
+.nav a {
+	float: left;
+	width: 60%;
+	height: 100%;
+}
+
+.left-nav {
+	width: 100%;
+	height: 100%;
+	background: #272727;
+}
+
+.nav-ul {
+	width: 100%;
+}
+
+.nav-ul li {
+	text-align: center;
+	width: 86%;
+	height: 3rem;
+	padding: 1rem 7%;
+	border-bottom: 1px solid #1a1a1a;
+}
+
+.nav-ul li img {
+	float: left;
+	height: 1.5rem;
+	margin-top: 0.75rem;
+}
+
+.nav-ul li h3 {
+	display: inline-block;
+	width: 75%;
+	line-height: 3rem;
+	color: #f9be00;
+	text-align: left;
+	font-size: 1.15rem;
+	font-weight: bold;
+}
+

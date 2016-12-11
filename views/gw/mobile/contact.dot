@@ -1,0 +1,80 @@
+---
+layout: ../../layout/mobile.dot
+title: 联系我们
+---
+
+[[##headSection:
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/gw/mobile/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/gw/mobile/css/base.css?v=20160608">
+    <link rel="stylesheet" type="text/css" href="/gw/mobile/css/contact.css?v=2016061203">
+    <script type="text/javascript" src="/gw/mobile/js/baiducount.js"></script>
+#]]
+
+[[##bodySection:
+    <div class="header">
+        <div class="header-cont">
+            <img id="show-nav" data-open='0' class="user-icn" src="/gw/mobile/images/header/icn_user.png" alt="菜单"/>
+            <h2>联系我们</h2>
+        </div>
+    </div>
+    <div class="nav">
+        <a><div class="left-nav">
+            <ul class="nav-ul">
+                <li>
+                    <img src="/gw/mobile/images/header/icn_sy.png" alt="首页"/>
+                    <h3>首页</h3>
+                </li>
+                <li>
+                    <img src="/gw/mobile/images/header/icn_comment.png" alt="客户评价"/>
+                    <h3>客户评价</h3>
+                </li>
+                <li>
+                    <img src="/gw/mobile/images/header/icn_history.png" alt="发展历程"/>
+                    <h3>发展历程</h3>
+                </li>
+                <li>
+                    <img src="/gw/mobile/images/header/icn_contact.png" alt="联系我们"/>
+                    <h3>联系我们</h3>
+                </li>
+            </ul>
+        </div></a>
+    </div>
+    <div class="wrap">
+       <div class="contact-banner">
+            <img src="/gw/mobile/images/contact/Banner04.png" />
+       </div>
+       <div class="contact-list">
+            <ul class="contact-ul">
+                <li>
+                    <h3>商务合作</h3>
+                    <p>邮箱：business@feibotong.com</p>
+                </li>
+                <li>
+                    <h3>媒体联络</h3>
+                    <p>邮箱：longxiaolan@feibotong.com</p>
+                </li>
+                <li>
+                    <h3>加入我们</h3>
+                    <p>邮箱：hr@feibotong.com</p>
+                </li>
+                <li>
+                    <h3>联系我们</h3>
+                    <p>地址：广东省深圳市宝安区西乡泰华梧桐岛5B栋</p>
+                    <p>电话：<a href="tel:400-807-9936">400-807-9936</a>&nbsp;&nbsp;&nbsp;&nbsp;电话：<a href="tel:0755-23029965">0755-23029965</a></p>
+                </li>
+            </ul>
+       </div>
+    </div>
+#]]
+
+[[##scriptSection:
+<script type="text/javascript" src="/gw/mobile/js/zepto.js"></script>
+<script type="text/javascript" src="/gw/mobile/js/cookies.js"></script>
+<script type="text/javascript" src="/gw/mobile/js/util.js"></script>
+<script type="text/javascript" src="/gw/mobile/js/frozen.js"></script>
+<script src="/gw/mobile/js/header.js"></script>
+<script src="/gw/mobile/js/zepto.picLazyLoad.min.js"></script>
+<script type="text/javascript">
+</script>
+#]]

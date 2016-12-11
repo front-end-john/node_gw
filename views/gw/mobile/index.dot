@@ -1,0 +1,185 @@
+---
+layout: ../../layout/mobile.dot
+title: 飞泊通官网移动版
+---
+
+[[##headSection:
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" id="viewport" />
+<link rel="stylesheet" type="text/css" href="/gw/mobile/css/base.css">
+<link rel="stylesheet" type="text/css" href="/gw/mobile/css/header.css?v=20160908010">
+<link rel="stylesheet" type="text/css" href="/gw/mobile/css/index.css?v=201609091111111">
+#]]
+
+[[##bodySection:
+<div class="header">
+        <div class="header-cont">
+            <img id="show-nav" data-open='0' class="user-icn" src="/gw/mobile/images/header/icn_user.png" alt="菜单"/>
+            <h2>飞泊通</h2>
+        </div>
+    </div>
+<div class="nav">
+    <a><div class="left-nav">
+        <ul class="nav-ul">
+            <li>
+                <img src="/gw/mobile/images/header/icn_sy.png" alt="首页"/>
+                <h3>首页</h3>
+            </li>
+            <li>
+                <img src="/gw/mobile/images/header/icn_comment.png" alt="客户评价"/>
+                <h3>客户评价</h3>
+            </li>
+            <li>
+                <img src="/gw/mobile/images/header/icn_history.png" alt="发展历程"/>
+                <h3>发展历程</h3>
+            </li>
+            <li>
+                <img src="/gw/mobile/images/header/icn_contact.png" alt="联系我们"/>
+                <h3>联系我们</h3>
+            </li>
+        </ul>
+    </div></a>
+</div>
+
+
+<div id="container">
+  <div class="page page-1">
+    <div class="partheader" style="border: none;">
+        
+    </div>
+    <div class="part part1" style="margin-top: -1px;">
+      <img class="bg" src="/gw/mobile/images/index/icn_part1.jpg" />
+      <img class="part1-title" src="/gw/mobile/images/index/icn_part1_title.png" />
+      <div class="part-bottom">
+        <p>登录成功即送88飞豆，可抵现金</p>
+        <a href="http://m.feibotong.com/pages/app_downloads" class="download-fbt">
+          <img src="/gw/mobile/images/index/icn_download.png" />
+          <p>免费下载飞泊通</p>
+        </a>
+        <a href="/guide" class="detail-introduce">详细服务介绍</a>
+        <img class="to-up" src="/gw/mobile/images/index/icn_toup.png" />
+      </div>
+    </div>
+  </div>
+  <div class="page page-2">
+    <div class="partheader" style="border: none;">
+        
+    </div>
+    <div class="part part2">
+      <div class="part2-top">
+        <h2>最便捷体验</h2>
+        <p>告别机场停车难</p>
+      </div>
+      <img class="park2-img" src="/gw/mobile/images/index/icn_part2_1.jpg" />
+      <div class="part-bottom">
+        <p>登录成功即送88飞豆，可抵现金</p>
+        <a href="http://m.feibotong.com/pages/app_downloads" class="download-fbt">
+          <img src="/gw/mobile/images/index/icn_download.png" />
+          <p>免费下载飞泊通</p>
+        </a>
+        <a href="/guide" class="detail-introduce">详细服务介绍</a>
+        <img class="to-up" src="/gw/mobile/images/index/icn_gray_up.png" />
+      </div>
+    </div>
+  </div>
+  <div class="page page-3">
+    <div class="partheader">
+        
+    </div>
+    <div class="part part2 part3">
+      <div class="part2-top">
+        <h2>多重保障保证您的爱车安全</h2>
+        <p>您安心飞行 我们照料爱车</p>
+      </div>
+      <img class="park3-img" src="/gw/mobile/images/index/icn_part3_1.jpg" />
+      <div class="part-bottom">
+        <p>登录成功即送88飞豆，可抵现金</p>
+        <a href="http://m.feibotong.com/pages/app_downloads" class="download-fbt">
+          <img src="/gw/mobile/images/index/icn_download.png" />
+          <p>免费下载飞泊通</p>
+        </a>
+        <a href="/guide" class="detail-introduce">详细服务介绍</a>
+        <img class="to-up" src="/gw/mobile/images/index/icn_gray_up.png" />
+      </div>
+    </div>
+  </div>
+  <div class="page page-4">
+    <div class="partheader">
+        
+    </div>
+    <div class="part part2 part4">
+      <div class="part2-top">
+        <h2>最优惠机场停车价格</h2>
+        <p>比机场停车场便宜 比打车更实惠</p>
+      </div>
+      <img class="park4-img" src="/gw/mobile/images/index/icn_part4_1.jpg" />
+      <div class="part-bottom">
+        <p>登录成功即送88飞豆，可抵现金</p>
+        <a href="http://m.feibotong.com/pages/app_downloads" class="download-fbt">
+          <img src="/gw/mobile/images/index/icn_download.png" />
+          <p>免费下载飞泊通</p>
+        </a>
+        <a href="/guide" class="detail-introduce">详细服务介绍</a>
+        <img class="to-up" src="/gw/mobile/images/index/icn_gray_up.png" />
+      </div>
+    </div>
+  </div>
+  <div class="page page-5">
+    <div class="partheader">
+        
+    </div>
+    <div class="part part2 part5">
+      <div class="part5-top">
+        <p>飞泊通上线至今</p>
+        <h2>已有<em id="usercount"></em>位用户</h2>
+        <p>关注使用了飞泊通机场停车服务</p>
+      </div>
+      <div class="part5-bottom">
+        <p>登录成功即送88飞豆，可抵现金</p>
+        <a href="http://m.feibotong.com/pages/app_downloads" class="download-fbt">
+          <img src="/gw/mobile/images/index/icn_download.png" />
+          <p>免费下载飞泊通</p>
+        </a>
+        <a href="/guide" class="detail-introduce">详细服务介绍</a>
+      </div>
+      <div class="part5-top">
+        <p>如有疑问可拨打24小时客服热线</p>
+        <a href="tel:400-807-9936">400-807-9936</a>
+        <p>或关注微信公众号“飞泊通”在线咨询</p>
+      </div>
+      <div class="part-bottom-last">
+        <p>Copyright©2016深圳市天行家科技有限公司 </p>
+        <p>粤ICP备15105149号</p>
+      </div>
+    </div>
+  </div>
+</div>
+#]]
+
+[[##scriptSection:
+<script src="/gw/mobile/js/jquery.js"></script>
+<script type="text/javascript" src="/gw/mobile/js/slip.min.js"></script>
+<script type="text/javascript" src="/gw/mobile/js/baiducount.js"></script>
+<script src="/gw/mobile/js/header.js"></script>
+<script>
+    
+$(function(){
+  var container = document.getElementById('container');
+  var pages = document.querySelectorAll('.page');
+  var slip = Slip(container, 'y').webapp(pages);
+  //alert($(window).height());
+
+  $.ajax({
+    method: "POST",
+    url: "http://m.feibotong.com/api3/system/usercount",
+    dataType: "jsonp",
+    success:function(data){
+      if(data.code == 0){
+        $('#usercount').text(data.record.count);
+      }
+    }
+  });
+})
+</script>
+<!--代码部分end-->
+#]]

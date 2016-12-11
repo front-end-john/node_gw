@@ -1,0 +1,429 @@
+---
+layout: ../../layout/default.dot
+title: 送你起航，等你回家
+---
+
+[[##headSection:
+	<link rel="stylesheet" type="text/css" href="/gw/pc/css/base.css">
+	<link rel="stylesheet" type="text/css" href="/gw/pc/css/header.css">
+	<link rel="stylesheet" type="text/css" href="/gw/pc/css/footer.css">
+	<link rel="stylesheet" type="text/css" href="/gw/pc/css/index.css">
+	<script type="text/javascript" src="/gw/pc/js/baiducount.js"></script>
+	<script type="text/javascript" src="/gw/pc/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/gw/pc/js/util.js"></script>
+	<script type="text/javascript" src="/gw/pc/js/index.js"></script>
+ 	<meta name="keywords" content="机场停车 机场代泊 机场大巴首都机场停车 浦东机场停车 宝安机场停车 白云机场停车" />
+	<meta name="description" content="一键下单即可停车，200万车辆保险，全职专业司机接送，三分钟内完成交接。首都国际机场，上海虹桥机场，上海浦东机场，广州白云机场，深圳宝安机场均可提供服务。" />
+#]]
+[[##bodySection:
+	<div class="wrap">
+		<div class="header">
+			<div class="header-content">
+				<a href="index.dot"><img class="logo" src="/gw/pc/images/index/logo.png" /></a>
+				<ul class="top-ul">
+					<li class="first">
+						<a href="/contact">联系我们</a>
+					</li>
+					<li>
+						<a href="/joinus">加入我们</a>
+					</li>
+					<li class="aboutus-li">
+						<a>关于我们</a>
+						<div class="aboutus-choice">
+							<a href="/aboutus?type=history">发展历程</a>
+							<a href="/aboutus?type=coreTeam">核心团队</a>
+							<a href="/aboutus?type=serviceAgreement">服务协议</a>
+						</div>
+					</li>
+					<li>
+						<a href="/evaluate">客户评价</a>
+					</li>
+					<li class="on">
+						<a href="/index">首页</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="banner">
+			<ul class="partner-banner js-partner-banner">
+				<li class="on">
+					<a href="/feidou"><img alt="飞泊通飞豆页面" src="/gw/pc/images/index/icn_banner_feidou.jpg"/></a>
+				</li>
+				<li >
+					<img alt="飞泊通官网" src="/gw/pc/images/index/Banner.jpg"/>
+				</li>
+				<!-- <li>
+					<a href="http://www.feibotong.com/baidu/index.html" target="_blank"><img alt="飞泊通领券" src="images/index/banner1.jpg"/>
+					</a>
+				</li> -->
+				<li>
+					<a href="https://shop144013827.taobao.com/?spm=a230r.7195193.1997079397.1.iTKmDS" target="_blank"><img alt="飞泊通淘宝店" src="/gw/pc/images/index/icn_taobao_banner.jpg"/>
+					</a>
+				</li>
+
+			</ul>
+			<div class="prev js-prev">
+				<img  src="/gw/pc/images/index/icn_to-left.png"/>
+			</div>
+			<div class="next js-next">
+				<img class="" src="/gw/pc/images/index/icn_to-right.png"/>
+			</div>
+
+			<div class="identification js-identification">
+				<span class="on"></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+		<div class="user-number-block">
+			<div class="user-number-content">
+				<div class="user-num">
+					<img src="/gw/pc/images/index/1.png"/>
+					<img src="/gw/pc/images/index/1.png"/>
+					<img src="/gw/pc/images/index/2.png"/>
+					<img src="/gw/pc/images/index/8.png"/>
+					<img src="/gw/pc/images/index/7.png"/>
+					<img src="/gw/pc/images/index/3.png"/>
+				</div>
+				<p class="gz-already">已关注使用了飞泊通机场停车服务</p>
+				<p class="sm-getfbt">请扫描二维码，进入飞泊通的世界</p>
+				<img class="ewm" src="/gw/pc/images/index/image01.png"/>
+			</div>
+		</div>
+		<div class="fbt-cj">
+			<div class="ftb-cj-content">
+				<span class="title-block">
+					<img src="/gw/pc/images/index/left.png" />
+					<p>开始飞泊通自驾乘机之旅</p>
+					<img class="right" src="/gw/pc/images/index/right.png" />
+				</span>
+				<p class="yzfw">优质服务体验&nbsp;&nbsp;机场停车方便快捷</p>
+				<div class="park-step">
+					<ul id="parkul" data-now="0">
+						<li class="on">
+							<img class="left-img" src="/gw/pc/images/index/icn_part_01.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/01.png" />
+									<em>点击预约泊车&nbsp;&nbsp;一键下单完成泊车</em>
+								</p>
+								<span>关注飞泊通微信公众号或下载APP后，点击“预约泊车”，即可一键预约服务。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_02.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/02.png" />
+									<em>填写预约接车时间及相应信息</em>
+								</p>
+								<span>填写您的个人及车辆信息、预约接车时间和接车地点，接车司机会提前在接车地点等候您的到来。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_03.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/03.png" />
+									<em>核对密码&nbsp;&nbsp;完成接车</em>
+								</p>
+								<span>您到达机场接车地点后，接车司机将主动与您确认接车密码，密码确认吻合，您就可以把爱车及钥匙放心交付给司机，进入航站楼赶飞机啦。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_04.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/04.png" />
+									<em>完成泊车&nbsp;&nbsp;可查看停车照片</em>
+								</p>
+								<span>接车成功后，司机会将您的爱车停至飞泊通专属地下停车场，行驶过程中您可在飞泊通微信或APP中查看行驶轨迹，停好车后，司机将拍摄里程表及停车照片上传，钥匙统一上交公司保管。您可以在飞泊通微信或APP中查看停车照片。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_05.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/05.png" />
+									<em>提前输入返程航班信息</em>
+								</p>
+								<span>您可以提前在飞泊通微信号或APP中输入返程航班信息，飞泊通将在航班落地前15分钟自动分配送车司机。您也可以在落地后直接点击“立即取车”，飞泊通立刻分配送车司机。航班信息由中国民航出行第一品牌航旅纵横提供。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_06.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/06.png" />
+									<em>司机快速送车</em>
+								</p>
+								<span>在您航班落地后，您就已经收到送车司机的信息和送车密码了，送车司机将主动与您保持联系，确认送车时间地点，直到与您汇合。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_07.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/07.png" />
+									<em>核对密码&nbsp;&nbsp;爱车交还</em>
+								</p>
+								<span>司机将车送到后，您可以检查车辆，核对送车密码成功后，您就可以取回爱车啦。</span>
+							</div>
+						</li>
+						<li>
+							<img class="left-img" src="/gw/pc/images/index/icn_part_08.png"/>
+							<div class="right-block">
+								<p class="park-car">
+									<img src="/gw/pc/images/index/08.png" />
+									<em>支付分享</em>
+								</p>
+								<span>等您开车安全到家后，可以随时在手机上完成支付。支付后进行分享，还可以获得飞泊通免费停车券哦！</span>
+							</div>
+						</li>
+					</ul>
+					<div class="park-focue">
+						<span class="on"></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="experience">
+			<div class="experience-block">
+				<span class="title-block title-notop">
+					<img src="/gw/pc/images/index/left.png" />
+					<p>最便捷体验</p>
+					<img class="right" src="/gw/pc/images/index/right.png" />
+				</span>
+				<p class="yzfw">告别机场停车难</p>
+				<ul class="experience-ul">
+					<li>
+						<img src="/gw/pc/images/index/icn_yjxd.png" />
+						<p>提前1小时预约，系统自动安排司机接车</p>
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_jccfcjc.png" />
+						<p>机场出发层一分钟交接车，方便高效</p>
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_hcwxzdd.png" />
+						<p>只需提前输入返程航班，落地后即可取车，无惧晚点延误。航班信息由中国民航出行第一品牌航旅纵横提供</p>
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_kdxchjy.png" />
+						<p>可在线预约代洗车、加油服务，省时省力</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="guarantee">
+			<div class="guarantee-content">
+				<span class="title-block title-notop">
+					<img src="/gw/pc/images/index/left.png" />
+					<p>多重保障保证您的爱车安全</p>
+					<img class="right" src="/gw/pc/images/index/right.png" />
+				</span>
+				<p class="yzfw">您安心飞行&nbsp;&nbsp;我们照料爱车</p>
+				<div class="guaran-block">
+					<div class="guaran-block-left">
+						<img class="picc" src="/gw/pc/images/index/icn_picc.png" />
+						<div class="bottm-picc">
+							<img src="/gw/pc/images/index/icn_zydbsi.png"/>
+							<p class="title">专业代泊司机</p>
+							<p class="content">高素质全职司机团队，经验丰富，无事故史，40小时以上培训考核</p>
+						</div>
+					</div>
+					<ul class="guarn-right-ul">
+						<li>
+							<img src="/gw/pc/images/index/icn_znddxt.png" />
+							<p class="title">智能调度系统</p>
+							<p class="content">强大完善的后台调度系统，保证每个订单都能及时分配泊车司机，避免差错</p>
+						</li>
+						<li>
+							<img src="/gw/pc/images/index/icn_dtanqcmm.png" />
+							<p class="title">动态安全接车密码</p>
+							<p class="content">为每个订单生成唯一的接送车密码，确保交接车安全</p>
+						</li>
+						<li>
+							<img src="/gw/pc/images/index/icn_kckxsgj.png" />
+							<p class="title">可查看行驶轨迹</p>
+							<p class="content">用户可在APP或微信公众号看到司机的泊车行车轨迹，安全可靠</p>
+						</li>
+						<li>
+							<img src="/gw/pc/images/index/icn_kcktczp.png" />
+							<p class="title">可查看停车照片</p>
+							<p class="content">爱车停妥后，泊车司机将及时上传停放照片，用户可在APP或微信公众号中查看</p>
+						</li>
+						<li>
+							<img src="/gw/pc/images/index/icn_kefurex.png" />
+							<p class="title">24小时客服热线</p>
+							<p class="content">专业客服7*24小时在线，随时解决用户的各种疑惑和问题，免除后顾之忧</p>
+						</li>
+						<li>
+							<img src="/gw/pc/images/index/icn_shineizhuanshutch.png" />
+							<p class="title">室内专属停车场</p>
+							<p class="content">成功接车后，车辆将停放在距离机场7公里内的飞泊通专属地下停车场，24小时视频监控，保安巡视</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="price">
+			<div class="price-content">
+				<span class="title-block title-notop">
+					<img src="/gw/pc/images/index/left.png" />
+					<p>最优惠机场停车价格</p>
+					<img class="right" src="/gw/pc/images/index/right.png" />
+				</span>
+				<p class="yzfw">比机场停车更便宜&nbsp;&nbsp;比打车更实惠</p>
+				<p class="first-hour">首12小时收费18元，超出12小时部分，按1.5元/小时计算</p>
+				<img class="price-img-c" src="/gw/pc/images/index/icn_zyhdjctcjg.jpg" />
+			</div>
+		</div>
+		<div class="comment">
+			<div class="comment-content">
+				<span class="title-block title-notop">
+					<img src="/gw/pc/images/index/left.png" />
+					<p>使用过的朋友们这样说</p>
+					<img class="right" src="/gw/pc/images/index/right.png" />
+				</span>
+				<p class="yzfw">好评率99.6%</p>
+				<div class="comment-detail-block">
+					<ul class="comment-data">
+						<li>
+							<div class="com-div">
+								<img class="avatar" src="/gw/pc/images/index/icn_huang.png"/>
+								<h2>陈先生&nbsp;&nbsp;北京</h2>
+								<img class="line" src="/gw/pc/images/index/icn_line.png" />
+								<p>非常好！服务及时到位，安全可靠便利，价格低廉实惠。半夜下的单子，早起六点半交车次日凌晨两点收车，小伙子们非常辛苦，实在是感谢他们。比较T3航楼每日80元的价格，本次收费令人感动。这是第三次使用飞泊通，前两次是通过协程安排的，这次直接订也极方便。</p>
+							</div>
+						</li>
+						<li>
+							<div class="com-div">
+								<img class="avatar" src="/gw/pc/images/index/icn_xue.png"/>
+								<h2>李女士&nbsp;&nbsp;深圳</h2>
+								<img class="line" src="/gw/pc/images/index/icn_line.png" />
+								<p>对飞泊通的服务非常满意。你们员工的工作态度很认真，服务有礼，车辆交接很准时，工服统一，凭密码交接车，让我对你们的服务感到放心、安全。我与同行的朋友谈起你们的这项服务，很多朋友当即表示下次一定也试试，希望你们的这些服务保持水准，将来我也一定再继续使用你们的这项服务。</p>
+							</div>
+						</li>
+						<li>
+							<div class="com-div">
+								<img class="avatar" src="/gw/pc/images/index/icn_s.png"/>
+								<h2>李先生&nbsp;&nbsp;深圳</h2>
+								<img class="line" src="/gw/pc/images/index/icn_line.png" />
+								<p>服务态度好，提前与车主进行有效快捷的沟通，车辆及时接走并及时送到，下次还要与飞泊通合作，值得信赖。</p>
+							</div>
+						</li>
+
+						<li style="height: 350px;">
+							<div class="com-div">
+								<img class="avatar" src="/gw/pc/images/index/icn_wu.png"/>
+								<h2>曹先生&nbsp;&nbsp;上海</h2>
+								<img class="line" src="/gw/pc/images/index/icn_line.png" />
+								<p>本来是到虹桥西北口交车的，结果错走到高铁站了，小焦二话没说一路小跑到高铁站接车另我很感动！总之用了飞泊通4~5次了，感觉服务非常的好，愿我们愉快的合作！</p>
+							</div>
+						</li>
+						<li style="height: 350px;">
+							<div class="com-div">
+								<img class="avatar" src="/gw/pc/images/index/icn_miao.png"/>
+								<h2>朱先生&nbsp;&nbsp;深圳</h2>
+								<img class="line" src="/gw/pc/images/index/icn_line.png" />
+								<p>不错的体验！小哥的服务灵活周到，停车场环境高端大气，给爱车找了一个安全舒适的寄宿地，希望飞泊通坚持安全专注的运营，定会受到广大客户的信任与追捧，定会生意兴隆！</p>
+							</div>
+						</li>
+						<li style="height: 350px;">
+							<div class="com-div">
+								<img class="avatar" src="/gw/pc/images/index/icn_tian.png"/>
+								<h2>杨女士&nbsp;&nbsp;深圳</h2>
+								<img class="line" src="/gw/pc/images/index/icn_line.png" />
+								<p>因为有飞泊通，这次出行变得非常便利，不必提前很多时间去机场泊车，节省了时间。工作人员也非常负责任，整个流程通畅，有非常好的服务体验。</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<a href="/evaluate" class="check-more-comment">查看更多评论</a>
+			</div>
+		</div>
+		<div class="partner-block">
+			<div class="partner-content-block">
+				<span class="title-block title-notop">
+					<img src="/gw/pc/images/index/left.png" />
+					<p>他们都选择与飞泊通合作</p>
+					<img class="right" src="/gw/pc/images/index/right.png" />
+				</span>
+				<ul class="hzhb">
+					<li>
+						<img src="/gw/pc/images/index/icn_sh.png" />
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_hlzh.png" />
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_xc.png" />
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_qner.png" />
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_tc.png" />
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_gzl.png" />
+					</li>
+					<li>
+						<img src="/gw/pc/images/index/icn_tn.png" />
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="footer-content">
+				<div class="footer-top">
+					<img src="/gw/pc/images/index/icn_ktfw.png" />
+				</div>
+				<div class="city-block">
+					<ul>
+						<li>
+							<h3>北京</h3>
+							<p>北京首都国际机场</p>
+						</li>
+						<li>
+							<h3>上海</h3>
+							<p>上海浦东国际机场</p>
+							<p>上海虹桥国际机场</p>
+							<p>上海虹桥火车站</p>
+						</li>
+						<li>
+							<h3>广州</h3>
+							<p>广州白云国际机场</p>
+						</li>
+						<li>
+							<h3 style="width: 170px;">深圳</h3>
+							<p style="text-align: right;">深圳宝安国际机场</p>
+						</li>
+					</ul>
+				</div>
+				<div class="phone-block">
+					<img src="/gw/pc/images/index/icn_lxdh.png" />
+				</div>
+				<div class="page-link">
+					<div class="link-div">
+						<a href="/index">首页</a>
+						<a href="/evaluate">客户评价</a>
+						<a href="/aboutus?type=history">公司介绍</a>
+						<a href="/contact">联系我们</a>
+						<a href="/joinus">加入我们</a>
+					</div>
+					<p class="copyright">Copyright © 2016 深圳市天行家科技有限公司 粤ICP备15105149号</p>
+				</div>
+			</div>
+		</div>
+	</div>
+#]]
+

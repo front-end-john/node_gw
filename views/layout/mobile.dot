@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>[[= layout.title ]]</title>
+    [[= layout.headSection ]]
+</head>
+<body class="" onmousewheel="return false;" data-open='0'>
+[[= layout.bodySection ]]
+[[= layout.scriptSection ]]
+</body>
+</html>
