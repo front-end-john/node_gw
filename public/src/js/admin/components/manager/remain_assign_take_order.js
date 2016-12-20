@@ -50,7 +50,7 @@ let RemainAssignTakeOrder=React.createClass({
             {city:'广州',terminal:'白云国际机场T1',fieldName:'OnwardTerminal'},
             {session:"2016-8-9 15:14",fieldName:'Session'},
             {remain_time:"30分钟",fieldName:'RemainTakeCarTime'},
-            {op_items:1,op_1:"分配接车司机",dialog_type:2,color:"#DB8800",fieldName:'Operation'}];
+            {op_items:["分配接车司机"],dialogs:[1],color:"#DB8800",fieldName:'Operation'}];
         return(
             <section className="data-section">
                 <TextScroll />

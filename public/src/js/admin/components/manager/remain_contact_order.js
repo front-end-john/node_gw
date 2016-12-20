@@ -51,7 +51,7 @@ let RemainContactOrder=React.createClass({
             {session:"2016-8-9 15:14",fieldName:'Session'},
             {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
             {wash:'洗车',oil:'加油',fieldName:'MoreService'}
-            ,{op_items:1,op_1:"电话确认",dialog_type:1,color:"#DB8800",fieldName:'Operation'}];
+            ,{op_items:["电话确认"],dialogs:[1],color:"#DB8800",fieldName:'Operation'}];
         return(
             <section className="data-section">
                 <TextScroll />

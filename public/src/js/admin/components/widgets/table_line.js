@@ -55,6 +55,30 @@ let TableLine=React.createClass({
                         <p>{item.order_time}</p>
                     </li>
                 );
+            }else if(item.fieldName=='EvaluateTime'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.evaluate_time}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='EvaluateStarLevel'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>客服打星:{item.evaluate_star_level}星</p>
+                    </li>
+                );
+            }else if(item.fieldName=='CustomerServiceReply'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.service_reply}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='ShowStatus'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.status}</p>
+                    </li>
+                );
             }else if(item.fieldName=='Car'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
@@ -230,16 +254,14 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='Operation'){
-                let html=null;
-                if(item.op_items==1){
-                    html=( <p style={{color:item.color||"inherit"}}>{item.op_1}</p>);
-                }else if(item.op_items==2){
-                    html=( <p style={{color:item.color||"inherit"}}>
-                        <em>{item.op_1}</em>&ensp;<em>{item.op_2}</em></p>);
-                }
+                let list=item.op_items.map(function(ele,i) {
+                    return (
+                        <em key={i}>&ensp;{ele}</em>
+                    );
+                });
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        {html}
+                        <p style={{color:item.color||"inherit"}}>{list}</p>
                     </li>
                 );
             }

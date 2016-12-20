@@ -83,11 +83,10 @@ let Aside = React.createClass({
 
             }else if(id==="03"){
                 location.href="#/user_manager";
-
             }else if(id==="04"){
-
+                location.href="#/evaluation_manage";
             }else if(id==="05"){
-
+                location.href="#/coupon_manage";
             }
         }
     },

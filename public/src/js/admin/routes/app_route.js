@@ -11,6 +11,8 @@ import AirportTempPark from "../components/manager/airport_temp_park";
 import InGarageCar from "../components/manager/in_garage_car";
 import OngoingSendOrder from "../components/manager/ongoing_send_order";
 import UserManager from "../components/manager/user_manage";
+import EvaluationManage from "../components/manager/evaluation_manage";
+import CouponManage from "../components/manager/coupon_manage";
 
 
 let App=React.createClass({
@@ -35,6 +37,8 @@ let routes = (<Route path="/" component={App}>
     <Route path="remain_assign_send_order" component={RemainAssignSendOrder}/>
     <Route path="ongoing_send_order" component={OngoingSendOrder}/>
     <Route path="user_manager" component={UserManager}/>
+    <Route path="evaluation_manage" component={EvaluationManage}/>
+    <Route path="coupon_manage" component={CouponManage}/>
 </Route>);
 
 let AppRoute= <Router history={hashHistory}  routes={routes} />;

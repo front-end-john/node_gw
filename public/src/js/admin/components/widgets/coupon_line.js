@@ -19,44 +19,46 @@ export default React.createClass({
                         <p>{item.phone_no}</p>
                     </li>
                 );
-            }else if(item.fieldName=='FullName'){
+            }else if(item.fieldName=='MoneyAmount'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.full_name}</p>
+                        <p>{item.amount}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Gender'){
+            }else if(item.fieldName=='CouponID'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.gender}</p>
+                        <p>{item.id}</p>
                     </li>
                 );
-            }else if(item.fieldName=='ImportantLevel'){
-                let list=[];
-                for(let i=0;i<item.level;i++){
-                    list[i]=(<span>&#9733;&ensp;</span>);
-                }
+            }else if(item.fieldName=='CouponType'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p style={{color:"red"}}>{list}</p>
+                        <p>{item.type_msg}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Mark'){
+            }else if(item.fieldName=='CouponStatus'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.mark}</p>
+                        <p>{item.status}</p>
                     </li>
                 );
-            }else if(item.fieldName=='MarkStarTime'){
+            }else if(item.fieldName=='ReceiveCouponTime'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.mark_star_time}</p>
+                        <p>{item.receive_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='LogonTime'){
+            }else if(item.fieldName=='DeadlineTime'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.logon_time}</p>
+                        <p>{item.deadline_time}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='ActivitySource'){
+                return (
+                    <li key={index} style={{width: widths[index]} }>
+                        <p>{item.source}</p>
                     </li>
                 );
             }else if(item.fieldName=='Operation'){
@@ -72,7 +74,6 @@ export default React.createClass({
                 );
             }
         });
-
 
         return(
             <ul className="table-line">

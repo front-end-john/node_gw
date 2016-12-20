@@ -42,7 +42,7 @@ let UserManager=React.createClass({
             {mark:'重要客户',fieldName:'Mark'},
             {mark_star_time:'2016-8-9 15:14',fieldName:'MarkStarTime'},
             {logon_time:'2016-8-9 15:14',fieldName:'LogonTime'},
-            {op_items:["编辑","取消星级"],dialog_type:2,color:"#1A9FE5",fieldName:'Operation'}];
+            {op_items:["编辑","取消星级"],dialogs:[2],color:"#1A9FE5",fieldName:'Operation'}];
         return(
             <section className="data-section">
                 <TextScroll />

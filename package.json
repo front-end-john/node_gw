@@ -17,7 +17,6 @@
     "express-dot-engine": "^1.0.7",
     "express-session": "^1.14.2",
     "morgan": "~1.7.0",
-    "rctui": "^0.7.6",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-router": "^3.0.0",

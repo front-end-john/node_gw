@@ -55,7 +55,7 @@ let RemainAssignSendOrder=React.createClass({
             {terminal:'白云T1',fieldName:'ReturnTerminal'},
             {order_fetch_time:"2016-8-9 15:14",fieldName:'OrderFetchTime'},
             {wash:'下雨也洗车',oil:'汽油、92#、100元',fieldName:'MoreService'},
-            {op_items:1,op_1:"分配送车司机",dialog_type:2,color:"#1A9FE5",fieldName:'Operation'}];
+            {op_items:["分配送车司机"],dialogs:[1],color:"#1A9FE5",fieldName:'Operation'}];
         return(
             <section className="data-section">
                 <TextScroll />
