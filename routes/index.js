@@ -19,6 +19,7 @@ router.get('/aboutus(.html)?',function (req, res, next) {
 
 router.get('/contact(.html)?',function (req, res, next) {
     let userAgent=req.get('User-Agent').toLowerCase();
+
     if(mobileReg.test(userAgent)){
         res.render('gw/mobile/contact', {});
     }else {
@@ -27,6 +28,7 @@ router.get('/contact(.html)?',function (req, res, next) {
 });
 
 router.get('/evaluate(.html)?',function (req, res, next) {
+
     res.render('gw/pc/evaluate', {});
 });
 
@@ -51,9 +53,6 @@ router.get('/guide(.html)?',function (req, res, next) {
 router.get('/history(.html)?',function (req, res, next) {
     res.render('gw/mobile/history', {});
 });
-
-
-
 
 
 module.exports = router;

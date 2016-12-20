@@ -5,14 +5,13 @@ title: 客户评价
 
 [[##headSection:
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="/gw/mobile/css/header.css">
     <link rel="stylesheet" type="text/css" href="/gw/mobile/css/base.css?v=20160608">
+    <link rel="stylesheet" type="text/css" href="/gw/mobile/css/header.css">
     <link rel="stylesheet" type="text/css" href="/gw/mobile/css/comment.css?v=2016061203">
      <link rel="stylesheet" type="text/css" href="/gw/mobile/css/frozenui/dialog.css?v=0.3">
     <link rel="stylesheet" type="text/css" href="/gw/mobile/css/frozenui/loading.css">
     <link rel="stylesheet" href="/gw/mobile/css/frozenui/poptips.css?v=0.01" />
     <script type="text/javascript" src="/gw/mobile/js/baiducount.js"></script>
-
 #]]
 
 [[##bodySection:

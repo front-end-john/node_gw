@@ -11,6 +11,7 @@ title: 飞泊通官网移动版
 <link rel="stylesheet" type="text/css" href="/gw/mobile/css/index.css?v=201609091111111">
 #]]
 
+
 [[##bodySection:
 <div class="header">
         <div class="header-cont">
@@ -41,13 +42,12 @@ title: 飞泊通官网移动版
     </div></a>
 </div>
 
-
 <div id="container">
   <div class="page page-1">
     <div class="partheader" style="border: none;">
         
     </div>
-    <div class="part part1" style="margin-top: -1px;">
+    <div class="part part1" style="margin-top: -5px;">
       <img class="bg" src="/gw/mobile/images/index/icn_part1.jpg" />
       <img class="part1-title" src="/gw/mobile/images/index/icn_part1_title.png" />
       <div class="part-bottom">
