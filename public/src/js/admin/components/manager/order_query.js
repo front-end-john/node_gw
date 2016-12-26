@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
@@ -6,6 +7,18 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import DateInput from '../widgets/date_input'
+
+//import OPImportantUser from '../dialog/operate_important_user';
+//import OPFlightInfo from '../dialog/operate_flight_info';
+//import EditUserInfo from '../dialog/edit_user_info';
+//import IssueCoupon from '../dialog/issue_coupon';
+//import OilService from '../dialog/oil_service';
+//import WashService from '../dialog/wash_service';
+//import AddRemark from '../dialog/add_remark';
+//import ModifyCarInfo from '../dialog/modify_car_info';
+//import ModifyPassword from '../dialog/modify_password';
+import CustomerLabel from '../dialog/customer_label';
+
 
 let OrderQuery=React.createClass({
     getInitialState(){
@@ -56,6 +69,12 @@ let OrderQuery=React.createClass({
         "use strict";
         console.log(this.state.queryCondition);
     },
+    showDialog(){
+        "use strict";
+        let mask=document.getElementById("dialogContainer");
+        mask.style.display="block";
+        ReactDOM.render(<CustomerLabel />, mask);
+    },
     render(){
         "use strict";
         let widths=['152px','140px','170px','138px','140px','166px','168px','202px','168px','110px','85px'];
@@ -91,7 +110,7 @@ let OrderQuery=React.createClass({
                     <SelectInput title="机场:" change={this.handleChange} name="airport" defaultName="全部"/>
                     <SelectInput title="订单状态:" change={this.handleChange} name="order_status" defaultName="全部"/>
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
-                    <button className="checkout">导出</button>
+                    <button className="checkout" onClick={this.showDialog}>导出</button>
                 </div>
                 <TableHead data={headData} />
                 <TableLine widths={widths} data={data} />

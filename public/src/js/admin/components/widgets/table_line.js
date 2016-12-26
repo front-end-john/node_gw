@@ -14,7 +14,7 @@ let TableLine=React.createClass({
         "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
-        ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, document.getElementById("dialogContainer"));
+        ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
     expandDetail(){
         "use strict";

@@ -5,8 +5,10 @@ let PrimaryItem = React.createClass({
         "use strict";
         let items=this.props.childItems;
         let list=items.map((item,index) =>{
+            let id=this.props.prefix+(index+1);
             return(
-                <li  id={'2_'+(index+1)} key={index}  className={this.props.secondItem==index?"highlight":""}>
+                <li  id={id} key={index}
+                     className={this.props.secondItem==id?"highlight":""}>
                     {item.name} <span>{item.newCount}</span></li>
             );
         });
@@ -55,7 +57,7 @@ let Aside = React.createClass({
         return {
             currItem:"01",
             hoverItem:'01',
-            secondItem:null
+            secondItem:""
         };
     },
     handleHover(e){
@@ -75,10 +77,13 @@ let Aside = React.createClass({
         if(e.target.nodeName==="H2"){
             let id=e.target.id;
             this.setState({currItem:id});
-            this.setState({secondItem:null});
+            this.setState({secondItem:""});
             if(id==="01"){
                 location.href="#/order_query";
             }else if(id==="02"){
+                //this.setState({secondItem:0});
+
+            }else if(id==="jsj_order"){
                 //this.setState({secondItem:0});
 
             }else if(id==="03"){
@@ -93,29 +98,32 @@ let Aside = React.createClass({
     handleSecondClick(e){
         "use strict";
         if(e.target.nodeName==="LI"){
+
             let id=e.target.id;
-            this.setState({currItem:"02"});
+            if(/jsj_/.test(id)){
+                this.setState({currItem:"jsj_order"});
+            }else {
+                this.setState({currItem:"02"});
+            }
+            this.setState({secondItem:id});
             if(id=="2_1"){
-                this.setState({secondItem:0});
                 location.href="#/remain_contact_order";
             }else if(id=="2_2"){
-                this.setState({secondItem:1});
                 location.href="#/remain_assign_take_order";
             }else if(id=="2_3"){
-                this.setState({secondItem:2});
                 location.href="#/ongoing_take_order";
             }else if(id=="2_4"){
-                this.setState({secondItem:3});
                 location.href="#/airport_temp_park";
             }else if(id=="2_5"){
-                this.setState({secondItem:4});
                 location.href="#/in_garage_car";
             }else if(id=="2_6"){
-                this.setState({secondItem:5});
                 location.href="#/remain_assign_send_order";
             }else if(id=="2_7"){
-                this.setState({secondItem:6});
                 location.href="#/ongoing_send_order";
+            }else if(id=="jsj_1"){
+                //location.href="#/ongoing_send_order";
+            }else if(id=="jsj_2"){
+                //location.href="#/ongoing_send_order";
             }
         }
     },
@@ -125,6 +133,8 @@ let Aside = React.createClass({
             {name:'进行中的接车订单',newCount:115},{name:'机场临时停放',newCount:15},
             {name:'在库车辆',newCount:15},{name:'待分配送车单',newCount:15},
             {name:'进行中的送车单',newCount:115}];
+        let jsjOrder=[{name:'接机订单',newCount:15},{name:'送机订单',newCount:15}];
+
         return(
             <aside>
                 <div id="manager">
@@ -146,7 +156,15 @@ let Aside = React.createClass({
                              select={this.highlight(this.state.currItem,this.state.hoverItem,'02')?'y':'n'}
                              secondItem={this.state.secondItem}
                              hover={this.handleHover} leave={this.handleLeave} click={this.handClick}
-                             secondNav={this.handleSecondClick} />
+                             secondNav={this.handleSecondClick}
+                             prefix="2_"/>
+
+                <PrimaryItem id='jsj_order' childItems={jsjOrder} itemName={"接送机订单"} imgUrl={
+                             this.highlight(this.state.currItem,this.state.hoverItem,'jsj_order')?"/img/admin/icon/jsj_2.png":"/img/admin/icon/jsj_1.png"}
+                             select={this.highlight(this.state.currItem,this.state.hoverItem,'jsj_order')?'y':'n'}
+                             secondItem={this.state.secondItem}
+                             hover={this.handleHover} leave={this.handleLeave} click={this.handClick}
+                             secondNav={this.handleSecondClick} prefix="jsj_" />
 
 
                 <PrimaryItemNoList id='03' itemName={"用户管理"} imgUrl={

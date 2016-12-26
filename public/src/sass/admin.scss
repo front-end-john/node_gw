@@ -649,33 +649,61 @@ html,body{
   background-color: rgba(20,20,20,0.3);
   display: none;
 }
+
 $dialogWidth:500px;
 $dialogHeadHeight:48px;
-.dialog-ensure{
+.dialog{
   width: $dialogWidth;
-  text-align: center;
   background-color: #fff;
   position: absolute;
   top:60px;
   left: 50%;
   @include translateX(-50%);
-  &>h2{
+  &>.title{
+    text-align: center;
     height: $dialogHeadHeight;
     line-height:$dialogHeadHeight;
     background-color: #314055;
     color: #fff;
     font-size: 16px;
+    position: relative;
+    &>i{
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top:18px;
+      right: 18px;
+
+      cursor: pointer;
+      &:after{
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 16px;
+        background-color: #fff;
+        @include rotate(-45deg);
+        top:-2px;right:5px;
+      }
+      &:before{
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 16px;
+        background-color: #fff;
+        @include rotate(45deg);
+        top:-2px;right:5px;
+      }
+    }
   }
-  &>p{
-    height: 100px;
-    line-height: 100px;
-    font-size:14px;
-    border-bottom: 1px solid #ddd;
-  }
-  &>section{
+
+  &>.btn{
     height: 80px;
     line-height: 80px;
+    border-top: 1px solid #DCDCDC;
+    text-align: center;
     &>button{
+      cursor: pointer;
       font-size: 14px;
       width: 120px;
       height: 36px;
@@ -685,9 +713,195 @@ $dialogHeadHeight:48px;
           color: #646464;
       }&:nth-of-type(2){
           background-color: #F9BE00;
-          color: #fff;
+          color: #fff;border:0;
           margin-left:40px;
       }
     }
+  }
+}
+.dialog-ensure{
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  font-size:14px;
+  border-bottom: 1px solid #ddd;
+}
+.dialog-service-reply{
+  padding: 40px;
+  &>textarea{
+    width: 420px;
+    max-width: 420px;
+    background: #FFFFFF;
+    border: 1px solid #DCDCDC;
+    @include border-radius(2px);
+    margin-bottom: 10px;
+    height: 140px;
+    clear: both;
+  }
+  &>p{
+    font-size: 12px;
+    color: #646464;
+    line-height: 12px;
+    text-align: justify;
+    overflow: hidden;
+    span:nth-of-type(2){
+      float: right;
+    }
+    $radioSize:15px;
+    span>input{
+      position: relative;
+      margin-right: 10px;
+      cursor: pointer;
+      width: $radioSize;
+      height: $radioSize;
+      @include appearance(none);
+      top:3px;
+      &:focus{outline: none;}
+      &:after{
+        content: "";
+        width: $radioSize;
+        height: $radioSize;
+        @include border-radius(51%);
+        position: absolute;
+        background-color:#fff;
+        border: 1px solid #DCDCDC;
+        left: 0;top: 0;
+      }
+      &:checked{
+        &:after{background-color:#314055;border:0;}
+        &:before{
+          content: "";
+          width: 5px;
+          height: 5px;
+          @include border-radius(51%);
+          position: absolute;
+          background-color:#fff;
+          left: ($radioSize - 5)/2 ;top: ($radioSize - 5)/2;
+          z-index: 3;
+        }
+      }
+    }
+  }
+}
+
+.select-arrow{
+  position: relative;
+  display: inline-block;
+  left: -30px;
+  width: 13px;
+  height: 7px;
+  border-color:#c8c8c8;
+  pointer-events: none;
+  &:after{
+    content: "";
+    width: 9px;
+    height: 0;
+    border-top: 1px solid;
+    position: absolute;
+    @include rotate(46deg);
+    bottom: 3px;right: 5px;
+  }
+  &:before{
+    content: "";
+    width: 9px;
+    height: 0;
+    border-top: 1px solid;
+    position: absolute;
+    @include rotate(-46deg);
+    bottom: 3px;left:5px;
+  }
+}
+
+.dialog-important-user{
+  padding: 40px 60px 30px;
+  &>p{
+    margin-bottom: 10px;
+
+    em{
+      font-size: 14px;
+      color: #323232;
+      vertical-align: middle;
+    }
+    input,select{
+      width: 220px;
+      height: 36px;
+      vertical-align: middle;
+      @include border-radius(2px);
+      border: 1px solid #DCDCDC;
+      background-color: #fff;
+      @include appearance(none);
+      padding-left: 10px;
+      @include box-sizing(border-box);
+    }
+    .user-gender,.username{
+      width: 100px;margin-right: 10px;
+      color: #646464;
+    }
+    .user-gender{color: #c8c8c8;}
+    textarea{
+      width: 300px;
+      max-width: 300px;
+      height: 96px;
+      vertical-align: middle;
+      @include border-radius(2px);
+      border: 1px solid #DCDCDC;
+      background-color: #fff;
+      @include appearance(none);
+      padding-left: 10px;
+      @include box-sizing(border-box);
+    }
+
+  }
+}
+.dialog-flight-info{
+  text-align: center;
+  padding: 40px 0 30px;
+  &>p {
+    margin-bottom: 10px;
+    em {
+      font-size: 14px;
+      color: #323232;
+      vertical-align: middle;
+    }
+    input{
+      width: 220px;
+      height: 36px;
+      vertical-align: middle;
+      @include border-radius(2px);
+      border: 1px solid #DCDCDC;
+      background-color: #fff;
+      @include appearance(none);
+      padding-left: 10px;
+      @include box-sizing(border-box);
+    }
+  }
+}
+.dialog-modify-car{
+  @extend .dialog-flight-info;
+}
+.dialog-modify-password{
+  @extend .dialog-flight-info;
+  text-align: right;
+  &>p{margin-right: 104px;}
+}
+.customer-label{
+  @include display-flex;
+  padding: 40px 50px 20px;
+  @include justify-content(space-between);
+  @include flex-wrap(wrap);
+  &>li{
+    width: 120px;
+    height: 36px;
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+    border:1px solid #DCDCDC;
+    @include border-radius(2px);
+    color: #646464;
+    text-align: center;
+    line-height: 36px;
+  }
+  .selected{
+    background-color: #202E43;
+    color:#fff;
   }
 }
