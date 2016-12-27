@@ -17,7 +17,8 @@ import DateInput from '../widgets/date_input'
 //import AddRemark from '../dialog/add_remark';
 //import ModifyCarInfo from '../dialog/modify_car_info';
 //import ModifyPassword from '../dialog/modify_password';
-import CustomerLabel from '../dialog/customer_label';
+//import CustomerLabel from '../dialog/customer_label';
+import CustomerLabel from '../dialog/assign_driver';
 
 
 let OrderQuery=React.createClass({
