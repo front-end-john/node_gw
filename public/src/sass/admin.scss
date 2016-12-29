@@ -1,5 +1,5 @@
 @import "compass/css3";
-@import "../../lib/jeet/index";
+@import "../lib/jeet/index";
 $jeet: (
         gutter: 0,
         max-width: 1920px
@@ -233,7 +233,7 @@ html,body{
   &>hr{
     @include opacity(0);
   }
-  &>p{
+  &>.input-item{
     display: inline-block;
     &>label{
       padding-right: 12px;

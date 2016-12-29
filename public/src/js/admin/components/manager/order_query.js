@@ -6,7 +6,9 @@ import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
-import DateInput from '../widgets/date_input'
+import DateSelect from '../widgets/date_select';
+
+
 
 //import OPImportantUser from '../dialog/operate_important_user';
 //import OPFlightInfo from '../dialog/operate_flight_info';
@@ -66,6 +68,11 @@ let OrderQuery=React.createClass({
             this.state.queryCondition.order_status=val;
         }
     },
+    handleDateSelect(date,obj){
+        "use strict";
+        console.log(date);
+        console.log(obj);
+    },
     handleQuery(){
         "use strict";
         console.log(this.state.queryCondition);
@@ -103,13 +110,14 @@ let OrderQuery=React.createClass({
                     <TextInput title="车牌号码:" change={this.handleChange} name="car_no" holdText="请输入车牌号" />
                     <TextInput title="微信昵称:" change={this.handleChange} name="wx_nick" holdText="请输入微信昵称" />
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="订单状态:" change={this.handleChange} name="order_status" defaultName="全部"/>
                     <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
                     <hr/>
                     <SelectInput title="筛选时间:" change={this.handleChange} name="time_type" defaultName="选择筛选的时间"/>
-                    <DateInput title="开始时间:" change={this.handleChange} name="start_time" holdText="2016-12-8" />
-                    <DateInput title="结束时间:" change={this.handleChange} name="end_time" holdText="2016-12-8" />
+                    <DateSelect title="开始时间:" change={this.handleDateSelect}  holdText="2016-12-08" />
+                    <DateSelect title="结束时间:" change={this.handleDateSelect} name="end_time" holdText="2016-12-08" />
                     <SelectInput title="机场:" change={this.handleChange} name="airport" defaultName="全部"/>
-                    <SelectInput title="订单状态:" change={this.handleChange} name="order_status" defaultName="全部"/>
+
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
                     <button className="checkout" onClick={this.showDialog}>导出</button>
                 </div>

@@ -22,6 +22,7 @@ let Ensure=React.createClass({
             }
         }
     },
+
     render(){
         "use strict";
         return(

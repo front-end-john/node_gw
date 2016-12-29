@@ -8,9 +8,8 @@ title: 后台管理首页
 <link rel="stylesheet" type="text/css" href="/dist/css/admin.css">
 #]]
 [[##bodySection:
-
-    <div id="appContainer"></div>
-    <div id="dialogContainer"></div>
+    <div id="appContainer"> </div>
+    <div id="dialogContainer"> </div>
 #]]
 
 [[##scriptSection:

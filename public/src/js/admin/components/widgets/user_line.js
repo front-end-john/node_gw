@@ -34,7 +34,7 @@ export default React.createClass({
             }else if(item.fieldName=='ImportantLevel'){
                 let list=[];
                 for(let i=0;i<item.level;i++){
-                    list[i]=(<span>&#9733;&ensp;</span>);
+                    list[i]=(<span key={i}>&#9733;&ensp;</span>);
                 }
                 return (
                     <li key={index} style={{width: widths[index]} }>
@@ -72,8 +72,6 @@ export default React.createClass({
                 );
             }
         });
-
-
         return(
             <ul className="table-line">
                 {list}
