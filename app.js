@@ -1,10 +1,16 @@
 let express = require('express');
 let path = require('path');
 let favicon = require('serve-favicon');
-let logger = require('morgan');
+let log4js = require('log4js');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+let os = require('os');
+if(os.platform()=='linux'){
+    global.wx_jsj_url="";
+}else {
+    global.wx_jsj_url="http://192.168.1.234:8080/txj-jsj";
+}
 
 let app = express();
 
@@ -17,7 +23,12 @@ app.set('views', path.join(__dirname, 'views'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+
+log4js.configure('./config/log4js.json',{ reloadSecs: 300 });
+let logger = log4js.getLogger('app');
+logger.setLevel(log4js.levels.INFO);
+app.use(log4js.connectLogger(logger));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -35,10 +46,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 let routes = require('./routes/index');
 let users = require('./routes/users');
 let admin = require('./routes/admin');
+let jsj=require('./routes/weixinjsj');
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admin', admin);
+app.use('/jsj', jsj);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -70,6 +83,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

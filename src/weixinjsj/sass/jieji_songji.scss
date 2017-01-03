@@ -1,0 +1,184 @@
+@import "compass/css3";
+@import "variable";
+.jieji-query{
+  &>figure{
+    img{width: 100%;height: auto;vertical-align: bottom;}
+    position: relative;
+    .flight-info{
+      @include rotateY(90deg);
+      @include transition(all 0.2s ease-in);
+      position: absolute;
+      top: 0;left: 30px;
+      right: 30px;bottom: 0;
+      @include display-flex;
+      @include align-items(center);
+      &>li{
+        @include flex(1 0);
+        font-size: $smallFont;
+        color: #969696;
+        &>p:nth-of-type(2){
+          color: #F9BE00;
+          font-size: $bigFont;
+          margin: 9px 0;
+        }
+        &:nth-of-type(2){
+          text-align: right;
+        }
+      }
+    }
+    .show{
+      @include rotateY(0);
+    }
+  }
+  &>hgroup{
+    @include display-flex();
+    @include align-items(center);
+    background-color:#fff;
+    //margin-top: -3px;
+    i{
+      border-right: 2px solid #dcdcdc;
+      height: 60px;
+    }
+    h2{
+      font-size: $bigFont;
+      color: #969696;
+      @include flex(1 0);
+      height: 120px;
+      line-height: 120px;
+      text-align: center;
+      @include box-sizing(border-box);
+      border-bottom: 1px solid #dcdcdc;
+    }
+    .current{
+      color: #F9BE00;
+      border-bottom: 4px solid #F9BE00;
+    }
+  }
+  &>section{
+    position: relative;
+    background-color: #fff;
+    @include box-sizing(border-box);
+  }
+  &>.songji-input{
+    border-bottom: 1px solid #dcdcdc;
+    height: 102px;
+    &:nth-of-type(1){
+      margin-top: 20px;
+      border-top: 1px solid #dcdcdc;
+    }
+    img{
+      width: 40px;
+      height: 41px;
+      position: absolute;
+      top:50%;left: $borderPad;
+      @include translateY(-50%);
+    }
+    input{
+      position: absolute;
+      font-size: $middleFont;
+      border: 0;
+      &:focus{outline: none;}
+      left:90px;  width:630px;
+      top: 50%;
+      @include translateY(-50%);
+      color: #323232;
+    }
+    .date-select{
+      @include opacity(0);
+    }
+  }
+
+  &>.jieji-flight{
+    margin-top: 20px;
+    height: 101px;
+    border-bottom: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+    &>img{
+      width: 39px;
+      height: auto;
+      position: absolute;
+      top:50%;left: $borderPad;
+      @include translateY(-50%);
+    }
+    &>div{
+      position: absolute;
+      left: 90px;top:50%;right: 30px;
+      @include translateY(-50%);
+      input{
+        width: 100%;
+        font-size: $middleFont;
+        border: 0;
+        &:focus{outline: none;}
+      }
+      p{
+        font-size: $smallFont;
+        color: #969696;
+      }
+    }
+  }
+  &>.from-to{
+    height: 202px;
+    border-bottom: 1px solid #dcdcdc;
+    ul{
+      position: absolute;
+      top:50%;left: 42px;
+      @include translateY(-50%);
+      height: 120px;
+      &>li{
+        width: 8px;
+        height: 8px;
+        @include border-radius(51%);
+        background-color: #c8c8c8;
+        margin-top: 11px;
+        margin-left: 4px;
+        &:nth-of-type(1){
+          margin-top:0;
+          margin-left:0;
+          background-color: #02B631;
+          width: 16px;
+          height:16px;
+        }
+        &:nth-last-of-type(1){
+          background-color: #D0021B;
+          width: 16px;
+          height:16px;
+          margin-left:0;
+        }
+      }
+    }
+    div{
+      position: absolute;
+      left: 90px;right: 0;
+      p{
+        height: 101px;
+        &:nth-of-type(2){
+          @include box-sizing(border-box);
+          border-top: 1px solid #dcdcdc;
+        }
+        input{
+          width: 100%;
+          font-size: $middleFont;
+          padding-right: 30px;
+          border: 0;
+          color: #323232;
+          &:focus{outline: none;}
+          position: relative;
+          top: 50%;
+          @include translateY(-52%);
+        }
+      }
+    }
+  }
+}
+.query-btn{
+  width: 690px;
+  display: block;
+  margin: 120px auto 40px;
+  background-color: #F9BE00;
+  color: #fff;
+  font-size: $bigFont;
+  font-weight: bold;
+  height: 96px;
+  border: 0;
+  @include border-radius(4px);
+}

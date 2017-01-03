@@ -11,8 +11,3 @@ html,body,input,textarea {
 	font-family: "微软雅黑";
 }
 a:visited {outline: none;} a:link {outline: none;}
-
-.wrap {
-	position: relative;
-	padding-top: 59px;
-}

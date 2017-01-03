@@ -5,7 +5,7 @@ title: 后台管理首页
 
 [[##headSection:
 <link rel="stylesheet" type="text/css" href="/gw/pc/css/base.css">
-<link rel="stylesheet" type="text/css" href="/dist/css/admin.css">
+<link rel="stylesheet" type="text/css" href="/admin/css/admin.css">
 #]]
 [[##bodySection:
     <div id="appContainer"> </div>
@@ -13,6 +13,6 @@ title: 后台管理首页
 #]]
 
 [[##scriptSection:
-<script src="/dist/js/admin/index.js?t=0.1"></script>
+<script src="/admin/dist/index.js?t=0.1"></script>
 
 #]]

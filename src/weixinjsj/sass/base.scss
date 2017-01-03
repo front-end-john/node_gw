@@ -1,0 +1,62 @@
+@charset "UTF-8";
+body, div, dl, dt,figure,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote，th,td{margin:0;padding:0;}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img {border:0;}
+address,caption, cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}
+ol,ul {list-style:none;}
+capation,th{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+q:before, q:after{content:' '}
+abbr,acronym{border:0;}
+html,body,input,textarea {
+	font-family: "微软雅黑";
+}
+a:visited {outline: none;} a:link {outline: none;}
+/*
+@media only screen and (max-width: 320px) {
+	html,body{
+		font-size: 13px;
+	}
+}
+
+@media only screen and (min-width: 321px) and (max-width: 360px){
+	html,body{
+		font-size: 14px;
+	}
+}
+
+@media only screen and (min-width: 361px) and (max-width: 375px){
+	html,body{
+		font-size: 15px;
+	}
+}
+
+@media only screen and (min-width: 376px) and (max-width: 414px){
+	html,body{
+		font-size: 17px;
+	}
+}
+
+@media only screen and (min-width: 415px) and (max-width: 450px){
+	html,body{
+		font-size: 18px;
+	}
+}
+
+@media only screen and (min-width: 451px) and (max-width: 510px){
+	html,body{
+		font-size: 18.5px;
+	}
+}
+
+@media only screen and (min-width: 511px) and (max-width: 570px){
+	html,body{
+		font-size: 19px;
+	}
+}
+
+@media only screen and (min-width: 571px) and (max-width: 640px){
+	html,body{
+		font-size: 20px;
+	}
+}*/

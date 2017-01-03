@@ -1,0 +1,84 @@
+@import "compass/css3";
+@import "variable";
+.city-select{
+  background-color: #fff;
+  &>.search-section{
+    padding: 24px 30px;
+    position: relative;
+    background-color: #E0E0E0;
+    &>input{
+      width: 100%;
+      height: 70px;
+      border: 0;
+      font-size: 30px;
+      @include border-radius(6px);
+      text-align: center;
+      @include box-sizing(border-box);
+      &:focus{
+        outline: none;
+        text-align: left;
+        padding-left: 60px;
+        &+em{
+          left: 40px;
+        }
+      }
+    }
+    .input-search{
+      display: inline-block;
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      @include border-radius(50%);
+      border:1px solid #969696;
+      top:44px;
+      left: 210px;
+      &:after{
+        content: "";
+        width: 0;
+        height: 16px;
+        border-left: 1px solid #969696;
+        position: absolute;
+        @include rotate(-45deg);
+        left: 27px;top:18px;
+      }
+    }
+  }
+  .hot-cities{
+    &>h3{
+      font-size:$middleFont;
+      padding-left: 30px;
+      height: 80px;
+      line-height: 80px;
+      color: #969696;
+    }
+    &>ul{
+      @include display-flex();
+      padding:0 30px 20px;
+      background-color: #fff;
+      li{
+        margin-right: 16px;
+        @include flex(1 0);
+        font-size: $middleFont;
+        color: #323232;
+        height: 66px;
+        line-height: 60px;
+        text-align: center;
+        border: 1px solid #dcdcdc;
+        &:nth-of-type(3n){ margin-right:0;}
+      }
+    }
+  }
+  .city-list{
+    &>ul{
+      .group-letter{
+        background-color:#f0f0f0;
+      }
+      li{
+        height: 100px;
+        line-height: 100px;
+        padding-left: 40px;
+        font-size: $middleFont;
+      }
+    }
+  }
+}
