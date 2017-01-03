@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "complie-weixinjsj": "webpack --watch --config ./config/webpack.weixinjsj.js",
-    "complie-admin": "webpack --watch --config ./config/webpack.admin.js"
+    "webpack":"webpack --watch"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -32,6 +31,7 @@
     "gulp": "^3.9.1",
     "gulp-compass": "^2.1.0",
     "gulp-sftp": "^0.1.5",
+    "gulp-watch": "^4.3.11",
     "merge-stream": "^1.0.1",
     "react": "^15.4.1",
     "react-date-picker": "^5.3.28",

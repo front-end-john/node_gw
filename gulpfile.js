@@ -2,6 +2,7 @@ let gulp = require('gulp');
 let sftp = require('gulp-sftp');
 let compass = require('gulp-compass');
 let merge = require('merge-stream');
+let watch = require('gulp-watch');
 let browserSync = require('browser-sync').create();
 let reload = browserSync.reload;
 gulp.task('browser-sync', function() {
@@ -40,13 +41,14 @@ gulp.task('compass', function() {
             css: 'public/weixinjsj/css',
             sass: 'src/weixinjsj/sass'
         })).pipe(gulp.dest('./public/weixinjsj/css'));
-
     return merge(admin_scss,jsj_scss);
 });
 
 //scss编译并上传
 gulp.task('scss-compiled-upload',['compass'],function () {
     let admin_css=gulp.src('./public/admin/css/*.css')
+        //只有改变才处理
+        .pipe(watch('./public/admin/css/*.css'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
@@ -54,6 +56,8 @@ gulp.task('scss-compiled-upload',['compass'],function () {
             remotePath:"/var/code/fronts/public/admin/css/"
     }));
     let jsj_css=gulp.src('./public/weixinjsj/css/*.css')
+        //只有改变才处理
+        .pipe(watch('./public/weixinjsj/css/*.css'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
@@ -66,6 +70,8 @@ gulp.task('scss-compiled-upload',['compass'],function () {
 //react编译并上传
 gulp.task('react-compiled-upload',function () {
     let admin_js=gulp.src('./public/admin/dist/*.js')
+        //只有改变才处理
+        .pipe(watch('./public/admin/dist/*.js'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
@@ -73,6 +79,8 @@ gulp.task('react-compiled-upload',function () {
             remotePath:"/var/code/fronts/public/admin/dist/"
         }));
     let jsj_js=gulp.src('./public/weixinjsj/dist/*.js')
+        //只有改变才处理
+        .pipe(watch('./public/weixinjsj/dist/*.js'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
