@@ -14,7 +14,7 @@ export default React.createClass({
         /**
          *初始化车图片列表
          */
-        this.carImgList=["/weixinjsj/jsj/img/07.png","/weixinjsj/jsj/img/08.png","/weixinjsj/jsj/img/09.png","/weixinjsj/jsj/img/10.png"];
+        this.carImgList=["/weixinjsj/img/07.png","/weixinjsj/img/08.png","/weixinjsj/img/09.png","/weixinjsj/img/10.png"];
     },
     handleClickSelect(e){
         let id=e.target.id;

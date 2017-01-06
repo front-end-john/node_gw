@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {decDatetime} from '../util';
 export default React.createClass({
 
     componentWillMount(){
@@ -7,44 +7,52 @@ export default React.createClass({
         document.getElementById("appContainer").style.backgroundColor="#fff";
     },
     render(){
+        let d = sessionStorage.getItem("TravelDetailInfo");
+        d=JSON.parse(d);
+        let flag=d.ordertype;
+        let {year,month,day,hour,minute}=decDatetime(d.bookingtime);
+        let {year:y1,month:mon1,day:d1,hour:h1,minute:min1}=decDatetime(d.bookingtime);
+
+        let f=sessionStorage.getItem("FlightInfo");
+        f=JSON.parse(f);
         return(
             <div className="travel-detail">
                 <ul className="travel-order-detail">
                     <li>成功支付</li>
-                    <li>&yen;122.00</li>
+                    <li>&yen;{d.totalfee}.00</li>
                     <li>
                         <p>费用总计</p>
-                        <p>&yen;122</p>
+                        <p>&yen;{d.totalfee}</p>
                     </li>
                     <li>订单信息</li>
-                    <li>接机</li>
+                    <li>{+flag==1?'接机':'送机'}</li>
                     <li>
                         <p>航班号</p>
-                        <p>MU4587</p>
+                        <p>{f?f.flightnumber:''}</p>
                     </li>
                     <li>
                         <p>用车时间</p>
-                        <p>2016-12-14 21：50</p>
+                        <p>{year}-{month}-{day} {hour}:{minute}</p>
                     </li>
                     <li>
-                        <p>出发机场</p>
-                        <p>上海虹桥机场T2航站楼</p>
+                        {+flag==1?(<p>出发机场</p>):(<p>出发地址</p>)}
+                        <p>{d?d.startaddress:''}</p>
                     </li>
                     <li>
-                        <p>送达地址</p>
-                        <p>上海迪士尼乐园</p>
+                        {+flag==1?(<p>送达地址</p>):(<p>送达机场</p>)}
+                        <p>{d?d.endadress:''}</p>
                     </li>
                     <li>
                         <p>行程备注</p>
-                        <p>请提前到达指定地点请提前到达指定地点</p>
+                        <p>{d?d.userremark:''}</p>
                     </li>
                     <li>
                         <p>联系人</p>
-                        <p>郑阳平 18667656668</p>
+                        <p>{d?d.actualname:''} {d?d.actualphone:''}</p>
                     </li>
                     <li>
                         <p>下单时间</p>
-                        <p>2016-12-14 19:55</p>
+                        <p>{y1}-{mon1}-{d1} {h1}:{min1}</p>
                     </li>
                 </ul>
             </div>

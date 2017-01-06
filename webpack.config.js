@@ -68,7 +68,7 @@ module.exports=[{
          warnings: false
          },
          output: {
-         comments: false
+          comments: false
          }
          }),*/
         /*new webpack.optimize.CommonsChunkPlugin({
@@ -78,6 +78,7 @@ module.exports=[{
     ]
 }];
 //监听编译
-//webpack -p --watch
+//webpack  --watch
+//webpack  --watch --config ./config/example.config.js
 //npm i --save-dev babel-core babel-loader babel-preset-es2015
 // babel-preset-react webpack

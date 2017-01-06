@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dialog from "../widgets/warning_dialog";
-
+import {decDatetime} from '../util';
 export default React.createClass({
     getInitialState(){
         return{
@@ -18,21 +18,22 @@ export default React.createClass({
     handleQuery(){
         let paramsObj=this.state.queryLocation;
         console.log(paramsObj);
-        let url="http://192.168.1.234:8080/txj-jsj/jsj/jsjorder/querycartype";
+        let url="/jsj/jsjorder/querycartype";
         url+="?"+queryStr.stringify(paramsObj);
-        console.log("查询车型：",url);
-        fetch(url,{
-            method: 'GET',
-            mode: 'cors'
-        }).then(function(res) {
-            console.log(res.status);
-            return res.text();
+        console.log("查询车型url：",url);
+        fetch(url).then(function(res){
+            console.log("查询车型响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
         }).then((str)=>{
             console.log(JSON.parse(str));
             sessionStorage.setItem("carTypeList",str);
             location.href="#/select_car_type";
         }).catch(function(e) {
-            console.log('parsing failed', e);
+            console.trace('错误:', e);
         });
     },
     componentWillMount(){
@@ -47,14 +48,10 @@ export default React.createClass({
             /**
              * 航班的降落数据
              */
-            let landDate=new Date(flight.landingtime);
-            let year=landDate.getFullYear();
-            let month=landDate.getMonth();month++;month=month<10?"0"+month:month;
-            let day=landDate.getDate();day=day<10?"0"+day:day;
-            let hour=landDate.getHours();hour=hour<10?"0"+hour:hour;
-            let minute=landDate.getMinutes();minute=minute<10?"0"+minute:minute;
+
+            let {year,month,day,hour,minute,week} =decDatetime(flight.landingtime);
             this.setState({flightInfo:{number:flight.flightnumber,year,month,day,
-                weekday:weekday[landDate.getDay()],hour,minute,
+                hour,minute,weekday:weekday[week],
                 city:flight.tocity,airport:flight.toairport,
                 terminal:flight.toterminal}});
             this.state.queryLocation.ordertype=1;
@@ -64,12 +61,8 @@ export default React.createClass({
             /**
              * 航班的起飞数据
              */
-            let takeoffDate=new Date(flight.takingofftime);
-            let tmonth=takeoffDate.getMonth();tmonth++;tmonth=tmonth<10?"0"+tmonth:tmonth;
-            let tday=takeoffDate.getDate();tday=tday<10?"0"+tday:tday;
-            let thour=takeoffDate.getHours();thour=thour<10?"0"+thour:thour;
-            let tminute=takeoffDate.getMinutes();tminute=tminute<10?"0"+tminute:tminute;
-            this.setState({takeoffFlight:{month:tmonth,day:tday,hour:thour,minute:tminute,
+            let {month:month1,day:day1,hour:hour1,minute:minute1} =decDatetime(flight.takingofftime);
+            this.setState({takeoffFlight:{month:month1,day:day1,hour:hour1,minute:minute1,
                 city:flight.fromcity,airport:flight.fromairport, terminal:flight.fromterminal}});
             /**
              * 获取降落机场航站楼的经纬度
@@ -135,7 +128,7 @@ export default React.createClass({
                         <p onClick={this.handleWarning}>
                             <input  placeholder="航站楼" onFocus={(e)=>{e.target.blur()}}
                             defaultValue={f?f.city+f.airport+"机场"+f.terminal+"航站楼":''}/></p>
-                        <p onClick={()=>location.href="#/destination"}>
+                        <p onClick={()=>location.href="#/destination?city="+f.city}>
                             <input placeholder="请输入目的地" defaultValue={dest?dest.name:''}/></p>
                     </div>
                 </section>

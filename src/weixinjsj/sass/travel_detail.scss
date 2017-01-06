@@ -294,12 +294,12 @@
     color: #323232;
     &>li{
       @include display-flex;
+      @include justify-content(space-between);
       &>p:nth-of-type(1){
-        @include flex(2 0);
         color: #646464;
       }
       &>p:nth-of-type(2){
-        @include flex(5 0);
+        max-width:500px;
         text-align: right;
         color: #323232;
       }

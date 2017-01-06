@@ -9,6 +9,7 @@ global.fetchJsonp=fetchJsonp;
 global.weekday=['星期天','星期一','星期二','星期三','星期四','星期五','星期六'];
 import queryStr from 'querystring';
 global.queryStr=queryStr;
+global.baseUrl=location.protocol+"//"+location.host;
 
 import JiejiQuery from "./components/jieji_query";
 import SongjiQuery from "./components/songji_query";
@@ -22,7 +23,7 @@ import TravelDetail from './components/travel_detail';
 import Comments from './components/comments';
 import CheckTravelDetail from './components/check_travel_detail';
 import CancelRule from './components/cancel_rule';
-import JiesongjiOrder from './components/jiesongji_order';
+import JsjOrder from './components/jsj_order';
 
 let App=React.createClass({
     render(){
@@ -45,11 +46,11 @@ let routes = (<Route path="/" component={App}>
     <Route path="select_car_type" component={SelectCarType}/>
     <Route path="order_detail" component={OrderDetail}/>
     <Route path="contact_person" component={ContactPerson}/>
-    <Route path="travel_detail/:status" component={TravelDetail}/>
+    <Route path="travel_detail" component={TravelDetail}/>
     <Route path="comments" component={Comments}/>
     <Route path="check_travel_detail" component={CheckTravelDetail}/>
     <Route path="cancel_rule" component={CancelRule}/>
-    <Route path="jiesongji_order" component={JiesongjiOrder}/>
+    <Route path="jsj_order" component={JsjOrder}/>
 </Route>);
 
 ReactDOM.render( <Router history={hashHistory}  routes={routes} />, document.getElementById("appContainer"));

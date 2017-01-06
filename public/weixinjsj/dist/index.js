@@ -74,7 +74,7 @@
 
 	var _jieji_query2 = _interopRequireDefault(_jieji_query);
 
-	var _songji_query = __webpack_require__(242);
+	var _songji_query = __webpack_require__(243);
 
 	var _songji_query2 = _interopRequireDefault(_songji_query);
 
@@ -118,9 +118,9 @@
 
 	var _cancel_rule2 = _interopRequireDefault(_cancel_rule);
 
-	var _jiesongji_order = __webpack_require__(257);
+	var _jsj_order = __webpack_require__(257);
 
-	var _jiesongji_order2 = _interopRequireDefault(_jiesongji_order);
+	var _jsj_order2 = _interopRequireDefault(_jsj_order);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -130,6 +130,7 @@
 	global.weekday = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 
 	global.queryStr = _querystring2.default;
+	global.baseUrl = location.protocol + "//" + location.host;
 
 	var App = _react2.default.createClass({
 	    displayName: 'App',
@@ -155,11 +156,11 @@
 	    _react2.default.createElement(_reactRouter.Route, { path: 'select_car_type', component: _select_car_type2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'order_detail', component: _order_detail2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'contact_person', component: _contact_person2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'travel_detail/:status', component: _travel_detail2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'travel_detail', component: _travel_detail2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'comments', component: _comments2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'check_travel_detail', component: _check_travel_detail2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'cancel_rule', component: _cancel_rule2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'jiesongji_order', component: _jiesongji_order2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_order', component: _jsj_order2.default })
 	);
 
 	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { history: _reactRouter.hashHistory, routes: routes }), document.getElementById("appContainer"));
@@ -28411,6 +28412,8 @@
 
 	var _warning_dialog2 = _interopRequireDefault(_warning_dialog);
 
+	var _util = __webpack_require__(242);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -28430,21 +28433,22 @@
 	    handleQuery: function handleQuery() {
 	        var paramsObj = this.state.queryLocation;
 	        console.log(paramsObj);
-	        var url = "http://192.168.1.234:8080/txj-jsj/jsj/jsjorder/querycartype";
+	        var url = "/jsj/jsjorder/querycartype";
 	        url += "?" + queryStr.stringify(paramsObj);
-	        console.log("查询车型：", url);
-	        fetch(url, {
-	            method: 'GET',
-	            mode: 'cors'
-	        }).then(function (res) {
-	            console.log(res.status);
-	            return res.text();
+	        console.log("查询车型url：", url);
+	        fetch(url).then(function (res) {
+	            console.log("查询车型响应状态：" + res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
 	        }).then(function (str) {
 	            console.log(JSON.parse(str));
 	            sessionStorage.setItem("carTypeList", str);
 	            location.href = "#/select_car_type";
 	        }).catch(function (e) {
-	            console.log('parsing failed', e);
+	            console.trace('错误:', e);
 	        });
 	    },
 	    componentWillMount: function componentWillMount() {
@@ -28462,14 +28466,17 @@
 	                /**
 	                 * 航班的降落数据
 	                 */
-	                var landDate = new Date(flight.landingtime);
-	                var year = landDate.getFullYear();
-	                var month = landDate.getMonth();month++;month = month < 10 ? "0" + month : month;
-	                var day = landDate.getDate();day = day < 10 ? "0" + day : day;
-	                var hour = landDate.getHours();hour = hour < 10 ? "0" + hour : hour;
-	                var minute = landDate.getMinutes();minute = minute < 10 ? "0" + minute : minute;
+
+	                var _decDatetime = (0, _util.decDatetime)(flight.landingtime),
+	                    year = _decDatetime.year,
+	                    month = _decDatetime.month,
+	                    day = _decDatetime.day,
+	                    hour = _decDatetime.hour,
+	                    minute = _decDatetime.minute,
+	                    week = _decDatetime.week;
+
 	                _this.setState({ flightInfo: { number: flight.flightnumber, year: year, month: month, day: day,
-	                        weekday: weekday[landDate.getDay()], hour: hour, minute: minute,
+	                        hour: hour, minute: minute, weekday: weekday[week],
 	                        city: flight.tocity, airport: flight.toairport,
 	                        terminal: flight.toterminal } });
 	                _this.state.queryLocation.ordertype = 1;
@@ -28479,12 +28486,14 @@
 	                /**
 	                 * 航班的起飞数据
 	                 */
-	                var takeoffDate = new Date(flight.takingofftime);
-	                var tmonth = takeoffDate.getMonth();tmonth++;tmonth = tmonth < 10 ? "0" + tmonth : tmonth;
-	                var tday = takeoffDate.getDate();tday = tday < 10 ? "0" + tday : tday;
-	                var thour = takeoffDate.getHours();thour = thour < 10 ? "0" + thour : thour;
-	                var tminute = takeoffDate.getMinutes();tminute = tminute < 10 ? "0" + tminute : tminute;
-	                _this.setState({ takeoffFlight: { month: tmonth, day: tday, hour: thour, minute: tminute,
+
+	                var _decDatetime2 = (0, _util.decDatetime)(flight.takingofftime),
+	                    month1 = _decDatetime2.month,
+	                    day1 = _decDatetime2.day,
+	                    hour1 = _decDatetime2.hour,
+	                    minute1 = _decDatetime2.minute;
+
+	                _this.setState({ takeoffFlight: { month: month1, day: day1, hour: hour1, minute: minute1,
 	                        city: flight.fromcity, airport: flight.fromairport, terminal: flight.fromterminal } });
 	                /**
 	                 * 获取降落机场航站楼的经纬度
@@ -28634,7 +28643,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        { onClick: function onClick() {
-	                                return location.href = "#/destination";
+	                                return location.href = "#/destination?city=" + f.city;
 	                            } },
 	                        _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u76EE\u7684\u5730', defaultValue: dest ? dest.name : '' })
 	                    )
@@ -28687,6 +28696,27 @@
 
 /***/ },
 /* 242 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var decDatetime = exports.decDatetime = function decDatetime(timestamp) {
+	    var d = new Date(timestamp);
+	    var year = d.getFullYear();
+	    var month = d.getMonth();month++;month = month < 10 ? "0" + month : month;
+	    var day = d.getDate();day = day < 10 ? "0" + day : day;
+	    var hour = d.getHours();hour = hour < 10 ? "0" + hour : hour;
+	    var minute = d.getMinutes();minute = minute < 10 ? "0" + minute : minute;
+	    var second = d.getSeconds();second = second < 10 ? "0" + second : second;
+	    var week = d.getDay();
+	    return { year: year, month: month, day: day, hour: hour, minute: minute, second: second, week: week };
+	};
+
+/***/ },
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28703,7 +28733,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _select_date = __webpack_require__(243);
+	var _select_date = __webpack_require__(244);
 
 	var _select_date2 = _interopRequireDefault(_select_date);
 
@@ -28711,7 +28741,7 @@
 
 	var _warning_dialog2 = _interopRequireDefault(_warning_dialog);
 
-	var _util = __webpack_require__(244);
+	var _util = __webpack_require__(242);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28846,16 +28876,20 @@
 	        console.log(paramsObj);
 	        var url = "/jsj/jsjorder/querycartype";
 	        url += "?" + queryStr.stringify(paramsObj);
-	        console.log("查询车型：", url);
+	        console.log("送机查询车型url：", url);
 	        fetch(url).then(function (res) {
-	            console.log(res.status);
-	            return res.text();
+	            console.log("查询车型响应状态：" + res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
 	        }).then(function (str) {
 	            console.log(JSON.parse(str));
 	            sessionStorage.setItem("carTypeList", str);
 	            location.href = "#/select_car_type";
 	        }).catch(function (e) {
-	            console.warn('parsing failed', e);
+	            console.trace('错误:', e);
 	        });
 	    },
 	    render: function render() {
@@ -28968,7 +29002,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        { onClick: function onClick() {
-	                                return location.href = "#/destination";
+	                                return location.href = "#/destination?city=" + tf.city;
 	                            } },
 	                        _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u51FA\u53D1\u5730', defaultValue: dest ? dest.name : '',
 	                            onFocus: function onFocus(e) {
@@ -28995,7 +29029,7 @@
 	});
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29280,31 +29314,10 @@
 	});
 
 /***/ },
-/* 244 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var decDatetime = exports.decDatetime = function decDatetime(timestamp) {
-	    var d = new Date(timestamp);
-	    var year = d.getFullYear();
-	    var month = d.getMonth();month++;month = month < 10 ? "0" + month : month;
-	    var day = d.getDate();day = day < 10 ? "0" + day : day;
-	    var hour = d.getHours();hour = hour < 10 ? "0" + hour : hour;
-	    var minute = d.getMinutes();minute = minute < 10 ? "0" + minute : minute;
-	    var second = d.getSeconds();second = second < 10 ? "0" + second : second;
-	    var week = d.getDay();
-	    return { year: year, month: month, day: day, hour: hour, minute: minute, second: second, week: week };
-	};
-
-/***/ },
 /* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -29314,35 +29327,57 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _warning_dialog = __webpack_require__(241);
+
+	var _warning_dialog2 = _interopRequireDefault(_warning_dialog);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	    displayName: "query_flight",
-
-	    flightInfo: {},
+	    displayName: 'query_flight',
 	    handleDateChange: function handleDateChange(e) {
-	        var dt = e.target.value;
-	        this.refs.dateInput.value = dt;
-	        this.flightInfo.flightdate = new Date(dt + " 00:00:00").getTime();
-	    },
-	    handleNoChange: function handleNoChange(e) {
-	        this.flightInfo.flightnumber = e.target.value;
+	        this.refs.dateInput.value = e.target.value;
 	    },
 	    handleQuery: function handleQuery() {
-	        var url = "http://192.168.1.234:8080/txj-jsj/jsj/jsjorder/queryflight";
-	        url += "?" + queryStr.stringify(this.flightInfo);
-	        console.log("查询航班：", url);
-	        fetch(url, {
-	            method: 'GET',
-	            mode: 'cors'
-	        }).then(function (res) {
-	            console.log(res.status);
-	            return res.text();
+	        var date = this.refs.dateInput.value,
+	            number = this.refs.noInput.value.trim();
+	        var flightdate = void 0,
+	            flightnumber = void 0;
+	        if (date) {
+	            flightdate = new Date(date + " 00:00:00").getTime();
+	        } else {
+	            var dom = document.getElementById("dialog");
+	            _reactDom2.default.render(_react2.default.createElement(_warning_dialog2.default, { warn: '\u672A\u8F93\u5165\u822A\u73ED\u65E5\u671F!' }), dom);
+	            dom.style.display = "block";
+	            return 0;
+	        }
+	        if (number) {
+	            flightnumber = number;
+	        } else {
+	            var _dom = document.getElementById("dialog");
+	            _reactDom2.default.render(_react2.default.createElement(_warning_dialog2.default, { warn: '\u672A\u8F93\u5165\u822A\u73ED\u53F7!' }), _dom);
+	            _dom.style.display = "block";
+	            return 0;
+	        }
+	        var url = "/jsj/jsjorder/queryflight";
+	        url += "?" + queryStr.stringify({ flightdate: flightdate, flightnumber: flightnumber });
+	        console.log("接机查询航班url：", url);
+	        fetch(url).then(function (res) {
+	            console.log("查询航班响应状态：", res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
 	        }).then(function (str) {
 	            sessionStorage.setItem("flightData", str);
 	            location.href = "#/flight_list";
 	        }).catch(function (e) {
-	            console.log('parsing failed', e);
+	            console.log('错误：', e);
 	        });
 	    },
 	    componentWillMount: function componentWillMount() {
@@ -29350,25 +29385,25 @@
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
-	            "div",
-	            { className: "jieji-query" },
+	            'div',
+	            { className: 'jieji-query' },
 	            _react2.default.createElement(
-	                "section",
-	                { className: "songji-input" },
-	                _react2.default.createElement("img", { src: "/weixinjsj/img/04.png" }),
-	                _react2.default.createElement("input", { type: "text", placeholder: "\u8BF7\u586B\u5199\u8D77\u98DE\u822A\u73ED\u65E5\u671F", ref: "dateInput" }),
-	                _react2.default.createElement("input", { type: "date", onChange: this.handleDateChange, className: "date-select" })
+	                'section',
+	                { className: 'songji-input' },
+	                _react2.default.createElement('img', { src: '/weixinjsj/img/04.png' }),
+	                _react2.default.createElement('input', { type: 'text', placeholder: '\u8BF7\u586B\u5199\u8D77\u98DE\u822A\u73ED\u65E5\u671F', ref: 'dateInput' }),
+	                _react2.default.createElement('input', { type: 'date', onChange: this.handleDateChange, className: 'date-select' })
 	            ),
 	            _react2.default.createElement(
-	                "section",
-	                { className: "songji-input" },
-	                _react2.default.createElement("img", { src: "/weixinjsj/img/05.png" }),
-	                _react2.default.createElement("input", { type: "text", placeholder: "\u8D77\u98DE\u822A\u73ED\u53F7", onChange: this.handleNoChange })
+	                'section',
+	                { className: 'songji-input' },
+	                _react2.default.createElement('img', { src: '/weixinjsj/img/05.png' }),
+	                _react2.default.createElement('input', { type: 'text', placeholder: '\u8D77\u98DE\u822A\u73ED\u53F7', ref: 'noInput' })
 	            ),
 	            _react2.default.createElement(
-	                "button",
-	                { className: "query-btn", onClick: this.handleQuery },
-	                "\u67E5\u8BE2"
+	                'button',
+	                { className: 'query-btn', onClick: this.handleQuery },
+	                '\u67E5\u8BE2'
 	            )
 	        );
 	    }
@@ -29398,23 +29433,25 @@
 	    },
 	    handleClick: function handleClick(e) {
 	        var orderType = sessionStorage.getItem("OrderType");
-	        if (e.target.nodeName == "SECTION") {
-	            var id = e.target.id;
-	            var flight = this.flightList[id];
-	            sessionStorage.setItem('FlightInfo', JSON.stringify(flight));
+	        var id = e.target.id;
+	        var flight = this.flightList[id];
+	        console.log(flight);
+	        sessionStorage.setItem('FlightInfo', JSON.stringify(flight));
+	        setTimeout(function () {
 	            if (+orderType == 1) {
 	                location.href = "#/jieji_query";
 	            } else if (+orderType == 2) {
 	                location.href = "#/songji_query";
 	            }
-	        }
+	        }, 500);
 	    },
 	    render: function render() {
 	        var _this = this;
 
 	        var flightData = sessionStorage.getItem("flightData");
-	        console.log(flightData);
-	        this.flightList = JSON.parse(flightData).records;
+	        var obj = JSON.parse(flightData);
+	        console.log(obj);
+	        this.flightList = obj.records || [];
 	        var list = this.flightList.map(function (item, index) {
 	            var dt1 = new Date(item.takingofftime);
 	            var dt2 = new Date(item.landingtime);
@@ -29427,7 +29464,7 @@
 
 	            return _react2.default.createElement(
 	                "section",
-	                { className: "flight-item", onClick: _this.handleClick, id: index, key: index },
+	                { className: "flight-item", key: index },
 	                _react2.default.createElement(
 	                    "h3",
 	                    null,
@@ -29465,7 +29502,7 @@
 	                            "h2",
 	                            null,
 	                            t2,
-	                            _react2.default.createElement("em", null)
+	                            _react2.default.createElement("em", { onClick: _this.handleClick, id: index })
 	                        ),
 	                        _react2.default.createElement(
 	                            "p",
@@ -29479,15 +29516,20 @@
 	                )
 	            );
 	        });
+	        var len = list.length;
 	        return _react2.default.createElement(
 	            "div",
 	            { className: "flight-list" },
-	            _react2.default.createElement(
+	            len > 0 ? _react2.default.createElement(
 	                "p",
 	                null,
 	                "\u4EE5\u4E0B\u65F6\u95F4\u5747\u4E3A\u5F53\u5730\u65F6\u95F4"
-	            ),
-	            list
+	            ) : '',
+	            len > 0 ? list : _react2.default.createElement(
+	                "h4",
+	                null,
+	                "\u672A\u67E5\u8BE2\u5230\u822A\u73ED\u4FE1\u606F"
+	            )
 	        );
 	    }
 	});
@@ -29519,13 +29561,11 @@
 	exports.default = _react2.default.createClass({
 	    displayName: 'destination',
 	    getInitialState: function getInitialState() {
-	        return {
-	            searchData: []
-	        };
+	        return { searchData: [] };
 	    },
 	    componentWillMount: function componentWillMount() {
 	        document.title = "目的地";
-	        this.city = { pinyin: "ShenZhen", name: '深圳' };
+	        this.city = { pinyin: "", name: this.props.location.query.city || "深圳" };
 	    },
 	    handleSelectCity: function handleSelectCity() {
 	        var dom = document.getElementById("dialog");
@@ -29815,7 +29855,7 @@
 	        /**
 	         *初始化车图片列表
 	         */
-	        this.carImgList = ["/weixinjsj/jsj/img/07.png", "/weixinjsj/jsj/img/08.png", "/weixinjsj/jsj/img/09.png", "/weixinjsj/jsj/img/10.png"];
+	        this.carImgList = ["/weixinjsj/img/07.png", "/weixinjsj/img/08.png", "/weixinjsj/img/09.png", "/weixinjsj/img/10.png"];
 	    },
 	    handleClickSelect: function handleClickSelect(e) {
 	        var id = e.target.id;
@@ -29958,19 +29998,20 @@
 	            this.setState({ contactPerson: contact });
 	        } else {
 	            /*联系人不存在，后台获取*/
-	            var url = "http://192.168.1.234:8080/txj-jsj/jsj/jsjorder/queryuser";
-	            console.log("查询航班：", url);
-	            fetch(url, {
-	                method: 'GET',
-	                mode: 'cors'
-	            }).then(function (res) {
-	                console.log(res.status);
-	                return res.text();
+	            var url = "/jsj/jsjorder/queryuser";
+	            console.log("查询航班url：", url);
+	            fetch(url).then(function (res) {
+	                console.log("查询航班响应状态：", res.status);
+	                if (+res.status < 400) {
+	                    return res.text();
+	                } else {
+	                    throw new Error("服务异常");
+	                }
 	            }).then(function (str) {
 	                console.log(str);
 	                _this.setState({ contactPerson: JSON.parse(str).record });
 	            }).catch(function (e) {
-	                console.warn('parsing failed', e);
+	                console.warn('错误', e);
 	            });
 	        }
 	        /**
@@ -30015,23 +30056,25 @@
 	        var userremark = this.state.remark;
 	        var paramsObj = { ordertype: ordertype, actualname: actualname, actualphone: actualphone, cartype: cartype, pricemark: pricemark, totalfee: totalfee, userremark: userremark };
 	        console.log(paramsObj);
-	        var url = "http://192.168.1.234:8080/txj-jsj/jsj//jsjorder/new";
+	        var url = "/jsj/jsjorder/new";
 	        url += "?" + queryStr.stringify(paramsObj, null, null, { encodeURIComponent: encodeURI });
-	        console.info("下单：", url);
-	        fetch(url, {
-	            method: 'GET',
-	            mode: 'cors'
-	        }).then(function (res) {
-	            console.log(res.status);
-	            return res.text();
+	        console.info("创建订单url：", url);
+	        fetch(url).then(function (res) {
+	            console.log("创建订单响应状态：", res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
 	        }).then(function (str) {
 	            var obj = JSON.parse(str);
 	            console.log(obj);
 	            if (obj.code == 0) {
-	                location.href = "#/travel_detail/1";
+	                sessionStorage.setItem("OrderSerialNumber", obj.record.serialnumber);
+	                location.href = "#/travel_detail";
 	            } else {}
 	        }).catch(function (e) {
-	            console.warn('parsing failed', e);
+	            console.warn('错误', e);
 	        });
 	    },
 	    render: function render() {
@@ -30364,31 +30407,86 @@
 
 	    /**
 	     * 1：行程正安排,2：行程已安排,3：行程服务中，4：行程待评价,5:评价完成,6:行程支付取消
-	     * @returns {{travelStatus: number}}
+	     * @returns {{status: number}}
 	     */
 	    getInitialState: function getInitialState() {
-	        return {
-	            travelStatus: this.props.params.status
-	        };
+	        return { status: 1 };
 	    },
 	    componentWillMount: function componentWillMount() {
 	        document.title = "行程详情";
 	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	        var status = this.state.travelStatus;
-	        if (status == 1) {
-	            var cartype = sessionStorage.getItem('selectedCarType');
-	            this.car = JSON.parse(cartype);
-	            this.sumMoney = this.car.totalfee;
-	        } else if (status == 2) {}
+	        var serialNumber = sessionStorage.getItem("OrderSerialNumber");
+	        this.setState({ serialNumber: serialNumber });
+	        var cartype = sessionStorage.getItem('selectedCarType');
+	        this.carType = JSON.parse(cartype);
+	        var d = sessionStorage.getItem("TravelDetailInfo");
+	        if (d) {
+	            d = JSON.parse(d);
+	            this.setState({ driver: d.driverinfo[0].record });
+	        } else {
+	            this.setState({ driver: {} });
+	        }
+	        /**
+	         * 获取上一步的评价星数
+	         */
+	        var score = this.props.location.query.score;
+	        if (score) this.setState({ score: score });
+	        /**
+	         *通过设置状态来改变呈现
+	         */
+	        var flag = this.props.location.query.flag;
+	        if (flag) this.setState({ status: +flag });
 	    },
 	    incre: function incre() {
-	        var i = 0;
-	        return function () {
+	        var i = 0;return function () {
 	            return i++;
 	        };
 	    },
+	    handleCheckDetail: function handleCheckDetail() {
+	        var url = "/jsj/jsjorder/detail";
+	        url += "?serialnumber=" + this.state.serialNumber;
+	        fetch(url).then(function (res) {
+	            console.log("查询订单详情响应状态：", res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
+	        }).then(function (str) {
+	            var obj = JSON.parse(str);
+	            console.log(obj);
+	            if (obj.code == 0) {
+	                sessionStorage.setItem("TravelDetailInfo", JSON.stringify(obj.record));
+	                location.href = "#/check_travel_detail";
+	            }
+	        }).catch(function (e) {
+	            console.warn('错误', e);
+	        });
+	    },
+	    handleOrderCancel: function handleOrderCancel() {
+	        var _this = this;
+
+	        var url = "/jsj/jsjorder/cancel";
+	        url += "?serialnumber=" + this.state.serialNumber;
+	        fetch(url).then(function (res) {
+	            console.log("取消订单响应状态：", res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
+	        }).then(function (str) {
+	            var obj = JSON.parse(str);
+	            console.log(obj);
+	            if (obj.code == 0) {
+	                _this.setState({ status: 6 });
+	            }
+	        }).catch(function (e) {
+	            console.warn('错误', e);
+	        });
+	    },
 	    render: function render() {
-	        var status = this.state.travelStatus;
+	        var status = +this.state.status;
 	        var seq = this.incre();
 	        var list = [];
 	        var commonPart = [_react2.default.createElement(
@@ -30403,10 +30501,10 @@
 	                null,
 	                '\xA5'
 	            ),
-	            this.sumMoney || '0.00'
+	            this.carType.totalfee || '0.00'
 	        ), _react2.default.createElement(
 	            'li',
-	            { key: seq() },
+	            { key: seq(), onClick: this.handleCheckDetail },
 	            '\u67E5\u770B\u8BE6\u60C5',
 	            _react2.default.createElement('i', { className: 'arrow' })
 	        )];
@@ -30436,7 +30534,8 @@
 	                { key: seq() },
 	                _react2.default.createElement(
 	                    'a',
-	                    { href: '' },
+	                    { href: 'javascript:void(0)',
+	                        onClick: this.handleOrderCancel },
 	                    '\u53D6\u6D88\u8BA2\u5355'
 	                )
 	            );
@@ -30466,7 +30565,7 @@
 	                { key: seq() },
 	                _react2.default.createElement(
 	                    'a',
-	                    { href: '' },
+	                    { href: 'javascript:void(0)' },
 	                    '\u53D6\u6D88\u8BA2\u5355'
 	                )
 	            );
@@ -30500,7 +30599,9 @@
 	            list[1] = _react2.default.createElement('li', { key: seq(), className: 'space' });
 	            list[2] = _react2.default.createElement(
 	                'li',
-	                { key: seq() },
+	                { key: seq(), onClick: function onClick() {
+	                        return location.href = "#/comments";
+	                    } },
 	                '\u53BB\u8BC4\u4EF7 ',
 	                _react2.default.createElement('i', { className: 'arrow' })
 	            );
@@ -30518,7 +30619,7 @@
 	            list[1] = _react2.default.createElement(
 	                'li',
 	                { key: seq() },
-	                _react2.default.createElement(_star2.default, { starCount: 4,
+	                _react2.default.createElement(_star2.default, { starCount: this.state.score,
 	                    starOnUrl: '/weixinjsj/img/bigStar-on.png',
 	                    starOffUrl: '/weixinjsj/img/bigStar-off.png' })
 	            );
@@ -30557,7 +30658,9 @@
 	                _react2.default.createElement(
 	                    'em',
 	                    null,
-	                    '\xA572.00 \u5DF2\u9000\u6B3E'
+	                    '\xA5',
+	                    this.carType.totalfee,
+	                    '.00 \u5DF2\u9000\u6B3E'
 	                )
 	            );
 	            list[5] = _react2.default.createElement(
@@ -30566,7 +30669,9 @@
 	                '\u53D6\u6D88\u6263\u8D39:\u2002\xA50.00',
 	                _react2.default.createElement(
 	                    'em',
-	                    null,
+	                    { onClick: function onClick() {
+	                            return location.href = "#/cancel_rule";
+	                        } },
 	                    '\u53D6\u6D88\u89C4\u5219'
 	                ),
 	                _react2.default.createElement('i', { className: 'arrow' })
@@ -30580,13 +30685,13 @@
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'travel-detail' },
-	            this.state.travelStatus == 1 ? _react2.default.createElement(
+	            this.state.status == 1 ? _react2.default.createElement(
 	                'ul',
 	                { className: 'order-car-info' },
 	                _react2.default.createElement(
 	                    'li',
 	                    null,
-	                    _react2.default.createElement('img', { src: this.car.imgUrl })
+	                    _react2.default.createElement('img', { src: this.carType.imgUrl })
 	                ),
 	                _react2.default.createElement(
 	                    'li',
@@ -30597,21 +30702,21 @@
 	                        _react2.default.createElement(
 	                            'em',
 	                            null,
-	                            this.car.cartype
+	                            this.carType.cartype
 	                        ),
 	                        _react2.default.createElement('img', { src: '/weixinjsj/img/people.png' }),
 	                        ' \u2264',
-	                        this.car.passengernumber,
+	                        this.carType.passengernumber,
 	                        '\u4EBA',
 	                        _react2.default.createElement('img', { src: '/weixinjsj/img/trunk.png' }),
 	                        ' \u2264',
-	                        this.car.luggagenumber,
+	                        this.carType.luggagenumber,
 	                        '\u4EF6'
 	                    ),
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        this.car.cardescription
+	                        this.carType.cardescription
 	                    )
 	                )
 	            ) : _react2.default.createElement(
@@ -30620,7 +30725,7 @@
 	                _react2.default.createElement(
 	                    'li',
 	                    null,
-	                    _react2.default.createElement('img', { src: '/weixinjsj/img/11.png' })
+	                    _react2.default.createElement('img', { src: this.state.driver.avatar || "/weixinjsj/img/11.png" })
 	                ),
 	                _react2.default.createElement(
 	                    'li',
@@ -30628,14 +30733,16 @@
 	                    _react2.default.createElement(
 	                        'h2',
 	                        null,
-	                        '\u4E00\u81F4\u6027\u2002\u5965B45487'
+	                        this.state.driver.realname || "司机名",
+	                        '\u2002',
+	                        this.state.driver.carno || "车牌号"
 	                    ),
 	                    _react2.default.createElement(_star2.default, { starCount: 5, starOnUrl: '/weixinjsj/img/star-on.png',
 	                        starOffUrl: '/weixinjsj/img/star-off.png' }),
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        '\u672C\u7530\u96C5\u9601'
+	                        this.state.driver.carbrand || "车品牌"
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -30719,9 +30826,14 @@
 	exports.default = _react2.default.createClass({
 	    displayName: 'comments',
 	    getInitialState: function getInitialState() {
-	        return {
-	            starCount: 5
-	        };
+	        return { starCount: 5 };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        document.title = "评价我们";
+	        document.getElementById("appContainer").style.backgroundColor = "#fff";
+	        var d = sessionStorage.getItem("TravelDetailInfo");
+	        d = JSON.parse(d);
+	        this.setState({ driver: d.driverinfo[0].record });
 	    },
 	    handleClickStar: function handleClickStar(e) {
 	        var grade = e.target.id;
@@ -30740,16 +30852,30 @@
 	            this.refs.starTip.innerHTML = "满意";
 	        }
 	    },
-	    componentWillMount: function componentWillMount() {
-	        document.title = "评价我们";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	    },
 	    handleCommentCommit: function handleCommentCommit() {
-	        console.log(this.star.state.count);
+	        var content = this.refs.comment.value;
+	        var score = this.state.starCount;
+	        var serialnumber = sessionStorage.getItem("OrderSerialNumber");
+	        var url = "/jsj/jsjorder/comment";
+	        url += "?" + queryStr.stringify({ serialnumber: serialnumber, score: score, content: content });
+	        fetch(url).then(function (res) {
+	            console.log("查询订单详情响应状态：", res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
+	        }).then(function (str) {
+	            var obj = JSON.parse(str);
+	            console.log(obj);
+	            if (obj.code == 0) {
+	                location.href = "#/travel_detail?flag=5&score=" + score;
+	            }
+	        }).catch(function (e) {
+	            console.warn('错误', e);
+	        });
 	    },
 	    render: function render() {
-	        var _this = this;
-
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'comments-us' },
@@ -30764,7 +30890,7 @@
 	                _react2.default.createElement(
 	                    'li',
 	                    null,
-	                    _react2.default.createElement('img', { src: '/weixinjsj/img/11.png' })
+	                    _react2.default.createElement('img', { src: this.state.driver.avatar || "/weixinjsj/img/11.png" })
 	                ),
 	                _react2.default.createElement(
 	                    'li',
@@ -30772,28 +30898,27 @@
 	                    _react2.default.createElement(
 	                        'h2',
 	                        null,
-	                        '\u4E00\u81F4\u6027\u2002\u5965B45487'
+	                        this.state.driver.realname,
+	                        '\u2002',
+	                        this.state.driver.carno
 	                    ),
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        '\u672C\u7530\u96C5\u9601'
+	                        this.state.driver.carbrand
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'li',
 	                    null,
-	                    _react2.default.createElement(_star2.default, { starCount: this.state.starCount, ref: function ref(c) {
-	                            return _this.star = c;
-	                        },
+	                    _react2.default.createElement(_star2.default, { starCount: this.state.starCount,
 	                        starOnUrl: '/weixinjsj/img/bigStar-on.png',
 	                        starOffUrl: '/weixinjsj/img/bigStar-off.png',
-	                        commentStar: this.handleClickStar
-	                    }),
+	                        commentStar: this.handleClickStar }),
 	                    _react2.default.createElement('p', { ref: 'starTip' })
 	                )
 	            ),
-	            _react2.default.createElement('textarea', { placeholder: '\u628A\u60A8\u7684\u4F53\u9A8C\u6216\u5EFA\u8BAE\u544A\u8BC9\u6211\u4EEC\u5427!(\u533F\u540D\u5185\u5BB9\uFF0C\u53EF\u653E\u5FC3\u586B\u5199)' }),
+	            _react2.default.createElement('textarea', { placeholder: '\u628A\u60A8\u7684\u4F53\u9A8C\u6216\u5EFA\u8BAE\u544A\u8BC9\u6211\u4EEC\u5427!(\u533F\u540D\u5185\u5BB9\uFF0C\u53EF\u653E\u5FC3\u586B\u5199)', ref: 'comment' }),
 	            _react2.default.createElement(
 	                'button',
 	                { className: 'query-btn', onClick: this.handleCommentCommit },
@@ -30807,7 +30932,7 @@
 /* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -30817,151 +30942,202 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _util = __webpack_require__(242);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	    displayName: "check_travel_detail",
+	    displayName: 'check_travel_detail',
 	    componentWillMount: function componentWillMount() {
 	        document.title = "行程详情";
 	        document.getElementById("appContainer").style.backgroundColor = "#fff";
 	    },
 	    render: function render() {
+	        var d = sessionStorage.getItem("TravelDetailInfo");
+	        d = JSON.parse(d);
+	        var flag = d.ordertype;
+
+	        var _decDatetime = (0, _util.decDatetime)(d.bookingtime),
+	            year = _decDatetime.year,
+	            month = _decDatetime.month,
+	            day = _decDatetime.day,
+	            hour = _decDatetime.hour,
+	            minute = _decDatetime.minute;
+
+	        var _decDatetime2 = (0, _util.decDatetime)(d.bookingtime),
+	            y1 = _decDatetime2.year,
+	            mon1 = _decDatetime2.month,
+	            d1 = _decDatetime2.day,
+	            h1 = _decDatetime2.hour,
+	            min1 = _decDatetime2.minute;
+
+	        var f = sessionStorage.getItem("FlightInfo");
+	        f = JSON.parse(f);
 	        return _react2.default.createElement(
-	            "div",
-	            { className: "travel-detail" },
+	            'div',
+	            { className: 'travel-detail' },
 	            _react2.default.createElement(
-	                "ul",
-	                { className: "travel-order-detail" },
+	                'ul',
+	                { className: 'travel-order-detail' },
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
-	                    "\u6210\u529F\u652F\u4ED8"
+	                    '\u6210\u529F\u652F\u4ED8'
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
-	                    "\xA5122.00"
+	                    '\xA5',
+	                    d.totalfee,
+	                    '.00'
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u8D39\u7528\u603B\u8BA1"
+	                        '\u8D39\u7528\u603B\u8BA1'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\xA5122"
+	                        '\xA5',
+	                        d.totalfee
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
-	                    "\u8BA2\u5355\u4FE1\u606F"
+	                    '\u8BA2\u5355\u4FE1\u606F'
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
-	                    "\u63A5\u673A"
+	                    +flag == 1 ? '接机' : '送机'
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u822A\u73ED\u53F7"
+	                        '\u822A\u73ED\u53F7'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "MU4587"
+	                        f ? f.flightnumber : ''
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u7528\u8F66\u65F6\u95F4"
+	                        '\u7528\u8F66\u65F6\u95F4'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "2016-12-14 21\uFF1A50"
+	                        year,
+	                        '-',
+	                        month,
+	                        '-',
+	                        day,
+	                        ' ',
+	                        hour,
+	                        ':',
+	                        minute
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
-	                    _react2.default.createElement(
-	                        "p",
+	                    +flag == 1 ? _react2.default.createElement(
+	                        'p',
 	                        null,
-	                        "\u51FA\u53D1\u673A\u573A"
+	                        '\u51FA\u53D1\u673A\u573A'
+	                    ) : _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        '\u51FA\u53D1\u5730\u5740'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u4E0A\u6D77\u8679\u6865\u673A\u573AT2\u822A\u7AD9\u697C"
+	                        d ? d.startaddress : ''
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
-	                    _react2.default.createElement(
-	                        "p",
+	                    +flag == 1 ? _react2.default.createElement(
+	                        'p',
 	                        null,
-	                        "\u9001\u8FBE\u5730\u5740"
+	                        '\u9001\u8FBE\u5730\u5740'
+	                    ) : _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        '\u9001\u8FBE\u673A\u573A'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u4E0A\u6D77\u8FEA\u58EB\u5C3C\u4E50\u56ED"
+	                        d ? d.endadress : ''
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u884C\u7A0B\u5907\u6CE8"
+	                        '\u884C\u7A0B\u5907\u6CE8'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u8BF7\u63D0\u524D\u5230\u8FBE\u6307\u5B9A\u5730\u70B9\u8BF7\u63D0\u524D\u5230\u8FBE\u6307\u5B9A\u5730\u70B9"
+	                        d ? d.userremark : ''
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u8054\u7CFB\u4EBA"
+	                        '\u8054\u7CFB\u4EBA'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u90D1\u9633\u5E73 18667656668"
+	                        d ? d.actualname : '',
+	                        ' ',
+	                        d ? d.actualphone : ''
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u4E0B\u5355\u65F6\u95F4"
+	                        '\u4E0B\u5355\u65F6\u95F4'
 	                    ),
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "2016-12-14 19:55"
+	                        y1,
+	                        '-',
+	                        mon1,
+	                        '-',
+	                        d1,
+	                        ' ',
+	                        h1,
+	                        ':',
+	                        min1
 	                    )
 	                )
 	            )
@@ -31084,7 +31260,7 @@
 /* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -31094,199 +31270,197 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _util = __webpack_require__(242);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	    displayName: "jiesongji_order",
+	    displayName: 'jsj_order',
 	    getInitialState: function getInitialState() {
 	        return {
-	            isFinish: true
+	            finished: false,
+	            orderList: []
 	        };
 	    },
 	    componentWillMount: function componentWillMount() {
+	        var _this = this;
+
 	        document.title = "接送机订单";
+	        var list = sessionStorage.getItem("GoonOrders");
+	        if (list) {
+	            this.setState({ orderList: JSON.parse(list) });
+	            return 0;
+	        }
+	        var url = "/jsj/jsjorder/runninglist";
+	        fetch(url).then(function (res) {
+	            console.log("获取进行中订单的响应状态：", res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
+	        }).then(function (str) {
+	            var obj = JSON.parse(str);
+	            console.log(obj);
+	            if (obj.code == 0) {
+	                _this.setState({ orderList: obj.records });
+	                sessionStorage.setItem("GoonOrders", JSON.stringify(obj.records));
+	            }
+	        }).catch(function (e) {
+	            console.warn('错误', e);
+	        });
 	    },
 	    handleShift: function handleShift(e) {
+	        var _this2 = this;
+
 	        var id = e.target.id;
-	        var clazz = e.target.className;
-	        if (clazz != "current") {
-	            this.setState({ isFinish: !this.state.isFinish });
-	        }
 	        if (id == 'finished') {
-	            console.log("finished");
+	            var list = sessionStorage.getItem("FinishedOrders");
+	            if (list) {
+	                this.setState({ orderList: JSON.parse(list) });
+	                this.setState({ finished: true });
+	                return 0;
+	            }
+	            var url = "/jsj/jsjorder/historylist";
+	            fetch(url).then(function (res) {
+	                console.log("获取进行中订单的响应状态：", res.status);
+	                if (+res.status < 400) {
+	                    return res.text();
+	                } else {
+	                    throw new Error("服务异常");
+	                }
+	            }).then(function (str) {
+	                var obj = JSON.parse(str);
+	                console.log(obj);
+	                if (obj.code == 0) {
+	                    _this2.setState({ orderList: obj.records });
+	                    _this2.setState({ finished: true });
+	                    sessionStorage.setItem("FinishedOrders", JSON.stringify(obj.records));
+	                }
+	            }).catch(function (e) {
+	                console.warn('错误', e);
+	            });
 	        } else {
-	            console.log("other");
+	            var _list = sessionStorage.getItem("GoonOrders");
+	            this.setState({ orderList: JSON.parse(_list) });
+	            this.setState({ finished: false });
 	        }
 	    },
 	    render: function render() {
+	        var list = this.state.orderList.map(function (item, index) {
+	            var _decDatetime = (0, _util.decDatetime)(item.bookingtime),
+	                year = _decDatetime.year,
+	                month = _decDatetime.month,
+	                day = _decDatetime.day,
+	                hour = _decDatetime.hour,
+	                minute = _decDatetime.minute;
+
+	            var statusMsg = _react2.default.createElement(
+	                'span',
+	                { style: { color: "#E6C057" } },
+	                '\u8FDB\u884C\u4E2D'
+	            );
+	            switch (item.status) {
+	                case 0:
+	                    statusMsg = _react2.default.createElement(
+	                        'span',
+	                        { style: { color: "#E6C057" } },
+	                        '\u8FDB\u884C\u4E2D'
+	                    );break;
+	                case 1:
+	                    statusMsg = _react2.default.createElement(
+	                        'span',
+	                        { style: { color: "#E6C057" } },
+	                        '\u8FDB\u884C\u4E2D'
+	                    );break;
+	                case 2:
+	                    statusMsg = _react2.default.createElement(
+	                        'span',
+	                        { style: { color: "#E6C057" } },
+	                        '\u8FDB\u884C\u4E2D'
+	                    );break;
+	                default:
+	                    break;
+	            }
+	            return _react2.default.createElement(
+	                'ul',
+	                { key: index },
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        +item.ordertype == 1 ? "接车" : "送车"
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        statusMsg,
+	                        _react2.default.createElement('i', { className: 'arrow' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement('img', { src: '/weixinjsj/img/clock.png' }),
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u65F6\u95F4 :'
+	                    ),
+	                    year,
+	                    '-',
+	                    month,
+	                    '-',
+	                    day,
+	                    '\u2002',
+	                    hour,
+	                    ':',
+	                    minute
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u8D77\u70B9 :'
+	                    ),
+	                    item.startaddress
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u7EC8\u70B9 :'
+	                    ),
+	                    item.endaddress
+	                )
+	            );
+	        });
+
 	        return _react2.default.createElement(
-	            "div",
-	            { className: "jiesongji-order" },
+	            'div',
+	            { className: 'jiesongji-order' },
 	            _react2.default.createElement(
-	                "hgroup",
+	                'hgroup',
 	                null,
 	                _react2.default.createElement(
-	                    "h2",
-	                    { id: "", onClick: this.handleShift, className: this.state.isFinish ? "" : "current" },
-	                    "\u8FDB\u884C\u4E2D"
+	                    'h2',
+	                    { onClick: this.handleShift, className: this.state.finished ? "" : "current" },
+	                    '\u8FDB\u884C\u4E2D'
 	                ),
-	                _react2.default.createElement("i", null),
+	                _react2.default.createElement('i', null),
 	                _react2.default.createElement(
-	                    "h2",
-	                    { id: "finished", onClick: this.handleShift, className: this.state.isFinish ? "current" : "" },
-	                    "\u5DF2\u5B8C\u6210"
+	                    'h2',
+	                    { id: 'finished', onClick: this.handleShift, className: this.state.finished ? "current" : "" },
+	                    '\u5DF2\u5B8C\u6210'
 	                )
 	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        "\u63A5\u8F66"
-	                    ),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        "\u5DF2\u53D6\u6D88",
-	                        _react2.default.createElement("i", { className: "arrow" })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement("img", { src: "/weixinjsj/img/clock.png" }),
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u65F6\u95F4 :"
-	                    ),
-	                    "2016-12-14  19:54"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u8D77\u70B9 :"
-	                    ),
-	                    "\u6DF1\u5733\u5B9D\u5B89\u673A\u573AT3\u822A\u7AD9\u697C"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u7EC8\u70B9 :"
-	                    ),
-	                    "\u5B9D\u5B89\u533A\u897F\u4E61\u6D77\u57CE\u8DEF\u767D\u91D1\u516C\u5BD3"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        "\u63A5\u8F66"
-	                    ),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        "\u5DF2\u53D6\u6D88",
-	                        _react2.default.createElement("i", { className: "arrow" })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement("img", { src: "/weixinjsj/img/clock.png" }),
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u65F6\u95F4 :"
-	                    ),
-	                    "2016-12-14  19:54"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u8D77\u70B9 :"
-	                    ),
-	                    "\u6DF1\u5733\u5B9D\u5B89\u673A\u573AT3\u822A\u7AD9\u697C"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u7EC8\u70B9 :"
-	                    ),
-	                    "\u5B9D\u5B89\u533A\u897F\u4E61\u6D77\u57CE\u8DEF\u767D\u91D1\u516C\u5BD3"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        "\u63A5\u8F66"
-	                    ),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        "\u5DF2\u53D6\u6D88",
-	                        _react2.default.createElement("i", { className: "arrow" })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement("img", { src: "/weixinjsj/img/clock.png" }),
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u65F6\u95F4 :"
-	                    ),
-	                    "2016-12-14  19:54"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u8D77\u70B9 :"
-	                    ),
-	                    "\u6DF1\u5733\u5B9D\u5B89\u673A\u573AT3\u822A\u7AD9\u697C"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u7EC8\u70B9 :"
-	                    ),
-	                    "\u5B9D\u5B89\u533A\u897F\u4E61\u6D77\u57CE\u8DEF\u767D\u91D1\u516C\u5BD3"
-	                )
-	            )
+	            list
 	        );
 	    }
 	});

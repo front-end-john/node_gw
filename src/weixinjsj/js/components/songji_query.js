@@ -104,16 +104,20 @@ export default React.createClass({
         console.log(paramsObj);
         let url="/jsj/jsjorder/querycartype";
         url+="?"+queryStr.stringify(paramsObj);
-        console.log("查询车型：",url);
-        fetch(url).then(function(res) {
-            console.log(res.status);
-            return res.text();
+        console.log("送机查询车型url：",url);
+        fetch(url).then(function(res){
+            console.log("查询车型响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
         }).then((str)=>{
             console.log(JSON.parse(str));
             sessionStorage.setItem("carTypeList",str);
             location.href="#/select_car_type";
         }).catch(function(e) {
-            console.warn('parsing failed', e);
+            console.trace('错误:', e);
         });
     },
     render(){
@@ -150,7 +154,7 @@ export default React.createClass({
                 <section className="from-to">
                     <ul><li/><li/><li/><li/><li/><li/></ul>
                     <div>
-                        <p onClick={()=>location.href="#/destination"}>
+                        <p onClick={()=>location.href="#/destination?city="+tf.city}>
                             <input placeholder="请输入出发地" defaultValue={dest?dest.name:''}
                                    onFocus={(e)=>e.target.blur()}/></p>
                         <p onClick={this.handleWarning}>

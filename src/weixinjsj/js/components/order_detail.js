@@ -31,19 +31,20 @@ export default React.createClass({
             this.setState({contactPerson:contact});
         }else {
             /*联系人不存在，后台获取*/
-            let url="http://192.168.1.234:8080/txj-jsj/jsj/jsjorder/queryuser";
-            console.log("查询航班：",url);
-            fetch(url,{
-                method: 'GET',
-                mode: 'cors'
-            }).then(function(res) {
-                console.log(res.status);
-                return res.text();
+            let url="/jsj/jsjorder/queryuser";
+            console.log("查询航班url：",url);
+            fetch(url).then(function(res) {
+                console.log("查询航班响应状态：",res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务异常");
+                }
             }).then((str)=>{
                 console.log(str);
                 this.setState({contactPerson:JSON.parse(str).record});
             }).catch(function(e) {
-                console.warn('parsing failed', e)
+                console.warn('错误', e)
             });
         }
         /**
@@ -85,25 +86,27 @@ export default React.createClass({
         let userremark=this.state.remark;
         let paramsObj={ordertype,actualname,actualphone,cartype,pricemark,totalfee,userremark};
         console.log(paramsObj);
-        let url="http://192.168.1.234:8080/txj-jsj/jsj//jsjorder/new";
+        let url="/jsj/jsjorder/new";
         url+="?"+queryStr.stringify(paramsObj,null,null,{encodeURIComponent: encodeURI});
-        console.info("下单：",url);
-        fetch(url,{
-            method: 'GET',
-            mode: 'cors'
-        }).then(function(res) {
-            console.log(res.status);
-            return res.text();
+        console.info("创建订单url：",url);
+        fetch(url).then(function(res){
+            console.log("创建订单响应状态：",res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
         }).then((str)=>{
             let obj=JSON.parse(str);
             console.log(obj);
-            if(obj.code==0){
-                location.href="#/travel_detail/1";
+            if(obj.code == 0){
+                sessionStorage.setItem("OrderSerialNumber",obj.record.serialnumber);
+                location.href="#/travel_detail";
             }else {
 
             }
         }).catch(function(e) {
-            console.warn('parsing failed', e);
+            console.warn('错误', e);
         });
     },
     render(){

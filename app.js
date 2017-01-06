@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 log4js.configure('./config/log4js.json',{ reloadSecs: 300 });
 let logger = log4js.getLogger('app');
-logger.setLevel(log4js.levels.INFO);
+logger.setLevel(log4js.levels.WARN);
 app.use(log4js.connectLogger(logger));
 
 app.use(bodyParser.json());

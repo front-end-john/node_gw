@@ -4,13 +4,11 @@ import CitySelect from '../widgets/city_select'
 
 export default React.createClass({
     getInitialState(){
-        return{
-          searchData:[]
-        };
+        return{searchData:[]};
     },
     componentWillMount(){
         document.title="目的地";
-        this.city={pinyin:"ShenZhen",name:'深圳'};
+        this.city={pinyin:"",name:this.props.location.query.city||"深圳"};
     },
     handleSelectCity(){
         let dom=document.getElementById("dialog");
@@ -73,7 +71,8 @@ export default React.createClass({
             <div className="destination">
                 <section className="dest-select">
                     <ul>
-                        <li onClick={this.handleSelectCity}><span ref='cityName' >{this.city.name}</span><i className="arrow-down"/></li>
+                        <li onClick={this.handleSelectCity}>
+                            <span ref='cityName' >{this.city.name}</span><i className="arrow-down"/></li>
                         <li><input type="text" placeholder="请输入目的地" onChange={this.handleChange} /></li>
                     </ul>
                 </section>
