@@ -33,15 +33,42 @@ let OngoingSendOrder=React.createClass({
         "use strict";
         console.log(this.state.queryCondition);
     },
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[  120,   120,  110,  120,  120,    120,     130,      130,        120,       130];
+        let titles=['订单号','用户','标签','车辆','机场','返程航班','航班状态','预约取车时间','送车司机','开始送车时间'];
+        this.adaptScreen(widths,titles);
+    },
     render(){
-        "use strict";
-        let widths=['168px','158px','158px','150px','158px','160px','180px','180px','150px','160px'];
-        let headData=[{name:'订单号',width:'168px'},
-            {name:'用户',width:'158px'}, {name:'标签',width:'158px'},
-            {name:'车辆',width:'150px'}, {name:'机场',width:'158px'},
-            {name:'返程航班',width:'160px'}, {name:'航班状态',width:'180px'},
-            {name:'预约取车时间',width:'180px'}, {name:'送车司机',width:'150px'},
-            {name:'开始送车时间',width:'160px'}];
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width= 200+sumWidth+'px';
 
         let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
             {username:"中小屋",phone_no:"124578654",fieldName:'User'},
@@ -54,7 +81,7 @@ let OngoingSendOrder=React.createClass({
             {send_driver:'周当啊',color:"#1A9FE5",fieldName:'SendDriver'},
             {start_send_time:"2016-8-9 15:14",fieldName:'StartSendTime'}];
         return(
-            <section className="data-section">
+            <section className="data-section" style={{width:sumWidth}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>

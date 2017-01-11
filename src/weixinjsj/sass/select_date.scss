@@ -1,8 +1,9 @@
 @import "compass/css3";
 @import "variable";
 .select-date{
+  $scrollHeight:500px;
   position: absolute;
-  height: 500px;
+  height: $scrollHeight + 100px;
   left: 0;right: 0;
   bottom: 0;
   background-color: #fff;
@@ -31,34 +32,29 @@
     margin-top: 72px;
     @include justify-content(center);
     &>div{
-      height: 400px;
+      height: $scrollHeight;
       overflow-x: hidden;
       overflow-y: auto;
       text-align: center;
-      &:nth-of-type(1){
-        width: 400px;
-      }
-      &:nth-of-type(2){
-        width: 120px;
-      }
-      &:nth-of-type(3){
-        width:120px;
-      }
+      //padding: 0 25px;
+      &:nth-of-type(1){ width: 290px;}
+      &:nth-of-type(2){width: 150px;}
+      &:nth-of-type(3){width: 150px;}
       &>ul{
         li{
-          height: 80px;
-          line-height: 80px;
+          height: $scrollHeight/5;
+          line-height: $scrollHeight/5;
           color: #969696;
-          font-size: $middleFont - 2px;
-          @include transition(all 0.1s cubic-bezier(.06,.21,.31,.93));
+          font-size: $smallFont + 2px;
+          @include transition(all 0.2s ease-out 0.1s);
         }
         &>.around{
           color: #646464;
-          font-size: $middleFont;
+          font-size: $middleFont - 2px;
         }
         &>.selected{
           color: #323232;
-          font-size: $middleFont + 6px;
+          font-size: $bigFont;
         }
       }
     }

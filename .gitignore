@@ -28,5 +28,6 @@ build/Release
 node_modules
 .idea
 .sass-cache
+__tests__
 # Debug log from npm
 npm-debug.log

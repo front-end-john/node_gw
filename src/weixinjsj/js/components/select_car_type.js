@@ -35,7 +35,7 @@ export default React.createClass({
                     </li>
                     <li>
                         <p><img src={this.carImgList[+item.id-1]}/></p>
-                        <p>一口价<em>{item.totalfee}</em>元&emsp;
+                        <p>一口价<em>{item.totalfee}</em>元
                             <button onClick={this.handleClickSelect} id={index}>选择</button></p>
                     </li>
                 </ul>

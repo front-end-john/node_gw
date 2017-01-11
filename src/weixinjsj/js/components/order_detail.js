@@ -1,5 +1,7 @@
 import React from 'react';
-
+import Loading from '../widgets/loading';
+import PulldownTip from '../widgets/pulldown_tip';
+import ReactDOM from 'react-dom';
 export default React.createClass({
 
     componentWillMount(){
@@ -26,12 +28,13 @@ export default React.createClass({
          */
         let contact=sessionStorage.getItem("contactPerson");
         if(contact){
-            /*联系人已存在*/
             contact=JSON.parse(contact);
             this.setState({contactPerson:contact});
         }else {
-            /*联系人不存在，后台获取*/
-            let url="/jsj/jsjorder/queryuser";
+            /**
+             * 联系人不存在，后台获取
+             */
+            let url="/jsj/user/queryuser";
             console.log("查询航班url：",url);
             fetch(url).then(function(res) {
                 console.log("查询航班响应状态：",res.status);
@@ -44,6 +47,7 @@ export default React.createClass({
                 console.log(str);
                 this.setState({contactPerson:JSON.parse(str).record});
             }).catch(function(e) {
+                //ReactDOM.render(<PulldownTip msg="联系人获取失败!" />,dom);
                 console.warn('错误', e)
             });
         }
@@ -52,12 +56,18 @@ export default React.createClass({
          */
         let remark=sessionStorage.getItem('userRemark');
         if(remark) this.setState({remark});
+
     },
     /**
      * 处理用户备注更改
      */
     handleRemarkChange(e){
-        let remark=e.target.value;
+        let remark=e.target.value.trim();
+        let textLen=60;
+        if(remark.length>=textLen){
+            remark=remark.substr(0,textLen);
+            e.target.value=remark;
+        }
         this.setState({remark});
         sessionStorage.setItem("userRemark",remark);
     },
@@ -75,7 +85,7 @@ export default React.createClass({
         let c=this.state.carTypeInfo;
         let flight=sessionStorage.getItem("FlightInfo");
         flight=JSON.parse(flight);
-
+        console.log(flight);
         let p=this.state.contactPerson;
         let ordertype=sessionStorage.getItem("OrderType");
         let actualname=p.name;
@@ -85,12 +95,20 @@ export default React.createClass({
         let totalfee=c.totalfee;
         let userremark=this.state.remark;
         let paramsObj={ordertype,actualname,actualphone,cartype,pricemark,totalfee,userremark};
+        /**
+         * 显示加载中
+         */
+        let dom=document.getElementById("dialog");
+        ReactDOM.render(<Loading />,dom);
+        dom.style.display="block";
+
         console.log(paramsObj);
-        let url="/jsj/jsjorder/new";
+        let url="/jsj/user/new";
         url+="?"+queryStr.stringify(paramsObj,null,null,{encodeURIComponent: encodeURI});
         console.info("创建订单url：",url);
         fetch(url).then(function(res){
             console.log("创建订单响应状态：",res.status);
+            dom.style.display="none";
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -103,9 +121,10 @@ export default React.createClass({
                 sessionStorage.setItem("OrderSerialNumber",obj.record.serialnumber);
                 location.href="#/travel_detail";
             }else {
-
+                ReactDOM.render(<PulldownTip msg="订单创建失败,请稍后再试!" />,dom);
             }
-        }).catch(function(e) {
+        }).catch(function(e){
+            ReactDOM.render(<PulldownTip msg="订单创建失败,请稍后再试!" />,dom);
             console.warn('错误', e);
         });
     },
@@ -152,7 +171,7 @@ export default React.createClass({
                     {detail}
                     <li>
                         <p>行程备注</p>
-                        <p><textarea placeholder="提前告知司机途径地点，方便司机规划行程(选填)"
+                        <p><textarea placeholder="提前告知司机途径地点，方便司机规划行程(选填),最多60个字符"
                                      defaultValue={this.state.remark||''} onChange={this.handleRemarkChange} /></p>
                     </li>
                 </ul>
@@ -163,10 +182,14 @@ export default React.createClass({
                 </ul>
                 <p className="notice"><a href="#">《预定须知&退订须知》</a></p>
                 <ul className="bottom-pay">
-                    <li>需支付:<em>&yen;{c?c.totalfee:0}.00</em></li>
+                    <li>需支付:<em>&yen;{c?parseFloat(c.totalfee).toFixed(2):0.00}</em></li>
                     <li onClick={this.handlePay}>进行支付</li>
                 </ul>
             </div>
         );
+    },
+    componentWillUnmount(){
+        let dom=document.getElementById("dialog");
+        dom.style.display="none";
     }
 });

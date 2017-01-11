@@ -19,7 +19,7 @@ export default React.createClass({
             <div className="travel-detail">
                 <ul className="travel-order-detail">
                     <li>成功支付</li>
-                    <li>&yen;{d.totalfee}.00</li>
+                    <li>&yen;{parseFloat(d.totalfee).toFixed(2)}</li>
                     <li>
                         <p>费用总计</p>
                         <p>&yen;{d.totalfee}</p>

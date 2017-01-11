@@ -30,19 +30,44 @@ let RemainAssignSendOrder=React.createClass({
         }
     },
     handleQuery(){
-        "use strict";
         console.log(this.state.queryCondition);
     },
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[ 120,    110,  110,    110,   110,  110,   120,      110,      120,       130,         130,    120];
+        let titles=['订单号','用户','标签','订单来源','车辆','机场','返程航班','航班状态','回程航站楼','预约取车时间','更多服务','操作'];
+        this.adaptScreen(widths,titles);
+    },
     render(){
-        "use strict";
-        let widths=['150px','110px','120px','140px','126px','126px','150px','150px','140px','140px','140px','130px'];
-        let headData=[{name:'订单号',width:'150px'},
-            {name:'用户',width:'110px'}, {name:'标签',width:'120px'},
-            {name:'订单来源',width:'140px'},{name:'车辆',width:'126px'},
-            {name:'机场',width:'126px'}, {name:'返程航班',width:'150px'},
-            {name:'航班状态',width:'150px'},{name:'回程航站楼',width:'140px'},
-            {name:'预约取车时间',width:'140px'}, {name:'更多服务',width:'140px'},
-            {name:'操作',width:'130px'}];
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width=200+sumWidth+'px';
 
         let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
             {username:"中小屋",phone_no:"124578654",fieldName:'User'},
@@ -57,7 +82,7 @@ let RemainAssignSendOrder=React.createClass({
             {wash:'下雨也洗车',oil:'汽油、92#、100元',fieldName:'MoreService'},
             {op_items:["分配送车司机"],dialogs:[1],color:"#1A9FE5",fieldName:'Operation'}];
         return(
-            <section className="data-section">
+            <section className="data-section" style={{width:sumWidth}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>

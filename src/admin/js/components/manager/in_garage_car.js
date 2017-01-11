@@ -30,19 +30,44 @@ let InGarageCar=React.createClass({
         }
     },
     handleQuery(){
-        "use strict";
         console.log(this.state.queryCondition);
     },
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[ 120,    100,   110,   110,    110,  120,  110,       130,     120,      120,     120,     120];
+        let titles=['订单号','用户','标签','订单来源','车辆','机场','接车司机','入库时间','停车时长','返程航班','更多服务','航班状态'];
+        this.adaptScreen(widths,titles);
+    },
     render(){
-        "use strict";
-        let widths=['160px','110px','128px','158px','128px','128px','130px','150px','150px','136px','136px','120px'];
-        let headData=[{name:'订单号',width:'160px'},
-            {name:'用户',width:'110px'}, {name:'标签',width:'128px'},
-            {name:'订单来源',width:'158px'},{name:'车辆',width:'128px'},
-            {name:'机场',width:'128px'},{name:'接车司机',width:'130px'},
-            {name:'入库时间',width:'150px'},{name:'停车时长',width:'150px'},
-            {name:'返程航班',width:'136px'},{name:'更多服务',width:'136px'},
-            {name:'航班状态',width:'120px'}];
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width=200+sumWidth+"px";
 
         let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
             {username:"中小屋",phone_no:"124578654",fieldName:'User'},
@@ -57,7 +82,7 @@ let InGarageCar=React.createClass({
             {wash:'下雨也洗车',oil:'汽油、92#、100元',fieldName:'MoreService'},
             {status:'起飞',start_time:"2016-12-12 14:14",fieldName:'ReturnFlightLaunchStatus'}];
         return(
-            <section className="data-section">
+            <section className="data-section" style={{width:sumWidth+'px'}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>

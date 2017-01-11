@@ -26,22 +26,44 @@ export default React.createClass({
         }
     },
     handleQuery(){
-        "use strict";
         console.log(this.state.queryCondition);
     },
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[130,120,100,100,120,130,130,120,120];
+        let titles=['ID','手机号','类型','状态','金额','领取时间','截止时间','活动来源','操作'];
+        this.adaptScreen(widths,titles);
+    },
     render(){
-        "use strict";
-        let widths=['170px','180px','190px','190px','190px','200px','180px','180px','150px'];
-        let headData= [
-            {name:'ID',width:'170px'},
-            {name:'手机号',width:'180px'},
-            {name:'类型',width:'190px'},
-            {name:'状态',width:'190px'},
-            {name:'金额',width:'190px'},
-            {name:'领取时间',width:'200px'},
-            {name:'截止时间',width:'180px'},
-            {name:'活动来源',width:'180px'},
-            {name:'操作',width:'150px'}];
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width= 200+sumWidth+'px';
 
         let data=[{id:'1457',fieldName:'CouponID'},
             {phone_no:"1457258456",fieldName:'PhoneNo'},
@@ -53,7 +75,7 @@ export default React.createClass({
             {source:'深圳航空客户专享',fieldName:'ActivitySource'},
             {op_items:["删除"],dialogs:[1],color:"#1A9FE5",fieldName:'Operation'}];
         return(
-            <section className="data-section">
+            <section className="data-section"  style={{width:sumWidth}}>
                 <TextScroll />
                 <div className="query-condition">
                     <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>

@@ -2,9 +2,6 @@
 @import "variable";
 .car-type-list{
   &>p{
-    padding-left: $borderPad;
-    //background-color: #646464;
-    //margin-bottom: 41px;
     text-align: center;
     font-size: $smallFont;
     border-top: 1px solid #dcdcdc;
@@ -33,10 +30,11 @@
         line-height: 90px;
         border-bottom: 1px solid #dcdcdc;
         p:nth-of-type(1){
-          font-size: $smallFont;
+          font-size: $smallFont - 3px;
           color: #646464;
           &>em{
-            font-size: $bigFont;
+            font-size: $bigFont + 2px;
+            margin: 0 5px;
             color: #323232;
             padding-right: 10px;
           }
@@ -79,6 +77,7 @@
             color: #fff;
             width: 160px;
             height: 72px;
+            margin-left: 35px;
             font-size: $middleFont;
             font-weight: bold;
             @include border-radius(4px);

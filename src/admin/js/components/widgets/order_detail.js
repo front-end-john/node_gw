@@ -6,18 +6,33 @@ import InGarage from '../order_process/in_garage';
 import SendCar from '../order_process/send_car';
 import Evaluation from '../order_process/evaluation';
 
+import {decDatetime,getStateMsg} from '../../util'
+
 let OrderDetail=React.createClass({
     getInitialState(){
-        "use strict";
         return{
             p_item:'p1'
         };
     },
     componentDidMount(){
         ReactDOM.render(<TakeCar /> , this.refs.processInfo);
+        let url="/admin/api/orders/orderdetails?serialnumber="+this.props.number;
+        fetch(url).then(function(res){
+            console.log("查询订单详情响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
+        }).then((str)=>{
+            let obj=JSON.parse(str);
+            console.log(obj);
+            this.setState({orderDetail:obj.order});
+        }).catch(function(e) {
+            console.trace('错误:', e);
+        });
     },
     handleSwitch(e){
-        "use strict";
         if(e.target.nodeName==="LI"){
             if (e.target.id == "pro_1") {
                 this.setState({p_item:'p1'});
@@ -40,34 +55,43 @@ let OrderDetail=React.createClass({
         }
     },
     render(){
-        "use strict";
+        let o=this.state.orderDetail;
+        let level=[],registertime;
+        if(o){
+           let {year,month,day,hour,minute} = decDatetime(o.user.registertime);
+            registertime=year+'-'+month+'-'+day+' '+hour+':'+minute;
+            for(let i=0;i<o.user.stars;i++){
+                level[i]=(<span key={i} style={{color:'red'}}>&#9733;</span>)
+            }
+        }
+
         return(
             <section className="detail-section">
                 <p className="order-brief">
-                    <label style={{paddingLeft:'20px'}}>订单号: </label><span>8745456765454</span>
-                    <label style={{paddingLeft:'20px'}}>下车时间: </label><span>2016-12-12 14:12</span>
-                    <label style={{paddingLeft:'20px'}}>来源: </label><span>携程</span>
-                    <label style={{paddingLeft:'20px'}}>状态: </label><span style={{color:'red'}}>未支付</span>
+                    <label style={{paddingLeft:'20px'}}>订单号: </label><span>{o?o.serialnumber:''}</span>
+                    <label style={{paddingLeft:'20px'}}>下单时间: </label><span>{o?o.createtime:''}</span>
+                    <label style={{paddingLeft:'20px'}}>来源: </label><span>{o?o.comefrom:''}</span>
+                    <label style={{paddingLeft:'20px'}}>状态: </label><span style={{color:'red'}}>{o?getStateMsg(o.status):""}</span>
                 </p>
                 <div className="order-main">
                     <div className="user-info">
                         <h2>用户信息</h2>
                         <figure className="user-basic">
-                            <img src="/admin/img/userheadimg.png"/>
+                            <img src={o&&o.user.avater?o.user.avater:"/admin/img/userheadimg.png"}/>
                             <figcaption>
-                                <p>姓名: <span style={{color:"#1AA0E5"}}>种小麦</span></p>
-                                <p>性别: <span>男</span></p>
-                                <p>手机: <span>145785245</span></p>
+                                <p>姓名: <span style={{color:"#1AA0E5"}}>{o?o.user.realname:''}</span></p>
+                                <p>性别: <span>{o?(o.user.sex==1?"男":"女"):''}</span></p>
+                                <p>手机: <span>{o?o.user.phoneno:''}</span></p>
                             </figcaption>
                         </figure>
                         <div className="user-other">
-                            <p><label>重要等级:</label><span style={{color:'red'}}>&#9733;</span></p>
-                            <p><label>使用次数:</label><span>5</span></p>
-                            <p><label>用户来源:</label><span>百度</span></p>
-                            <p><label>注册时间:</label><span>2016-11-18 18:45</span></p>
+                            <p><label>重要等级:</label>{level}</p>
+                            <p><label>使用次数:</label><span>{o?o.user.bookcount:''}</span></p>
+                            <p><label>用户来源:</label><span>{o?o.user.comefrom:''}</span></p>
+                            <p><label>注册时间:</label><span>{registertime}</span></p>
                             <p><label>标&emsp;&emsp;签:</label><span style={{color:"#1AA0E5"}}>添加</span></p>
                             <p className="note-field"><label>备&emsp;&emsp;注: </label>
-                                <span>阿斯顿啊说不定阿什顿阿斯顿啊啥的吧啊监控设备的</span></p>
+                                <span>{o?o.user.remark:''}</span></p>
                         </div>
                     </div>
                     <div className="order-info">

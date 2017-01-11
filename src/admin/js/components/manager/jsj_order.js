@@ -3,13 +3,15 @@ import React from 'react';
 import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
 import TableHead from '../widgets/table_head';
-import UserLine from '../widgets/user_line';
+import TableLine from '../widgets/table_line';
 
-let UserManager=React.createClass({
+let OngoingSendOrder=React.createClass({
     getInitialState(){
         "use strict";
         return{
             queryCondition:{
+                order_source:"",
+                order_no:"",
                 phone_no:""
             }
         };
@@ -20,9 +22,14 @@ let UserManager=React.createClass({
         let val=e.target.value;
         if(key==="phone_no"){
             this.state.queryCondition.phone_no=val;
+        }else if(key==="order_source"){
+            this.state.queryCondition.order_source=val;
+        }else if(key==="order_no"){
+            this.state.queryCondition.order_no=val;
         }
     },
     handleQuery(){
+        "use strict";
         console.log(this.state.queryCondition);
     },
     adaptScreen(widths,titles){
@@ -49,8 +56,8 @@ let UserManager=React.createClass({
         },false);
     },
     componentWillMount(){
-        let widths=[130,    120,   100,    130,    140,   140,      140,   120];
-        let titles=['手机号','姓名','性别','重要等级','标注','标星时间','注册时间','操作'];
+        let widths=[  120,   120,  110,  130,  120,    120,     130,      130,        120,     100];
+        let titles=['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态'];
         this.adaptScreen(widths,titles);
     },
     render(){
@@ -62,30 +69,34 @@ let UserManager=React.createClass({
         });
         document.getElementById("appContainer").style.width= 200+sumWidth+'px';
 
-        let data=[{phone_no:'14572584545',fieldName:'PhoneNo'},
-            {full_name:"中小屋",fieldName:'FullName'},
-            {gender:"男",fieldName:'Gender'},
-            {level:3,fieldName:'ImportantLevel'},
-            {mark:'重要客户',fieldName:'Mark'},
-            {mark_star_time:'2016-8-9 15:14',fieldName:'MarkStarTime'},
-            {logon_time:'2016-8-9 15:14',fieldName:'LogonTime'},
-            {op_items:["编辑","取消星级"],dialogs:[2],color:"#1A9FE5",fieldName:'Operation'}];
+        let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
+            {username:"中小屋",phone_no:"124578654",fieldName:'User'},
+            {trade:"发票",user_type:"关系客户",fieldName:'Label'},
+            {create_order_time:"2016-8-9 15:14",fieldName:'CreateOrderTime'},
+            {local:"深圳市南山区",address:'科兴科学园B栋15楼',fieldName:'StartAddress'},
+            {local:"深圳",address:'宝安国际机场T3',fieldName:'EndAddress'},
+            {number:"hu4564",launch_time:"2017-1-21",fieldName:'FlightNumber'},
+            {booking_time:"2016-8-9 15:14",fieldName:'BookingTime'},
+            {type:'豪华型',car_brief:'奥迪A6L 同等级车',fieldName:'CarType'},
+            {status:'已完成',color:"#f00",fieldName:'OrderStatus'}];
         return(
             <section className="data-section" style={{width:sumWidth}}>
                 <TextScroll />
                 <div className="query-condition">
+                    <TextInput title="用户姓名:" change={this.handleChange} name="username" holdText="请输入用户姓名" />
                     <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
+                    <TextInput title="微信昵称:" change={this.handleChange} name="wx_nick" holdText="请输入微信昵称" />
+                    <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
-                    <button className="checkout" >新增</button>
                 </div>
                 <TableHead data={headData} />
-                <UserLine widths={widths} data={data} />
-                <UserLine widths={widths} data={data} />
-                <UserLine widths={widths} data={data} />
-                <UserLine widths={widths} data={data} />
+                <TableLine widths={widths} data={data} />
+                <TableLine widths={widths} data={data} />
+                <TableLine widths={widths} data={data} />
+                <TableLine widths={widths} data={data} />
             </section>
         );
     }
 });
 
-export default UserManager;
+export default OngoingSendOrder;

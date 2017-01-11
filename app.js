@@ -8,8 +8,10 @@ let session = require('express-session');
 let os = require('os');
 if(os.platform()=='linux'){
     global.wx_jsj_url="";
+    global.admin_url="http://dev.feibotong.com";
 }else {
     global.wx_jsj_url="http://192.168.1.234:8080/txj-jsj";
+    global.admin_url="http://dev.feibotong.com";
 }
 
 let app = express();

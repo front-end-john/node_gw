@@ -82,3 +82,50 @@
     }
   }
 }
+.loading-sec{
+  position: absolute;
+  width: 300px;
+  height: 260px;
+  left: 50%;top:50%;
+  @include translate(-50%,-50%);
+  background-color: #595959;
+  @include border-radius(8px);
+  &>p{
+    font-size: 32px;
+    text-align: center;
+    color: #fff;
+  }
+}
+.load-effect{
+  position: relative;
+  width: 100px;
+  height: 80px;
+  margin: 40px auto;
+}
+.load-effect {
+  $amount:12;
+  $step:0.1s;
+  &>span {
+    display: inline-block;
+    width: 6px;
+    height: 16px;
+    @include opacity(0.05);
+    @include border-radius(2px);
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 48px;
+    @include transform-origin(2px, 36px);
+    @include animation(load $step*$amount ease infinite);
+    @for $i from 1 through $amount {
+      &:nth-of-type(#{$i}){
+        @include rotate(360deg * $i/$amount);
+        @include animation-delay($step*($i - 1));
+      }
+    }
+  }
+}
+@include keyframes(load){
+  0%{  @include opacity(1); }
+  100%{  @include opacity(0.05);}
+}

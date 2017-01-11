@@ -16,7 +16,6 @@ html,body{
   }
 }
 
-
 @import "jieji_songji";
 @import "flight_dest";
 @import "city_select";
@@ -83,7 +82,7 @@ html,body{
   background-color:#C8C8C8;
   position: relative;
   &:after{
-    content: "";
+    content:"";
     width: 2px;
     height: 20px;
     background-color: #fff;
@@ -92,7 +91,7 @@ html,body{
     top:4px;left: 13px;
   }
   &:before{
-    content: "";
+    content:"";
     width: 2px;
     height: 20px;
     background-color: #fff;
@@ -108,11 +107,64 @@ html,body{
   background-color: #dcdcdc;
 }
 #dialog{
-  position: fixed;
-  top:0;
+  position: absolute;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   display: none;
   overflow-y: auto;
+}
+.pull-down-tip{
+  height: 0;
+  line-height: 80px;
+  text-align: center;
+  background-color: #2b2b2b;
+  width: 90%;
+  @include opacity(0.7);
+  margin: 0 auto;
+  color: #fff;
+  font-size: 30px;
+  overflow: hidden;
+  @include border-bottom-left-radius(5px);
+  @include border-bottom-right-radius(5px);
+  @include transition(height 0.25s linear);
+}
+.show-tip{
+  height: 80px;
+}
+.cancel-ensure{
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  top:50%;left: 50%;
+  @include translate(-50%,-50%);
+  background-color: rgba(#fff,1);
+  border: 1px solid #DCDCDC;
+  @include border-radius(8px);
+  &>p:nth-of-type(1){
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
+    font-size: 32px;
+    color: #323232;
+  }
+  &>p:nth-of-type(2){
+    @include display-flex();
+    height: 100px;
+    @include box-sizing(border-box);
+    border-top: 1px solid #ccc;
+    &>em{
+      font-size: 30px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      @include flex(1 0);
+      color: #cdcdcd;
+      &:nth-of-type(2){
+        border-left: 1px solid #ccc;
+        color: #F9BE00;
+      }
+    }
+  }
 }

@@ -35,7 +35,7 @@ export default React.createClass({
         let content=this.refs.comment.value;
         let score=this.state.starCount;
         let serialnumber = sessionStorage.getItem("OrderSerialNumber");
-        let url="/jsj/jsjorder/comment";
+        let url="/jsj/user/comment";
         url+="?"+queryStr.stringify({serialnumber,score,content});
         fetch(url).then(function(res){
             console.log("查询订单详情响应状态：",res.status);

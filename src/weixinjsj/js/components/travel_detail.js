@@ -1,5 +1,8 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
+import PulldownTip from '../widgets/pulldown_tip';
+import Loading from '../widgets/loading';
+import CancelEnsure from '../widgets/cancel_ensure';
 import Star from '../widgets/star'
 
 export default React.createClass({
@@ -16,14 +19,11 @@ export default React.createClass({
         let serialNumber = sessionStorage.getItem("OrderSerialNumber");
         this.setState({serialNumber});
         let cartype=sessionStorage.getItem('selectedCarType');
-        this.carType=JSON.parse(cartype);
+
+        this.setState({carType:cartype?JSON.parse(cartype):{}});
         let d = sessionStorage.getItem("TravelDetailInfo");
-        if(d){
-            d=JSON.parse(d);
-            this.setState({driver:d.driverinfo[0].record});
-        }else {
-            this.setState({driver:{}});
-        }
+        if(d) d=JSON.parse(d);
+        this.setState({driver:d?d.driverinfo[0].record:{}});
         /**
          * 获取上一步的评价星数
          */
@@ -37,10 +37,19 @@ export default React.createClass({
     },
     incre(){let i=0;return () => i++},
     handleCheckDetail(){
-        let url="/jsj/jsjorder/detail";
+
+        /**
+         * 显示加载中
+         */
+        let dom=document.getElementById("dialog");
+        ReactDOM.render(<Loading />,dom);
+        dom.style.display="block";
+
+        let url="/jsj/user/detail";
         url+="?serialnumber="+this.state.serialNumber;
         fetch(url).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
+            dom.style.display="none";
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -54,14 +63,23 @@ export default React.createClass({
                 location.href="#/check_travel_detail";
             }
         }).catch(function(e) {
+            ReactDOM.render(<PulldownTip msg="订单查询失败,请稍后再试!" />,dom);
             console.warn('错误', e);
         });
     },
-    handleOrderCancel(){
-        let url="/jsj/jsjorder/cancel";
+    ensureCancel(){
+        /**
+         * 显示加载中
+         */
+        let dom=document.getElementById("dialog");
+        ReactDOM.render(<Loading />,dom);
+        dom.style.display="block";
+
+        let url="/jsj/user/cancel";
         url+="?serialnumber="+this.state.serialNumber;
         fetch(url).then(function(res){
             console.log("取消订单响应状态：",res.status);
+            dom.style.display="none";
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -72,16 +90,26 @@ export default React.createClass({
             console.log(obj);
             if(obj.code==0){
                 this.setState({status:6});
+            }else {
+                ReactDOM.render(<PulldownTip msg="订单取消失败,请稍后重试!" />,dom);
             }
         }).catch(function(e) {
+            ReactDOM.render(<PulldownTip msg="订单取消失败,请稍后重试!" />,dom);
             console.warn('错误', e);
         });
     },
+    handleOrderCancel(){
+        let dom=document.getElementById("dialog");
+        ReactDOM.render(<CancelEnsure ensure={this.ensureCancel}/>,dom);
+        dom.style.display="block";
+    },
     render(){
         let status=+this.state.status;
+        let ct=this.state.carType;
         let seq=this.incre();
         let list=[];
-        let commonPart=[<li key={seq()}>成功支付</li>,<li key={seq()}><em>&yen;</em>{this.carType.totalfee||'0.00'}</li>,
+        let commonPart=[<li key={seq()}>成功支付</li>,<li key={seq()}><em>&yen;</em>
+            {ct?parseFloat(ct.totalfee).toFixed(2):'0.00'}</li>,
             <li key={seq()} onClick={this.handleCheckDetail}>查看详情<i className="arrow"/></li>];
         if(status==1){
             list[0]=(<li key={seq()}>待服务</li>);
@@ -108,7 +136,7 @@ export default React.createClass({
             list[3]=(<li key={seq()}>您的评价对我们至关重要</li>);
         }else if(status==5){
             list[0]=(<li key={seq()}>已完成</li>);
-            list[1]=(<li key={seq()}><Star starCount={this.state.score}
+            list[1]=(<li key={seq()}><Star starCount={this.state.score||0}
                                            starOnUrl="/weixinjsj/img/bigStar-on.png"
                                            starOffUrl="/weixinjsj/img/bigStar-off.png" /></li>);
             list[2]=(<li key={seq()} />);
@@ -119,21 +147,20 @@ export default React.createClass({
             list[1]=(<li key={seq()}><img src="/weixinjsj/img/sigh-tip.png" /></li>);
             list[2]=(<li key={seq()}>订单已取消</li>);
             list[3]=(<li key={seq()}>如有退款将原路退回您的支付账户中</li>);
-            list[4]=(<li key={seq()}>退款金额:<em>&yen;{this.carType.totalfee}.00 已退款</em></li>);
+            list[4]=(<li key={seq()}>退款金额:<em>&yen;{ct?parseFloat(ct.totalfee).toFixed(2):'0.00'}&emsp;已退款</em></li>);
             list[5]=(<li key={seq()}>取消扣费:&ensp;&yen;0.00
                     <em onClick={()=>location.href="#/cancel_rule"}>取消规则</em><i className="arrow"/></li>);
             list[6]=(<li key={seq()} className="side-line">扣费原因</li>);
         }
         return(
             <div className="travel-detail">
-                {
-                    this.state.status==1?(<ul className="order-car-info">
-                            <li><img src={this.carType.imgUrl}/></li>
+                {this.state.status==1?(<ul className="order-car-info">
+                            <li><img src={ct.imgUrl}/></li>
                             <li>
-                                <p><em>{this.carType.cartype}</em>
-                                    <img src="/weixinjsj/img/people.png"/> &le;{this.carType.passengernumber}人
-                                    <img src="/weixinjsj/img/trunk.png"/> &le;{this.carType.luggagenumber}件</p>
-                                <p>{this.carType.cardescription}</p>
+                                <p><em>{ct.cartype}</em>
+                                    <img src="/weixinjsj/img/people.png"/> &le;{ct.passengernumber||0}人
+                                    <img src="/weixinjsj/img/trunk.png"/> &le;{ct.luggagenumber||0}件</p>
+                                <p>{ct.cardescription||""}</p>
                             </li>
                         </ul>):(<ul className="driver-info">
                             <li><img src={this.state.driver.avatar||"/weixinjsj/img/11.png"}/></li>
@@ -153,5 +180,13 @@ export default React.createClass({
                 </ul>
             </div>
         );
+    },
+    componentWillUnmount(){
+        let dom=document.getElementById("dialog");
+        dom.style.display="none";
+    },
+    componentWillUpdate(){
+        let dom=document.getElementById("dialog");
+        dom.style.display="none";
     }
 });

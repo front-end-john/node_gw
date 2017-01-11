@@ -30,18 +30,44 @@ let AirportTempPark=React.createClass({
         }
     },
     handleQuery(){
-        "use strict";
         console.log(this.state.queryCondition);
     },
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[ 120,    120,  120,    120,    120,   120,    130,     120,       130,         130];
+        let titles=['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','挪车司机','机场停放时间','开始挪车时间'];
+        this.adaptScreen(widths,titles);
+    },
     render(){
-        "use strict";
-        let widths=['168px','156px','156px','180px','152px','168px','180px','170px','168px','140px'];
-        let headData=[{name:'订单号',width:'168px'},
-            {name:'用户',width:'156px'}, {name:'标签',width:'156px'},
-            {name:'订单来源',width:'180px'},{name:'车辆',width:'152px'},
-            {name:'航站楼',width:'168px'},{name:'预约时间',width:'180px'},
-            {name:'挪车司机',width:'170px'},{name:'机场停放时间',width:'168px'},
-            {name:'开始挪车时间',width:'140px'}];
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width=200+sumWidth;
 
         let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
             {username:"中小屋",phone_no:"124578654",fieldName:'User'},
@@ -54,7 +80,7 @@ let AirportTempPark=React.createClass({
             {airport_park_time_long:"4小时25分钟",fieldName:'AirportParkTimeLong'},
             {start_move_time:"2016-12-12 14:24",fieldName:'StartMoveTime'}];
         return(
-            <section className="data-section">
+            <section className="data-section" style={{width:sumWidth}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>

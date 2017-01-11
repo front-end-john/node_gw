@@ -1,10 +1,14 @@
 let express = require('express');
+let fetch = require('node-fetch');
+let log=require('../utils/mylog');
 let router = express.Router();
 
 router.get('/',function (req, res, next) {
     res.render('admin/index', {});
 });
-
+/**
+ * 后台登陆验证
+ */
 router.post('/login',function (req, res, next) {
     let user={name:'fbt',password:'123'};
     let reqMsg=req.body;
@@ -15,5 +19,33 @@ router.post('/login',function (req, res, next) {
         res.end("reject");
     }
 });
+
+let proxy=function(req, res) {
+    let url=admin_url+req.originalUrl;
+    log.info(url,__filename);
+    fetch(url).then(function(res){
+        log.info("响应状态："+res.status);
+        return res.text();
+    }).then(function(body) {
+        log.info("响应内容："+body);
+        res.end(body);
+    }).catch(function(e){
+        log.error(e,__filename);
+        res.status(500).end();
+    });
+};
+/**
+ * 获取订单查询列表
+ */
+router.get('/api/orders/query', function(req, res, next){
+    proxy(req, res);
+});
+/**
+ * 获取订单详情数据
+ */
+router.get('/api/orders/orderdetails', function(req, res, next){
+    proxy(req, res);
+});
+
 
 module.exports = router;

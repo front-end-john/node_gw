@@ -13,6 +13,7 @@ import OngoingSendOrder from "../components/manager/ongoing_send_order";
 import UserManager from "../components/manager/user_manage";
 import EvaluationManage from "../components/manager/evaluation_manage";
 import CouponManage from "../components/manager/coupon_manage";
+import JsjOrder from "../components/manager/jsj_order";
 
 
 let App=React.createClass({
@@ -39,6 +40,7 @@ let routes = (<Route path="/" component={App}>
     <Route path="user_manager" component={UserManager}/>
     <Route path="evaluation_manage" component={EvaluationManage}/>
     <Route path="coupon_manage" component={CouponManage}/>
+    <Route path="jsj_order" component={JsjOrder}/>
 </Route>);
 
 let AppRoute= <Router history={hashHistory}  routes={routes} />;

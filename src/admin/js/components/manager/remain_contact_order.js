@@ -33,14 +33,42 @@ let RemainContactOrder=React.createClass({
         "use strict";
         console.log(this.state.queryCondition);
     },
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[ 120,    120,  120,   100,      120,      120,     140,     130,      120,     120,    80];
+        let titles=['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作'];
+        this.adaptScreen(widths,titles);
+    },
     render(){
-        "use strict";
-        let widths=['160px','140px','140px','164px','168px','140px','180px','168px','168px','130px','80px'];
-        let headData=[{name:'订单号',width:'160px'},{name:'用户',width:'140px'},{name:'标签',width:'140px'},
-            {name:'订单来源',width:'164px'}, {name:'下单时间',width:'168px'},{name:'车辆',width:'140px'},
-            {name:'去程航站楼',width:'180px'},{name:'预约时间',width:'168px'},{name:'返程信息',width:'168px'},
-            {name:'更多服务',width:'130px'},{name:'操作',width:'80px'}];
-
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width=200+sumWidth+"px";
         let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
             {username:"中小屋",phone_no:"124578654",fieldName:'User'},
             {trade:"发票",user_type:"关系客户",fieldName:'Label'},
@@ -53,7 +81,7 @@ let RemainContactOrder=React.createClass({
             {wash:'洗车',oil:'加油',fieldName:'MoreService'}
             ,{op_items:["电话确认"],dialogs:[1],color:"#DB8800",fieldName:'Operation'}];
         return(
-            <section className="data-section">
+            <section className="data-section" style={{width:sumWidth+'px'}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>

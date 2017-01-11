@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import SelectDate from '../widgets/select_date';
-import Dialog from "../widgets/warning_dialog";
+import PulldownTip from '../widgets/pulldown_tip';
+import Loading from '../widgets/loading';
 import {decDatetime} from '../util';
 export default React.createClass({
     getInitialState(){
@@ -10,7 +11,7 @@ export default React.createClass({
             queryLocation:{}
         };
     },
-    handleDateSelect(){
+    openDateSelect(){
         let dom=document.getElementById("dialog");
         ReactDOM.render(<SelectDate ensure={this.handleEnsure} ref={(c)=> this.dateSelect=c} />,dom);
         dom.style.display="block";
@@ -21,18 +22,24 @@ export default React.createClass({
         let d=this.dateSelect.state.dateObj;
         let hourStr=d.hour<10?"0"+d.hour:d.hour;
         let minuteStr=d.minute<10?"0"+d.minute:d.minute;
-        let month=d.date.getMonth()+1;month=month<10?'0'+month:month;
-        let day=d.date.getDate();day=day<10?'0'+day:day;
-        this.refs.useTime.value=d.date.getFullYear()+"-"+month+"-"+day+" "+hourStr+":"+minuteStr;
-        this.state.queryLocation.bookingtime=d.date.getTime();
-        /*更新用车时间*/
+        let {year,month,day}=decDatetime(d.date.getTime());
+        this.refs.useTime.value=year+"-"+month+"-"+day+" "+hourStr+":"+minuteStr;
+        /**
+         * 更新用车/预约时间
+         */
+        this.state.queryLocation.bookingtime=new Date(year+"/"+month+"/"+day+" "+hourStr+":"+minuteStr).getTime();
         sessionStorage.setItem("UserUseCarTime",this.refs.useTime.value);
     },
     handleWarning(){
+        let fi=this.state.flightInfo;
         let dom=document.getElementById("dialog");
-        ReactDOM.render(<Dialog warn="已与航班号对应，无法修改" />,dom);
-        dom.style.display="block";
-        this.setState({ showInfo:true});
+        if(fi){
+            ReactDOM.render(<PulldownTip msg="已与航班号对应，无法修改!" />,dom);
+            //this.setState({ showInfo:true});
+        }else {
+            ReactDOM.render(<PulldownTip msg="请先选择航班号!" />,dom);
+        }
+
     },
     componentWillMount(){
         document.title="接送机";
@@ -69,6 +76,7 @@ export default React.createClass({
             }
             let {year:year2,month:month2,day:day2,hour:hour2,minute:minute2} = decDatetime(flight.takingofftime);
             this.setState({takeoffTime:year2+'-'+month2+'-'+day2+' '+hour2+':'+minute2});
+            this.setState({ showInfo:true});
             /**
              * 获取起飞机场航站楼的经纬度
              */
@@ -100,23 +108,50 @@ export default React.createClass({
         }
     },
     handleQuery(){
+        let dom=document.getElementById("dialog");
+        let numberIn=this.refs.number,destIn=this.refs.dest,
+            useTimeIn=this.refs.useTime;
+        if(!numberIn.value){
+            ReactDOM.render(<PulldownTip msg="请输入航班号!" />,dom);
+            return 0;
+        }
+        if(!useTimeIn.value){
+            ReactDOM.render(<PulldownTip msg="请输入用车时间!" />,dom);
+            return 0;
+        }
+        if(!destIn.value){
+            ReactDOM.render(<PulldownTip msg="请输入出发地!" />,dom);
+            return 0;
+        }
+        /**
+         * 显示加载中
+         */
+        ReactDOM.render(<Loading />,dom);
+        dom.style.display="block";
+
         let paramsObj=this.state.queryLocation;
-        console.log(paramsObj);
-        let url="/jsj/jsjorder/querycartype";
+        //console.log(paramsObj);
+        let url="/jsj/user/querycartype";
         url+="?"+queryStr.stringify(paramsObj);
         console.log("送机查询车型url：",url);
         fetch(url).then(function(res){
             console.log("查询车型响应状态："+res.status);
+            dom.style.display="none";
             if(+res.status < 400){
                 return res.text();
             }else {
                 throw new Error("服务异常");
             }
         }).then((str)=>{
-            console.log(JSON.parse(str));
-            sessionStorage.setItem("carTypeList",str);
-            location.href="#/select_car_type";
+            let obj=JSON.parse(str);
+            if(obj.code==0){
+                sessionStorage.setItem("carTypeList",str);
+                location.href="#/select_car_type";
+            }else {
+                ReactDOM.render(<PulldownTip msg="查询失败!" />,dom);
+            }
         }).catch(function(e) {
+            ReactDOM.render(<PulldownTip msg="查询失败!" />,dom);
             console.trace('错误:', e);
         });
     },
@@ -140,30 +175,35 @@ export default React.createClass({
                     <h2 onClick={()=>location.href="#/jieji_query"} >接机</h2>
                     <i/><h2 className="current">送机</h2>
                 </hgroup>
-                <section className="songji-input" onClick={()=>location.href="#/query_flight"}>
+                <section className="songji-input" >
                     <img src="/weixinjsj/img/02.png" />
-                   <input type="text" placeholder="请输入航班号" defaultValue={f?(f.number+'  '+this.state.takeoffTime):''}
-                          onFocus={(e)=>e.target.blur()}/>
+                    <input type="text" placeholder="请输入航班号" defaultValue={f?(f.number.toUpperCase()+'  '+this.state.takeoffTime):''}
+                          onClick={()=>{location.href="#/query_flight"}} readOnly ref="number" />
                 </section>
                 <section className="songji-input">
                     <img src="/weixinjsj/img/order-time.png" />
-                    <input type="text" placeholder="用车时间" ref="useTime"
-                           defaultValue={useCarTime||''}
-                           onClick={this.handleDateSelect} />
+                    <input type="text" placeholder="用车时间" ref="useTime" readOnly
+                           defaultValue={useCarTime||''} onClick={this.openDateSelect} />
                 </section>
                 <section className="from-to">
                     <ul><li/><li/><li/><li/><li/><li/></ul>
                     <div>
-                        <p onClick={()=>location.href="#/destination?city="+tf.city}>
-                            <input placeholder="请输入出发地" defaultValue={dest?dest.name:''}
-                                   onFocus={(e)=>e.target.blur()}/></p>
+                        <p onClick={()=>location.href="#/destination?city="+(tf?tf.city:"深圳")}>
+                            <input placeholder="请输入出发地" readOnly ref="dest"
+                                   defaultValue={dest?dest.name:''} />
+                        </p>
                         <p onClick={this.handleWarning}>
-                            <input  placeholder="航站楼" onClick={(e)=>{e.target.blur()}}
-                                    defaultValue={tf?tf.city+tf.airport+"机场"+tf.terminal+"航站楼":''}/></p>
+                            <input  placeholder="航站楼" readOnly
+                                    defaultValue={tf?tf.city+tf.airport+"机场"+tf.terminal+"航站楼":''}/>
+                        </p>
                     </div>
                 </section>
                 <button className="query-btn" onClick={this.handleQuery}>查询</button>
             </div>
         );
+    },
+    componentWillUnmount(){
+        let dom=document.getElementById("dialog");
+        dom.style.display="none";
     }
 });

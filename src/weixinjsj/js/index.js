@@ -26,6 +26,9 @@ import CancelRule from './components/cancel_rule';
 import JsjOrder from './components/jsj_order';
 
 let App=React.createClass({
+    componentWillMount(){
+        document.body.addEventListener("touchstart",()=>{});
+    },
     render(){
         return (
             <div className="app">

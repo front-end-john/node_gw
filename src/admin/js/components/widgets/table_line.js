@@ -6,36 +6,32 @@ import Empty from './empty';
 
 let TableLine=React.createClass({
     getInitialState(){
-        "use strict";
         return{
-            order_no:'1445515665454',
             isExpand:false
         };
     },
     handlePay(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
         ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
-    expandDetail(){
-        "use strict";
+    expandDetail(orderNo){
         if(this.state.isExpand){
             ReactDOM.render(<Empty />,this.refs.orderDetail);
         }else {
-            ReactDOM.render(<OrderDetail />,this.refs.orderDetail);
+            ReactDOM.render(<OrderDetail number={orderNo}/>,this.refs.orderDetail);
         }
         this.setState({isExpand:!this.state.isExpand});
     },
     render(){
-        "use strict";
         let widths=this.props.widths;
 
         let list=this.props.data.map((item,index) =>{
             if(item.fieldName=='OrderNo'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p onClick={this.expandDetail} style={{color:"#1A9FE5"}}>{item.order_no}</p>
+                        <p onClick={()=>this.expandDetail(item.order_no)}
+                           style={{color:"#1A9FE5"}}>{item.order_no}</p>
                     </li>
                 );
             }else if(item.fieldName=='User'){
@@ -68,6 +64,12 @@ let TableLine=React.createClass({
                         <p>{item.evaluate_time}</p>
                     </li>
                 );
+            }else if(item.fieldName=='CreateOrderTime'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.create_order_time}</p>
+                    </li>
+                );
             }else if(item.fieldName=='EvaluateStarLevel'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
@@ -90,6 +92,43 @@ let TableLine=React.createClass({
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.car_no}<br/>{item.car_color}&ensp;{item.car_brand}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='StartAddress'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.local}<br/>{item.address}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='EndAddress'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.local}<br/>{item.address}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='FlightNumber'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.number}<br/>{item.launch_time}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='BookingTime'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.booking_time}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='CarType'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.type}<br/>{item.car_brief}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='OrderStatus'){
+                return(
+                    <li key={index} style={{width:widths[index]} } className="list-end">
+                        <p style={{color:item.color||"inherit"}}>
+                            {item.status}</p>
                     </li>
                 );
             }else if(item.fieldName=='Airport'){

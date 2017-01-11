@@ -7,6 +7,7 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import DateSelect from '../widgets/date_select';
+import Page from '../widgets/page';
 
 
 
@@ -38,8 +39,32 @@ let OrderQuery=React.createClass({
                 end_time:"",
                 airport:"",
                 order_status:""
-            }
+            },
+            orderData:[],
+            pageObj:{}
         };
+    },
+    componentWillMount(){
+
+    },
+    handlePageClick(page,pageSize){
+        let url="/admin/api/orders/query?";
+        url+=queryStr.stringify({ordertype:'all',page:page,pagesize:pageSize});
+        fetch(url).then(function(res){
+            console.log("查询订单列表响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
+        }).then((str)=>{
+            let obj=JSON.parse(str);
+            //console.log(obj);
+            this.setState({orderData:obj.result});
+            this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
+        }).catch(function(e) {
+            console.trace('错误:', e);
+        });
     },
     handleChange(e){
         "use strict";
@@ -83,27 +108,82 @@ let OrderQuery=React.createClass({
         mask.style.display="block";
         ReactDOM.render(<CustomerLabel />, mask);
     },
-    render(){
-        "use strict";
-        let widths=['152px','140px','170px','138px','140px','166px','168px','202px','168px','110px','85px'];
-        let headData=[{name:'订单号',width:'152px'},{name:'用户',width:'140px'},
-            {name:'订单来源',width:'170px'}, {name:'车辆',width:'138px'},{name:'机场',width:'140px'},
-            {name:'预约时间',width:'166px'},{name:'接车司机',width:'168px'},{name:'接车/入库时间',width:'202px'},
-            {name:'送车司机',width:'168px'},{name:'送车时间',width:'110px'},{name:'状态',width:'85px'}];
+    adaptScreen(widths,titles){
+        this.setState({titles});
+        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
+        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth-200 > initSumWidth){
+            let incre=(screenWidth-200-initSumWidth)/len;
+            widths=initWidths.map((item)=>item+incre);
+            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+            this.setState({sumWidth,widths});
+        }else {
+            this.setState({sumWidth,widths});
+        }
+        window.addEventListener("resize",()=>{
+            let screenWidth=document.body.clientWidth||window.innerWidth;
+            if(screenWidth-200 > initSumWidth){
+                let incre=(screenWidth-200-initSumWidth)/len;
+                widths=initWidths.map((item)=>item+incre);
+                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
+                this.setState({sumWidth,widths});
+            }
+        },false);
+    },
+    componentWillMount(){
+        let widths=[ 130,    110,    120,    128,  160,   190,       90,       130,         90,      130,    80];
+        let titles=['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态'];
+        this.adaptScreen(widths,titles);
+        this.handlePageClick(1,10);
+        /*let url="/admin/api/orders/query?";
+        url+=queryStr.stringify({ordertype:'all',page:1,pagesize:10});
+        console.log("订单初始化查询url：",url);
+        fetch(url).then(function(res){
+            //console.log("查询车型响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
+        }).then((str)=>{
+            let obj=JSON.parse(str);
+            console.log(obj);
+            this.setState({orderData:obj.result});
+            this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
+            //sessionStorage.setItem("carTypeList",str);
+            //location.href="#/select_car_type";
 
-        let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
-            {username:"中小屋",phone_no:"124578654",fieldName:'User'},
-            {order_source:"携程",fieldName:'OrderSource'},
-            {car_no:'奥B4878',car_color:'白色',car_brand:'宝马',fieldName:'Car'},
-            {airport:'广州白云',fieldName:'Airport'},
-            {order_time:"2016-12-12 12:12",back_time:"hu456 2017-1-21",fieldName:'AdvanceTime'},
-            {take_driver:'周当啊',fieldName:'TakeDriver'},
-            {take_car_at:'2016-05-15 15:14',in_garage_at:'2016-12-12 12:12',fieldName:'TakeCarStatus'},
-            {send_driver:'周当啊',fieldName:'SendDriver'},
-            {send_car_start:'2016-05-15 15:14',send_car_end:'2016-12-12 12:12',fieldName:'SendCarStatus'}
-            ,{pay_status:'未支付',fieldName:'PayStatus'}];
+        }).catch(function(e) {
+            console.trace('错误:', e);
+        });*/
+    },
+    render(){
+        let sumWidth=this.state.sumWidth;
+        let widths=this.state.widths;
+        let titles=this.state.titles;
+        let headData = titles.map((item,index)=>{
+            return {name:item,width:widths[index]+'px'};
+        });
+        document.getElementById("appContainer").style.width=200+sumWidth+"px";
+        let list=this.state.orderData.map((item,index)=>{
+            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
+                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+                {order_source:item.comefrom,fieldName:'OrderSource'},
+                {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
+                {airport:item.terminalname,fieldName:'Airport'},
+                {order_time:item.bookingtime,
+                    back_time:item.returningflight+" "+item.returningdate,fieldName:'AdvanceTime'},
+                {take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
+                {take_car_at:item.parkingstartedtime,in_garage_at:item.parkingfinishedtime,fieldName:'TakeCarStatus'},
+                {send_driver:item.returningdrivername,fieldName:'SendDriver'},
+                {send_car_start:item.returningstartedtime,
+                    send_car_end:item.returningfinishedtime,fieldName:'SendCarStatus'}
+                ,{pay_status:'未支付',fieldName:'PayStatus'}];
+            return (<TableLine key={index} widths={widths} data={data} />);
+        });
         return(
-            <section className="data-section">
+            <section className="data-section" style={{width:sumWidth+'px'}}>
                 <TextScroll />
                 <div className="query-condition">
                     <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
@@ -122,10 +202,8 @@ let OrderQuery=React.createClass({
                     <button className="checkout" onClick={this.showDialog}>导出</button>
                 </div>
                 <TableHead data={headData} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
+                {list}
+                <Page {...this.state.pageObj} paging={this.handlePageClick}/>
             </section>
         );
     }
