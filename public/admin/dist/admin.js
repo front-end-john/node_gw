@@ -29814,7 +29814,9 @@
 	    render: function render() {
 	        var o = this.state.orderDetail;
 	        var level = [],
-	            registertime = void 0;
+	            registertime = void 0,
+	            serviceRemark = void 0,
+	            driverRemark = void 0;
 	        if (o) {
 	            var _decDatetime = (0, _util.decDatetime)(o.user.registertime),
 	                year = _decDatetime.year,
@@ -29831,6 +29833,28 @@
 	                    '\u2605'
 	                );
 	            }
+	            serviceRemark = o.serviceorders[0].serviceremark.map(function (item, index) {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { key: index },
+	                    item
+	                );
+	            });
+	            driverRemark = o.drivernote.map(function (item, index) {
+	                return _react2.default.createElement(
+	                    'p',
+	                    { key: index },
+	                    item.time,
+	                    '\u2002',
+	                    _react2.default.createElement(
+	                        'span',
+	                        { style: { color: 'yellow' } },
+	                        item.driver_name,
+	                        ':\u2002'
+	                    ),
+	                    item.remark
+	                );
+	            });
 	        }
 
 	        return _react2.default.createElement(
@@ -30037,7 +30061,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                { style: { color: "#1AA0E5" } },
-	                                '\u5965457887 \u767D\u8272\u5B9D\u9A6C'
+	                                o ? o.car.carno + " " + o.car.color + o.car.brand : ""
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30051,7 +30075,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                { style: { color: "#1AA0E5" } },
-	                                '2016-12-12 18:45'
+	                                o ? o.bookingtime : ""
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30065,7 +30089,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '\u5E7F\u5DDE\u767D\u4E91\u56FD\u9645\u673A\u573AT2'
+	                                o ? o.parkingterminalname : ""
 	                            )
 	                        )
 	                    ),
@@ -30097,7 +30121,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                { style: { color: "#1AA0E5" } },
-	                                'hu98547_2016-11-12'
+	                                o ? o.returningflight + " " + o.returningdate : ""
 	                            ),
 	                            _react2.default.createElement('img', { src: '/admin/img/icon/10_1.png' })
 	                        ),
@@ -30112,7 +30136,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                { style: { color: "#1AA0E5" } },
-	                                '2016-12-14 17:25'
+	                                o ? o.returningtime : ""
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30126,7 +30150,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '\u5E7F\u5DDE\u767D\u4E91\u56FD\u9645\u673A\u573AT1'
+	                                o ? o.returningterminalname : ""
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -30140,7 +30164,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '\u673A\u573A\u91CD\u8981\u5BA2\u6237\uFF0C\u65E0\u9700\u7535\u8BDD\u8054\u7CFBask\u7535\u8BDD\u554A\u5F00\u59CB\u89C9\u5F97\u8FD8ask\u5927\u5BB6ask\u89C9\u5F97\u5580\u4EC0\u89C9\u5F97\u8FD8'
+	                                o ? o.remark : ""
 	                            )
 	                        )
 	                    )
@@ -30167,7 +30191,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '\u4E0B\u96E8\u5929\u4E5F\u6D17\u8F66'
+	                                o && o.serviceorders[0].config.rainwashing == "1" ? "下雨也洗车" : ""
 	                            ),
 	                            _react2.default.createElement(
 	                                'em',
@@ -30211,7 +30235,7 @@
 	                        _react2.default.createElement(
 	                            'span',
 	                            null,
-	                            '\u65E0\u9700'
+	                            o ? o.userremark : ""
 	                        )
 	                    )
 	                ),
@@ -30263,16 +30287,7 @@
 	                        '\u5BA2\u670D\u5907\u6CE8:',
 	                        _react2.default.createElement('img', { src: '/admin/img/icon/13_1.png' })
 	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '2016-11-18 18:34\u2002\u963F\u8D3E\u514B\u65AF\u7684:\u2002\u554A\u5F00\u59CB\u5C31'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '2016-11-18 18:34\u2002\u963F\u8D3E\u514B\u65AF\u7684:\u2002\u554A\u624B\u673A\u5BFC\u822A\u963F\u4EC0\u987F\u554A\u5565\u7684\u6740\u5361\u68EE\u5BB6\u7684'
-	                    )
+	                    serviceRemark
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -30282,28 +30297,7 @@
 	                        null,
 	                        '\u53F8\u673A\u5907\u6CE8:'
 	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '2016-11-18 18:34\u2002',
-	                        _react2.default.createElement(
-	                            'span',
-	                            { style: { color: 'yellow' } },
-	                            '\u63A5\u8F66\u5434\u6653\u534E:\u2002'
-	                        ),
-	                        '\u554A\u5F00\u59CB\u5C31'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '2016-11-18 18:34\u2002',
-	                        _react2.default.createElement(
-	                            'span',
-	                            { style: { color: '#1AA0E5' } },
-	                            '\u9001\u8F66\u5434\u6653\u534E:\u2002'
-	                        ),
-	                        '\u554A\u624B\u673A\u5BFC\u822A\u963F\u4EC0\u987F\u554A\u5565\u7684\u6740\u5361\u68EE\u5BB6\u7684'
-	                    )
+	                    driverRemark
 	                )
 	            )
 	        );

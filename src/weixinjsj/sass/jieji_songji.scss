@@ -2,7 +2,14 @@
 @import "variable";
 .jieji-query{
   &>figure{
-    img{width: 100%;height: auto;vertical-align: bottom;}
+    div{
+      width: 100%;height:160px;
+      background: url('/weixinjsj/img/jsj-flight.png') no-repeat -1504px 0;
+    }
+    .jj-flight{background-position:-1504px 0; }
+    .sj-flight{background-position:0 0;}
+    .show-flight{background-position:-752px 0;}
+    img{ width: 100%;height:160px;vertical-align: middle;}
     position: relative;
     .flight-info{
       @include rotateY(90deg);
@@ -30,7 +37,7 @@
       @include rotateY(0);
     }
   }
-  &>hgroup{
+  hgroup{
     @include display-flex();
     @include align-items(center);
     background-color:#fff;
@@ -54,12 +61,12 @@
       border-bottom: 4px solid #F9BE00;
     }
   }
-  &>section{
+  &>div>section{
     position: relative;
     background-color: #fff;
     @include box-sizing(border-box);
   }
-  &>.songji-input{
+  &>div>.songji-input{
     border-bottom: 1px solid #dcdcdc;
     height: 102px;
     &:nth-of-type(1){
@@ -87,8 +94,7 @@
       @include opacity(0);
     }
   }
-
-  &>.jieji-flight{
+  &>div>.jieji-flight{
     margin-top: 20px;
     height: 101px;
     border-bottom: 1px solid #dcdcdc;
@@ -116,7 +122,7 @@
       }
     }
   }
-  &>.from-to{
+  &>div>.from-to{
     height: 202px;
     border-bottom: 1px solid #dcdcdc;
     ul{

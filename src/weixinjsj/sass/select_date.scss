@@ -33,20 +33,24 @@
     @include justify-content(center);
     &>div{
       height: $scrollHeight;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
+      //overflow-y: auto;
       text-align: center;
       //padding: 0 25px;
       &:nth-of-type(1){ width: 290px;}
       &:nth-of-type(2){width: 150px;}
       &:nth-of-type(3){width: 150px;}
+      position: relative;
       &>ul{
+        position: absolute;
+        top:0;left: 0;
         li{
+          pointer-events: none;
           height: $scrollHeight/5;
           line-height: $scrollHeight/5;
           color: #969696;
           font-size: $smallFont + 2px;
-          @include transition(all 0.2s ease-out 0.1s);
+          @include transition(all 0.11s cubic-bezier(.07,.87,.45,.84));
         }
         &>.around{
           color: #646464;

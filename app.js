@@ -7,7 +7,7 @@ let bodyParser = require('body-parser');
 let session = require('express-session');
 let os = require('os');
 if(os.platform()=='linux'){
-    global.wx_jsj_url="";
+    global.wx_jsj_url="http://dev.feibotong.com";
     global.admin_url="http://dev.feibotong.com";
 }else {
     global.wx_jsj_url="http://192.168.1.234:8080/txj-jsj";
@@ -38,7 +38,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     secret: 'redis@session',
-    cookie: {
+    cookie:{
         //session时长,单位毫秒
         maxAge:3600000
     }

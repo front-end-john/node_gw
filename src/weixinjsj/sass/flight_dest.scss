@@ -43,11 +43,13 @@
     border-bottom: 1px solid #dcdcdc;
     border-top: 1px solid #dcdcdc;
     &>h3{
+      pointer-events: none;
       font-size: $bigFont;
       padding-left: 30px;
       padding-top: 24px;
     }
     &>ul{
+      pointer-events: none;
       @include display-flex;
       height: 152px;
       @include align-items(flex-start);

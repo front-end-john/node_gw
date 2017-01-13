@@ -7,16 +7,17 @@ export default React.createClass({
     handleClick(e){
         let orderType=sessionStorage.getItem("OrderType");
         let id=e.target.id;
-        e.target.style.backgroundColor="#F9BE00";
+        this["standout"+id].style.backgroundColor="#F9BE00";
         let flight=this.flightList[id];
         console.log(flight);
         sessionStorage.setItem('FlightInfo',JSON.stringify(flight));
         setTimeout(()=>{
-            if(+orderType==1){
+            location.href="#/jsj_query?type="+orderType;
+            /*if(+orderType==1){
                 location.href="#/jieji_query";
             }else if(+orderType==2){
                 location.href="#/songji_query";
-            }
+            }*/
         },500);
     },
     render(){
@@ -28,7 +29,7 @@ export default React.createClass({
             let {hour,minute}=decDatetime(item.takingofftime);
             let{hour:hour1,minute:minute1}=decDatetime(item.landingtime);
 
-            return(<section className="flight-item" key={index}>
+            return(<section className="flight-item" key={index} onClick={this.handleClick} id={index} >
                 <h3>{item.flightnumber.toUpperCase()}</h3>
                 <ul>
                     <li>
@@ -39,7 +40,7 @@ export default React.createClass({
                         <img src="/weixinjsj/img/06.png" />
                     </li>
                     <li>
-                        <h2>{hour1+":"+minute1}<em onClick={this.handleClick} id={index} /></h2>
+                        <h2>{hour1+":"+minute1}<em ref={(c)=>this["standout"+index]=c}/></h2>
                         <p>{item.tocity}{item.toairport}机场{item.toterminal}</p>
                     </li>
                 </ul>

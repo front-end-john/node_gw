@@ -51,11 +51,12 @@ export default React.createClass({
          * 保存目的地数据
          */
         sessionStorage.setItem("UserDest",JSON.stringify(dest));
-        if(+orderType==1){
+        location.href="#/jsj_query?type="+orderType;
+        /*if(+orderType==1){
             location.href="#/jieji_query";
         }else if(+orderType==2){
             location.href="#/songji_query";
-        }
+        }*/
     },
     render(){
         let list=this.state.searchData.map((item,index)=>{

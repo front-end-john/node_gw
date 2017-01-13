@@ -3,7 +3,9 @@ import Loading from '../widgets/loading';
 import PulldownTip from '../widgets/pulldown_tip';
 import ReactDOM from 'react-dom';
 export default React.createClass({
-
+    getInitialState(){
+        return {wxValid:false}
+    },
     componentWillMount(){
         document.title="订单信息";
         /**
@@ -56,7 +58,40 @@ export default React.createClass({
          */
         let remark=sessionStorage.getItem('userRemark');
         if(remark) this.setState({remark});
+        /**
+         * 从后台获取验证参数
+         */
 
+        let url="";
+
+        /**
+         * 微信接口调用
+         */
+        wx.config({
+            debug: false, // 开启调试模式,打出，仅在pc端时才会打印。
+            appId: '', // 必填，公众号的唯一标识
+            timestamp: '', // 必填，生成签名的时间戳
+            nonceStr: '', // 必填，生成签名的随机串
+            signature: '',// 必填，签名，见附录1
+            jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(function(){
+            wx.chooseWXPay({
+                timestamp: 0,
+                nonceStr: '', // 支付签名随机串，不长于 32 位
+                package: '', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: '', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: '', // 支付签名
+                success: function (res) {
+                    // 支付成功后的回调函数
+                    console.log(res);
+                }
+            });
+
+        });
+        wx.error(function(res){
+            console.log("微信验证错误：",res)
+        });
     },
     /**
      * 处理用户备注更改
@@ -180,7 +215,7 @@ export default React.createClass({
                     <li>联系人</li>
                     <li>{p?p.name:''}&ensp;{p?p.phonenumber:''}<i className="arrow" /></li>
                 </ul>
-                <p className="notice"><a href="#">《预定须知&退订须知》</a></p>
+                <p className="notice"><a href="javascript:void(0)">《预定须知&退订须知》</a></p>
                 <ul className="bottom-pay">
                     <li>需支付:<em>&yen;{c?parseFloat(c.totalfee).toFixed(2):0.00}</em></li>
                     <li onClick={this.handlePay}>进行支付</li>

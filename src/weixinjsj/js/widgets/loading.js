@@ -1,6 +1,12 @@
 import React from "react";
 
 export default React.createClass({
+    componentDidMount(){
+        let dom = document.getElementById("dialog");
+        dom.style.height = "auto";
+        dom.style.bottom = "0";
+        dom.style.display = "block";
+    },
     render(){
         return(
             <section className="loading-sec">

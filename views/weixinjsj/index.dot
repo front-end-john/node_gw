@@ -1,9 +1,9 @@
----
-layout: ../layout/default.dot
-title: 接送机
----
-
-[[##headSection:
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>接送机</title>
+<meta name="x5-orientation" content="portrait">
 <meta name = "format-detection" content = "telephone=no">
 <meta name="viewport" content="width=750"/>
 <script>
@@ -90,11 +90,9 @@ title: 接送机
 </script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" async ></script>
 <link id="mainStyle" href="/weixinjsj/css/index.css" rel="stylesheet">
-#]]
-[[##bodySection:
-<div id="appContainer"></div>
-<script id="mainScript" src="/weixinjsj/dist/index.js"></script>
-#]]
-
-[[##scriptSection:
-#]]
+</head>
+    <body>
+        <div id="appContainer"></div>
+        <script id="mainScript" src="/weixinjsj/dist/index.js"></script>
+    </body>
+</html>

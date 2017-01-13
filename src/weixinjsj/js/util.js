@@ -9,3 +9,8 @@ export let decDatetime=(timestamp)=>{
     let week=d.getDay();
     return {year,month,day,hour,minute,second,week};
 };
+
+export let getLocalTimestamp=(timeStr)=>{
+    let dt=new Date(timeStr.replace(/\-/g,'/'));
+    return dt.getTime() + dt.getTimezoneOffset()*60000;
+};

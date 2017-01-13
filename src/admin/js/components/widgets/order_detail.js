@@ -56,13 +56,20 @@ let OrderDetail=React.createClass({
     },
     render(){
         let o=this.state.orderDetail;
-        let level=[],registertime;
+        let level=[],registertime,serviceRemark,driverRemark;
         if(o){
            let {year,month,day,hour,minute} = decDatetime(o.user.registertime);
             registertime=year+'-'+month+'-'+day+' '+hour+':'+minute;
             for(let i=0;i<o.user.stars;i++){
                 level[i]=(<span key={i} style={{color:'red'}}>&#9733;</span>)
             }
+            serviceRemark=o.serviceorders[0].serviceremark.map((item,index)=>{
+                return (<p key={index}>{item}</p>);
+            });
+            driverRemark=o.drivernote.map((item,index)=>{
+                return (<p key={index}>{item.time}&ensp;
+                    <span style={{color:'yellow'}}>{item.driver_name}:&ensp;</span>{item.remark}</p>);
+            });
         }
 
         return(
@@ -98,37 +105,40 @@ let OrderDetail=React.createClass({
                         <h2>预约信息</h2>
                         <div className="up-section">
                             <p><label>车辆信息:&ensp;</label>
-                                <span style={{color:"#1AA0E5"}}>奥457887 白色宝马</span></p>
+                                <span style={{color:"#1AA0E5"}}>
+                                    {o?o.car.carno+" "+o.car.color+o.car.brand:""}</span></p>
                             <p><label>预约接车时间:&ensp;</label>
-                                <span style={{color:"#1AA0E5"}}>2016-12-12 18:45</span></p>
+                                <span style={{color:"#1AA0E5"}}>{o?o.bookingtime:""}</span></p>
                             <p><label>去程航站楼:&ensp;</label>
-                                <span>广州白云国际机场T2</span></p>
+                                <span>{o?o.parkingterminalname:""}</span></p>
                         </div>
                         <div className="down-section">
                             <p><label>用户更新时间:&ensp;</label><span>2016-12-12 18:45</span></p>
                             <p className="back-flight">
                                 <label>返程航班:&ensp;</label>
-                                <span style={{color:"#1AA0E5"}}>hu98547_2016-11-12</span>
+                                <span style={{color:"#1AA0E5"}}>
+                                    {o?o.returningflight+" "+o.returningdate:""}</span>
                                 <img src="/admin/img/icon/10_1.png" />
                             </p>
                             <p><label>预计取车时间:&ensp;</label>
-                                <span style={{color:"#1AA0E5"}}>2016-12-14 17:25</span></p>
-                            <p><label>回程航站楼:&ensp;</label><span>广州白云国际机场T1</span></p>
+                                <span style={{color:"#1AA0E5"}}>{o?o.returningtime:""}</span></p>
+                            <p><label>回程航站楼:&ensp;</label><span>{o?o.returningterminalname:""}</span></p>
                             <p className="note-field"><label>渠道备注:</label>
-                                <span>机场重要客户，无需电话联系ask电话啊开始觉得还ask大家ask觉得喀什觉得还</span></p>
+                                <span>{o?o.remark:""}</span></p>
                         </div>
                     </div>
                     <div className="service-info">
                         <h2>更多服务</h2>
                         <div className="extra-service">
-                            <p><label>洗车:</label><span>下雨天也洗车</span>
+                            <p><label>洗车:</label><span>
+                                {o&&o.serviceorders[0].config.rainwashing=="1"?"下雨也洗车":""}</span>
                                 <em>取消</em><em>编辑</em>
                             </p>
                             <p style={{marginBottom:'62px'}}><label>加油:</label><span>无</span>
                                 <em>添加</em>
                             </p>
                         </div>
-                        <p className="note-field"><label>用户备注:</label><span>无需</span></p>
+                        <p className="note-field"><label>用户备注:</label><span>{o?o.userremark:""}</span></p>
                     </div>
                     <div className="process-info" >
                         <ul onClick={this.handleSwitch}>
@@ -139,19 +149,15 @@ let OrderDetail=React.createClass({
                             <li id="pro_5" className={this.state.p_item=='p5'?"show-item":''} >支付</li>
                             <li id="pro_6" className={this.state.p_item=='p6'?"show-item":''} >评价</li>
                         </ul>
-                        <div ref="processInfo">
-
-                        </div>
+                        <div ref="processInfo" />
                     </div>
                     <div className="service-note">
                         <p>客服备注:<img src="/admin/img/icon/13_1.png"/></p>
-                        <p>2016-11-18 18:34&ensp;阿贾克斯的:&ensp;啊开始就</p>
-                        <p>2016-11-18 18:34&ensp;阿贾克斯的:&ensp;啊手机导航阿什顿啊啥的杀卡森家的</p>
+                        {serviceRemark}
                     </div>
                     <div className="driver-note">
                         <p>司机备注:</p>
-                        <p>2016-11-18 18:34&ensp;<span style={{color:'yellow'}}>接车吴晓华:&ensp;</span>啊开始就</p>
-                        <p>2016-11-18 18:34&ensp;<span style={{color:'#1AA0E5'}}>送车吴晓华:&ensp;</span>啊手机导航阿什顿啊啥的杀卡森家的</p>
+                        {driverRemark}
                     </div>
                 </div>
             </section>

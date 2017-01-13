@@ -10,7 +10,7 @@ gulp.task('browser-sync', function() {
         proxy: "127.0.0.1:8180"
     });
     gulp.watch('./public/admin/css/*.css').on('change', reload);
-    gulp.watch('./public/admin/dist/*.js').on('change', reload);
+    //gulp.watch('./public/admin/dist/*.js').on('change', reload);
     gulp.watch('./public/weixinjsj/css/*.css').on('change', reload);
     gulp.watch('./public/weixinjsj/dist/*.js').on('change', reload);
 });

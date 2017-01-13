@@ -751,9 +751,9 @@ html,body{
 
   &>.service-note{
     @include column(1/2);
+    @include translateX(1px);
     border-right:1px solid #B6D0E8;
-    padding: 18px 0 0 20px;
-    height: 98px;
+    padding: 18px 0 10px 20px;
     &>p{
       margin-bottom: 8px;
       color: #323232;
@@ -770,8 +770,8 @@ html,body{
   }
   &>.driver-note{
     @include column(1/2);
-    padding: 18px 0 0 20px;
-    height: 98px;
+    border-left:1px solid #B6D0E8;
+    padding: 18px 0 10px 20px;
     &>p{
       margin-bottom: 8px;
       color: #323232;

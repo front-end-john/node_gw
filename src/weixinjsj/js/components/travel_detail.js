@@ -24,6 +24,7 @@ export default React.createClass({
         let d = sessionStorage.getItem("TravelDetailInfo");
         if(d) d=JSON.parse(d);
         this.setState({driver:d?d.driverinfo[0].record:{}});
+
         /**
          * 获取上一步的评价星数
          */
@@ -116,8 +117,8 @@ export default React.createClass({
             list[1]=(<li key={seq()}><img src="/weixinjsj/img/sandglass.png"/></li>);
             list[2]=(<li key={seq()}>已经预定成功，等待安排司机</li>);
             list[3]=(<li key={seq()}>客服会尽快帮您确认订单,将以短信通知您</li>);
-            list[4]=(<li key={seq()}><a href="javascript:void(0)"
-                                        onClick={this.handleOrderCancel}>取消订单</a></li>);
+            list[4]=(<li key={seq()}>
+                <a href="javascript:void(0)" onClick={this.handleOrderCancel}>取消订单</a></li>);
         }else if(status==2){
             list[0]=(<li key={seq()}>待服务</li>);
             list[1]=(<li key={seq()}><img src="/weixinjsj/img/success.png"/></li>);

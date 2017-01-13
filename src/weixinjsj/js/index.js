@@ -10,9 +10,10 @@ global.weekday=['星期天','星期一','星期二','星期三','星期四','星
 import queryStr from 'querystring';
 global.queryStr=queryStr;
 global.baseUrl=location.protocol+"//"+location.host;
-
-import JiejiQuery from "./components/jieji_query";
-import SongjiQuery from "./components/songji_query";
+import JsjIndex from "./components/jsj_index";
+import JsjQuery from "./components/jsj_query";
+//import JiejiQuery from "./components/jieji_query";
+//import SongjiQuery from "./components/songji_query";
 import QueryFlight from "./components/query_flight";
 import FlightList from './components/flight_list';
 import Destination from './components/destination';
@@ -40,9 +41,10 @@ let App=React.createClass({
 });
 
 let routes = (<Route path="/" component={App}>
-    <IndexRoute component={JiejiQuery} />
-    <Route path="jieji_query" component={JiejiQuery}/>
-    <Route path="songji_query" component={SongjiQuery}/>
+    <IndexRoute component={JsjQuery} />
+    <Route path="jsj_query" component={JsjQuery}/>
+   {/* <Route path="jieji_query" component={JiejiQuery}/>
+    <Route path="songji_query" component={SongjiQuery}/>*/}
     <Route path="query_flight" component={QueryFlight}/>
     <Route path="flight_list" component={FlightList}/>
     <Route path="destination" component={Destination}/>
@@ -54,6 +56,7 @@ let routes = (<Route path="/" component={App}>
     <Route path="check_travel_detail" component={CheckTravelDetail}/>
     <Route path="cancel_rule" component={CancelRule}/>
     <Route path="jsj_order" component={JsjOrder}/>
+    <Route path="jsj_index" component={JsjIndex}/>
 </Route>);
 
 ReactDOM.render( <Router history={hashHistory}  routes={routes} />, document.getElementById("appContainer"));
