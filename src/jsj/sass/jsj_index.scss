@@ -1,0 +1,163 @@
+@import "compass/css3";
+@import "variable";
+.jsj-index{
+  .head-banner{
+    img{
+      width: 100%;height: auto;
+      vertical-align: middle;
+    }
+  }
+  .middle-state{
+    background-color: #fff;
+    &>p{
+      height: 100px;
+      line-height: 100px;
+      position: relative;
+      @include box-sizing(border-box);
+      padding-left: 90px;
+      font-size: $middleFont;
+      &>em{
+        display: inline-block;
+        position: absolute;
+        left: 30px;
+        top:50%;
+        @include translateY(-50%);
+      }
+      &:nth-of-type(1){
+        em{
+          width: 38px;
+          height: 30px;
+          background:url("/mobile/jsj/img/icon.png") no-repeat -2px -2px;
+        }
+      }
+      &:nth-of-type(2){
+        em{
+          width: 34px;
+          height: 44px;
+          background:url("/mobile/jsj/img/icon.png") no-repeat -2px -172px;
+        }
+      }
+    }
+    &>div{
+      height: 300px;
+      @include box-sizing(border-box);
+      border-bottom: 1px solid #dcdcdc;
+      border-top: 1px solid #dcdcdc;
+      @include display-flex;
+      position: relative;
+      @include justify-content(center);
+      @include align-items(center);
+      &>i{right: 30px;}
+      &>p{
+        font-size: 28px;
+        color: #969696;
+        em{
+          color: #f9be00;
+          font-size: 40px;
+        }
+      }
+    }
+  }
+  .service-list{
+    margin-top: 20px;
+    padding-bottom: 20px;
+    &>div{
+      margin-bottom: 20px;
+      background-color: #fff;
+      height: 160px;
+      @include box-sizing(border-box);
+      @include display-flex;
+      position: relative;
+      @include justify-content(space-between);
+      @include align-items(center);
+      padding: 0 30px 0 90px;
+      &>em{
+        position: absolute;
+        display: inline-block;
+        left: 30px;
+        top:50%;
+        @include translateY(-50%);
+      }
+      &>p{
+        font-size: $smallFont;
+        color: #969696;
+        line-height: 40px;
+        &>em{
+          font-size:$middleFont;
+          color:#646464;
+          font-weight: bold;
+          span{color: #f9be00;}
+        }
+        &>i{color:#02b631;top:50%;@include translateY(-50%);}
+      }
+      &>button{
+        width: 140px;
+        height: 64px;
+        &:focus{outline: none;}
+        background-color: #fff;
+        color: #f9be00;
+        @include border-radius(4px);
+        border: 2px solid #F9BE00;
+        font-size: $middleFont;
+        &:disabled{border-color: #c8c8c8;color: #c8c8c8;}
+      }
+    }
+    &>.oil-item{
+      &>em{
+        width: 38px;
+        height: 40px;
+        background:url("/mobile/jsj/img/icon.png") no-repeat -44px -36px;
+      }
+
+    }
+    &>.wash-item{
+      &>em{
+        width: 50px;height: 31px;
+        background:url("/mobile/jsj/img/icon.png") no-repeat -54px -78px;
+      }
+    }
+    &>.jj-item{
+      &>em{
+        width: 37px;height: 33px;
+        background:url("/mobile/jsj/img/icon.png") no-repeat -42px -111px;
+      }
+    }
+    &>.sj-item{
+      &>em{
+        width: 38px;height: 27px;
+        background:url("/mobile/jsj/img/icon.png") no-repeat -42px -146px;
+      }
+    }
+    &>.start-end{
+      margin-bottom: 20px;
+      background-color: #fff;
+      padding: 0 30px 30px;
+      &>li{
+        font-size: $middleFont;
+        color: #646464;
+        label{color:#969696;}
+        &:nth-of-type(1){
+          margin-bottom: 30px;
+          height: 90px;
+          @include box-sizing(border-box);
+          @include display-flex();
+          position: relative;
+          @include justify-content(space-between);
+          @include align-items(center);
+          padding: 0 34px 0 60px;
+          &>em{
+            position: absolute;
+            top:50%;left: 0;
+            @include translateY(-50%);
+          }
+          &>p{color: #f9be00;}
+          &>i{right: 0;top:50%;@include translateY(-50%);}
+          &>em.jj{
+            width: 37px;height: 33px;
+            background:url("/mobile/jsj/img/icon.png") no-repeat -2px -111px;
+          }
+        }
+      }
+    }
+  }
+}

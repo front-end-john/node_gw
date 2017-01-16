@@ -3,13 +3,11 @@ let router = express.Router();
 let fetch = require('node-fetch');
 let log=require('../utils/mylog');
 
-router.get('/', function(req, res, next) {
-    res.render('weixinjsj/index', {});
-});
 
 let proxy=function(req, res) {
     let url=wx_jsj_url+req.originalUrl;
     log.info(url,__filename);
+    res.set({"User-Agent":req.get('User-Agent')});
     fetch(url).then(function(res){
         log.info("响应状态："+res.status);
         return res.text();
@@ -73,6 +71,18 @@ router.get('/user/runninglist', function(req, res, next){
  * 获取已完成的订单列表
  */
 router.get('/user/historylist', function(req, res, next){
+    proxy(req, res);
+});
+/**
+ * 获取微信支付参数
+ */
+router.get('/user/wechat/payconfig', function(req, res, next){
+    proxy(req, res);
+});
+/**
+ * 微信支付成功后更新订单
+ */
+router.get('/user/wechatpaysuccess', function(req, res, next){
     proxy(req, res);
 });
 

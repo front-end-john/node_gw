@@ -11,8 +11,8 @@ gulp.task('browser-sync', function() {
     });
     gulp.watch('./public/admin/css/*.css').on('change', reload);
     //gulp.watch('./public/admin/dist/*.js').on('change', reload);
-    gulp.watch('./public/weixinjsj/css/*.css').on('change', reload);
-    gulp.watch('./public/weixinjsj/dist/*.js').on('change', reload);
+    gulp.watch('./public/mobile/jsj/css/*.css').on('change', reload);
+    gulp.watch('./public/mobile/jsj/dist/*.js').on('change', reload);
 });
 
 
@@ -24,7 +24,7 @@ gulp.task('watch-scss-compiled-upload', function() {
 
 //监听 react编译并上传
 gulp.task('watch-react-compiled-upload', function() {
-    gulp.watch(['./public/*/dist/*.js'],
+    gulp.watch(['./public/admin/dist/*.js','./public/mobile/jsj/dist/*.js'],
         ['react-compiled-upload']);
 });
 
@@ -37,12 +37,12 @@ gulp.task('compass', function() {
             css: 'public/admin/css',
             sass: 'src/admin/sass'
         })).pipe(gulp.dest('./public/admin/css'));
-    let jsj_scss=gulp.src('./src/weixinjsj/sass/index.scss')
+    let jsj_scss=gulp.src('./src/jsj/sass/index.scss')
         .pipe(compass({
-            config_file: './config/weixinjsj.rb',
-            css: 'public/weixinjsj/css',
-            sass: 'src/weixinjsj/sass'
-        })).pipe(gulp.dest('./public/weixinjsj/css'));
+            config_file: './config/jsj.rb',
+            css: 'public/mobile/jsj/css',
+            sass: 'src/jsj/sass'
+        })).pipe(gulp.dest('./public/mobile/jsj/css'));
     return merge(admin_scss,jsj_scss);
 });
 
@@ -57,14 +57,14 @@ gulp.task('scss-compiled-upload',['compass'],function () {
             keyLocation: "./utils/dev",
             remotePath:"/var/code/fronts/public/admin/css/"
     }));
-    let jsj_css=gulp.src('./public/weixinjsj/css/*.css')
+    let jsj_css=gulp.src('./public/mobile/jsj/css/*.css')
         //只有改变才处理
-        .pipe(watch('./public/weixinjsj/css/*.css'))
+        .pipe(watch('./public/mobile/jsj/css/*.css'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/weixinjsj/css/"
+            remotePath:"/var/code/fronts/public/jsj/css/"
         }));
     return merge(admin_css,jsj_css);
 });
@@ -80,14 +80,14 @@ gulp.task('react-compiled-upload',function () {
             keyLocation: "./utils/dev",
             remotePath:"/var/code/fronts/public/admin/dist/"
         }));
-    let jsj_js=gulp.src('./public/weixinjsj/dist/*.js')
+    let jsj_js=gulp.src('./public/mobile/jsj/dist/*.js')
         //只有改变才处理
-        .pipe(watch('./public/weixinjsj/dist/*.js'))
+        .pipe(watch('./public/mobile/jsj/dist/*.js'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/weixinjsj/dist/"
+            remotePath:"/var/code/fronts/public/mobile/jsj/dist/"
         }));
     return merge(admin_js,jsj_js);
 });

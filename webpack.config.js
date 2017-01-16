@@ -1,13 +1,13 @@
 let webpack = require("webpack");
 module.exports=[{
-    name:"weixinjsj",
+    name:"jsj",
     entry:{
         //jquery_family:['jquery','jquery-touch-events'],
-        index:"./src/weixinjsj/js/index.js"
+        index:"./src/jsj/js/index.js"
     },
     output:{
         filename:'[name].js',
-        path:'./public/weixinjsj/dist'
+        path:'./public/mobile/jsj/dist'
     },
     module:{
         loaders:[

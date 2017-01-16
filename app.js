@@ -10,7 +10,7 @@ if(os.platform()=='linux'){
     global.wx_jsj_url="http://dev.feibotong.com";
     global.admin_url="http://dev.feibotong.com";
 }else {
-    global.wx_jsj_url="http://192.168.1.234:8080/txj-jsj";
+    global.wx_jsj_url="http://192.168.1.181:8080/txj-jsj";
     global.admin_url="http://dev.feibotong.com";
 }
 
@@ -23,12 +23,12 @@ app.set('view engine', 'dot');
 
 app.set('views', path.join(__dirname, 'views'));
 
-// uncomment after placing your favicon in /public
+//uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 log4js.configure('./config/log4js.json',{ reloadSecs: 300 });
 let logger = log4js.getLogger('app');
-logger.setLevel(log4js.levels.WARN);
+logger.setLevel(log4js.levels.INFO);
 app.use(log4js.connectLogger(logger));
 
 app.use(bodyParser.json());
@@ -40,7 +40,7 @@ app.use(session({
     secret: 'redis@session',
     cookie:{
         //session时长,单位毫秒
-        maxAge:3600000
+        maxAge:1800000
     }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,7 +53,7 @@ let jsj=require('./routes/weixinjsj');
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admin', admin);
-app.use('/jsj', jsj);
+app.use('/mobile/jsj', jsj);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
