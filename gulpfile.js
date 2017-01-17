@@ -64,7 +64,7 @@ gulp.task('scss-compiled-upload',['compass'],function () {
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/jsj/css/"
+            remotePath:"/var/code/fronts/public/mobile/jsj/css/"
         }));
     return merge(admin_css,jsj_css);
 });

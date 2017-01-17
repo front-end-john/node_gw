@@ -12,11 +12,11 @@ export default React.createClass({
         let tel=this.telInput.value.trim();
         let dom=document.getElementById("dialog");
         if(!name){
-            ReactDOM.render(<PulldownTip msg="姓名不能为空" />,dom);
+            ReactDOM.render(<PulldownTip msg="姓名不能为空！" />,dom);
             return 0;
         }
         if(!tel){
-            ReactDOM.render(<PulldownTip msg="手机号不能为空" />,dom);
+            ReactDOM.render(<PulldownTip msg="手机号不能为空！" />,dom);
             return 0;
         }
         sessionStorage.setItem("ChangedContactPerson",JSON.stringify({name,phonenumber:tel}));

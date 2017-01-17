@@ -48,7 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 let routes = require('./routes/index');
 let users = require('./routes/users');
 let admin = require('./routes/admin');
-let jsj=require('./routes/weixinjsj');
+let jsj=require('./routes/jsj');
 
 app.use('/', routes);
 app.use('/users', users);

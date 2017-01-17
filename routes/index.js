@@ -54,11 +54,5 @@ router.get('/history(.html)?',function (req, res, next) {
     res.render('gw/mobile/history', {});
 });
 
-/**
- * 微信接送机首页
- */
-router.get('/mobile/jsj', function(req, res, next) {
-    res.render('jsj/index', {});
-});
 
 module.exports = router;

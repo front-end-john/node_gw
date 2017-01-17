@@ -26,7 +26,7 @@ export default React.createClass({
             /**
              * 联系人不存在，后台获取
              */
-            let url="/jsj/user/queryuser";
+            let url=jsj_api_path+"/user/queryuser";
             console.log("查询航班url：",url);
             fetch(url).then(function(res) {
                 console.log("查询航班响应状态：",res.status);
@@ -69,7 +69,7 @@ export default React.createClass({
         dom.style.display="block";
 
         console.log("创建订的参数：",paramsObj);
-        let url="/jsj/user/new";
+        let url=jsj_api_path+"/user/new";
         url+="?"+queryStr.stringify(paramsObj);
 
         console.info("创建订单url：",url);

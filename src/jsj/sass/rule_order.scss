@@ -32,6 +32,7 @@
       padding-left: 32px;
       font-size: $middleFont;
       color: #646464;
+      &>strong{font-weight: bold;}
     }
     &>li:nth-last-of-type(1){
       margin-bottom: 60px;
@@ -80,8 +81,8 @@
     }
     &>li:nth-of-type(1){
       margin-bottom: 30px;
+      @include justify-content(space-between);
       &>p{
-        @include flex(1 0);
         &:nth-of-type(2){
           text-align: right;
           padding-right: 30px;

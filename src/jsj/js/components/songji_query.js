@@ -141,7 +141,7 @@ export default React.createClass({
 
         let paramsObj=this.state.queryLocation;
         //console.log(paramsObj);
-        let url="/jsj/user/querycartype";
+        let url=jsj_api_path+"/user/querycartype";
         url+="?"+queryStr.stringify(paramsObj);
         console.log("送机查询车型url：",url);
         fetch(url).then(function(res){

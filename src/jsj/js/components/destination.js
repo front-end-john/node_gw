@@ -55,7 +55,6 @@ export default React.createClass({
         }else {
             sessionStorage.setItem("UserSJAddress",JSON.stringify(address));
         }
-
         location.href="#/jsj_query?type="+orderType;
     },
     render(){

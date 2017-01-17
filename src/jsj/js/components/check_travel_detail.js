@@ -8,7 +8,7 @@ export default React.createClass({
     },
     render(){
         let d = sessionStorage.getItem("TravelDetailInfo");
-        d=JSON.parse(d);
+        d=JSON.parse(d)||{};
         let flag=d.ordertype;
         let {year,month,day,hour,minute}=decDatetime(d.bookingtime);
         let {year:y1,month:mon1,day:d1,hour:h1,minute:min1}=decDatetime(d.createtime);
@@ -17,16 +17,16 @@ export default React.createClass({
             <div className="travel-detail">
                 <ul className="travel-order-detail">
                     <li>成功支付</li>
-                    <li>&yen;{parseFloat(d.totalfee).toFixed(2)}</li>
+                    <li>&yen;{parseFloat(d.totalfee||0).toFixed(2)}</li>
                     <li>
                         <p>费用总计</p>
-                        <p>&yen;{d.totalfee}</p>
+                        <p>&yen;{parseFloat(d.totalfee||0).toFixed(2)}</p>
                     </li>
                     <li>订单信息</li>
                     <li>{+flag==1?'接机':'送机'}</li>
                     <li>
                         <p>航班号</p>
-                        <p>{f.flightnumber||''}</p>
+                        <p>{(f.flightnumber||'').toUpperCase()}</p>
                     </li>
                     <li>
                         <p>用车时间</p>

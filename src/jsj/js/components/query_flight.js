@@ -8,7 +8,6 @@ export default React.createClass({
     getInitialState(){
         return {flightTime:'',flightnumber:''}
     },
-
     handleDateChange(e){
         let timeStr=e.target.value;
         let currTimestamp=new Date(new Date().toLocaleDateString()).getTime();
@@ -18,11 +17,14 @@ export default React.createClass({
         if(selectTimestamp < currTimestamp){
             ReactDOM.render(<PulldownTip msg="只能选择今天或者今天之后的日期！" />,dom);
             return 0;
+        }else if(selectTimestamp > currTimestamp+29*24*3600*1000){
+            ReactDOM.render(<PulldownTip msg="只能选择30天以内的日期！" />,dom);
+            return 0;
         }
-        this.refs.dateInput.value=timeStr;
+        this.refs.dateIn.value=timeStr;
     },
     handleQuery(){
-        let date=this.refs.dateInput.value,number=this.refs.noInput.value.trim();
+        let date=this.refs.dateIn.value,number=this.refs.noInput.value.trim();
         let flightdate,flightnumber;
         let dom=document.getElementById("dialog");
         if(number){
@@ -43,7 +45,7 @@ export default React.createClass({
         ReactDOM.render(<Loading />,dom);
         dom.style.display="block";
 
-        let url="/jsj/user/queryflight";
+        let url=jsj_api_path+"/user/queryflight";
         url+="?"+queryStr.stringify({flightdate,flightnumber});
         console.log("接机查询航班url：",url);
         fetch(url).then(function(res) {
@@ -100,7 +102,7 @@ export default React.createClass({
                     </section>
                     <section className="songji-input">
                         <img src={jsj_static_path+"/img/04.png"} />
-                        <input type="text" placeholder="请选择航班起飞日期" ref="dateInput" readOnly
+                        <input type="text" placeholder="请选择航班起飞日期" ref="dateIn" readOnly
                                defaultValue={this.state.flightTime||""} onClick={this.openDateSelect}/>
                        <input type="date" onChange={this.handleDateChange} className="date-select"/>
                     </section>

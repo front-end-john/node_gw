@@ -118,6 +118,10 @@
 
 	var _cancel_rule2 = _interopRequireDefault(_cancel_rule);
 
+	var _cancel_notice = __webpack_require__(259);
+
+	var _cancel_notice2 = _interopRequireDefault(_cancel_notice);
+
 	var _jsj_order = __webpack_require__(258);
 
 	var _jsj_order2 = _interopRequireDefault(_jsj_order);
@@ -131,9 +135,7 @@
 
 	global.queryStr = _querystring2.default;
 	global.jsj_static_path = "/mobile/jsj";
-	global.jsj_api_path = "/mobile/jsj";
-	//import JiejiQuery from "./components/jieji_query";
-	//import SongjiQuery from "./components/songji_query";
+	global.jsj_api_path = "/jsj";
 
 
 	var App = _react2.default.createClass({
@@ -166,6 +168,7 @@
 	    _react2.default.createElement(_reactRouter.Route, { path: 'comments', component: _comments2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'check_travel_detail', component: _check_travel_detail2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'cancel_rule', component: _cancel_rule2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'cancel_notice', component: _cancel_notice2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_order', component: _jsj_order2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_index', component: _jsj_index2.default })
 	);
@@ -28676,9 +28679,9 @@
 	        var flight = sessionStorage.getItem("FlightInfo");
 	        var dom = document.getElementById("dialog");
 	        if (flight) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u5DF2\u4E0E\u822A\u73ED\u53F7\u5BF9\u5E94\uFF0C\u65E0\u6CD5\u4FEE\u6539!' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u5DF2\u4E0E\u822A\u73ED\u53F7\u5BF9\u5E94\uFF0C\u65E0\u6CD5\u4FEE\u6539\uFF01' }), dom);
 	        } else {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BF7\u5148\u9009\u62E9\u822A\u73ED\u53F7!' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BF7\u5148\u9009\u62E9\u822A\u73ED\u53F7\uFF01' }), dom);
 	        }
 	    },
 	    handleDateChange: function handleDateChange(e) {
@@ -28716,7 +28719,7 @@
 
 	        var paramsObj = this.state.queryLocation;
 	        console.log(paramsObj);
-	        var url = "/jsj/user/querycartype";
+	        var url = jsj_api_path + "/user/querycartype";
 	        url += "?" + queryStr.stringify(paramsObj);
 	        console.log("查询车型url：", url);
 	        fetch(url).then(function (res) {
@@ -28734,10 +28737,10 @@
 	                sessionStorage.setItem("carTypeList", str);
 	                location.href = "#/select_car_type";
 	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u67E5\u8BE2\u5931\u8D25!' }), dom);
+	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u67E5\u8BE2\u5931\u8D25!' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u67E5\u8BE2\u5931\u8D25\uFF01' }), dom);
 	            console.trace('错误:', e);
 	        });
 	    },
@@ -28800,9 +28803,9 @@
 	                    jjData = { number: flight.flightnumber,
 	                        useTime: month + '-' + day + ' ' + weekday[week] + ' ' + hour + ':' + minute + ' 用车',
 	                        terminal: flight.tocity + flight.toairport + "机场" + flight.toterminal + "航站楼",
-	                        startTime: month + '-' + day + ' ' + hour + ':' + minute,
+	                        startTime: month2 + '-' + day2 + ' ' + hour2 + ':' + minute2,
 	                        startTerminal: flight.fromcity + flight.fromairport + "机场" + flight.fromterminal,
-	                        endTime: month2 + '-' + day2 + ' ' + hour2 + ':' + minute2,
+	                        endTime: month + '-' + day + ' ' + hour + ':' + minute,
 	                        endTerminal: flight.tocity + flight.toairport + "机场" + flight.toterminal,
 	                        city: flight.tocity
 	                    };
@@ -28815,9 +28818,9 @@
 	                        useTime: sessionStorage.getItem("UserUseCarTime"),
 	                        terminal: flight.fromcity + flight.fromairport + "机场" + flight.fromterminal + "航站楼",
 	                        takeoffTime: year2 + '-' + month2 + '-' + day2 + ' ' + hour2 + ':' + minute2,
-	                        startTime: month + '-' + day + ' ' + hour + ':' + minute,
+	                        startTime: month2 + '-' + day2 + ' ' + hour2 + ':' + minute2,
 	                        startTerminal: flight.fromcity + flight.fromairport + "机场" + flight.fromterminal,
-	                        endTime: month2 + '-' + day2 + ' ' + hour2 + ':' + minute2,
+	                        endTime: month + '-' + day + ' ' + hour + ':' + minute,
 	                        endTerminal: flight.tocity + flight.toairport + "机场" + flight.toterminal,
 	                        city: flight.fromcity
 	                    };
@@ -29265,11 +29268,14 @@
 	        if (selectTimestamp < currTimestamp) {
 	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u53EA\u80FD\u9009\u62E9\u4ECA\u5929\u6216\u8005\u4ECA\u5929\u4E4B\u540E\u7684\u65E5\u671F\uFF01' }), dom);
 	            return 0;
+	        } else if (selectTimestamp > currTimestamp + 29 * 24 * 3600 * 1000) {
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u53EA\u80FD\u9009\u62E930\u5929\u4EE5\u5185\u7684\u65E5\u671F\uFF01' }), dom);
+	            return 0;
 	        }
-	        this.refs.dateInput.value = timeStr;
+	        this.refs.dateIn.value = timeStr;
 	    },
 	    handleQuery: function handleQuery() {
-	        var date = this.refs.dateInput.value,
+	        var date = this.refs.dateIn.value,
 	            number = this.refs.noInput.value.trim();
 	        var flightdate = void 0,
 	            flightnumber = void 0;
@@ -29292,7 +29298,7 @@
 	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
 	        dom.style.display = "block";
 
-	        var url = "/jsj/user/queryflight";
+	        var url = jsj_api_path + "/user/queryflight";
 	        url += "?" + queryStr.stringify({ flightdate: flightdate, flightnumber: flightnumber });
 	        console.log("接机查询航班url：", url);
 	        fetch(url).then(function (res) {
@@ -29370,7 +29376,7 @@
 	                    'section',
 	                    { className: 'songji-input' },
 	                    _react2.default.createElement('img', { src: jsj_static_path + "/img/04.png" }),
-	                    _react2.default.createElement('input', { type: 'text', placeholder: '\u8BF7\u9009\u62E9\u822A\u73ED\u8D77\u98DE\u65E5\u671F', ref: 'dateInput', readOnly: true,
+	                    _react2.default.createElement('input', { type: 'text', placeholder: '\u8BF7\u9009\u62E9\u822A\u73ED\u8D77\u98DE\u65E5\u671F', ref: 'dateIn', readOnly: true,
 	                        defaultValue: this.state.flightTime || "", onClick: this.openDateSelect }),
 	                    _react2.default.createElement('input', { type: 'date', onChange: this.handleDateChange, className: 'date-select' })
 	                ),
@@ -29603,7 +29609,6 @@
 	        } else {
 	            sessionStorage.setItem("UserSJAddress", JSON.stringify(address));
 	        }
-
 	        location.href = "#/jsj_query?type=" + orderType;
 	    },
 	    render: function render() {
@@ -29868,7 +29873,7 @@
 	            /**
 	             * 联系人不存在，后台获取
 	             */
-	            var url = "/jsj/user/queryuser";
+	            var url = jsj_api_path + "/user/queryuser";
 	            console.log("查询航班url：", url);
 	            fetch(url).then(function (res) {
 	                console.log("查询航班响应状态：", res.status);
@@ -29911,7 +29916,7 @@
 	        dom.style.display = "block";
 
 	        console.log("创建订的参数：", paramsObj);
-	        var url = "/jsj/user/new";
+	        var url = jsj_api_path + "/user/new";
 	        url += "?" + queryStr.stringify(paramsObj);
 
 	        console.info("创建订单url：", url);
@@ -30057,19 +30062,21 @@
 
 	exports.default = _react2.default.createClass({
 	    displayName: 'order_detail',
-	    getInitialState: function getInitialState() {
-	        return { detail: {} };
-	    },
 	    componentWillMount: function componentWillMount() {
 	        this.carImgList = [jsj_static_path + "/img/07.png", jsj_static_path + "/img/08.png", jsj_static_path + "/img/09.png", jsj_static_path + "/img/10.png"];
 	        document.title = "订单信息";
+	        var detail = sessionStorage.getItem("TravelDetailInfo");
+	        detail = detail ? JSON.parse(detail) : {};
+	        this.setState({ detail: detail });
 	    },
 	    componentDidMount: function componentDidMount() {
 	        var _this = this;
 
 	        var number = this.props.location.query.serialnumber;
-	        var serialnumber = number ? number : sessionStorage.getItem("OrderSerialNumber");
+	        var serialnumber = number || sessionStorage.getItem("OrderSerialNumber");
 	        sessionStorage.setItem("OrderSerialNumber", serialnumber);
+	        var detail = sessionStorage.getItem("TravelDetailInfo");
+	        if (detail) return 0;
 	        /**
 	         * 显示加载中
 	         */
@@ -30077,7 +30084,7 @@
 	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
 	        dom.style.display = "block";
 
-	        var url = "/jsj/user/detail";
+	        var url = jsj_api_path + "/user/detail";
 	        url += "?serialnumber=" + serialnumber;
 	        console.log("获取订单详情url", url);
 	        fetch(url).then(function (res) {
@@ -30103,7 +30110,7 @@
 	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u83B7\u53D6\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5!' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u83B7\u53D6\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01' }), dom);
 	            console.warn('错误', e);
 	        });
 	    },
@@ -30148,10 +30155,10 @@
 	        /**
 	         * 从后台获取微信支付验证参数
 	         */
-	        var payordernumber = "js154546545",
+	        var payordernumber = "js154546847",
 	            totalfee = 0.01,
 	            openid = "obsLEuFmAHp5eNcLNoACrzkrJ5CI";
-	        var url = "/jsj/user/wechat/payconfig?" + queryStr.stringify({ payordernumber: payordernumber, totalfee: totalfee, openid: openid });
+	        var url = jsj_api_path + "/user/wechat/payconfig?" + queryStr.stringify({ payordernumber: payordernumber, totalfee: totalfee, openid: openid });
 	        fetch(url).then(function (res) {
 	            console.log("请求微信支付参数响应状态：", res.status);
 	            dom.style.display = "none";
@@ -30165,7 +30172,7 @@
 	            console.log("微信支付验证参数：", obj);
 	            if (obj.code == 0) {
 	                wx.config({
-	                    debug: true, // 开启调试模式,打出，仅在pc端时才会打印。
+	                    debug: false, // 开启调试模式,打出，仅在pc端时才会打印。
 	                    appId: obj.record.appid, // 必填，公众号的唯一标识
 	                    timestamp: obj.record.timestamp, // 必填，生成签名的时间戳
 	                    nonceStr: obj.record.noncstr, // 必填，生成签名的随机串
@@ -30176,17 +30183,25 @@
 	                    wx.chooseWXPay({
 	                        timestamp: obj.record.timestamp,
 	                        nonceStr: obj.record.noncstr,
-	                        package: obj.record.prepayid,
-	                        signType: 'MD5',
+	                        package: "prepay_id=" + obj.record.prepayid,
+	                        signType: "MD5",
 	                        paySign: obj.record.sign,
 	                        success: function success(res) {
-	                            console.log("支付成功:", res);
-	                            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u652F\u4ED8\u6210\u529F\uFF01' }), dom);
+	                            var errMsg = res.errMsg;
+	                            if (errMsg == "chooseWXPay:cancel" || errMsg == "chooseWXPay:fail") {
+	                                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u652F\u4ED8\u5931\u8D25\uFF01' }), dom);
+	                                return 0;
+	                            } else if (errMsg == "chooseWXPay:ok") {
+	                                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u652F\u4ED8\u6210\u529F\uFF01' }), dom);
+	                                setTimeout(function () {
+	                                    location.href = "#/travel_detail";
+	                                }, 1500);
+	                            }
 	                            /**
 	                             *支付成功后更新订单
 	                             */
 	                            if (!actualname && !actualphone && !userremark) return 0;
-	                            url = "/jsj/user/wechatpaysuccess?" + queryStr.stringify({ serialnumber: serialnumber, actualname: actualname, actualphone: actualphone, userremark: userremark });
+	                            url = jsj_api_path + "/user/wechatpaysuccess?" + queryStr.stringify({ serialnumber: serialnumber, actualname: actualname, actualphone: actualphone, userremark: userremark });
 	                            fetch(url).then(function (res) {
 	                                console.log("订单更新响应状态：", res.status);
 	                                dom.style.display = "none";
@@ -30200,9 +30215,6 @@
 	                            }).catch(function (e) {
 	                                console.warn('错误', e);
 	                            });
-	                            setTimeout(function () {
-	                                location.href = "#/travel_detail";
-	                            }, 2500);
 	                        }
 	                    });
 	                });
@@ -30386,7 +30398,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        _react2.default.createElement('textarea', { placeholder: '\u63D0\u524D\u544A\u77E5\u53F8\u673A\u9014\u5F84\u5730\u70B9\uFF0C\u65B9\u4FBF\u53F8\u673A\u89C4\u5212\u884C\u7A0B(\u9009\u586B),\u6700\u591A60\u4E2A\u5B57\u7B26',
+	                        _react2.default.createElement('textarea', { placeholder: '\u63D0\u524D\u544A\u77E5\u53F8\u673A\u9014\u5F84\u5730\u70B9\uFF0C\u65B9\u4FBF\u53F8\u673A\u89C4\u5212\u884C\u7A0B(\u9009\u586B),\u6700\u591A60\u4E2A\u5B57\u7B26\u3002',
 	                            defaultValue: changedRemark || detail.userremark || "",
 	                            onChange: this.handleRemarkChange })
 	                    )
@@ -30414,7 +30426,7 @@
 	                { className: 'notice' },
 	                _react2.default.createElement(
 	                    'a',
-	                    { href: 'javascript:void(0)' },
+	                    { href: '#/cancel_notice' },
 	                    '\u300A\u9884\u5B9A\u987B\u77E5&\u9000\u8BA2\u987B\u77E5\u300B'
 	                )
 	            ),
@@ -30480,11 +30492,11 @@
 	        var tel = this.telInput.value.trim();
 	        var dom = document.getElementById("dialog");
 	        if (!name) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u59D3\u540D\u4E0D\u80FD\u4E3A\u7A7A' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u59D3\u540D\u4E0D\u80FD\u4E3A\u7A7A\uFF01' }), dom);
 	            return 0;
 	        }
 	        if (!tel) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u624B\u673A\u53F7\u4E0D\u80FD\u4E3A\u7A7A' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u624B\u673A\u53F7\u4E0D\u80FD\u4E3A\u7A7A\uFF01' }), dom);
 	            return 0;
 	        }
 	        sessionStorage.setItem("ChangedContactPerson", JSON.stringify({ name: name, phonenumber: tel }));
@@ -30587,7 +30599,9 @@
 	    componentWillMount: function componentWillMount() {
 	        document.title = "行程详情";
 	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-
+	        var td = sessionStorage.getItem("TravelDetailInfo");
+	        td = JSON.parse(td);
+	        this.setState({ detail: td });
 	        /**
 	         * 获取上一步的评价星数
 	         */
@@ -30599,21 +30613,23 @@
 	        var flag = this.props.location.query.flag;
 	        if (flag) this.setState({ status: +flag });
 	    },
-	    incre: function incre() {
-	        var i = 0;return function () {
-	            return i++;
-	        };
-	    },
-	    handleCheckDetail: function handleCheckDetail() {
-	        /**
-	         * 显示加载中
-	         */
-	        var dom = document.getElementById("dialog");
-	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	        dom.style.display = "block";
+	    componentDidMount: function componentDidMount() {
+	        var _this = this;
 
-	        var url = "/jsj/user/detail";
-	        url += "?serialnumber=" + this.state.serialNumber;
+	        var number = this.props.location.query.serialnumber;
+	        var serialnumber = number || sessionStorage.getItem("OrderSerialNumber");
+	        sessionStorage.setItem("OrderSerialNumber", serialnumber);
+	        var dom = document.getElementById("dialog");
+	        if (!this.state.detail) {
+	            /**
+	             * 显示加载中
+	             */
+	            _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
+	            dom.style.display = "block";
+	        }
+	        var url = jsj_api_path + "/user/detail";
+	        url += "?serialnumber=" + serialnumber;
+	        console.log("获取订单详情url", url);
 	        fetch(url).then(function (res) {
 	            console.log("查询订单详情响应状态：", res.status);
 	            dom.style.display = "none";
@@ -30624,20 +30640,28 @@
 	            }
 	        }).then(function (str) {
 	            var obj = JSON.parse(str);
-	            console.log(obj);
+	            console.log("订单详细数据：", obj);
 	            if (obj.code == 0) {
+	                _this.setState({ detail: obj.record });
 	                sessionStorage.setItem("TravelDetailInfo", JSON.stringify(obj.record));
-	                location.href = "#/check_travel_detail";
 	            } else {
 	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u67E5\u8BE2\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5!' }), dom);
+	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u83B7\u53D6\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01' }), dom);
 	            console.warn('错误', e);
 	        });
 	    },
+	    incre: function incre() {
+	        var i = 0;return function () {
+	            return i++;
+	        };
+	    },
+	    handleCheckDetail: function handleCheckDetail() {
+	        location.href = "#/check_travel_detail";
+	    },
 	    ensureCancel: function ensureCancel() {
-	        var _this = this;
+	        var _this2 = this;
 
 	        /**
 	         * 显示加载中
@@ -30646,8 +30670,8 @@
 	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
 	        dom.style.display = "block";
 
-	        var url = "/jsj/user/cancel";
-	        url += "?serialnumber=" + this.state.serialNumber;
+	        var url = jsj_api_path + "/user/cancel";
+	        url += "?serialnumber=" + sessionStorage.getItem("OrderSerialNumber");
 	        fetch(url).then(function (res) {
 	            console.log("取消订单响应状态：", res.status);
 	            dom.style.display = "none";
@@ -30660,7 +30684,7 @@
 	            var obj = JSON.parse(str);
 	            console.log(obj);
 	            if (obj.code == 0) {
-	                _this.setState({ status: 6 });
+	                _this2.setState({ status: 6 });
 	            } else {
 	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
@@ -30676,13 +30700,9 @@
 	    },
 	    render: function render() {
 	        var status = +this.state.status;
-	        var serialnumber = sessionStorage.getItem("OrderSerialNumber");
-	        var ct = sessionStorage.getItem('SelectedCarType');
-	        ct = ct ? JSON.parse(ct) : {};
-
-	        var td = sessionStorage.getItem("TravelDetailInfo");
-	        td = td ? JSON.parse(td) : {};
-	        var driver = td.driverinfo ? td.driverinfo[0].record : {};
+	        var td = this.state.detail || {};
+	        var driver = td.driverinfo || {};
+	        var ct = td.cartypeinfo || {};
 
 	        var seq = this.incre();
 	        var list = [];
@@ -30698,7 +30718,7 @@
 	                null,
 	                '\xA5'
 	            ),
-	            ct ? parseFloat(ct.totalfee).toFixed(2) : '0.00'
+	            parseFloat(td.totalfee || 0).toFixed(2)
 	        ), _react2.default.createElement(
 	            'li',
 	            { key: seq(), onClick: this.handleCheckDetail },
@@ -30855,7 +30875,7 @@
 	                    'em',
 	                    null,
 	                    '\xA5',
-	                    ct ? parseFloat(ct.totalfee).toFixed(2) : '0.00',
+	                    parseFloat(td.totalfee || 0).toFixed(2),
 	                    '\u2003\u5DF2\u9000\u6B3E'
 	                )
 	            );
@@ -31083,6 +31103,14 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _pulldown_tip = __webpack_require__(243);
+
+	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
+
 	var _star = __webpack_require__(254);
 
 	var _star2 = _interopRequireDefault(_star);
@@ -31119,10 +31147,11 @@
 	        }
 	    },
 	    handleCommentCommit: function handleCommentCommit() {
+	        var dom = document.getElementById("dialog");
 	        var content = this.refs.comment.value;
 	        var score = this.state.starCount;
 	        var serialnumber = sessionStorage.getItem("OrderSerialNumber");
-	        var url = "/jsj/user/comment";
+	        var url = jsj_api_path + "/user/comment";
 	        url += "?" + queryStr.stringify({ serialnumber: serialnumber, score: score, content: content });
 	        fetch(url).then(function (res) {
 	            console.log("查询订单详情响应状态：", res.status);
@@ -31136,6 +31165,8 @@
 	            console.log(obj);
 	            if (obj.code == 0) {
 	                location.href = "#/travel_detail?flag=5&score=" + score;
+	            } else {
+	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
 	            console.warn('错误', e);
@@ -31220,7 +31251,7 @@
 	    },
 	    render: function render() {
 	        var d = sessionStorage.getItem("TravelDetailInfo");
-	        d = JSON.parse(d);
+	        d = JSON.parse(d) || {};
 	        var flag = d.ordertype;
 
 	        var _decDatetime = (0, _util.decDatetime)(d.bookingtime),
@@ -31253,7 +31284,7 @@
 	                    'li',
 	                    null,
 	                    '\xA5',
-	                    parseFloat(d.totalfee).toFixed(2)
+	                    parseFloat(d.totalfee || 0).toFixed(2)
 	                ),
 	                _react2.default.createElement(
 	                    'li',
@@ -31267,7 +31298,7 @@
 	                        'p',
 	                        null,
 	                        '\xA5',
-	                        d.totalfee
+	                        parseFloat(d.totalfee || 0).toFixed(2)
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -31291,7 +31322,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        f.flightnumber || ''
+	                        (f.flightnumber || '').toUpperCase()
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -31530,9 +31561,23 @@
 	    value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _loading = __webpack_require__(242);
+
+	var _loading2 = _interopRequireDefault(_loading);
+
+	var _pulldown_tip = __webpack_require__(243);
+
+	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
 
 	var _util = __webpack_require__(244);
 
@@ -31547,17 +31592,27 @@
 	        };
 	    },
 	    componentWillMount: function componentWillMount() {
+	        document.title = "接送机订单";
+	    },
+	    componentDidMount: function componentDidMount() {
 	        var _this = this;
 
-	        document.title = "接送机订单";
 	        var list = sessionStorage.getItem("GoonOrders");
 	        if (list) {
 	            this.setState({ orderList: JSON.parse(list) });
 	            return 0;
 	        }
-	        var url = "/jsj/jsjorder/runninglist";
+	        /**
+	         * 显示加载中
+	         */
+	        var dom = document.getElementById("dialog");
+	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
+	        dom.style.display = "block";
+
+	        var url = jsj_api_path + "/user/runninglist";
 	        fetch(url).then(function (res) {
 	            console.log("获取进行中订单的响应状态：", res.status);
+	            dom.style.display = "none";
 	            if (+res.status < 400) {
 	                return res.text();
 	            } else {
@@ -31569,6 +31624,8 @@
 	            if (obj.code == 0) {
 	                _this.setState({ orderList: obj.records });
 	                sessionStorage.setItem("GoonOrders", JSON.stringify(obj.records));
+	            } else {
+	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
 	            console.warn('错误', e);
@@ -31579,34 +31636,49 @@
 
 	        var id = e.target.id;
 	        if (id == 'finished') {
-	            var list = sessionStorage.getItem("FinishedOrders");
-	            if (list) {
-	                this.setState({ orderList: JSON.parse(list) });
-	                this.setState({ finished: true });
-	                return 0;
-	            }
-	            var url = "/jsj/jsjorder/historylist";
-	            fetch(url).then(function (res) {
-	                console.log("获取进行中订单的响应状态：", res.status);
-	                if (+res.status < 400) {
-	                    return res.text();
-	                } else {
-	                    throw new Error("服务异常");
-	                }
-	            }).then(function (str) {
-	                var obj = JSON.parse(str);
-	                console.log(obj);
-	                if (obj.code == 0) {
-	                    _this2.setState({ orderList: obj.records });
+	            var _ret = function () {
+	                var list = sessionStorage.getItem("FinishedOrders");
+	                if (list) {
+	                    _this2.setState({ orderList: JSON.parse(list) });
 	                    _this2.setState({ finished: true });
-	                    sessionStorage.setItem("FinishedOrders", JSON.stringify(obj.records));
+	                    return {
+	                        v: 0
+	                    };
 	                }
-	            }).catch(function (e) {
-	                console.warn('错误', e);
-	            });
+	                /**
+	                 * 显示加载中
+	                 */
+	                var dom = document.getElementById("dialog");
+	                _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
+	                dom.style.display = "block";
+	                var url = jsj_api_path + "/user/historylist";
+	                fetch(url).then(function (res) {
+	                    console.log("获取进行中订单的响应状态：", res.status);
+	                    dom.style.display = "none";
+	                    if (+res.status < 400) {
+	                        return res.text();
+	                    } else {
+	                        throw new Error("服务异常");
+	                    }
+	                }).then(function (str) {
+	                    var obj = JSON.parse(str);
+	                    console.log(obj);
+	                    if (obj.code == 0) {
+	                        _this2.setState({ orderList: obj.records || [] });
+	                        _this2.setState({ finished: true });
+	                        sessionStorage.setItem("FinishedOrders", JSON.stringify(obj.records));
+	                    } else {
+	                        _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
+	                    }
+	                }).catch(function (e) {
+	                    console.warn('错误', e);
+	                });
+	            }();
+
+	            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	        } else {
 	            var _list = sessionStorage.getItem("GoonOrders");
-	            this.setState({ orderList: JSON.parse(_list) });
+	            this.setState({ orderList: JSON.parse(_list) || [] });
 	            this.setState({ finished: false });
 	        }
 	    },
@@ -31619,33 +31691,6 @@
 	                hour = _decDatetime.hour,
 	                minute = _decDatetime.minute;
 
-	            var statusMsg = _react2.default.createElement(
-	                'span',
-	                { style: { color: "#E6C057" } },
-	                '\u8FDB\u884C\u4E2D'
-	            );
-	            switch (item.status) {
-	                case 0:
-	                    statusMsg = _react2.default.createElement(
-	                        'span',
-	                        { style: { color: "#E6C057" } },
-	                        '\u8FDB\u884C\u4E2D'
-	                    );break;
-	                case 1:
-	                    statusMsg = _react2.default.createElement(
-	                        'span',
-	                        { style: { color: "#E6C057" } },
-	                        '\u8FDB\u884C\u4E2D'
-	                    );break;
-	                case 2:
-	                    statusMsg = _react2.default.createElement(
-	                        'span',
-	                        { style: { color: "#E6C057" } },
-	                        '\u8FDB\u884C\u4E2D'
-	                    );break;
-	                default:
-	                    break;
-	            }
 	            return _react2.default.createElement(
 	                'ul',
 	                { key: index },
@@ -31660,7 +31705,11 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        statusMsg,
+	                        _react2.default.createElement(
+	                            'span',
+	                            { style: { color: "#E6C057" } },
+	                            item.statusdescription
+	                        ),
 	                        _react2.default.createElement('i', { className: 'arrow' })
 	                    )
 	                ),
@@ -31724,7 +31773,203 @@
 	                    '\u5DF2\u5B8C\u6210'
 	                )
 	            ),
-	            list
+	            list.length > 0 ? list : _react2.default.createElement(
+	                'p',
+	                { style: { textAlign: "center", fontSize: "32px", fontColor: "#969696", lineHeight: "100px" } },
+	                '\u60A8\u5F53\u524D\u6CA1\u6709\u8BA2\u5355\uFF01'
+	            )
+	        );
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        var dom = document.getElementById("dialog");
+	        dom.style.display = "none";
+	    }
+	});
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	    displayName: "cancel_notice",
+	    componentWillMount: function componentWillMount() {
+	        document.title = "预订须知";
+	        document.getElementById("appContainer").style.backgroundColor = "#fff";
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "jieji-cancel-rule" },
+	            _react2.default.createElement(
+	                "h2",
+	                null,
+	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9884\u8BA2\u987B\u77E5"
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u8D39\u7528\u5305\u542B\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u6839\u636E\u60A8\u9884\u8BA2\u7684\u4E0A\u4E0B\u8F66\u5730\u5740\uFF0C\u60A8\u652F\u4ED8\u7684\u603B\u4EF7\u5305\u542B",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u4E00\u6B21\u63A5\u673A/\u9001\u673A"
+	                    ),
+	                    "\u7528\u8F66\u670D\u52A1\u7684\u5168\u90E8\u8D39\u7528\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u8D39\u7528\u4E0D\u5305\u542B\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u548C\u7528\u8F66\u65E0\u76F4\u63A5\u5173\u8054\u7684\u8D39\u7528\uFF0C\u4F8B\u5982",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u666F\u533A\u95E8\u7968"
+	                    ),
+	                    "\u7B49\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u8F66\u8F86\u5B89\u6392\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u6211\u4EEC\u5C06\u5728\u8BA2\u5355\u652F\u4ED8\u6210\u529F",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "30\u5206\u949F\u5185"
+	                    ),
+	                    "\u5B89\u6392\u8F66\u8F86\u548C\u53F8\u673A\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u670D\u52A1\u6807\u51C6\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "1\u3001\u63A5\u673A\u670D\u52A1\uFF1A"
+	                    ),
+	                    "\u82E5\u60A8\u63A5\u673A\u63D0\u4F9B\u4E86\u822A\u73ED\u53F7\uFF0C \u53F8\u673A\u5C06\u6309\u7167\u822A\u73ED\u5B9E\u9645\u62B5\u8FBE\u65F6\u95F4\u63D0\u4F9B\u670D\u52A1\uFF0C\u822A\u73ED\u62B5\u8FBE\u540E\u53F8\u673A",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u6700\u957F\u514D\u8D39\u7B49\u50191\u5C0F\u65F6\uFF1B"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "2\u3001\u9001\u673A\u670D\u52A1\uFF1A"
+	                    ),
+	                    "\u53F8\u673A\u5C06\u4F1A\u6309\u7EA6\u5B9A\u65F6\u95F4",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u514D\u8D39\u7B49\u5F8515\u5206\u949F"
+	                    ),
+	                    "\u3002 \u8D85\u8FC7\u514D\u8D39\u7B49\u5F85\u65F6\u95F4\u60A8\u4ECD\u672A\u5230\u8FBE\u6216\u65E0\u6CD5\u8054\u7CFB\uFF0C\u53F8\u673A\u5C06\u65E0\u6CD5\u7EE7\u7EED\u7B49\u5F85\uFF0C\u8BA2\u5355\u8D39\u7528\u65E0\u6CD5\u9000\u8FD8\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u7528\u8F66\u987B\u77E5\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "1\u3001\u63A5\u9001\u673A\u4EA7\u54C1\u662F\u70B9\u5230\u70B9\u4E2D\u9014\u4E0D\u505C\u7559\u7684\u670D\u52A1\uFF0C\u4E0D\u80FD\u4E34\u65F6\u6539\u53D8\u8DEF\u7EBF\u3002\u53F8\u673A\u4F1A\u6839\u636E\u8DEF\u51B5\u5408\u7406\u5B89\u6392\u884C\u9A76\u8DEF\u7EBF\uFF0C\u4E0D\u63A5\u53D7\u4E2D\u9014\u7ECF\u505C\u6216\u7ED5\u8DEF\uFF1B \u5982\u60A8\u9700\u8981\u9001\u8FBE\u591A\u4E2A\u5730\u5740\u6216\u5728\u591A\u4E2A\u5730\u5740\u4E0A\u8F66\uFF0C\u8BF7\u5206\u5F00\u4E0B\u5355\u3002"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "2\u3001\u5A74\u513F\u3001\u513F\u7AE5\u5373\u4F7F\u4E0D\u5360\u7528\u5EA7\u4F4D\u4E5F\u9700\u8BA1\u5165\u4E58\u8F66\u4EBA\u6570\u3002"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "3\u3001\u5404\u8F66\u578B\u7684\u627F\u8F7D\u4EBA\u6570\u53CA\u884C\u674E\u90FD\u6709\u6240\u9650\u5236\uFF0C\u8BF7\u60A8\u4ED4\u7EC6\u6838\u5BF9\uFF0C\u7531\u4E8E\u60A8\u81EA\u8EAB\u9009\u62E9\u8F66\u578B\u4E0D\u7B26\u800C\u5F71\u54CD\u60A8\u7684\u7528\u8F66\uFF0C\u8BE5\u635F\u5931\u7531\u60A8\u81EA\u884C\u627F\u62C5\u3002"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "4\u3001\u82E5\u60A8\u9009\u62E9\u7684\u5730\u5740\u56E0\u4EA4\u901A\u56E0\u7D20\u65E0\u6CD5\u9001\u8FBE\uFF0C\u6BD4\u5982\u9001\u8FBE\u5C71\u8109\u3001\u68EE\u6797\u3001\u5C9B\u5C7F\u3001\u6D77\u4E0A\u3001\u6C99\u6F20\u3001\u65E0\u4EBA\u533A\u7B49\uFF0C\u4F1A\u89C6\u60C5\u51B5\u9001\u60A8\u5230\u5C31\u8FD1\u7684\u5730\u70B9\u3002 \u5982\u9F13\u6D6A\u5C7F\uFF0C\u53F8\u673A\u4F1A\u9001\u60A8\u81F3\u8F6E\u6E21\u7801\u5934\uFF0C\u8BF7\u60A8\u81EA\u884C\u4E58\u8239\u524D\u5F80\u76EE\u7684\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "h2",
+	                null,
+	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9000\u8BA2\u89C4\u5219"
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u7ECF\u6D4E\u578B\u3001\u8212\u9002\u578B\u3001\u5546\u52A1\u578B\u3001\u8C6A\u534E\u578B\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "1\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\uFF08\u542B\uFF09\u524D\u53D6\u6D88\uFF0C\u6309\u8BA2\u5355\u91D1\u989D\u7684100%\u9000\u6B3E\uFF1B"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "2\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\u5185\u53D6\u6D88\uFF0C\u6536\u53D6\u8BA2\u5355\u91D1\u989D\u7684100%\u4F5C\u4E3A\u8FDD\u7EA6\u91D1\u3002"
+	                )
+	            )
 	        );
 	    }
 	});

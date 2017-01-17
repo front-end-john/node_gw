@@ -3,6 +3,13 @@ let router = express.Router();
 let fetch = require('node-fetch');
 let log=require('../utils/mylog');
 
+/**
+ * 微信接送机首页
+ */
+router.get('/', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/index', {});
+});
 
 let proxy=function(req, res) {
     let url=wx_jsj_url+req.originalUrl;
@@ -19,6 +26,7 @@ let proxy=function(req, res) {
         res.status(500).end();
     });
 };
+
 /**
  * 获取车型列表
  */

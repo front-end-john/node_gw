@@ -16,7 +16,9 @@ export default React.createClass({
     componentWillMount(){
         document.title="行程详情";
         document.getElementById("appContainer").style.backgroundColor="#fff";
-
+        let td=sessionStorage.getItem("TravelDetailInfo");
+        td=JSON.parse(td);
+        this.setState({detail:td});
         /**
          * 获取上一步的评价星数
          */
@@ -28,17 +30,21 @@ export default React.createClass({
         let flag=this.props.location.query.flag;
         if(flag) this.setState({status:+flag});
     },
-    incre(){let i=0;return () => i++},
-    handleCheckDetail(){
-        /**
-         * 显示加载中
-         */
+    componentDidMount(){
+        let number=this.props.location.query.serialnumber;
+        let serialnumber=number||sessionStorage.getItem("OrderSerialNumber");
+        sessionStorage.setItem("OrderSerialNumber",serialnumber);
         let dom=document.getElementById("dialog");
-        ReactDOM.render(<Loading />,dom);
-        dom.style.display="block";
-
-        let url="/jsj/user/detail";
-        url+="?serialnumber="+this.state.serialNumber;
+        if(!this.state.detail){
+            /**
+             * 显示加载中
+             */
+            ReactDOM.render(<Loading />,dom);
+            dom.style.display="block";
+        }
+        let url=jsj_api_path+"/user/detail";
+        url+="?serialnumber="+serialnumber;
+        console.log("获取订单详情url",url);
         fetch(url).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
             dom.style.display="none";
@@ -49,17 +55,22 @@ export default React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            console.log(obj);
+            console.log("订单详细数据：",obj);
             if(obj.code==0){
+                this.setState({detail:obj.record});
                 sessionStorage.setItem("TravelDetailInfo",JSON.stringify(obj.record));
-                location.href="#/check_travel_detail";
-            }else{
+            }else {
                 ReactDOM.render(<PulldownTip msg={obj.message} />,dom);
             }
         }).catch(function(e) {
-            ReactDOM.render(<PulldownTip msg="订单查询失败,请稍后再试!" />,dom);
+            ReactDOM.render(<PulldownTip msg="订单获取失败,请稍后再试！" />,dom);
             console.warn('错误', e);
         });
+    },
+    incre(){let i=0;return () => i++},
+
+    handleCheckDetail(){
+        location.href="#/check_travel_detail";
     },
     ensureCancel(){
         /**
@@ -69,8 +80,8 @@ export default React.createClass({
         ReactDOM.render(<Loading />,dom);
         dom.style.display="block";
 
-        let url="/jsj/user/cancel";
-        url+="?serialnumber="+this.state.serialNumber;
+        let url=jsj_api_path+"/user/cancel";
+        url+="?serialnumber="+sessionStorage.getItem("OrderSerialNumber");
         fetch(url).then(function(res){
             console.log("取消订单响应状态：",res.status);
             dom.style.display="none";
@@ -99,19 +110,14 @@ export default React.createClass({
     },
     render(){
         let status=+this.state.status;
-        let serialnumber = sessionStorage.getItem("OrderSerialNumber");
-        let ct=sessionStorage.getItem('SelectedCarType');
-        ct=ct?JSON.parse(ct):{};
-
-        let td = sessionStorage.getItem("TravelDetailInfo");
-        td =td?JSON.parse(td):{};
-        let driver=td.driverinfo?td.driverinfo[0].record:{};
-
+        let td =this.state.detail||{};
+        let driver=td.driverinfo||{};
+        let ct=td.cartypeinfo||{};
 
         let seq=this.incre();
         let list=[];
         let commonPart=[<li key={seq()}>成功支付</li>,<li key={seq()}><em>&yen;</em>
-            {ct?parseFloat(ct.totalfee).toFixed(2):'0.00'}</li>,
+            {parseFloat(td.totalfee||0).toFixed(2)}</li>,
             <li key={seq()} onClick={this.handleCheckDetail}>查看详情<i className="arrow"/></li>];
         if(status==1){
             list[0]=(<li key={seq()}>待服务</li>);
@@ -149,7 +155,7 @@ export default React.createClass({
             list[1]=(<li key={seq()}><img src={jsj_static_path+"/img/sigh-tip.png"} /></li>);
             list[2]=(<li key={seq()}>订单已取消</li>);
             list[3]=(<li key={seq()}>如有退款将原路退回您的支付账户中</li>);
-            list[4]=(<li key={seq()}>退款金额:<em>&yen;{ct?parseFloat(ct.totalfee).toFixed(2):'0.00'}&emsp;已退款</em></li>);
+            list[4]=(<li key={seq()}>退款金额:<em>&yen;{parseFloat(td.totalfee||0).toFixed(2)}&emsp;已退款</em></li>);
             list[5]=(<li key={seq()}>取消扣费:&ensp;&yen;0.00
                     <em onClick={()=>location.href="#/cancel_rule"}>取消规则</em><i className="arrow"/></li>);
             list[6]=(<li key={seq()} className="side-line">扣费原因</li>);

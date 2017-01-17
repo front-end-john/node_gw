@@ -16,9 +16,9 @@ export default React.createClass({
         let flight=sessionStorage.getItem("FlightInfo");
         let dom=document.getElementById("dialog");
         if(flight){
-            ReactDOM.render(<PulldownTip msg="已与航班号对应，无法修改!" />,dom);
+            ReactDOM.render(<PulldownTip msg="已与航班号对应，无法修改！" />,dom);
         }else {
-            ReactDOM.render(<PulldownTip msg="请先选择航班号!" />,dom);
+            ReactDOM.render(<PulldownTip msg="请先选择航班号！" />,dom);
         }
     },
     handleDateChange(e){
@@ -55,7 +55,7 @@ export default React.createClass({
 
         let paramsObj=this.state.queryLocation;
         console.log(paramsObj);
-        let url="/jsj/user/querycartype";
+        let url=jsj_api_path+"/user/querycartype";
         url+="?"+queryStr.stringify(paramsObj);
         console.log("查询车型url：",url);
         fetch(url).then(function(res){
@@ -73,10 +73,10 @@ export default React.createClass({
                 sessionStorage.setItem("carTypeList",str);
                 location.href="#/select_car_type";
             }else {
-                ReactDOM.render(<PulldownTip msg="查询失败!" />,dom);
+                ReactDOM.render(<PulldownTip msg={obj.message} />,dom);
             }
         }).catch(function(e){
-            ReactDOM.render(<PulldownTip msg="查询失败!" />,dom);
+            ReactDOM.render(<PulldownTip msg="查询失败！" />,dom);
             console.trace('错误:', e);
         });
     },
@@ -114,9 +114,9 @@ export default React.createClass({
                 jjData={number:flight.flightnumber,
                     useTime:month+'-'+day+' '+weekday[week]+' '+hour+':'+minute+' 用车',
                     terminal:flight.tocity+flight.toairport+"机场"+flight.toterminal+"航站楼",
-                    startTime:month+'-'+day+' '+hour+':'+minute,
+                    startTime:month2+'-'+day2+' '+hour2+':'+minute2,
                     startTerminal:flight.fromcity+flight.fromairport+"机场"+flight.fromterminal,
-                    endTime:month2+'-'+day2+' '+hour2+':'+minute2,
+                    endTime:month+'-'+day+' '+hour+':'+minute,
                     endTerminal:flight.tocity+flight.toairport+"机场"+flight.toterminal,
                     city:flight.tocity
                 };
@@ -129,9 +129,9 @@ export default React.createClass({
                     useTime:sessionStorage.getItem("UserUseCarTime"),
                     terminal:flight.fromcity+flight.fromairport+"机场"+flight.fromterminal+"航站楼",
                     takeoffTime:year2+'-'+month2+'-'+day2+' '+hour2+':'+minute2,
-                    startTime:month+'-'+day+' '+hour+':'+minute,
+                    startTime:month2+'-'+day2+' '+hour2+':'+minute2,
                     startTerminal:flight.fromcity+flight.fromairport+"机场"+flight.fromterminal,
-                    endTime:month2+'-'+day2+' '+hour2+':'+minute2,
+                    endTime:month+'-'+day+' '+hour+':'+minute,
                     endTerminal:flight.tocity+flight.toairport+"机场"+flight.toterminal,
                     city:flight.fromcity
                 };

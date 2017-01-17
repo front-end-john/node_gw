@@ -1,5 +1,6 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
+import PulldownTip from '../widgets/pulldown_tip';
 import Star from '../widgets/star'
 
 export default React.createClass({
@@ -32,10 +33,11 @@ export default React.createClass({
         }
     },
     handleCommentCommit(){
+        let dom=document.getElementById("dialog");
         let content=this.refs.comment.value;
         let score=this.state.starCount;
         let serialnumber = sessionStorage.getItem("OrderSerialNumber");
-        let url="/jsj/user/comment";
+        let url=jsj_api_path+"/user/comment";
         url+="?"+queryStr.stringify({serialnumber,score,content});
         fetch(url).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
@@ -49,6 +51,8 @@ export default React.createClass({
             console.log(obj);
             if(obj.code==0){
                 location.href="#/travel_detail?flag=5&score="+score;
+            }else {
+                ReactDOM.render(<PulldownTip msg={obj.message} />,dom);
             }
         }).catch(function(e) {
             console.warn('错误', e);

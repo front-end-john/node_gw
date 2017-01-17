@@ -37,6 +37,7 @@
     "gulp-compass": "^2.1.0",
     "gulp-sftp": "^0.1.5",
     "gulp-watch": "^4.3.11",
+    "iconv": "^2.2.1",
     "iconv-lite": "^0.4.15",
     "jest": "^18.1.0",
     "merge-stream": "^1.0.1",

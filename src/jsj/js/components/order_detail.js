@@ -4,18 +4,20 @@ import Loading from '../widgets/loading';
 import PulldownTip from '../widgets/pulldown_tip';
 import {decDatetime} from '../util';
 export default React.createClass({
-    getInitialState(){
-        return { detail:{}}
-    },
     componentWillMount(){
         this.carImgList=[jsj_static_path+"/img/07.png",jsj_static_path+"/img/08.png",
             jsj_static_path+"/img/09.png",jsj_static_path+"/img/10.png"];
         document.title="订单信息";
+        let detail=sessionStorage.getItem("TravelDetailInfo");
+        detail=detail?JSON.parse(detail):{};
+        this.setState({detail});
     },
     componentDidMount(){
         let number=this.props.location.query.serialnumber;
-        let serialnumber=number?number:sessionStorage.getItem("OrderSerialNumber");
+        let serialnumber=number||sessionStorage.getItem("OrderSerialNumber");
         sessionStorage.setItem("OrderSerialNumber",serialnumber);
+        let detail=sessionStorage.getItem("TravelDetailInfo");
+        if(detail) return 0;
         /**
          * 显示加载中
          */
@@ -23,7 +25,7 @@ export default React.createClass({
         ReactDOM.render(<Loading />,dom);
         dom.style.display="block";
 
-        let url="/jsj/user/detail";
+        let url=jsj_api_path+"/user/detail";
         url+="?serialnumber="+serialnumber;
         console.log("获取订单详情url",url);
         fetch(url).then(function(res){
@@ -48,7 +50,7 @@ export default React.createClass({
                 ReactDOM.render(<PulldownTip msg={obj.message} />,dom);
             }
         }).catch(function(e) {
-            ReactDOM.render(<PulldownTip msg="订单获取失败,请稍后再试!" />,dom);
+            ReactDOM.render(<PulldownTip msg="订单获取失败,请稍后再试！" />,dom);
             console.warn('错误', e);
         });
     },
@@ -89,8 +91,8 @@ export default React.createClass({
         /**
          * 从后台获取微信支付验证参数
          */
-        let payordernumber="js154546545",totalfee=0.01,openid="obsLEuFmAHp5eNcLNoACrzkrJ5CI";
-        let url="/jsj/user/wechat/payconfig?"+queryStr.stringify({payordernumber,totalfee,openid});
+        let payordernumber="js154546847",totalfee=0.01,openid="obsLEuFmAHp5eNcLNoACrzkrJ5CI";
+        let url=jsj_api_path+"/user/wechat/payconfig?"+queryStr.stringify({payordernumber,totalfee,openid});
         fetch(url).then((res)=>{
             console.log("请求微信支付参数响应状态：",res.status);
             dom.style.display="none";
@@ -104,7 +106,7 @@ export default React.createClass({
             console.log("微信支付验证参数：",obj);
             if(obj.code == 0){
                 wx.config({
-                    debug: true, // 开启调试模式,打出，仅在pc端时才会打印。
+                    debug: false, // 开启调试模式,打出，仅在pc端时才会打印。
                     appId: obj.record.appid, // 必填，公众号的唯一标识
                     timestamp: obj.record.timestamp, // 必填，生成签名的时间戳
                     nonceStr:  obj.record.noncstr, // 必填，生成签名的随机串
@@ -115,17 +117,25 @@ export default React.createClass({
                     wx.chooseWXPay({
                         timestamp: obj.record.timestamp,
                         nonceStr: obj.record.noncstr,
-                        package: obj.record.prepayid,
-                        signType: 'MD5',
+                        package: "prepay_id="+obj.record.prepayid,
+                        signType: "MD5",
                         paySign: obj.record.sign,
                         success: function (res) {
-                            console.log("支付成功:",res);
-                            ReactDOM.render(<PulldownTip msg="支付成功！" />,dom);
+                            let errMsg=res.errMsg;
+                            if(errMsg=="chooseWXPay:cancel" || errMsg=="chooseWXPay:fail" ){
+                                ReactDOM.render(<PulldownTip msg="支付失败！" />,dom);
+                                return 0;
+                            }else if(errMsg=="chooseWXPay:ok"){
+                                ReactDOM.render(<PulldownTip msg="支付成功！" />,dom);
+                                setTimeout(()=>{
+                                    location.href="#/travel_detail";
+                                },1500);
+                            }
                             /**
                              *支付成功后更新订单
                              */
                             if(!actualname && !actualphone && !userremark) return 0;
-                            url="/jsj/user/wechatpaysuccess?"+
+                            url=jsj_api_path+"/user/wechatpaysuccess?"+
                                 queryStr.stringify({serialnumber,actualname,actualphone,userremark});
                             fetch(url).then(function(res){
                                 console.log("订单更新响应状态：",res.status);
@@ -140,9 +150,6 @@ export default React.createClass({
                             }).catch(function(e){
                                 console.warn('错误', e);
                             });
-                            setTimeout(()=>{
-                                location.href="#/travel_detail";
-                            },2500);
                         }
                     });
                 });
@@ -207,7 +214,7 @@ export default React.createClass({
                     {list}
                     <li>
                         <p>行程备注</p>
-                        <p><textarea placeholder="提前告知司机途径地点，方便司机规划行程(选填),最多60个字符"
+                        <p><textarea placeholder="提前告知司机途径地点，方便司机规划行程(选填),最多60个字符。"
                                      defaultValue={changedRemark||detail.userremark||""}
                                      onChange={this.handleRemarkChange} /></p>
                     </li>
@@ -218,7 +225,7 @@ export default React.createClass({
                     <li>{ccp.name||detail.actualname||""}&ensp;
                         {ccp.phonenumber||detail.actualphone||""}<i className="arrow" /></li>
                 </ul>
-                <p className="notice"><a href="javascript:void(0)">《预定须知&退订须知》</a></p>
+                <p className="notice"><a href="#/cancel_notice">《预定须知&退订须知》</a></p>
                 <ul className="bottom-pay">
                     <li>需支付:<em>&yen;{detail.totalfee?parseFloat(detail.totalfee).toFixed(2):0.00}</em></li>
                     <li onClick={this.handlePay}>进行支付</li>
