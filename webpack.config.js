@@ -3,7 +3,14 @@ module.exports=[{
     name:"jsj",
     entry:{
         //jquery_family:['jquery','jquery-touch-events'],
-        index:"./src/jsj/js/index.js"
+        index:"./src/jsj/js/index.js",
+        jsj_index:"./src/jsj/js/alone/jsj_index.js",
+        order_pay:"./src/jsj/js/alone/order_pay.js",
+        order_status:"./src/jsj/js/alone/order_status.js",
+        modify_contact_person:"./src/jsj/js/alone/modify_contact_person.js",
+        order_comment:"./src/jsj/js/alone/order_comment.js",
+        cancel_order_rule:"./src/jsj/js/alone/cancel_order_rule.js",
+        cancel_order_know:"./src/jsj/js/alone/cancel_order_know.js",
     },
     output:{
         filename:'[name].js',

@@ -118,11 +118,11 @@
 
 	var _cancel_rule2 = _interopRequireDefault(_cancel_rule);
 
-	var _cancel_notice = __webpack_require__(259);
+	var _cancel_notice = __webpack_require__(258);
 
 	var _cancel_notice2 = _interopRequireDefault(_cancel_notice);
 
-	var _jsj_order = __webpack_require__(258);
+	var _jsj_order = __webpack_require__(259);
 
 	var _jsj_order2 = _interopRequireDefault(_jsj_order);
 
@@ -138,6 +138,11 @@
 	global.jsj_api_path = "/jsj";
 
 
+	var index_url = "/mobile/jsj/#/jsj_query";
+	var query = location.search;
+	if (query.indexOf("serialnumber") > -1 && query.indexOf("openid") > -1) {
+	    index_url = "/mobile/jsj/#/order_detail" + query;
+	}
 	var App = _react2.default.createClass({
 	    displayName: 'App',
 	    componentWillMount: function componentWillMount() {
@@ -156,7 +161,9 @@
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: App },
-	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _jsj_query2.default }),
+	    _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: function onEnter() {
+	            location.href = index_url;
+	        } }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_query', component: _jsj_query2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'query_flight', component: _query_flight2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'flight_list', component: _flight_list2.default }),
@@ -28734,7 +28741,7 @@
 	            var obj = JSON.parse(str);
 	            console.log(obj);
 	            if (obj.code == 0) {
-	                sessionStorage.setItem("carTypeList", str);
+	                sessionStorage.setItem("CarTypeList", str);
 	                location.href = "#/select_car_type";
 	            } else {
 	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
@@ -29221,6 +29228,16 @@
 	var getLocalTimestamp = exports.getLocalTimestamp = function getLocalTimestamp(timeStr) {
 	    var dt = new Date(timeStr.replace(/\-/g, '/'));
 	    return dt.getTime() + dt.getTimezoneOffset() * 60000;
+	};
+
+	var decLocSearch = exports.decLocSearch = function decLocSearch(search) {
+	    var arr = search.replace("?", "").split("&");
+	    var obj = {};
+	    for (var i = 0, len = arr.length; i < len; i++) {
+	        var item = arr[i].split("=");
+	        obj[item[0]] = decodeURI(item[1]);
+	    }
+	    return obj;
 	};
 
 /***/ },
@@ -29853,13 +29870,13 @@
 	    displayName: 'select_car_type',
 	    componentWillMount: function componentWillMount() {
 	        document.title = "选择车型";
-	        var carData = sessionStorage.getItem("carTypeList");
-	        carData = JSON.parse(carData);
+	        var carData = sessionStorage.getItem("CarTypeList");
+	        carData = JSON.parse(carData) || {};
 	        /**
 	         * 保存查询标识
 	         */
 	        sessionStorage.setItem("pricemark", carData.pricemark);
-	        this.setState({ cars: carData.records });
+	        this.setState({ cars: carData.records || [] });
 	        /**
 	         *初始化车图片列表
 	         */
@@ -29893,7 +29910,7 @@
 	    },
 	    handleClickSelect: function handleClickSelect(e) {
 	        var id = e.target.id;
-	        var selectedCarType = this.state.cars[id];
+	        var selectedCarType = this.state.cars[id] || {};
 	        selectedCarType.imgUrl = this.carImgList[+selectedCarType.id - 1];
 	        sessionStorage.setItem("SelectedCarType", JSON.stringify(selectedCarType));
 	        var flight = sessionStorage.getItem("FlightInfo");
@@ -29922,7 +29939,6 @@
 	        console.info("创建订单url：", url);
 	        fetch(url).then(function (res) {
 	            console.log("创建订单响应状态：", res.status);
-	            dom.style.display = "none";
 	            if (+res.status < 400) {
 	                return res.text();
 	            } else {
@@ -29932,12 +29948,15 @@
 	            var obj = JSON.parse(str);
 	            console.log(obj);
 	            if (obj.code == 0) {
-	                sessionStorage.setItem("OrderSerialNumber", obj.record.serialnumber);
-	                location.href = "#/order_detail";
+	                var serialnumber = obj.record.serialnumber;
+	                sessionStorage.setItem("OrderSerialNumber", serialnumber);
+	                location.href = "http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/?serialnumber=" + serialnumber;
 	            } else {
+	                dom.style.display = "none";
 	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
+	            dom.style.display = "none";
 	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u521B\u5EFA\u8BF7\u6C42\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5!' }), dom);
 	            console.warn('错误', e);
 	        });
@@ -30073,6 +30092,9 @@
 	        var _this = this;
 
 	        var number = this.props.location.query.serialnumber;
+	        var openid = this.props.location.query.openid;
+	        sessionStorage.setItem("OpenId", openid);
+
 	        var serialnumber = number || sessionStorage.getItem("OrderSerialNumber");
 	        sessionStorage.setItem("OrderSerialNumber", serialnumber);
 	        var detail = sessionStorage.getItem("TravelDetailInfo");
@@ -30155,10 +30177,8 @@
 	        /**
 	         * 从后台获取微信支付验证参数
 	         */
-	        var payordernumber = "js154546847",
-	            totalfee = 0.01,
-	            openid = "obsLEuFmAHp5eNcLNoACrzkrJ5CI";
-	        var url = jsj_api_path + "/user/wechat/payconfig?" + queryStr.stringify({ payordernumber: payordernumber, totalfee: totalfee, openid: openid });
+	        var openid = this.props.location.query.openid;
+	        var url = jsj_api_path + "/user/wechat/payconfig?" + queryStr.stringify({ serialnumber: serialnumber, openid: openid });
 	        fetch(url).then(function (res) {
 	            console.log("请求微信支付参数响应状态：", res.status);
 	            dom.style.display = "none";
@@ -30172,7 +30192,7 @@
 	            console.log("微信支付验证参数：", obj);
 	            if (obj.code == 0) {
 	                wx.config({
-	                    debug: false, // 开启调试模式,打出，仅在pc端时才会打印。
+	                    debug: false, // 开启调试模式,仅在pc端时才会打印。
 	                    appId: obj.record.appid, // 必填，公众号的唯一标识
 	                    timestamp: obj.record.timestamp, // 必填，生成签名的时间戳
 	                    nonceStr: obj.record.noncstr, // 必填，生成签名的随机串
@@ -30187,7 +30207,9 @@
 	                        signType: "MD5",
 	                        paySign: obj.record.sign,
 	                        success: function success(res) {
+
 	                            var errMsg = res.errMsg;
+	                            alert(errMsg);
 	                            if (errMsg == "chooseWXPay:cancel" || errMsg == "chooseWXPay:fail") {
 	                                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u652F\u4ED8\u5931\u8D25\uFF01' }), dom);
 	                                return 0;
@@ -30200,7 +30222,6 @@
 	                            /**
 	                             *支付成功后更新订单
 	                             */
-	                            if (!actualname && !actualphone && !userremark) return 0;
 	                            url = jsj_api_path + "/user/wechatpaysuccess?" + queryStr.stringify({ serialnumber: serialnumber, actualname: actualname, actualphone: actualphone, userremark: userremark });
 	                            fetch(url).then(function (res) {
 	                                console.log("订单更新响应状态：", res.status);
@@ -30223,7 +30244,7 @@
 	                    console.log("微信验证错误：", res);
 	                });
 	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u5FAE\u4FE1\u652F\u4ED8\u53C2\u6570\u65E0\u6548\uFF01' }), dom);
+	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
 	            }
 	        }).catch(function (e) {
 	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u83B7\u53D6\u5FAE\u4FE1\u652F\u4ED8\u53C2\u6570\u5931\u8D25\uFF01' }), dom);
@@ -30488,6 +30509,7 @@
 	        document.title = "联系人";
 	    },
 	    handleSave: function handleSave() {
+	        var flag = this.props.location.query.flag;
 	        var name = this.nameInput.value.trim();
 	        var tel = this.telInput.value.trim();
 	        var dom = document.getElementById("dialog");
@@ -30500,6 +30522,10 @@
 	            return 0;
 	        }
 	        sessionStorage.setItem("ChangedContactPerson", JSON.stringify({ name: name, phonenumber: tel }));
+	        if (flag == "out") {
+	            location.href = "/mobile/jsj/order_pay?name=" + encodeURI(name) + "&phonenumber=" + tel;
+	            return 0;
+	        }
 	        location.href = "#/order_detail";
 	    },
 	    handleNumberChange: function handleNumberChange(e) {
@@ -30513,6 +30539,11 @@
 
 	        var cp = sessionStorage.getItem("ContactPerson");
 	        cp = cp ? JSON.parse(cp) : {};
+	        console.log(this.props.location.query);
+	        var _props$location$query = this.props.location.query,
+	            name = _props$location$query.name,
+	            phonenumber = _props$location$query.phonenumber;
+
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'jieji-contact-person' },
@@ -30525,7 +30556,7 @@
 	                    _react2.default.createElement('input', { type: 'text', placeholder: '\u59D3\u540D', ref: function ref(c) {
 	                            return _this.nameInput = c;
 	                        },
-	                        defaultValue: cp.name || "" })
+	                        defaultValue: cp.name || name || "" })
 	                ),
 	                _react2.default.createElement(
 	                    'li',
@@ -30535,7 +30566,7 @@
 	                        null,
 	                        '+86'
 	                    ),
-	                    _react2.default.createElement('input', { type: 'number', placeholder: '\u624B\u673A\u53F7', defaultValue: cp.phonenumber || "",
+	                    _react2.default.createElement('input', { type: 'number', placeholder: '\u624B\u673A\u53F7', defaultValue: cp.phonenumber || phonenumber || "",
 	                        onChange: this.handleNumberChange, ref: function ref(c) {
 	                            return _this.telInput = c;
 	                        } })
@@ -31555,6 +31586,194 @@
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	    displayName: "cancel_notice",
+	    componentWillMount: function componentWillMount() {
+	        document.title = "预订须知";
+	        document.getElementById("appContainer").style.backgroundColor = "#fff";
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "jieji-cancel-rule" },
+	            _react2.default.createElement(
+	                "h2",
+	                null,
+	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9884\u8BA2\u987B\u77E5"
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u8D39\u7528\u5305\u542B\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u6839\u636E\u60A8\u9884\u8BA2\u7684\u4E0A\u4E0B\u8F66\u5730\u5740\uFF0C\u60A8\u652F\u4ED8\u7684\u603B\u4EF7\u5305\u542B",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u4E00\u6B21\u63A5\u673A/\u9001\u673A"
+	                    ),
+	                    "\u7528\u8F66\u670D\u52A1\u7684\u5168\u90E8\u8D39\u7528\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u8D39\u7528\u4E0D\u5305\u542B\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u548C\u7528\u8F66\u65E0\u76F4\u63A5\u5173\u8054\u7684\u8D39\u7528\uFF0C\u4F8B\u5982",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u666F\u533A\u95E8\u7968"
+	                    ),
+	                    "\u7B49\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u8F66\u8F86\u5B89\u6392\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u6211\u4EEC\u5C06\u5728\u8BA2\u5355\u652F\u4ED8\u6210\u529F",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "30\u5206\u949F\u5185"
+	                    ),
+	                    "\u5B89\u6392\u8F66\u8F86\u548C\u53F8\u673A\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u670D\u52A1\u6807\u51C6\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "1\u3001\u63A5\u673A\u670D\u52A1\uFF1A"
+	                    ),
+	                    "\u82E5\u60A8\u63A5\u673A\u63D0\u4F9B\u4E86\u822A\u73ED\u53F7\uFF0C \u53F8\u673A\u5C06\u6309\u7167\u822A\u73ED\u5B9E\u9645\u62B5\u8FBE\u65F6\u95F4\u63D0\u4F9B\u670D\u52A1\uFF0C\u822A\u73ED\u62B5\u8FBE\u540E\u53F8\u673A",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u6700\u957F\u514D\u8D39\u7B49\u50191\u5C0F\u65F6\uFF1B"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    _react2.default.createElement(
+	                        "strong",
+	                        null,
+	                        "2\u3001\u9001\u673A\u670D\u52A1\uFF1A"
+	                    ),
+	                    "\u53F8\u673A\u5C06\u4F1A\u6309\u7EA6\u5B9A\u65F6\u95F4",
+	                    _react2.default.createElement(
+	                        "em",
+	                        null,
+	                        "\u514D\u8D39\u7B49\u5F8515\u5206\u949F"
+	                    ),
+	                    "\u3002 \u8D85\u8FC7\u514D\u8D39\u7B49\u5F85\u65F6\u95F4\u60A8\u4ECD\u672A\u5230\u8FBE\u6216\u65E0\u6CD5\u8054\u7CFB\uFF0C\u53F8\u673A\u5C06\u65E0\u6CD5\u7EE7\u7EED\u7B49\u5F85\uFF0C\u8BA2\u5355\u8D39\u7528\u65E0\u6CD5\u9000\u8FD8\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u7528\u8F66\u987B\u77E5\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "1\u3001\u63A5\u9001\u673A\u4EA7\u54C1\u662F\u70B9\u5230\u70B9\u4E2D\u9014\u4E0D\u505C\u7559\u7684\u670D\u52A1\uFF0C\u4E0D\u80FD\u4E34\u65F6\u6539\u53D8\u8DEF\u7EBF\u3002\u53F8\u673A\u4F1A\u6839\u636E\u8DEF\u51B5\u5408\u7406\u5B89\u6392\u884C\u9A76\u8DEF\u7EBF\uFF0C\u4E0D\u63A5\u53D7\u4E2D\u9014\u7ECF\u505C\u6216\u7ED5\u8DEF\uFF1B \u5982\u60A8\u9700\u8981\u9001\u8FBE\u591A\u4E2A\u5730\u5740\u6216\u5728\u591A\u4E2A\u5730\u5740\u4E0A\u8F66\uFF0C\u8BF7\u5206\u5F00\u4E0B\u5355\u3002"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "2\u3001\u5A74\u513F\u3001\u513F\u7AE5\u5373\u4F7F\u4E0D\u5360\u7528\u5EA7\u4F4D\u4E5F\u9700\u8BA1\u5165\u4E58\u8F66\u4EBA\u6570\u3002"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "3\u3001\u5404\u8F66\u578B\u7684\u627F\u8F7D\u4EBA\u6570\u53CA\u884C\u674E\u90FD\u6709\u6240\u9650\u5236\uFF0C\u8BF7\u60A8\u4ED4\u7EC6\u6838\u5BF9\uFF0C\u7531\u4E8E\u60A8\u81EA\u8EAB\u9009\u62E9\u8F66\u578B\u4E0D\u7B26\u800C\u5F71\u54CD\u60A8\u7684\u7528\u8F66\uFF0C\u8BE5\u635F\u5931\u7531\u60A8\u81EA\u884C\u627F\u62C5\u3002"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "4\u3001\u82E5\u60A8\u9009\u62E9\u7684\u5730\u5740\u56E0\u4EA4\u901A\u56E0\u7D20\u65E0\u6CD5\u9001\u8FBE\uFF0C\u6BD4\u5982\u9001\u8FBE\u5C71\u8109\u3001\u68EE\u6797\u3001\u5C9B\u5C7F\u3001\u6D77\u4E0A\u3001\u6C99\u6F20\u3001\u65E0\u4EBA\u533A\u7B49\uFF0C\u4F1A\u89C6\u60C5\u51B5\u9001\u60A8\u5230\u5C31\u8FD1\u7684\u5730\u70B9\u3002 \u5982\u9F13\u6D6A\u5C7F\uFF0C\u53F8\u673A\u4F1A\u9001\u60A8\u81F3\u8F6E\u6E21\u7801\u5934\uFF0C\u8BF7\u60A8\u81EA\u884C\u4E58\u8239\u524D\u5F80\u76EE\u7684\u3002"
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "h2",
+	                null,
+	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9000\u8BA2\u89C4\u5219"
+	            ),
+	            _react2.default.createElement(
+	                "ul",
+	                null,
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "\u7ECF\u6D4E\u578B\u3001\u8212\u9002\u578B\u3001\u5546\u52A1\u578B\u3001\u8C6A\u534E\u578B\uFF1A"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "1\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\uFF08\u542B\uFF09\u524D\u53D6\u6D88\uFF0C\u6309\u8BA2\u5355\u91D1\u989D\u7684100%\u9000\u6B3E\uFF1B"
+	                ),
+	                _react2.default.createElement(
+	                    "li",
+	                    null,
+	                    "2\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\u5185\u53D6\u6D88\uFF0C\u6536\u53D6\u8BA2\u5355\u91D1\u989D\u7684100%\u4F5C\u4E3A\u8FDD\u7EA6\u91D1\u3002"
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -31783,194 +32002,6 @@
 	    componentWillUnmount: function componentWillUnmount() {
 	        var dom = document.getElementById("dialog");
 	        dom.style.display = "none";
-	    }
-	});
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: "cancel_notice",
-	    componentWillMount: function componentWillMount() {
-	        document.title = "预订须知";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "jieji-cancel-rule" },
-	            _react2.default.createElement(
-	                "h2",
-	                null,
-	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9884\u8BA2\u987B\u77E5"
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u8D39\u7528\u5305\u542B\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u6839\u636E\u60A8\u9884\u8BA2\u7684\u4E0A\u4E0B\u8F66\u5730\u5740\uFF0C\u60A8\u652F\u4ED8\u7684\u603B\u4EF7\u5305\u542B",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u4E00\u6B21\u63A5\u673A/\u9001\u673A"
-	                    ),
-	                    "\u7528\u8F66\u670D\u52A1\u7684\u5168\u90E8\u8D39\u7528\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u8D39\u7528\u4E0D\u5305\u542B\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u548C\u7528\u8F66\u65E0\u76F4\u63A5\u5173\u8054\u7684\u8D39\u7528\uFF0C\u4F8B\u5982",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u666F\u533A\u95E8\u7968"
-	                    ),
-	                    "\u7B49\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u8F66\u8F86\u5B89\u6392\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u6211\u4EEC\u5C06\u5728\u8BA2\u5355\u652F\u4ED8\u6210\u529F",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "30\u5206\u949F\u5185"
-	                    ),
-	                    "\u5B89\u6392\u8F66\u8F86\u548C\u53F8\u673A\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u670D\u52A1\u6807\u51C6\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "1\u3001\u63A5\u673A\u670D\u52A1\uFF1A"
-	                    ),
-	                    "\u82E5\u60A8\u63A5\u673A\u63D0\u4F9B\u4E86\u822A\u73ED\u53F7\uFF0C \u53F8\u673A\u5C06\u6309\u7167\u822A\u73ED\u5B9E\u9645\u62B5\u8FBE\u65F6\u95F4\u63D0\u4F9B\u670D\u52A1\uFF0C\u822A\u73ED\u62B5\u8FBE\u540E\u53F8\u673A",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u6700\u957F\u514D\u8D39\u7B49\u50191\u5C0F\u65F6\uFF1B"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "2\u3001\u9001\u673A\u670D\u52A1\uFF1A"
-	                    ),
-	                    "\u53F8\u673A\u5C06\u4F1A\u6309\u7EA6\u5B9A\u65F6\u95F4",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u514D\u8D39\u7B49\u5F8515\u5206\u949F"
-	                    ),
-	                    "\u3002 \u8D85\u8FC7\u514D\u8D39\u7B49\u5F85\u65F6\u95F4\u60A8\u4ECD\u672A\u5230\u8FBE\u6216\u65E0\u6CD5\u8054\u7CFB\uFF0C\u53F8\u673A\u5C06\u65E0\u6CD5\u7EE7\u7EED\u7B49\u5F85\uFF0C\u8BA2\u5355\u8D39\u7528\u65E0\u6CD5\u9000\u8FD8\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u7528\u8F66\u987B\u77E5\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u63A5\u9001\u673A\u4EA7\u54C1\u662F\u70B9\u5230\u70B9\u4E2D\u9014\u4E0D\u505C\u7559\u7684\u670D\u52A1\uFF0C\u4E0D\u80FD\u4E34\u65F6\u6539\u53D8\u8DEF\u7EBF\u3002\u53F8\u673A\u4F1A\u6839\u636E\u8DEF\u51B5\u5408\u7406\u5B89\u6392\u884C\u9A76\u8DEF\u7EBF\uFF0C\u4E0D\u63A5\u53D7\u4E2D\u9014\u7ECF\u505C\u6216\u7ED5\u8DEF\uFF1B \u5982\u60A8\u9700\u8981\u9001\u8FBE\u591A\u4E2A\u5730\u5740\u6216\u5728\u591A\u4E2A\u5730\u5740\u4E0A\u8F66\uFF0C\u8BF7\u5206\u5F00\u4E0B\u5355\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "2\u3001\u5A74\u513F\u3001\u513F\u7AE5\u5373\u4F7F\u4E0D\u5360\u7528\u5EA7\u4F4D\u4E5F\u9700\u8BA1\u5165\u4E58\u8F66\u4EBA\u6570\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "3\u3001\u5404\u8F66\u578B\u7684\u627F\u8F7D\u4EBA\u6570\u53CA\u884C\u674E\u90FD\u6709\u6240\u9650\u5236\uFF0C\u8BF7\u60A8\u4ED4\u7EC6\u6838\u5BF9\uFF0C\u7531\u4E8E\u60A8\u81EA\u8EAB\u9009\u62E9\u8F66\u578B\u4E0D\u7B26\u800C\u5F71\u54CD\u60A8\u7684\u7528\u8F66\uFF0C\u8BE5\u635F\u5931\u7531\u60A8\u81EA\u884C\u627F\u62C5\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "4\u3001\u82E5\u60A8\u9009\u62E9\u7684\u5730\u5740\u56E0\u4EA4\u901A\u56E0\u7D20\u65E0\u6CD5\u9001\u8FBE\uFF0C\u6BD4\u5982\u9001\u8FBE\u5C71\u8109\u3001\u68EE\u6797\u3001\u5C9B\u5C7F\u3001\u6D77\u4E0A\u3001\u6C99\u6F20\u3001\u65E0\u4EBA\u533A\u7B49\uFF0C\u4F1A\u89C6\u60C5\u51B5\u9001\u60A8\u5230\u5C31\u8FD1\u7684\u5730\u70B9\u3002 \u5982\u9F13\u6D6A\u5C7F\uFF0C\u53F8\u673A\u4F1A\u9001\u60A8\u81F3\u8F6E\u6E21\u7801\u5934\uFF0C\u8BF7\u60A8\u81EA\u884C\u4E58\u8239\u524D\u5F80\u76EE\u7684\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "h2",
-	                null,
-	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9000\u8BA2\u89C4\u5219"
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u7ECF\u6D4E\u578B\u3001\u8212\u9002\u578B\u3001\u5546\u52A1\u578B\u3001\u8C6A\u534E\u578B\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\uFF08\u542B\uFF09\u524D\u53D6\u6D88\uFF0C\u6309\u8BA2\u5355\u91D1\u989D\u7684100%\u9000\u6B3E\uFF1B"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "2\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\u5185\u53D6\u6D88\uFF0C\u6536\u53D6\u8BA2\u5355\u91D1\u989D\u7684100%\u4F5C\u4E3A\u8FDD\u7EA6\u91D1\u3002"
-	                )
-	            )
-	        );
 	    }
 	});
 

@@ -40,6 +40,7 @@ router.get('/joinus(.html)?',function (req, res, next) {
     res.render('gw/pc/joinus', {});
 });
 
+
 /**
  * mobile pages
  */

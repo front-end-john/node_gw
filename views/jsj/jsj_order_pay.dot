@@ -93,6 +93,7 @@
 </head>
     <body>
         <div id="appContainer"></div>
-        <script id="mainScript" src="/mobile/jsj/dist/index.js?v=0.01"></script>
+        <div id="dialog"></div>
+        <script id="mainScript" src="/mobile/jsj/dist/order_pay.js?v=0.01"></script>
     </body>
 </html>

@@ -70,7 +70,7 @@ export default React.createClass({
             let obj=JSON.parse(str);
             console.log(obj);
             if(obj.code==0){
-                sessionStorage.setItem("carTypeList",str);
+                sessionStorage.setItem("CarTypeList",str);
                 location.href="#/select_car_type";
             }else {
                 ReactDOM.render(<PulldownTip msg={obj.message} />,dom);

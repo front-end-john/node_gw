@@ -26,6 +26,11 @@ import CancelRule from './components/cancel_rule';
 import CancelNotice from './components/cancel_notice';
 import JsjOrder from './components/jsj_order';
 
+let index_url="/mobile/jsj/#/jsj_query";
+let query=location.search;
+if(query.indexOf("serialnumber")>-1 && query.indexOf("openid")>-1){
+    index_url="/mobile/jsj/#/order_detail"+query;
+}
 let App=React.createClass({
     componentWillMount(){
         document.body.addEventListener("touchstart",()=>{});
@@ -41,7 +46,10 @@ let App=React.createClass({
 });
 
 let routes = (<Route path="/" component={App}>
-    <IndexRoute component={JsjQuery} />
+    <IndexRoute  onEnter={() => {
+            location.href=index_url;
+        }
+    }/>
     <Route path="jsj_query" component={JsjQuery}/>
     <Route path="query_flight" component={QueryFlight}/>
     <Route path="flight_list" component={FlightList}/>
@@ -56,6 +64,7 @@ let routes = (<Route path="/" component={App}>
     <Route path="cancel_notice" component={CancelNotice}/>
     <Route path="jsj_order" component={JsjOrder}/>
     <Route path="jsj_index" component={JsjIndex}/>
+
 </Route>);
 
 ReactDOM.render( <Router history={hashHistory}  routes={routes} />, document.getElementById("appContainer"));

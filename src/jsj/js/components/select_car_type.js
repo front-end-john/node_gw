@@ -5,13 +5,13 @@ import PulldownTip from '../widgets/pulldown_tip';
 export default React.createClass({
     componentWillMount(){
         document.title="选择车型";
-        let carData=sessionStorage.getItem("carTypeList");
-        carData=JSON.parse(carData);
+        let carData=sessionStorage.getItem("CarTypeList");
+        carData=JSON.parse(carData)||{};
         /**
          * 保存查询标识
          */
         sessionStorage.setItem("pricemark",carData.pricemark);
-        this.setState({cars:carData.records});
+        this.setState({cars:carData.records||[]});
         /**
          *初始化车图片列表
          */
@@ -46,7 +46,7 @@ export default React.createClass({
     },
     handleClickSelect(e){
         let id=e.target.id;
-        let selectedCarType=this.state.cars[id];
+        let selectedCarType=this.state.cars[id]||{};
         selectedCarType.imgUrl=this.carImgList[+selectedCarType.id-1];
         sessionStorage.setItem("SelectedCarType",JSON.stringify(selectedCarType));
         let flight=sessionStorage.getItem("FlightInfo");
@@ -75,7 +75,6 @@ export default React.createClass({
         console.info("创建订单url：",url);
         fetch(url).then(function(res){
             console.log("创建订单响应状态：",res.status);
-            dom.style.display="none";
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -85,16 +84,18 @@ export default React.createClass({
             let obj=JSON.parse(str);
             console.log(obj);
             if(obj.code == 0){
-                sessionStorage.setItem("OrderSerialNumber",obj.record.serialnumber);
-                location.href="#/order_detail";
+                let serialnumber=obj.record.serialnumber;
+                sessionStorage.setItem("OrderSerialNumber",serialnumber);
+                location.href="http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/?serialnumber="+serialnumber;
             }else {
+                dom.style.display="none";
                 ReactDOM.render(<PulldownTip msg={obj.message} />,dom);
             }
         }).catch(function(e){
+            dom.style.display="none";
             ReactDOM.render(<PulldownTip msg="订单创建请求失败,请稍后再试!" />,dom);
             console.warn('错误', e);
         });
-
     },
     render(){
         let list=this.state.cars.map((item,index)=>{

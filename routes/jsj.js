@@ -4,12 +4,77 @@ let fetch = require('node-fetch');
 let log=require('../utils/mylog');
 
 /**
- * 微信接送机首页
+ * 微信接送机_首页
+ */
+router.get('/main', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/jsj_index', {});
+});
+
+/**
+ * 微信接送机_主页
  */
 router.get('/', function(req, res, next) {
     res.set({"User-Agent":req.get('User-Agent')});
     res.render('jsj/index', {});
 });
+
+/**
+ * 微信接送机_支付订单
+ */
+router.get('/order_pay', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/jsj_order_pay', {});
+});
+
+/**
+ * 微信接送机_订单状态
+ */
+router.get('/order_status', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/jsj_order_status', {});
+});
+
+/**
+ * 微信接送机_订单详情
+ */
+router.get('/check_order_detail', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/check_order_detail', {});
+});
+
+/**
+ * 微信接送机_退订须知
+ */
+router.get('/cancel_order_know', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/cancel_order_know', {});
+});
+
+/**
+ * 微信接送机_退订规则
+ */
+router.get('/cancel_order_rule', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/cancel_order_rule', {});
+});
+
+/**
+ * 微信接送机_订单评论
+ */
+router.get('/order_comment', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/order_comment', {});
+});
+
+/**
+ * 微信接送机_联系人修改
+ */
+router.get('/modify_contact_person', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/modify_contact_person', {});
+});
+
 
 let proxy=function(req, res) {
     let url=wx_jsj_url+req.originalUrl;

@@ -1,23 +1,31 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Loading from '../widgets/loading';
 import PulldownTip from '../widgets/pulldown_tip';
-import {decDatetime} from '../util';
-export default React.createClass({
+import {decDatetime,decLocSearch} from '../util';
+
+import es6 from "es6-promise";
+es6.polyfill();
+import 'whatwg-fetch';
+global.jsj_static_path="/mobile/jsj";
+global.jsj_api_path="/jsj";
+let OrderPay=React.createClass({
     componentWillMount(){
         this.carImgList=[jsj_static_path+"/img/07.png",jsj_static_path+"/img/08.png",
             jsj_static_path+"/img/09.png",jsj_static_path+"/img/10.png"];
         document.title="订单信息";
         let detail=sessionStorage.getItem("TravelDetailInfo");
+        console.log(decLocSearch(location.search));
+        let {name,phonenumber}=decLocSearch(location.search);
         detail=detail?JSON.parse(detail):{};
         this.setState({detail});
+        sessionStorage.setItem("ChangedContactPerson",JSON.stringify({name,phonenumber}));
     },
-    componentDidMount(){
-        let number=this.props.location.query.serialnumber;
-        let openid=this.props.location.query.openid;
-        sessionStorage.setItem("OpenId",openid);
 
-        let serialnumber=number||sessionStorage.getItem("OrderSerialNumber");
+    componentDidMount(){
+        let {serialnumber,openid}=decLocSearch(location.search);
+        sessionStorage.setItem("OpenId",openid);
         sessionStorage.setItem("OrderSerialNumber",serialnumber);
         let detail=sessionStorage.getItem("TravelDetailInfo");
         if(detail) return 0;
@@ -43,11 +51,7 @@ export default React.createClass({
             let obj=JSON.parse(str);
             console.log("订单详细数据：",obj);
             if(obj.code==0){
-                let name=obj.record.actualname,phonenumber=obj.record.actualphone;
                 this.setState({detail:obj.record});
-                sessionStorage.setItem("OrderSerialNumber",obj.record.serialnumber);
-                sessionStorage.setItem("UserRemark",obj.record.userremark);
-                sessionStorage.setItem("ContactPerson",JSON.stringify({name,phonenumber}));
                 sessionStorage.setItem("TravelDetailInfo",JSON.stringify(obj.record));
             }else {
                 ReactDOM.render(<PulldownTip msg={obj.message} />,dom);
@@ -74,7 +78,10 @@ export default React.createClass({
      * 处理联系人更改
      */
     handleModifyContact(){
-        location.href="#/contact_person";
+        let ccp=sessionStorage.getItem("ChangedContactPerson");
+        ccp=ccp?JSON.parse(ccp):{};
+        location.href="/mobile/jsj/modify_contact_person?name="+
+            encodeURI(ccp.name)+"&phonenumber="+ccp.phonenumber;
     },
     /**
      * 处理下单请求
@@ -88,13 +95,12 @@ export default React.createClass({
         dom.style.display="block";
         let serialnumber=sessionStorage.getItem("OrderSerialNumber");
         let userremark=sessionStorage.getItem("ChangedUserRemark");
-        let cp=sessionStorage.getItem("ChangedContactPerson");
-        cp=cp?JSON.parse(cp):{};
+        let cp=this.state.ccp||{};
         let actualname=cp.name,actualphone=cp.phonenumber;
         /**
          * 从后台获取微信支付验证参数
          */
-        let openid=this.props.location.query.openid;
+        let openid=sessionStorage.getItem("OpenId");
         let url=jsj_api_path+"/user/wechat/payconfig?"+queryStr.stringify({serialnumber,openid});
         fetch(url).then((res)=>{
             console.log("请求微信支付参数响应状态：",res.status);
@@ -170,7 +176,7 @@ export default React.createClass({
         });
     },
     render(){
-        let detail=this.state.detail;
+        let detail=this.state.detail||{};
         let orderType=detail.ordertype||1,list=[];
         /**
          * 车型数据
@@ -186,8 +192,8 @@ export default React.createClass({
         ccp=ccp?JSON.parse(ccp):{};
         if(+orderType==1){
             list[0]=(<li key={0}>
-                        <p>出发机场</p><p>{detail.startaddress||''}</p>
-                    </li>);
+                <p>出发机场</p><p>{detail.startaddress||''}</p>
+            </li>);
             list[1]=(<li key={1}><p>送达地址</p><p>{detail.endaddress||""}</p></li>);
         }else {
             list[0]=(<li key={0}>
@@ -229,9 +235,9 @@ export default React.createClass({
                     <li>{ccp.name||detail.actualname||""}&ensp;
                         {ccp.phonenumber||detail.actualphone||""}<i className="arrow" /></li>
                 </ul>
-                <p className="notice"><a href="#/cancel_notice">《预定须知&退订须知》</a></p>
+                <p className="notice"><a href="/mobile/jsj/#/cancel_notice">《预定须知&退订须知》</a></p>
                 <ul className="bottom-pay">
-                    <li>需支付:<em>&yen;{detail.totalfee?parseFloat(detail.totalfee).toFixed(2):0.00}</em></li>
+                    <li>需支付:<em>&yen;{parseFloat(detail.totalfee||0).toFixed(2)}</em></li>
                     <li onClick={this.handlePay}>进行支付</li>
                 </ul>
             </div>
@@ -242,3 +248,5 @@ export default React.createClass({
         dom.style.display="none";
     }
 });
+
+ReactDOM.render(<OrderPay /> , document.getElementById("appContainer"));

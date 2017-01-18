@@ -14,3 +14,13 @@ export let getLocalTimestamp=(timeStr)=>{
     let dt=new Date(timeStr.replace(/\-/g,'/'));
     return dt.getTime() + dt.getTimezoneOffset()*60000;
 };
+
+export let decLocSearch=(search)=>{
+    let arr=search.replace("?","").split("&");
+    let obj={};
+    for(let i=0,len=arr.length;i<len;i++){
+        let item=arr[i].split("=");
+        obj[item[0]]=decodeURI(item[1]);
+    }
+    return obj;
+};
