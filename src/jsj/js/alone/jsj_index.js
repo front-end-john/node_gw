@@ -5,22 +5,22 @@ import ReactDOM from 'react-dom';
 
 //import PulldownTip from '../widgets/pulldown_tip';
 //import {decDatetime} from '../util';
+import ScrollImg from '../widgets/scroll_img';
 global.jsj_static_path="/mobile/jsj";
 global.jsj_api_path="/jsj";
 let Index=React.createClass({
     componentWillMount(){
-        console.log();
+        document.body.addEventListener("touchstart",()=>{});
     },
 
     componentDidMount(){
 
     },
     render(){
+        let imgList=[jsj_static_path+"/img/Banner.png",jsj_static_path+"/img/Banner.png"];
         return(
             <div className="jsj-index">
-                    <section className="head-banner">
-                        <img src={jsj_static_path+"/img/Banner.png"} />
-                    </section>
+                    <ScrollImg imgs={imgList}/>
                     <section className="middle-state">
                         <p><em />粤B98566 黑色奥迪A8</p>
                         <div>

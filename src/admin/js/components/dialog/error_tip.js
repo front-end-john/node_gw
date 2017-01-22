@@ -1,6 +1,5 @@
- import React from 'react';
-
- export default React.createClass({
+import React from 'react';
+let Ensure=React.createClass({
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
@@ -10,26 +9,20 @@
         mask.style.display="none";
     },
     ensure(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
-
     },
-
     render(){
-        "use strict";
-
         return(
             <div className="dialog">
-                <h2 className="title">添加备注<i onClick={this.cancel}/></h2>
-                <div className="dialog-important-user">
-                    <p><em>备&emsp;&emsp;注：</em><textarea placeholder="填写备注"  /></p>
-                </div>
+                <h2 className="title">异常错误<i onClick={this.cancel}/></h2>
+                <p className="dialog-ensure"><a>{this.props.msg}<br/>请联系开发维护人员！</a></p>
                 <section className="btn">
-                    <button onClick={this.cancel}>取消</button>
-                    <button onClick={this.ensure}>确认</button>
+                    <button onClick={this.ensure}>确定</button>
                 </section>
             </div>
         );
     }
 });
+
+export default Ensure;

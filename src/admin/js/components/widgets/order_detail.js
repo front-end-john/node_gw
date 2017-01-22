@@ -25,6 +25,7 @@ let OrderDetail=React.createClass({
                 throw new Error("服务异常");
             }
         }).then((str)=>{
+            console.log(str);
             let obj=JSON.parse(str);
             console.log(obj);
             this.setState({orderDetail:obj.order});

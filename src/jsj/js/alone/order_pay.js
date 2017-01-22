@@ -14,7 +14,6 @@ let OrderPay=React.createClass({
     componentWillMount(){
         this.carImgList=[jsj_static_path+"/img/07.png",jsj_static_path+"/img/08.png",
             jsj_static_path+"/img/09.png",jsj_static_path+"/img/10.png"];
-        document.title="订单信息";
         let detail=sessionStorage.getItem("TravelDetailInfo");
         console.log(decLocSearch(location.search));
         let {name,phonenumber}=decLocSearch(location.search);

@@ -12,6 +12,14 @@ router.get('/main', function(req, res, next) {
 });
 
 /**
+ * 微信接送机_更多服务
+ */
+router.get('/more_service', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/more_service', {});
+});
+
+/**
  * 微信接送机_主页
  */
 router.get('/', function(req, res, next) {
@@ -25,6 +33,14 @@ router.get('/', function(req, res, next) {
 router.get('/order_pay', function(req, res, next) {
     res.set({"User-Agent":req.get('User-Agent')});
     res.render('jsj/jsj_order_pay', {});
+});
+
+/**
+ * 微信接送机_订单列表
+ */
+router.get('/order_list', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.render('jsj/jsj_order_list', {});
 });
 
 /**

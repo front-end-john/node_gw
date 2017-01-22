@@ -70,61 +70,25 @@
 
 	var _querystring2 = _interopRequireDefault(_querystring);
 
-	var _jsj_index = __webpack_require__(240);
-
-	var _jsj_index2 = _interopRequireDefault(_jsj_index);
-
-	var _jsj_query = __webpack_require__(241);
+	var _jsj_query = __webpack_require__(240);
 
 	var _jsj_query2 = _interopRequireDefault(_jsj_query);
 
-	var _query_flight = __webpack_require__(245);
+	var _query_flight = __webpack_require__(244);
 
 	var _query_flight2 = _interopRequireDefault(_query_flight);
 
-	var _flight_list = __webpack_require__(246);
+	var _flight_list = __webpack_require__(245);
 
 	var _flight_list2 = _interopRequireDefault(_flight_list);
 
-	var _destination = __webpack_require__(247);
+	var _destination = __webpack_require__(246);
 
 	var _destination2 = _interopRequireDefault(_destination);
 
-	var _select_car_type = __webpack_require__(249);
+	var _select_car_type = __webpack_require__(248);
 
 	var _select_car_type2 = _interopRequireDefault(_select_car_type);
-
-	var _order_detail = __webpack_require__(250);
-
-	var _order_detail2 = _interopRequireDefault(_order_detail);
-
-	var _contact_person = __webpack_require__(251);
-
-	var _contact_person2 = _interopRequireDefault(_contact_person);
-
-	var _travel_detail = __webpack_require__(252);
-
-	var _travel_detail2 = _interopRequireDefault(_travel_detail);
-
-	var _comments = __webpack_require__(255);
-
-	var _comments2 = _interopRequireDefault(_comments);
-
-	var _check_travel_detail = __webpack_require__(256);
-
-	var _check_travel_detail2 = _interopRequireDefault(_check_travel_detail);
-
-	var _cancel_rule = __webpack_require__(257);
-
-	var _cancel_rule2 = _interopRequireDefault(_cancel_rule);
-
-	var _cancel_notice = __webpack_require__(258);
-
-	var _cancel_notice2 = _interopRequireDefault(_cancel_notice);
-
-	var _jsj_order = __webpack_require__(259);
-
-	var _jsj_order2 = _interopRequireDefault(_jsj_order);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -138,15 +102,11 @@
 	global.jsj_api_path = "/jsj";
 
 
-	var index_url = "/mobile/jsj/#/jsj_query";
-	var query = location.search;
-	if (query.indexOf("serialnumber") > -1 && query.indexOf("openid") > -1) {
-	    index_url = "/mobile/jsj/#/order_detail" + query;
-	}
 	var App = _react2.default.createClass({
 	    displayName: 'App',
 	    componentWillMount: function componentWillMount() {
 	        document.body.addEventListener("touchstart", function () {});
+	        console.log();
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -161,23 +121,12 @@
 	var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: App },
-	    _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: function onEnter() {
-	            location.href = index_url;
-	        } }),
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _jsj_query2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_query', component: _jsj_query2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'query_flight', component: _query_flight2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'flight_list', component: _flight_list2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'destination', component: _destination2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'select_car_type', component: _select_car_type2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'order_detail', component: _order_detail2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'contact_person', component: _contact_person2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'travel_detail', component: _travel_detail2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'comments', component: _comments2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'check_travel_detail', component: _check_travel_detail2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'cancel_rule', component: _cancel_rule2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'cancel_notice', component: _cancel_notice2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_order', component: _jsj_order2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'jsj_index', component: _jsj_index2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'select_car_type', component: _select_car_type2.default })
 	);
 
 	_reactDom2.default.render(_react2.default.createElement(_reactRouter.Router, { history: _reactRouter.hashHistory, routes: routes }), document.getElementById("appContainer"));
@@ -828,17 +777,6 @@
 	  }
 	};
 
-	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-
 	var standardReleaser = function (instance) {
 	  var Klass = this;
 	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
@@ -878,8 +816,7 @@
 	  oneArgumentPooler: oneArgumentPooler,
 	  twoArgumentPooler: twoArgumentPooler,
 	  threeArgumentPooler: threeArgumentPooler,
-	  fourArgumentPooler: fourArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
+	  fourArgumentPooler: fourArgumentPooler
 	};
 
 	module.exports = PooledClass;
@@ -955,12 +892,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
+	var validateFormat = function validateFormat(format) {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 
 	  if (!condition) {
 	    var error;
@@ -3213,7 +3156,14 @@
 	    // We warn in this case but don't throw. We expect the element creation to
 	    // succeed and there will likely be errors in render.
 	    if (!validType) {
-	      process.env.NODE_ENV !== 'production' ? warning(false, 'React.createElement: type should not be null, undefined, boolean, or ' + 'number. It should be a string (for DOM elements) or a ReactClass ' + '(for composite components).%s', getDeclarationErrorAddendum()) : void 0;
+	      if (typeof type !== 'function' && typeof type !== 'string') {
+	        var info = '';
+	        if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+	          info += ' You likely forgot to export your component from the file ' + 'it\'s defined in.';
+	        }
+	        info += getDeclarationErrorAddendum();
+	        process.env.NODE_ENV !== 'production' ? warning(false, 'React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', type == null ? type : typeof type, info) : void 0;
+	      }
 	    }
 
 	    var element = ReactElement.createElement.apply(this, arguments);
@@ -4184,7 +4134,7 @@
 
 	'use strict';
 
-	module.exports = '15.4.1';
+	module.exports = '15.4.2';
 
 /***/ },
 /* 31 */
@@ -4383,6 +4333,13 @@
 	var internalInstanceKey = '__reactInternalInstance$' + Math.random().toString(36).slice(2);
 
 	/**
+	 * Check if a given node should be cached.
+	 */
+	function shouldPrecacheNode(node, nodeID) {
+	  return node.nodeType === 1 && node.getAttribute(ATTR_NAME) === String(nodeID) || node.nodeType === 8 && node.nodeValue === ' react-text: ' + nodeID + ' ' || node.nodeType === 8 && node.nodeValue === ' react-empty: ' + nodeID + ' ';
+	}
+
+	/**
 	 * Drill down (through composites and empty components) until we get a host or
 	 * host text component.
 	 *
@@ -4447,7 +4404,7 @@
 	    }
 	    // We assume the child nodes are in the same order as the child instances.
 	    for (; childNode !== null; childNode = childNode.nextSibling) {
-	      if (childNode.nodeType === 1 && childNode.getAttribute(ATTR_NAME) === String(childID) || childNode.nodeType === 8 && childNode.nodeValue === ' react-text: ' + childID + ' ' || childNode.nodeType === 8 && childNode.nodeValue === ' react-empty: ' + childID + ' ') {
+	      if (shouldPrecacheNode(childNode, childID)) {
 	        precacheNode(childInst, childNode);
 	        continue outer;
 	      }
@@ -6688,17 +6645,6 @@
 	  }
 	};
 
-	var fiveArgumentPooler = function (a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-
 	var standardReleaser = function (instance) {
 	  var Klass = this;
 	  !(instance instanceof Klass) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Trying to release an instance into a pool of a different type.') : _prodInvariant('25') : void 0;
@@ -6738,8 +6684,7 @@
 	  oneArgumentPooler: oneArgumentPooler,
 	  twoArgumentPooler: twoArgumentPooler,
 	  threeArgumentPooler: threeArgumentPooler,
-	  fourArgumentPooler: fourArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
+	  fourArgumentPooler: fourArgumentPooler
 	};
 
 	module.exports = PooledClass;
@@ -11557,12 +11502,18 @@
 	    } else {
 	      var contentToUse = CONTENT_TYPES[typeof props.children] ? props.children : null;
 	      var childrenToUse = contentToUse != null ? null : props.children;
+	      // TODO: Validate that text is allowed as a child of this node
 	      if (contentToUse != null) {
-	        // TODO: Validate that text is allowed as a child of this node
-	        if (process.env.NODE_ENV !== 'production') {
-	          setAndValidateContentChildDev.call(this, contentToUse);
+	        // Avoid setting textContent when the text is empty. In IE11 setting
+	        // textContent on a text area will cause the placeholder to not
+	        // show within the textarea until it has been focused and blurred again.
+	        // https://github.com/facebook/react/issues/6731#issuecomment-254874553
+	        if (contentToUse !== '') {
+	          if (process.env.NODE_ENV !== 'production') {
+	            setAndValidateContentChildDev.call(this, contentToUse);
+	          }
+	          DOMLazyTree.queueText(lazyTree, contentToUse);
 	        }
-	        DOMLazyTree.queueText(lazyTree, contentToUse);
 	      } else if (childrenToUse != null) {
 	        var mountImages = this.mountChildren(childrenToUse, transaction, context);
 	        for (var i = 0; i < mountImages.length; i++) {
@@ -13482,7 +13433,17 @@
 	      }
 	    } else {
 	      if (props.value == null && props.defaultValue != null) {
-	        node.defaultValue = '' + props.defaultValue;
+	        // In Chrome, assigning defaultValue to certain input types triggers input validation.
+	        // For number inputs, the display value loses trailing decimal points. For email inputs,
+	        // Chrome raises "The specified value <x> is not a valid email address".
+	        //
+	        // Here we check to see if the defaultValue has actually changed, avoiding these problems
+	        // when the user is inputting text
+	        //
+	        // https://github.com/facebook/react/issues/7253
+	        if (node.defaultValue !== '' + props.defaultValue) {
+	          node.defaultValue = '' + props.defaultValue;
+	        }
 	      }
 	      if (props.checked == null && props.defaultChecked != null) {
 	        node.defaultChecked = !!props.defaultChecked;
@@ -14229,9 +14190,15 @@
 	    // This is in postMount because we need access to the DOM node, which is not
 	    // available until after the component has mounted.
 	    var node = ReactDOMComponentTree.getNodeFromInstance(inst);
+	    var textContent = node.textContent;
 
-	    // Warning: node.value may be the empty string at this point (IE11) if placeholder is set.
-	    node.value = node.textContent; // Detach value from defaultValue
+	    // Only set node.value if textContent is equal to the expected
+	    // initial value. In IE10/IE11 there is a bug where the placeholder attribute
+	    // will populate textContent as well.
+	    // https://developer.microsoft.com/microsoft-edge/platform/issues/101525/
+	    if (textContent === inst._wrapperState.initialValue) {
+	      node.value = textContent;
+	    }
 	  }
 	};
 
@@ -15033,7 +15000,17 @@
 	    instance = ReactEmptyComponent.create(instantiateReactComponent);
 	  } else if (typeof node === 'object') {
 	    var element = node;
-	    !(element && (typeof element.type === 'function' || typeof element.type === 'string')) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s', element.type == null ? element.type : typeof element.type, getDeclarationErrorAddendum(element._owner)) : _prodInvariant('130', element.type == null ? element.type : typeof element.type, getDeclarationErrorAddendum(element._owner)) : void 0;
+	    var type = element.type;
+	    if (typeof type !== 'function' && typeof type !== 'string') {
+	      var info = '';
+	      if (process.env.NODE_ENV !== 'production') {
+	        if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+	          info += ' You likely forgot to export your component from the file ' + 'it\'s defined in.';
+	        }
+	      }
+	      info += getDeclarationErrorAddendum(element._owner);
+	       true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s', type == null ? type : typeof type, info) : _prodInvariant('130', type == null ? type : typeof type, info) : void 0;
+	    }
 
 	    // Special case string values
 	    if (typeof element.type === 'string') {
@@ -15323,7 +15300,7 @@
 	      // Since plain JS classes are defined without any special initialization
 	      // logic, we can not catch common errors early. Therefore, we have to
 	      // catch them here, at initialization time, instead.
-	      process.env.NODE_ENV !== 'production' ? warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component') : void 0;
+	      process.env.NODE_ENV !== 'production' ? warning(!inst.getInitialState || inst.getInitialState.isReactClassApproved || inst.state, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', this.getName() || 'a component') : void 0;
 	      process.env.NODE_ENV !== 'production' ? warning(!inst.getDefaultProps || inst.getDefaultProps.isReactClassApproved, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', this.getName() || 'a component') : void 0;
 	      process.env.NODE_ENV !== 'production' ? warning(!inst.propTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', this.getName() || 'a component') : void 0;
 	      process.env.NODE_ENV !== 'production' ? warning(!inst.contextTypes, 'contextTypes was defined as an instance property on %s. Use a ' + 'static property to define contextTypes instead.', this.getName() || 'a component') : void 0;
@@ -16327,14 +16304,11 @@
 
 	'use strict';
 
-	var _prodInvariant = __webpack_require__(35),
-	    _assign = __webpack_require__(4);
+	var _prodInvariant = __webpack_require__(35);
 
 	var invariant = __webpack_require__(8);
 
 	var genericComponentClass = null;
-	// This registry keeps track of wrapper classes around host tags.
-	var tagToComponentClass = {};
 	var textComponentClass = null;
 
 	var ReactHostComponentInjection = {
@@ -16347,11 +16321,6 @@
 	  // rendered as props.
 	  injectTextComponentClass: function (componentClass) {
 	    textComponentClass = componentClass;
-	  },
-	  // This accepts a keyed object with classes as values. Each key represents a
-	  // tag. That particular tag will use this class instead of the generic one.
-	  injectComponentClasses: function (componentClasses) {
-	    _assign(tagToComponentClass, componentClasses);
 	  }
 	};
 
@@ -21206,7 +21175,7 @@
 
 	'use strict';
 
-	module.exports = '15.4.1';
+	module.exports = '15.4.2';
 
 /***/ },
 /* 172 */
@@ -28411,241 +28380,6 @@
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	//import ReactDOM from 'react-dom';
-	//import Loading from '../widgets/loading';
-
-	//import PulldownTip from '../widgets/pulldown_tip';
-	//import {decDatetime} from '../util';
-	exports.default = _react2.default.createClass({
-	    displayName: "jsj_index",
-	    componentWillMount: function componentWillMount() {},
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "jsj-index" },
-	            _react2.default.createElement(
-	                "section",
-	                { className: "head-banner" },
-	                _react2.default.createElement("img", { src: jsj_static_path + "/img/Banner.png" })
-	            ),
-	            _react2.default.createElement(
-	                "section",
-	                { className: "middle-state" },
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement("em", null),
-	                    "\u7CA4B98566 \u9ED1\u8272\u5965\u8FEAA8"
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    null,
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        _react2.default.createElement(
-	                            "em",
-	                            null,
-	                            "\u9884\u7EA6\u6210\u529F"
-	                        ),
-	                        _react2.default.createElement("br", null),
-	                        _react2.default.createElement(
-	                            "span",
-	                            null,
-	                            "\u9884\u7EA6\u63A5\u8F66\u65F6\u95F4\uFF1A2017-01-05  16:23"
-	                        )
-	                    ),
-	                    _react2.default.createElement("i", { className: "arrow" })
-	                ),
-	                _react2.default.createElement(
-	                    "p",
-	                    null,
-	                    _react2.default.createElement("em", null),
-	                    "\u6DF1\u5733\u5B9D\u5B89\u56FD\u9645\u673A\u573AT3\u822A\u7AD9\u697C"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "section",
-	                { className: "service-list" },
-	                _react2.default.createElement(
-	                    "ul",
-	                    { className: "start-end" },
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement("em", { className: "jj" }),
-	                        _react2.default.createElement(
-	                            "h3",
-	                            null,
-	                            "\u63A5\u673A"
-	                        ),
-	                        _react2.default.createElement(
-	                            "p",
-	                            null,
-	                            "\u5F85\u5206\u914D\u53F8\u673A"
-	                        ),
-	                        _react2.default.createElement("i", { className: "arrow" })
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement(
-	                            "label",
-	                            null,
-	                            "\u51FA\u53D1\u5730\uFF1A"
-	                        ),
-	                        "\u5317\u4EAC\u56FD\u9645\u673A\u573AT3\u822A\u7AD9\u697C"
-	                    ),
-	                    _react2.default.createElement(
-	                        "li",
-	                        null,
-	                        _react2.default.createElement(
-	                            "label",
-	                            null,
-	                            "\u76EE\u7684\u5730\uFF1A"
-	                        ),
-	                        "\u4E94\u9053\u53E3"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "oil-item" },
-	                    _react2.default.createElement("em", null),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        _react2.default.createElement(
-	                            "em",
-	                            null,
-	                            "\u52A0\u6CB9",
-	                            _react2.default.createElement(
-	                                "span",
-	                                null,
-	                                "100\u5143\u8D77"
-	                            )
-	                        ),
-	                        _react2.default.createElement("br", null),
-	                        "\u63A5\u8F66\u524D\u53EF\u9884\u7EA6"
-	                    ),
-	                    _react2.default.createElement(
-	                        "button",
-	                        null,
-	                        "\u52A0\u6CB9"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "wash-item" },
-	                    _react2.default.createElement("em", null),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        _react2.default.createElement(
-	                            "em",
-	                            null,
-	                            "\u6D17\u8F66",
-	                            _react2.default.createElement(
-	                                "span",
-	                                null,
-	                                "30\u5143"
-	                            )
-	                        ),
-	                        _react2.default.createElement("br", null),
-	                        "\u9001\u8F66\u4E09\u5C0F\u65F6\u524D\u6D17\u8F66"
-	                    ),
-	                    _react2.default.createElement(
-	                        "button",
-	                        null,
-	                        "\u6D17\u8F66"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "jj-item" },
-	                    _react2.default.createElement("em", null),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        _react2.default.createElement(
-	                            "em",
-	                            null,
-	                            "\u63A5\u673A",
-	                            _react2.default.createElement(
-	                                "span",
-	                                null,
-	                                "128\u5143\u8D77"
-	                            )
-	                        ),
-	                        _react2.default.createElement("br", null),
-	                        _react2.default.createElement(
-	                            "i",
-	                            null,
-	                            "\u98DE\u6CCA\u901A\u9EC4\u6807\u4FDD\u969C\u2003"
-	                        ),
-	                        "\u62A5\u9500\u65E0\u5FE7\uFF0C\u822A\u73ED\u5EF6\u8BEF\u514D\u8D39\u7B49"
-	                    ),
-	                    _react2.default.createElement(
-	                        "button",
-	                        null,
-	                        "\u9884\u8BA2"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "sj-item" },
-	                    _react2.default.createElement("em", null),
-	                    _react2.default.createElement(
-	                        "p",
-	                        null,
-	                        _react2.default.createElement(
-	                            "em",
-	                            null,
-	                            "\u9001\u673A",
-	                            _react2.default.createElement(
-	                                "span",
-	                                null,
-	                                "128\u5143\u8D77"
-	                            )
-	                        ),
-	                        _react2.default.createElement("br", null),
-	                        _react2.default.createElement(
-	                            "i",
-	                            null,
-	                            "\u98DE\u6CCA\u901A\u9EC4\u6807\u4FDD\u969C\u2003"
-	                        ),
-	                        "\u62A5\u9500\u65E0\u5FE7\uFF0C\u822A\u73ED\u5EF6\u8BEF\u514D\u8D39\u7B49"
-	                    ),
-	                    _react2.default.createElement(
-	                        "button",
-	                        { disabled: true },
-	                        "\u9884\u8BA2"
-	                    )
-	                )
-	            )
-	        );
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.display = "none";
-	    }
-	});
-
-/***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -28660,15 +28394,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _loading = __webpack_require__(242);
+	var _loading = __webpack_require__(241);
 
 	var _loading2 = _interopRequireDefault(_loading);
 
-	var _pulldown_tip = __webpack_require__(243);
+	var _pulldown_tip = __webpack_require__(242);
 
 	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
 
-	var _util = __webpack_require__(244);
+	var _util = __webpack_require__(243);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29097,7 +28831,7 @@
 	});
 
 /***/ },
-/* 242 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29150,7 +28884,7 @@
 	});
 
 /***/ },
-/* 243 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29205,7 +28939,7 @@
 	});
 
 /***/ },
-/* 244 */
+/* 243 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29240,8 +28974,46 @@
 	    return obj;
 	};
 
+	var checkCacheConfig = exports.checkCacheConfig = function checkCacheConfig(url, success, fail) {
+	    fetch(url, {
+	        method: 'GET',
+	        mode: 'cors'
+	    }).then(function (res) {
+	        return res.json();
+	    }).then(function (json) {
+	        success(json);
+	    }).catch(function (e) {
+	        fail(e);
+	    });
+	};
+
+	var loadRemoteResource = exports.loadRemoteResource = function loadRemoteResource(url, success, fail) {
+	    fetch(url, {
+	        method: 'GET',
+	        mode: 'cors'
+	    }).then(function (res) {
+	        return res.text();
+	    }).then(function (text) {
+	        success(text);
+	    }).catch(function (e) {
+	        fail(e);
+	    });
+	};
+
+	var appendInDom = exports.appendInDom = function appendInDom(text, type) {
+	    if (type == "css") {
+	        var style = document.createElement("style");
+	        style.innerHTML = text;
+	        document.head.appendChild(style);
+	    } else if (type == "js") {
+	        var script = document.createElement("script");
+	        script.innerHTML = text;
+	        document.body.appendChild(script);
+	    }
+	};
+
 /***/ },
-/* 245 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29258,15 +29030,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _loading = __webpack_require__(242);
+	var _loading = __webpack_require__(241);
 
 	var _loading2 = _interopRequireDefault(_loading);
 
-	var _pulldown_tip = __webpack_require__(243);
+	var _pulldown_tip = __webpack_require__(242);
 
 	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
 
-	var _util = __webpack_require__(244);
+	var _util = __webpack_require__(243);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29412,7 +29184,7 @@
 	});
 
 /***/ },
-/* 246 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29425,7 +29197,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _util = __webpack_require__(244);
+	var _util = __webpack_require__(243);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29548,7 +29320,7 @@
 	});
 
 /***/ },
-/* 247 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29565,7 +29337,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _city_select = __webpack_require__(248);
+	var _city_select = __webpack_require__(247);
 
 	var _city_select2 = _interopRequireDefault(_city_select);
 
@@ -29690,7 +29462,7 @@
 	});
 
 /***/ },
-/* 248 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29839,7 +29611,7 @@
 	//参考页面:http://m.jryghq.com/#!/car_city
 
 /***/ },
-/* 249 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29856,11 +29628,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _loading = __webpack_require__(242);
+	var _loading = __webpack_require__(241);
 
 	var _loading2 = _interopRequireDefault(_loading);
 
-	var _pulldown_tip = __webpack_require__(243);
+	var _pulldown_tip = __webpack_require__(242);
 
 	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
 
@@ -29901,7 +29673,7 @@
 	                }
 	            }).then(function (str) {
 	                var obj = JSON.parse(str);
-	                console.log(obj);
+	                console.log("后台获取的联系人：", obj);
 	                sessionStorage.setItem("ContactPerson", JSON.stringify(obj.record));
 	            }).catch(function (e) {
 	                console.warn('错误', e);
@@ -29950,7 +29722,7 @@
 	            if (obj.code == 0) {
 	                var serialnumber = obj.record.serialnumber;
 	                sessionStorage.setItem("OrderSerialNumber", serialnumber);
-	                location.href = "http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/?serialnumber=" + serialnumber;
+	                location.href = "http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/order_pay?serialnumber=" + serialnumber;
 	            } else {
 	                dom.style.display = "none";
 	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
@@ -30041,1962 +29813,6 @@
 	                '\u8D77\u70B9\u5230\u7EC8\u70B9\u7684\u6240\u6709\u8D39\u7528(\u5305\u62EC\u9AD8\u901F\u8D39\uFF0C\u505C\u8F66\u8D39\u7B49)'
 	            ),
 	            list
-	        );
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.display = "none";
-	    }
-	});
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _loading = __webpack_require__(242);
-
-	var _loading2 = _interopRequireDefault(_loading);
-
-	var _pulldown_tip = __webpack_require__(243);
-
-	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
-
-	var _util = __webpack_require__(244);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'order_detail',
-	    componentWillMount: function componentWillMount() {
-	        this.carImgList = [jsj_static_path + "/img/07.png", jsj_static_path + "/img/08.png", jsj_static_path + "/img/09.png", jsj_static_path + "/img/10.png"];
-	        document.title = "订单信息";
-	        var detail = sessionStorage.getItem("TravelDetailInfo");
-	        detail = detail ? JSON.parse(detail) : {};
-	        this.setState({ detail: detail });
-	    },
-	    componentDidMount: function componentDidMount() {
-	        var _this = this;
-
-	        var number = this.props.location.query.serialnumber;
-	        var openid = this.props.location.query.openid;
-	        sessionStorage.setItem("OpenId", openid);
-
-	        var serialnumber = number || sessionStorage.getItem("OrderSerialNumber");
-	        sessionStorage.setItem("OrderSerialNumber", serialnumber);
-	        var detail = sessionStorage.getItem("TravelDetailInfo");
-	        if (detail) return 0;
-	        /**
-	         * 显示加载中
-	         */
-	        var dom = document.getElementById("dialog");
-	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	        dom.style.display = "block";
-
-	        var url = jsj_api_path + "/user/detail";
-	        url += "?serialnumber=" + serialnumber;
-	        console.log("获取订单详情url", url);
-	        fetch(url).then(function (res) {
-	            console.log("查询订单详情响应状态：", res.status);
-	            dom.style.display = "none";
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            var obj = JSON.parse(str);
-	            console.log("订单详细数据：", obj);
-	            if (obj.code == 0) {
-	                var name = obj.record.actualname,
-	                    phonenumber = obj.record.actualphone;
-	                _this.setState({ detail: obj.record });
-	                sessionStorage.setItem("OrderSerialNumber", obj.record.serialnumber);
-	                sessionStorage.setItem("UserRemark", obj.record.userremark);
-	                sessionStorage.setItem("ContactPerson", JSON.stringify({ name: name, phonenumber: phonenumber }));
-	                sessionStorage.setItem("TravelDetailInfo", JSON.stringify(obj.record));
-	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	            }
-	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u83B7\u53D6\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01' }), dom);
-	            console.warn('错误', e);
-	        });
-	    },
-
-	    /**
-	     * 处理用户备注更改
-	     */
-	    handleRemarkChange: function handleRemarkChange(e) {
-	        var remark = e.target.value.trim();
-	        var textLen = 60;
-	        if (remark.length >= textLen) {
-	            remark = remark.substr(0, textLen);
-	            e.target.value = remark;
-	        }
-	        this.setState({ remark: remark });
-	        sessionStorage.setItem("ChangedUserRemark", remark);
-	    },
-
-	    /**
-	     * 处理联系人更改
-	     */
-	    handleModifyContact: function handleModifyContact() {
-	        location.href = "#/contact_person";
-	    },
-
-	    /**
-	     * 处理下单请求
-	     */
-	    handlePay: function handlePay() {
-	        /**
-	         * 显示加载中
-	         */
-	        var dom = document.getElementById("dialog");
-	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	        dom.style.display = "block";
-	        var serialnumber = sessionStorage.getItem("OrderSerialNumber");
-	        var userremark = sessionStorage.getItem("ChangedUserRemark");
-	        var cp = sessionStorage.getItem("ChangedContactPerson");
-	        cp = cp ? JSON.parse(cp) : {};
-	        var actualname = cp.name,
-	            actualphone = cp.phonenumber;
-	        /**
-	         * 从后台获取微信支付验证参数
-	         */
-	        var openid = this.props.location.query.openid;
-	        var url = jsj_api_path + "/user/wechat/payconfig?" + queryStr.stringify({ serialnumber: serialnumber, openid: openid });
-	        fetch(url).then(function (res) {
-	            console.log("请求微信支付参数响应状态：", res.status);
-	            dom.style.display = "none";
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            var obj = JSON.parse(str);
-	            console.log("微信支付验证参数：", obj);
-	            if (obj.code == 0) {
-	                wx.config({
-	                    debug: false, // 开启调试模式,仅在pc端时才会打印。
-	                    appId: obj.record.appid, // 必填，公众号的唯一标识
-	                    timestamp: obj.record.timestamp, // 必填，生成签名的时间戳
-	                    nonceStr: obj.record.noncstr, // 必填，生成签名的随机串
-	                    signature: obj.record.paymentpackage, // 必填，签名，见附录1
-	                    jsApiList: ["chooseWXPay"] // 必填
-	                });
-	                wx.ready(function () {
-	                    wx.chooseWXPay({
-	                        timestamp: obj.record.timestamp,
-	                        nonceStr: obj.record.noncstr,
-	                        package: "prepay_id=" + obj.record.prepayid,
-	                        signType: "MD5",
-	                        paySign: obj.record.sign,
-	                        success: function success(res) {
-
-	                            var errMsg = res.errMsg;
-	                            alert(errMsg);
-	                            if (errMsg == "chooseWXPay:cancel" || errMsg == "chooseWXPay:fail") {
-	                                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u652F\u4ED8\u5931\u8D25\uFF01' }), dom);
-	                                return 0;
-	                            } else if (errMsg == "chooseWXPay:ok") {
-	                                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u652F\u4ED8\u6210\u529F\uFF01' }), dom);
-	                                setTimeout(function () {
-	                                    location.href = "#/travel_detail";
-	                                }, 1500);
-	                            }
-	                            /**
-	                             *支付成功后更新订单
-	                             */
-	                            url = jsj_api_path + "/user/wechatpaysuccess?" + queryStr.stringify({ serialnumber: serialnumber, actualname: actualname, actualphone: actualphone, userremark: userremark });
-	                            fetch(url).then(function (res) {
-	                                console.log("订单更新响应状态：", res.status);
-	                                dom.style.display = "none";
-	                                if (+res.status < 400) {
-	                                    return res.text();
-	                                } else {
-	                                    throw new Error("服务异常");
-	                                }
-	                            }).then(function (str) {
-	                                console.log(str);
-	                            }).catch(function (e) {
-	                                console.warn('错误', e);
-	                            });
-	                        }
-	                    });
-	                });
-	                wx.error(function (res) {
-	                    _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u5FAE\u4FE1\u9A8C\u8BC1\u5931\u8D25\uFF01' }), dom);
-	                    console.log("微信验证错误：", res);
-	                });
-	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	            }
-	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u83B7\u53D6\u5FAE\u4FE1\u652F\u4ED8\u53C2\u6570\u5931\u8D25\uFF01' }), dom);
-	            console.warn('错误', e);
-	        });
-	    },
-	    render: function render() {
-	        var detail = this.state.detail;
-	        var orderType = detail.ordertype || 1,
-	            list = [];
-	        /**
-	         * 车型数据
-	         */
-	        var c = detail.cartypeinfo || {};
-	        var f = detail.flightinfo || {};
-
-	        var _decDatetime = (0, _util.decDatetime)(detail.bookingtime),
-	            year = _decDatetime.year,
-	            month = _decDatetime.month,
-	            day = _decDatetime.day,
-	            hour = _decDatetime.hour,
-	            minute = _decDatetime.minute;
-
-	        var number = f.flightnumber ? f.flightnumber.toUpperCase() : "";
-	        var useCarTime = year ? year + "-" + month + "-" + day + " " + hour + ":" + minute : "";
-	        var changedRemark = sessionStorage.getItem("ChangedUserRemark");
-	        var ccp = sessionStorage.getItem("ChangedContactPerson");
-	        ccp = ccp ? JSON.parse(ccp) : {};
-	        if (+orderType == 1) {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: 0 },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    '\u51FA\u53D1\u673A\u573A'
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    detail.startaddress || ''
-	                )
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: 1 },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    '\u9001\u8FBE\u5730\u5740'
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    detail.endaddress || ""
-	                )
-	            );
-	        } else {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: 0 },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    '\u51FA\u53D1\u5730\u5740'
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    detail.startaddress || ''
-	                )
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: 1 },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    '\u9001\u8FBE\u673A\u573A'
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    detail.endaddress || ""
-	                )
-	            );
-	        }
-
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'order-detail' },
-	            _react2.default.createElement(
-	                'ul',
-	                { className: 'order-car-info' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('img', { src: c.id ? this.carImgList[+c.id - 1] : "" })
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'em',
-	                            null,
-	                            c.cartype || ''
-	                        ),
-	                        _react2.default.createElement('img', { src: jsj_static_path + "/img/people.png" }),
-	                        ' \u2264',
-	                        c.passengernumber || 0,
-	                        '\u4EBA',
-	                        _react2.default.createElement('img', { src: jsj_static_path + "/img/trunk.png" }),
-	                        ' \u2264',
-	                        c.luggagenumber || 0,
-	                        '\u4EF6'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        c.cardescription || ''
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'ul',
-	                { className: 'order-flight-info' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    '\u63A5\u673A'
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u822A\u73ED\u53F7'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        number
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u7528\u8F66\u65F6\u95F4'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        useCarTime
-	                    )
-	                ),
-	                list,
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u884C\u7A0B\u5907\u6CE8'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement('textarea', { placeholder: '\u63D0\u524D\u544A\u77E5\u53F8\u673A\u9014\u5F84\u5730\u70B9\uFF0C\u65B9\u4FBF\u53F8\u673A\u89C4\u5212\u884C\u7A0B(\u9009\u586B),\u6700\u591A60\u4E2A\u5B57\u7B26\u3002',
-	                            defaultValue: changedRemark || detail.userremark || "",
-	                            onChange: this.handleRemarkChange })
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'ul',
-	                { className: 'order-contact', onClick: this.handleModifyContact },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    '\u8054\u7CFB\u4EBA'
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    ccp.name || detail.actualname || "",
-	                    '\u2002',
-	                    ccp.phonenumber || detail.actualphone || "",
-	                    _react2.default.createElement('i', { className: 'arrow' })
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'p',
-	                { className: 'notice' },
-	                _react2.default.createElement(
-	                    'a',
-	                    { href: '#/cancel_notice' },
-	                    '\u300A\u9884\u5B9A\u987B\u77E5&\u9000\u8BA2\u987B\u77E5\u300B'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'ul',
-	                { className: 'bottom-pay' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    '\u9700\u652F\u4ED8:',
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\xA5',
-	                        detail.totalfee ? parseFloat(detail.totalfee).toFixed(2) : 0.00
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    { onClick: this.handlePay },
-	                    '\u8FDB\u884C\u652F\u4ED8'
-	                )
-	            )
-	        );
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.display = "none";
-	    }
-	});
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _pulldown_tip = __webpack_require__(243);
-
-	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'contact_person',
-	    componentWillMount: function componentWillMount() {
-	        document.title = "联系人";
-	    },
-	    handleSave: function handleSave() {
-	        var flag = this.props.location.query.flag;
-	        var name = this.nameInput.value.trim();
-	        var tel = this.telInput.value.trim();
-	        var dom = document.getElementById("dialog");
-	        if (!name) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u59D3\u540D\u4E0D\u80FD\u4E3A\u7A7A\uFF01' }), dom);
-	            return 0;
-	        }
-	        if (!tel) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u624B\u673A\u53F7\u4E0D\u80FD\u4E3A\u7A7A\uFF01' }), dom);
-	            return 0;
-	        }
-	        sessionStorage.setItem("ChangedContactPerson", JSON.stringify({ name: name, phonenumber: tel }));
-	        if (flag == "out") {
-	            location.href = "/mobile/jsj/order_pay?name=" + encodeURI(name) + "&phonenumber=" + tel;
-	            return 0;
-	        }
-	        location.href = "#/order_detail";
-	    },
-	    handleNumberChange: function handleNumberChange(e) {
-	        var val = e.target.value.trim();
-	        if (val.length >= 11) {
-	            e.target.value = val.substr(0, 11);
-	        }
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        var cp = sessionStorage.getItem("ContactPerson");
-	        cp = cp ? JSON.parse(cp) : {};
-	        console.log(this.props.location.query);
-	        var _props$location$query = this.props.location.query,
-	            name = _props$location$query.name,
-	            phonenumber = _props$location$query.phonenumber;
-
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'jieji-contact-person' },
-	            _react2.default.createElement(
-	                'ul',
-	                null,
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('input', { type: 'text', placeholder: '\u59D3\u540D', ref: function ref(c) {
-	                            return _this.nameInput = c;
-	                        },
-	                        defaultValue: cp.name || name || "" })
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'label',
-	                        null,
-	                        '+86'
-	                    ),
-	                    _react2.default.createElement('input', { type: 'number', placeholder: '\u624B\u673A\u53F7', defaultValue: cp.phonenumber || phonenumber || "",
-	                        onChange: this.handleNumberChange, ref: function ref(c) {
-	                            return _this.telInput = c;
-	                        } })
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'button',
-	                { className: 'query-btn', onClick: this.handleSave },
-	                '\u4FDD\u5B58'
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _pulldown_tip = __webpack_require__(243);
-
-	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
-
-	var _loading = __webpack_require__(242);
-
-	var _loading2 = _interopRequireDefault(_loading);
-
-	var _cancel_ensure = __webpack_require__(253);
-
-	var _cancel_ensure2 = _interopRequireDefault(_cancel_ensure);
-
-	var _star = __webpack_require__(254);
-
-	var _star2 = _interopRequireDefault(_star);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'travel_detail',
-
-	    /**
-	     * 1：行程正安排,2：行程已安排,3：行程服务中，4：行程待评价,5:评价完成,6:行程支付取消
-	     * @returns {{status: number}}
-	     */
-	    getInitialState: function getInitialState() {
-	        return { status: 1 };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        document.title = "行程详情";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	        var td = sessionStorage.getItem("TravelDetailInfo");
-	        td = JSON.parse(td);
-	        this.setState({ detail: td });
-	        /**
-	         * 获取上一步的评价星数
-	         */
-	        var score = this.props.location.query.score;
-	        if (score) this.setState({ score: score });
-	        /**
-	         *通过设置状态来改变呈现
-	         */
-	        var flag = this.props.location.query.flag;
-	        if (flag) this.setState({ status: +flag });
-	    },
-	    componentDidMount: function componentDidMount() {
-	        var _this = this;
-
-	        var number = this.props.location.query.serialnumber;
-	        var serialnumber = number || sessionStorage.getItem("OrderSerialNumber");
-	        sessionStorage.setItem("OrderSerialNumber", serialnumber);
-	        var dom = document.getElementById("dialog");
-	        if (!this.state.detail) {
-	            /**
-	             * 显示加载中
-	             */
-	            _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	            dom.style.display = "block";
-	        }
-	        var url = jsj_api_path + "/user/detail";
-	        url += "?serialnumber=" + serialnumber;
-	        console.log("获取订单详情url", url);
-	        fetch(url).then(function (res) {
-	            console.log("查询订单详情响应状态：", res.status);
-	            dom.style.display = "none";
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            var obj = JSON.parse(str);
-	            console.log("订单详细数据：", obj);
-	            if (obj.code == 0) {
-	                _this.setState({ detail: obj.record });
-	                sessionStorage.setItem("TravelDetailInfo", JSON.stringify(obj.record));
-	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	            }
-	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u83B7\u53D6\u5931\u8D25,\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF01' }), dom);
-	            console.warn('错误', e);
-	        });
-	    },
-	    incre: function incre() {
-	        var i = 0;return function () {
-	            return i++;
-	        };
-	    },
-	    handleCheckDetail: function handleCheckDetail() {
-	        location.href = "#/check_travel_detail";
-	    },
-	    ensureCancel: function ensureCancel() {
-	        var _this2 = this;
-
-	        /**
-	         * 显示加载中
-	         */
-	        var dom = document.getElementById("dialog");
-	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	        dom.style.display = "block";
-
-	        var url = jsj_api_path + "/user/cancel";
-	        url += "?serialnumber=" + sessionStorage.getItem("OrderSerialNumber");
-	        fetch(url).then(function (res) {
-	            console.log("取消订单响应状态：", res.status);
-	            dom.style.display = "none";
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            var obj = JSON.parse(str);
-	            console.log(obj);
-	            if (obj.code == 0) {
-	                _this2.setState({ status: 6 });
-	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	            }
-	        }).catch(function (e) {
-	            _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: '\u8BA2\u5355\u53D6\u6D88\u5931\u8D25,\u8BF7\u7A0D\u540E\u91CD\u8BD5\uFF01' }), dom);
-	            console.warn('错误', e);
-	        });
-	    },
-	    handleOrderCancel: function handleOrderCancel() {
-	        var dom = document.getElementById("dialog");
-	        _reactDom2.default.render(_react2.default.createElement(_cancel_ensure2.default, { ensure: this.ensureCancel }), dom);
-	        dom.style.display = "block";
-	    },
-	    render: function render() {
-	        var status = +this.state.status;
-	        var td = this.state.detail || {};
-	        var driver = td.driverinfo || {};
-	        var ct = td.cartypeinfo || {};
-
-	        var seq = this.incre();
-	        var list = [];
-	        var commonPart = [_react2.default.createElement(
-	            'li',
-	            { key: seq() },
-	            '\u6210\u529F\u652F\u4ED8'
-	        ), _react2.default.createElement(
-	            'li',
-	            { key: seq() },
-	            _react2.default.createElement(
-	                'em',
-	                null,
-	                '\xA5'
-	            ),
-	            parseFloat(td.totalfee || 0).toFixed(2)
-	        ), _react2.default.createElement(
-	            'li',
-	            { key: seq(), onClick: this.handleCheckDetail },
-	            '\u67E5\u770B\u8BE6\u60C5',
-	            _react2.default.createElement('i', { className: 'arrow' })
-	        )];
-	        if (status == 1) {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5F85\u670D\u52A1'
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement('img', { src: jsj_static_path + "/img/sandglass.png" })
-	            );
-	            list[2] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5DF2\u7ECF\u9884\u5B9A\u6210\u529F\uFF0C\u7B49\u5F85\u5B89\u6392\u53F8\u673A'
-	            );
-	            list[3] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5BA2\u670D\u4F1A\u5C3D\u5FEB\u5E2E\u60A8\u786E\u8BA4\u8BA2\u5355,\u5C06\u4EE5\u77ED\u4FE1\u901A\u77E5\u60A8'
-	            );
-	            list[4] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement(
-	                    'a',
-	                    { href: 'javascript:void(0)', onClick: this.handleOrderCancel },
-	                    '\u53D6\u6D88\u8BA2\u5355'
-	                )
-	            );
-	        } else if (status == 2) {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5F85\u670D\u52A1'
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement('img', { src: jsj_static_path + "/img/success.png" })
-	            );
-	            list[2] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u53F8\u673A\u5DF2\u5C31\u4F4D'
-	            );
-	            list[3] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u8BF7\u540C\u53F8\u673A\u786E\u8BA4\u5177\u4F53\u7684\u884C\u7A0B'
-	            );
-	            list[4] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement(
-	                    'a',
-	                    { href: 'javascript:void(0)' },
-	                    '\u53D6\u6D88\u8BA2\u5355'
-	                )
-	            );
-	        } else if (status == 3) {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u670D\u52A1\u4E2D'
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement('img', { src: jsj_static_path + "/img/hourglass.png" })
-	            );
-	            list[2] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u8F66\u8F86\u670D\u52A1\u4E2D'
-	            );
-	            list[3] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u795D\u60A8\u65C5\u9014\u6109\u5FEB'
-	            );
-	        } else if (status == 4) {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5DF2\u5B8C\u6210'
-	            );
-	            list[1] = _react2.default.createElement('li', { key: seq(), className: 'space' });
-	            list[2] = _react2.default.createElement(
-	                'li',
-	                { key: seq(), onClick: function onClick() {
-	                        return location.href = "#/comments";
-	                    } },
-	                '\u53BB\u8BC4\u4EF7 ',
-	                _react2.default.createElement('i', { className: 'arrow' })
-	            );
-	            list[3] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u60A8\u7684\u8BC4\u4EF7\u5BF9\u6211\u4EEC\u81F3\u5173\u91CD\u8981'
-	            );
-	        } else if (status == 5) {
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5DF2\u5B8C\u6210'
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement(_star2.default, { starCount: this.state.score || 0,
-	                    starOnUrl: jsj_static_path + "/img/bigStar-on.png",
-	                    starOffUrl: jsj_static_path + "/img/bigStar-off.png" })
-	            );
-	            list[2] = _react2.default.createElement('li', { key: seq() });
-	            list[3] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u670D\u52A1\u5F88\u597D\uFF0C\u65C5\u9014\u6109\u5FEB\uFF0C\u4E0B\u6B21\u8FD8\u4F1A\u518D\u7528\u670D\u52A1\u5F88\u597D\uFF0C\u65C5\u9014\u6109\u5FEB\uFF0C\u4E0B\u6B21\u8FD8\u4F1A\u518D\u7528'
-	            );
-	        } else if (status == 6) {
-	            commonPart = [];
-	            list[0] = _react2.default.createElement(
-	                'li',
-	                { key: seq(), className: 'side-line' },
-	                '\u5DF2\u53D6\u6D88'
-	            );
-	            list[1] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                _react2.default.createElement('img', { src: jsj_static_path + "/img/sigh-tip.png" })
-	            );
-	            list[2] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u8BA2\u5355\u5DF2\u53D6\u6D88'
-	            );
-	            list[3] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u5982\u6709\u9000\u6B3E\u5C06\u539F\u8DEF\u9000\u56DE\u60A8\u7684\u652F\u4ED8\u8D26\u6237\u4E2D'
-	            );
-	            list[4] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u9000\u6B3E\u91D1\u989D:',
-	                _react2.default.createElement(
-	                    'em',
-	                    null,
-	                    '\xA5',
-	                    parseFloat(td.totalfee || 0).toFixed(2),
-	                    '\u2003\u5DF2\u9000\u6B3E'
-	                )
-	            );
-	            list[5] = _react2.default.createElement(
-	                'li',
-	                { key: seq() },
-	                '\u53D6\u6D88\u6263\u8D39:\u2002\xA50.00',
-	                _react2.default.createElement(
-	                    'em',
-	                    { onClick: function onClick() {
-	                            return location.href = "#/cancel_rule";
-	                        } },
-	                    '\u53D6\u6D88\u89C4\u5219'
-	                ),
-	                _react2.default.createElement('i', { className: 'arrow' })
-	            );
-	            list[6] = _react2.default.createElement(
-	                'li',
-	                { key: seq(), className: 'side-line' },
-	                '\u6263\u8D39\u539F\u56E0'
-	            );
-	        }
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'travel-detail' },
-	            status == 1 ? _react2.default.createElement(
-	                'ul',
-	                { className: 'order-car-info' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('img', { src: ct.imgUrl })
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'em',
-	                            null,
-	                            ct.cartype || ""
-	                        ),
-	                        _react2.default.createElement('img', { src: jsj_static_path + "/img/people.png" }),
-	                        ' \u2264',
-	                        ct.passengernumber || 0,
-	                        '\u4EBA',
-	                        _react2.default.createElement('img', { src: jsj_static_path + "/img/trunk.png" }),
-	                        ' \u2264',
-	                        ct.luggagenumber || 0,
-	                        '\u4EF6'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        ct.cardescription || ""
-	                    )
-	                )
-	            ) : _react2.default.createElement(
-	                'ul',
-	                { className: 'driver-info' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('img', { src: driver.avatar || jsj_static_path + "/img/11.png" })
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        driver.realname || "司机名",
-	                        '\u2002',
-	                        driver.carno || "车牌号"
-	                    ),
-	                    _react2.default.createElement(_star2.default, { starCount: 5, starOnUrl: jsj_static_path + "/img/star-on.png",
-	                        starOffUrl: jsj_static_path + "/img/star-off.png" }),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        driver.carbrand || "车品牌"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('img', { src: jsj_static_path + "/img/12.png" })
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'ul',
-	                { className: status == 6 ? "pay-cancel" : "other-relative" },
-	                commonPart,
-	                list
-	            )
-	        );
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.display = "none";
-	    },
-	    componentWillUpdate: function componentWillUpdate() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.display = "none";
-	    }
-	});
-
-/***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: "cancel_ensure",
-	    componentWillMount: function componentWillMount() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.backgroundColor = "rgba(10,10,10,.4)";
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        return _react2.default.createElement(
-	            "section",
-	            { className: "cancel-ensure" },
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "\u786E\u8BA4\u53D6\u6D88\u8BA2\u5355\u5417?"
-	            ),
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                _react2.default.createElement(
-	                    "em",
-	                    { onClick: function onClick() {
-	                            var dom = document.getElementById("dialog");
-	                            dom.style.display = "none";
-	                        } },
-	                    "\u53D6\u6D88"
-	                ),
-	                _react2.default.createElement(
-	                    "em",
-	                    { onClick: function onClick() {
-	                            var dom = document.getElementById("dialog");
-	                            dom.style.display = "none";
-	                            _this.props.ensure();
-	                        } },
-	                    "\u786E\u8BA4"
-	                )
-	            )
-	        );
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        var dom = document.getElementById("dialog");
-	        dom.style.backgroundColor = "auto";
-	    }
-	});
-
-/***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: "star",
-	    render: function render() {
-	        var len = this.props.starCount,
-	            list = [];
-	        for (var i = 0; i < 5; i++) {
-	            if (i < len) {
-	                list[i] = _react2.default.createElement("img", { key: i, id: i + 1, onClick: this.props.commentStar, src: this.props.starOnUrl });
-	            } else {
-	                list[i] = _react2.default.createElement("img", { key: i, id: i + 1, onClick: this.props.commentStar, src: this.props.starOffUrl });
-	            }
-	        }
-	        return _react2.default.createElement(
-	            "p",
-	            null,
-	            list,
-	            " ",
-	            _react2.default.createElement(
-	                "em",
-	                null,
-	                len + ".0"
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _pulldown_tip = __webpack_require__(243);
-
-	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
-
-	var _star = __webpack_require__(254);
-
-	var _star2 = _interopRequireDefault(_star);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'comments',
-	    getInitialState: function getInitialState() {
-	        return { starCount: 5 };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        document.title = "评价我们";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	        var d = sessionStorage.getItem("TravelDetailInfo");
-	        d = JSON.parse(d);
-	        this.setState({ driver: d.driverinfo[0].record });
-	    },
-	    handleClickStar: function handleClickStar(e) {
-	        var grade = e.target.id;
-	        this.refs.starTip.style.marginRight = (5 - grade) * 50 + 'px';
-	        this.setState({ starCount: grade });
-	        if (grade == 1) {
-	            this.refs.starTip.innerHTML = "糟糕";
-	        } else if (grade == 2) {
-	            this.refs.starTip.innerHTML = "差";
-	            this.refs.starTip.style.marginRight = (5 - grade) * 50 + 12 + 'px';
-	        } else if (grade == 3) {
-	            this.refs.starTip.innerHTML = "一般";
-	        } else if (grade == 4) {
-	            this.refs.starTip.innerHTML = "还行";
-	        } else if (grade == 5) {
-	            this.refs.starTip.innerHTML = "满意";
-	        }
-	    },
-	    handleCommentCommit: function handleCommentCommit() {
-	        var dom = document.getElementById("dialog");
-	        var content = this.refs.comment.value;
-	        var score = this.state.starCount;
-	        var serialnumber = sessionStorage.getItem("OrderSerialNumber");
-	        var url = jsj_api_path + "/user/comment";
-	        url += "?" + queryStr.stringify({ serialnumber: serialnumber, score: score, content: content });
-	        fetch(url).then(function (res) {
-	            console.log("查询订单详情响应状态：", res.status);
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            var obj = JSON.parse(str);
-	            console.log(obj);
-	            if (obj.code == 0) {
-	                location.href = "#/travel_detail?flag=5&score=" + score;
-	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	            }
-	        }).catch(function (e) {
-	            console.warn('错误', e);
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'comments-us' },
-	            _react2.default.createElement(
-	                'p',
-	                null,
-	                '\u60A8\u7684\u8BC4\u4EF7\u5BF9\u6211\u4EEC\u6539\u8FDB\u670D\u52A1\u81F3\u5173\u91CD\u8981'
-	            ),
-	            _react2.default.createElement(
-	                'ul',
-	                { className: 'driver-info' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('img', { src: this.state.driver.avatar || jsj_static_path + "/img/11.png" })
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'h2',
-	                        null,
-	                        this.state.driver.realname,
-	                        '\u2002',
-	                        this.state.driver.carno
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        this.state.driver.carbrand
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(_star2.default, { starCount: this.state.starCount,
-	                        starOnUrl: jsj_static_path + "/img/bigStar-on.png",
-	                        starOffUrl: jsj_static_path + "/img/bigStar-off.png",
-	                        commentStar: this.handleClickStar }),
-	                    _react2.default.createElement('p', { ref: 'starTip' })
-	                )
-	            ),
-	            _react2.default.createElement('textarea', { placeholder: '\u628A\u60A8\u7684\u4F53\u9A8C\u6216\u5EFA\u8BAE\u544A\u8BC9\u6211\u4EEC\u5427!(\u533F\u540D\u5185\u5BB9\uFF0C\u53EF\u653E\u5FC3\u586B\u5199)', ref: 'comment' }),
-	            _react2.default.createElement(
-	                'button',
-	                { className: 'query-btn', onClick: this.handleCommentCommit },
-	                '\u63D0\u4EF7\u8BC4\u4EF7'
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _util = __webpack_require__(244);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'check_travel_detail',
-	    componentWillMount: function componentWillMount() {
-	        document.title = "行程详情";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	    },
-	    render: function render() {
-	        var d = sessionStorage.getItem("TravelDetailInfo");
-	        d = JSON.parse(d) || {};
-	        var flag = d.ordertype;
-
-	        var _decDatetime = (0, _util.decDatetime)(d.bookingtime),
-	            year = _decDatetime.year,
-	            month = _decDatetime.month,
-	            day = _decDatetime.day,
-	            hour = _decDatetime.hour,
-	            minute = _decDatetime.minute;
-
-	        var _decDatetime2 = (0, _util.decDatetime)(d.createtime),
-	            y1 = _decDatetime2.year,
-	            mon1 = _decDatetime2.month,
-	            d1 = _decDatetime2.day,
-	            h1 = _decDatetime2.hour,
-	            min1 = _decDatetime2.minute;
-
-	        var f = d.flightinfo;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'travel-detail' },
-	            _react2.default.createElement(
-	                'ul',
-	                { className: 'travel-order-detail' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    '\u6210\u529F\u652F\u4ED8'
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    '\xA5',
-	                    parseFloat(d.totalfee || 0).toFixed(2)
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u8D39\u7528\u603B\u8BA1'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\xA5',
-	                        parseFloat(d.totalfee || 0).toFixed(2)
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    '\u8BA2\u5355\u4FE1\u606F'
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    +flag == 1 ? '接机' : '送机'
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u822A\u73ED\u53F7'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        (f.flightnumber || '').toUpperCase()
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u7528\u8F66\u65F6\u95F4'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        year,
-	                        '-',
-	                        month,
-	                        '-',
-	                        day,
-	                        ' ',
-	                        hour,
-	                        ':',
-	                        minute
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    +flag == 1 ? _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u51FA\u53D1\u673A\u573A'
-	                    ) : _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u51FA\u53D1\u5730\u5740'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        d.startaddress || ''
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    +flag == 1 ? _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u9001\u8FBE\u5730\u5740'
-	                    ) : _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u9001\u8FBE\u673A\u573A'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        d.endaddress || ''
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u884C\u7A0B\u5907\u6CE8'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        d.userremark || ''
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u8054\u7CFB\u4EBA'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        d.actualname || '',
-	                        ' ',
-	                        d.actualphone || ''
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        '\u4E0B\u5355\u65F6\u95F4'
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        y1,
-	                        '-',
-	                        mon1,
-	                        '-',
-	                        d1,
-	                        ' ',
-	                        h1,
-	                        ':',
-	                        min1
-	                    )
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: "cancel_rule",
-	    componentWillMount: function componentWillMount() {
-	        document.title = "取消规则";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "jieji-cancel-rule" },
-	            _react2.default.createElement(
-	                "h2",
-	                null,
-	                "\u63A5\u9001\u673A\uFF08\u5DF2\u586B\u5199\u822A\u73ED\u53F7\uFF09"
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u53D6\u6D88\u6263\u8D39\u89C4\u5219"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u53F8\u673A\u63A5\u5355\u540E\uFF0C\u4E58\u5BA2\u5728\u822A\u73ED\u5B9E\u9645\u8D77\u98DE\u524D\u5747\u53EF\u514D\u8D39\u53D6\u6D88\uFF0C\u822A\u73ED\u8D77\u98DE\u540E\u53D6\u6D88\u9700",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u8865\u507F\u7ED9\u53F8\u673A20\u5143\u53D6\u6D88\u8D39"
-	                    ),
-	                    "\uFF1B"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "2\u3001\u82E5\u53F8\u673A\u8FDF\u5230\uFF0C\u4E58\u5BA2\u53EF",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u514D\u8D39\u53D6\u6D88"
-	                    ),
-	                    "\uFF1B"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u53D6\u6D88\u8865\u507F\u89C4\u5219"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u4E58\u5BA2\u53D6\u6D88\u652F\u4ED8\u7684\u53D6\u6D88\u8D39\uFF0C\u5C06\u4F5C\u4E3A",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u7A7A\u9A76\u8865\u507F"
-	                    ),
-	                    "\u652F\u4ED8\u7ED9\u53F8\u673A\uFF1B"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u5982\u4F55\u5224\u65AD\u8FDF\u5230"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u53F8\u673A\u8FDF\u5230\uFF1A\u53F8\u673A\u63A5\u5355\u540E\uFF0C\u5728\u822A\u73ED\u5B9E\u9645\u843D\u5730\u524D\u672A\u80FD\u5230\u8FBE\u7EA6\u5B9A\u4E0A\u8F66\u5730\u70B9\uFF0C\u8BB0\u4E3A\u53F8\u673A\u8FDF\u5230\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "2\u3001\u4E58\u5BA2\u8FDF\u5230\uFF1A\u53F8\u673A\u63A5\u5355\u540E\uFF0C\u4E58\u5BA2\u5728\u822A\u73ED\u843D\u5730\u540E",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "60\u5206"
-	                    ),
-	                    "\u949F\u5185\u672A\u80FD\u5230\u8FBE\u7EA6\u5B9A\u4E0A\u8F66\u5730\u70B9\uFF0C\u8BB0\u4E3A\u4E58\u5BA2\u8FDF\u5230\u3002"
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: "cancel_notice",
-	    componentWillMount: function componentWillMount() {
-	        document.title = "预订须知";
-	        document.getElementById("appContainer").style.backgroundColor = "#fff";
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "jieji-cancel-rule" },
-	            _react2.default.createElement(
-	                "h2",
-	                null,
-	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9884\u8BA2\u987B\u77E5"
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u8D39\u7528\u5305\u542B\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u6839\u636E\u60A8\u9884\u8BA2\u7684\u4E0A\u4E0B\u8F66\u5730\u5740\uFF0C\u60A8\u652F\u4ED8\u7684\u603B\u4EF7\u5305\u542B",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u4E00\u6B21\u63A5\u673A/\u9001\u673A"
-	                    ),
-	                    "\u7528\u8F66\u670D\u52A1\u7684\u5168\u90E8\u8D39\u7528\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u8D39\u7528\u4E0D\u5305\u542B\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u548C\u7528\u8F66\u65E0\u76F4\u63A5\u5173\u8054\u7684\u8D39\u7528\uFF0C\u4F8B\u5982",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u666F\u533A\u95E8\u7968"
-	                    ),
-	                    "\u7B49\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u8F66\u8F86\u5B89\u6392\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u6211\u4EEC\u5C06\u5728\u8BA2\u5355\u652F\u4ED8\u6210\u529F",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "30\u5206\u949F\u5185"
-	                    ),
-	                    "\u5B89\u6392\u8F66\u8F86\u548C\u53F8\u673A\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u670D\u52A1\u6807\u51C6\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "1\u3001\u63A5\u673A\u670D\u52A1\uFF1A"
-	                    ),
-	                    "\u82E5\u60A8\u63A5\u673A\u63D0\u4F9B\u4E86\u822A\u73ED\u53F7\uFF0C \u53F8\u673A\u5C06\u6309\u7167\u822A\u73ED\u5B9E\u9645\u62B5\u8FBE\u65F6\u95F4\u63D0\u4F9B\u670D\u52A1\uFF0C\u822A\u73ED\u62B5\u8FBE\u540E\u53F8\u673A",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u6700\u957F\u514D\u8D39\u7B49\u50191\u5C0F\u65F6\uFF1B"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "strong",
-	                        null,
-	                        "2\u3001\u9001\u673A\u670D\u52A1\uFF1A"
-	                    ),
-	                    "\u53F8\u673A\u5C06\u4F1A\u6309\u7EA6\u5B9A\u65F6\u95F4",
-	                    _react2.default.createElement(
-	                        "em",
-	                        null,
-	                        "\u514D\u8D39\u7B49\u5F8515\u5206\u949F"
-	                    ),
-	                    "\u3002 \u8D85\u8FC7\u514D\u8D39\u7B49\u5F85\u65F6\u95F4\u60A8\u4ECD\u672A\u5230\u8FBE\u6216\u65E0\u6CD5\u8054\u7CFB\uFF0C\u53F8\u673A\u5C06\u65E0\u6CD5\u7EE7\u7EED\u7B49\u5F85\uFF0C\u8BA2\u5355\u8D39\u7528\u65E0\u6CD5\u9000\u8FD8\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u7528\u8F66\u987B\u77E5\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u63A5\u9001\u673A\u4EA7\u54C1\u662F\u70B9\u5230\u70B9\u4E2D\u9014\u4E0D\u505C\u7559\u7684\u670D\u52A1\uFF0C\u4E0D\u80FD\u4E34\u65F6\u6539\u53D8\u8DEF\u7EBF\u3002\u53F8\u673A\u4F1A\u6839\u636E\u8DEF\u51B5\u5408\u7406\u5B89\u6392\u884C\u9A76\u8DEF\u7EBF\uFF0C\u4E0D\u63A5\u53D7\u4E2D\u9014\u7ECF\u505C\u6216\u7ED5\u8DEF\uFF1B \u5982\u60A8\u9700\u8981\u9001\u8FBE\u591A\u4E2A\u5730\u5740\u6216\u5728\u591A\u4E2A\u5730\u5740\u4E0A\u8F66\uFF0C\u8BF7\u5206\u5F00\u4E0B\u5355\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "2\u3001\u5A74\u513F\u3001\u513F\u7AE5\u5373\u4F7F\u4E0D\u5360\u7528\u5EA7\u4F4D\u4E5F\u9700\u8BA1\u5165\u4E58\u8F66\u4EBA\u6570\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "3\u3001\u5404\u8F66\u578B\u7684\u627F\u8F7D\u4EBA\u6570\u53CA\u884C\u674E\u90FD\u6709\u6240\u9650\u5236\uFF0C\u8BF7\u60A8\u4ED4\u7EC6\u6838\u5BF9\uFF0C\u7531\u4E8E\u60A8\u81EA\u8EAB\u9009\u62E9\u8F66\u578B\u4E0D\u7B26\u800C\u5F71\u54CD\u60A8\u7684\u7528\u8F66\uFF0C\u8BE5\u635F\u5931\u7531\u60A8\u81EA\u884C\u627F\u62C5\u3002"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "4\u3001\u82E5\u60A8\u9009\u62E9\u7684\u5730\u5740\u56E0\u4EA4\u901A\u56E0\u7D20\u65E0\u6CD5\u9001\u8FBE\uFF0C\u6BD4\u5982\u9001\u8FBE\u5C71\u8109\u3001\u68EE\u6797\u3001\u5C9B\u5C7F\u3001\u6D77\u4E0A\u3001\u6C99\u6F20\u3001\u65E0\u4EBA\u533A\u7B49\uFF0C\u4F1A\u89C6\u60C5\u51B5\u9001\u60A8\u5230\u5C31\u8FD1\u7684\u5730\u70B9\u3002 \u5982\u9F13\u6D6A\u5C7F\uFF0C\u53F8\u673A\u4F1A\u9001\u60A8\u81F3\u8F6E\u6E21\u7801\u5934\uFF0C\u8BF7\u60A8\u81EA\u884C\u4E58\u8239\u524D\u5F80\u76EE\u7684\u3002"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "h2",
-	                null,
-	                "\u63A5\u673A/\u9001\u673A\uFF1A\u9000\u8BA2\u89C4\u5219"
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                null,
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "\u7ECF\u6D4E\u578B\u3001\u8212\u9002\u578B\u3001\u5546\u52A1\u578B\u3001\u8C6A\u534E\u578B\uFF1A"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "1\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\uFF08\u542B\uFF09\u524D\u53D6\u6D88\uFF0C\u6309\u8BA2\u5355\u91D1\u989D\u7684100%\u9000\u6B3E\uFF1B"
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    "2\u3001\u7528\u8F66\u524D0.5\u5C0F\u65F6\u5185\u53D6\u6D88\uFF0C\u6536\u53D6\u8BA2\u5355\u91D1\u989D\u7684100%\u4F5C\u4E3A\u8FDD\u7EA6\u91D1\u3002"
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _loading = __webpack_require__(242);
-
-	var _loading2 = _interopRequireDefault(_loading);
-
-	var _pulldown_tip = __webpack_require__(243);
-
-	var _pulldown_tip2 = _interopRequireDefault(_pulldown_tip);
-
-	var _util = __webpack_require__(244);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'jsj_order',
-	    getInitialState: function getInitialState() {
-	        return {
-	            finished: false,
-	            orderList: []
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        document.title = "接送机订单";
-	    },
-	    componentDidMount: function componentDidMount() {
-	        var _this = this;
-
-	        var list = sessionStorage.getItem("GoonOrders");
-	        if (list) {
-	            this.setState({ orderList: JSON.parse(list) });
-	            return 0;
-	        }
-	        /**
-	         * 显示加载中
-	         */
-	        var dom = document.getElementById("dialog");
-	        _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	        dom.style.display = "block";
-
-	        var url = jsj_api_path + "/user/runninglist";
-	        fetch(url).then(function (res) {
-	            console.log("获取进行中订单的响应状态：", res.status);
-	            dom.style.display = "none";
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            var obj = JSON.parse(str);
-	            console.log(obj);
-	            if (obj.code == 0) {
-	                _this.setState({ orderList: obj.records });
-	                sessionStorage.setItem("GoonOrders", JSON.stringify(obj.records));
-	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	            }
-	        }).catch(function (e) {
-	            console.warn('错误', e);
-	        });
-	    },
-	    handleShift: function handleShift(e) {
-	        var _this2 = this;
-
-	        var id = e.target.id;
-	        if (id == 'finished') {
-	            var _ret = function () {
-	                var list = sessionStorage.getItem("FinishedOrders");
-	                if (list) {
-	                    _this2.setState({ orderList: JSON.parse(list) });
-	                    _this2.setState({ finished: true });
-	                    return {
-	                        v: 0
-	                    };
-	                }
-	                /**
-	                 * 显示加载中
-	                 */
-	                var dom = document.getElementById("dialog");
-	                _reactDom2.default.render(_react2.default.createElement(_loading2.default, null), dom);
-	                dom.style.display = "block";
-	                var url = jsj_api_path + "/user/historylist";
-	                fetch(url).then(function (res) {
-	                    console.log("获取进行中订单的响应状态：", res.status);
-	                    dom.style.display = "none";
-	                    if (+res.status < 400) {
-	                        return res.text();
-	                    } else {
-	                        throw new Error("服务异常");
-	                    }
-	                }).then(function (str) {
-	                    var obj = JSON.parse(str);
-	                    console.log(obj);
-	                    if (obj.code == 0) {
-	                        _this2.setState({ orderList: obj.records || [] });
-	                        _this2.setState({ finished: true });
-	                        sessionStorage.setItem("FinishedOrders", JSON.stringify(obj.records));
-	                    } else {
-	                        _reactDom2.default.render(_react2.default.createElement(_pulldown_tip2.default, { msg: obj.message }), dom);
-	                    }
-	                }).catch(function (e) {
-	                    console.warn('错误', e);
-	                });
-	            }();
-
-	            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-	        } else {
-	            var _list = sessionStorage.getItem("GoonOrders");
-	            this.setState({ orderList: JSON.parse(_list) || [] });
-	            this.setState({ finished: false });
-	        }
-	    },
-	    render: function render() {
-	        var list = this.state.orderList.map(function (item, index) {
-	            var _decDatetime = (0, _util.decDatetime)(item.bookingtime),
-	                year = _decDatetime.year,
-	                month = _decDatetime.month,
-	                day = _decDatetime.day,
-	                hour = _decDatetime.hour,
-	                minute = _decDatetime.minute;
-
-	            return _react2.default.createElement(
-	                'ul',
-	                { key: index },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        +item.ordertype == 1 ? "接车" : "送车"
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'span',
-	                            { style: { color: "#E6C057" } },
-	                            item.statusdescription
-	                        ),
-	                        _react2.default.createElement('i', { className: 'arrow' })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement('img', { src: jsj_static_path + "/img/clock.png" }),
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u65F6\u95F4 :'
-	                    ),
-	                    year,
-	                    '-',
-	                    month,
-	                    '-',
-	                    day,
-	                    '\u2002',
-	                    hour,
-	                    ':',
-	                    minute
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u8D77\u70B9 :'
-	                    ),
-	                    item.startaddress
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u7EC8\u70B9 :'
-	                    ),
-	                    item.endaddress
-	                )
-	            );
-	        });
-
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'jiesongji-order' },
-	            _react2.default.createElement(
-	                'hgroup',
-	                null,
-	                _react2.default.createElement(
-	                    'h2',
-	                    { onClick: this.handleShift, className: this.state.finished ? "" : "current" },
-	                    '\u8FDB\u884C\u4E2D'
-	                ),
-	                _react2.default.createElement('i', null),
-	                _react2.default.createElement(
-	                    'h2',
-	                    { id: 'finished', onClick: this.handleShift, className: this.state.finished ? "current" : "" },
-	                    '\u5DF2\u5B8C\u6210'
-	                )
-	            ),
-	            list.length > 0 ? list : _react2.default.createElement(
-	                'p',
-	                { style: { textAlign: "center", fontSize: "32px", fontColor: "#969696", lineHeight: "100px" } },
-	                '\u60A8\u5F53\u524D\u6CA1\u6709\u8BA2\u5355\uFF01'
-	            )
 	        );
 	    },
 	    componentWillUnmount: function componentWillUnmount() {

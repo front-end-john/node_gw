@@ -3,26 +3,6 @@ let fetch = require('node-fetch');
 let log=require('../utils/mylog');
 let router = express.Router();
 
-/**
- * 后台首页
- */
-router.get('/',function (req, res, next) {
-    res.render('admin/index', {});
-});
-/**
- * 后台登陆验证
- */
-router.post('/login',function (req, res, next) {
-    let user={name:'fbt',password:'123'};
-    let reqMsg=req.body;
-    console.log(reqMsg);
-    if(reqMsg.account===user.name && reqMsg.password===user.password){
-        res.end("ok");
-    }else {
-        res.end("reject");
-    }
-});
-
 let proxy=function(req, res) {
     let url=admin_url+req.originalUrl;
     log.info(url,__filename);
@@ -37,16 +17,39 @@ let proxy=function(req, res) {
         res.status(500).end();
     });
 };
+
 /**
- * 获取订单查询列表
+ * 获取接送机订单详情数据
  */
-router.get('/api/orders/query', function(req, res, next){
+router.get('/system/orderlist', function(req, res, next){
     proxy(req, res);
 });
+
 /**
- * 获取订单详情数据
+ * 获取接送机订单详情数据_条件查询
  */
-router.get('/api/orders/orderdetails', function(req, res, next){
+router.get('/system/query', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 接送机订单详情_添加备注
+ */
+router.get('/system/addremark', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 获取接送机进行中的订单数量
+ */
+router.get('/system/runningordernumber', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 获取接送机的订单详情
+ */
+router.get('/system/orderdetail', function(req, res, next){
     proxy(req, res);
 });
 

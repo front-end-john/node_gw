@@ -37,7 +37,7 @@ export default React.createClass({
                 }
             }).then((str)=>{
                 let obj=JSON.parse(str);
-                console.log(obj);
+                console.log("后台获取的联系人：",obj);
                 sessionStorage.setItem("ContactPerson",JSON.stringify(obj.record));
             }).catch(function(e) {
                 console.warn('错误', e)
@@ -86,7 +86,7 @@ export default React.createClass({
             if(obj.code == 0){
                 let serialnumber=obj.record.serialnumber;
                 sessionStorage.setItem("OrderSerialNumber",serialnumber);
-                location.href="http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/?serialnumber="+serialnumber;
+                location.href="http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/order_pay?serialnumber="+serialnumber;
             }else {
                 dom.style.display="none";
                 ReactDOM.render(<PulldownTip msg={obj.message} />,dom);

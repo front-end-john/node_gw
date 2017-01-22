@@ -38,7 +38,6 @@ let ImgScroll=React.createClass({
         e.preventDefault();
     },
     render(){
-        "use strict";
         let list=this.props.imgs.map(function (item,index) {
             return (
                 <li key={index}><img src={item}/></li>

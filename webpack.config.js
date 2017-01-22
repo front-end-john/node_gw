@@ -11,6 +11,9 @@ module.exports=[{
         order_comment:"./src/jsj/js/alone/order_comment.js",
         cancel_order_rule:"./src/jsj/js/alone/cancel_order_rule.js",
         cancel_order_know:"./src/jsj/js/alone/cancel_order_know.js",
+        more_service:"./src/jsj/js/alone/more_service.js",
+        order_list:"./src/jsj/js/alone/order_list.js",
+        load_index:"./src/jsj/js/load_resource/load_index.js",
     },
     output:{
         filename:'[name].js',

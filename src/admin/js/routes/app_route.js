@@ -19,7 +19,7 @@ import JsjOrder from "../components/manager/jsj_order";
 let App=React.createClass({
     render(){
         return (
-            <div className="app">
+            <div className="app"  >
                 <Aside />
                 {this.props.children}
             </div>
@@ -27,7 +27,7 @@ let App=React.createClass({
     }
 });
 
-let routes = (<Route path="/" component={App}>
+let routes = (<Route path="/" component={App} >
     <IndexRoute component={OrderQuery} />
     <Route path="order_query" component={OrderQuery}/>
     <Route path="remain_contact_order" component={RemainContactOrder}/>
@@ -43,6 +43,6 @@ let routes = (<Route path="/" component={App}>
     <Route path="jsj_order" component={JsjOrder}/>
 </Route>);
 
-let AppRoute= <Router history={hashHistory}  routes={routes} />;
+let AppRoute= <Router history={hashHistory}  routes={routes}  />;
 
 export default AppRoute;

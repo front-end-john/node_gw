@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Ensure from '../dialog/ensure';
 import OrderDetail from './order_detail';
+import JSJOrderDetail from './jsj_order_detail';
 import Empty from './empty';
 
 let TableLine=React.createClass({
@@ -19,9 +20,19 @@ let TableLine=React.createClass({
         if(this.state.isExpand){
             ReactDOM.render(<Empty />,this.refs.orderDetail);
         }else {
-            ReactDOM.render(<OrderDetail number={orderNo}/>,this.refs.orderDetail);
+            if(this.props.section=="jsj"){
+                ReactDOM.render(<JSJOrderDetail type={this.props.type} number={orderNo}/>,this.refs.orderDetail);
+            }else {
+                ReactDOM.render(<OrderDetail number={orderNo}/>,this.refs.orderDetail);
+            }
         }
         this.setState({isExpand:!this.state.isExpand});
+    },
+    componentWillReceiveProps(nextProps){
+        if(nextProps!=this.props){
+            ReactDOM.render(<Empty />,this.refs.orderDetail);
+            this.setState({isExpand:false});
+        }
     },
     render(){
         let widths=this.props.widths;
@@ -41,9 +52,14 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='Label'){
+                let arr=item.tags||[],list=[];
+                list[0]=(<span key={0}>{arr[0]}</span>);
+                for(let i=1,len=arr.length;i<len;i++){
+                    list[i]=(<span key={i}><br/>{arr[i]}</span>);
+                }
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.trade}<br/>{item.user_type}</p>
+                        <p>{list}</p>
                     </li>
                 );
             }else if(item.fieldName=='OrderSource'){
@@ -95,15 +111,17 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='StartAddress'){
+                let html=item.local?(<p>{item.local}<br/>{item.address}</p>):
+                    <p style={{paddingRight:15}}>{item.address}</p>;
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.local}<br/>{item.address}</p>
+                        {html}
                     </li>
                 );
             }else if(item.fieldName=='EndAddress'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.local}<br/>{item.address}</p>
+                        <p style={{paddingRight:15}}>{item.address}</p>
                     </li>
                 );
             }else if(item.fieldName=='FlightNumber'){

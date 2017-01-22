@@ -1,9 +1,7 @@
 import React from 'react';
 
 let PrimaryItem = React.createClass({
-
     render(){
-        "use strict";
         let items=this.props.childItems,childLevel=null;
         if(items){
             let list = items.map((item, index) => {
@@ -32,14 +30,30 @@ let PrimaryItem = React.createClass({
 
 let Aside = React.createClass({
     getInitialState(){
-        "use strict";
         return {
             currItem:"order_query",
-            secondItem:""
+            secondItem:"",
+            jsjCount:{}
         };
     },
+    componentWillMount(){
+        let url="/jsj/system/runningordernumber";
+        fetch(url).then(function(res){
+            console.log("查询订单列表响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else{
+                throw new Error("服务异常");
+            }
+        }).then((str)=>{
+            let obj=JSON.parse(str);
+            //console.log("jsj订单数量：",obj);
+            this.setState({jsjCount:obj.record||{}});
+        }).catch(function(e) {
+            console.trace('错误:', e);
+        });
+    },
     handClick(id){
-        "use strict";
         this.setState({currItem:id});
         this.setState({secondItem:""});
         if(id==="order_query"){
@@ -87,11 +101,13 @@ let Aside = React.createClass({
         }
     },
     render(){
+        let jsjCount=this.state.jsjCount;
         let orderManager=[{name:'待联系订单',newCount:15}, {name:'待分配接车单',newCount:15},
             {name:'进行中的接车订单',newCount:115},{name:'机场临时停放',newCount:15},
             {name:'在库车辆',newCount:15},{name:'待分配送车单',newCount:15},
             {name:'进行中的送车单',newCount:115}];
-        let jsjOrder=[{name:'接机订单',newCount:15},{name:'送机订单',newCount:15}];
+        let jsjOrder=[{name:'接机订单',newCount:jsjCount.pickupnumber||0},
+            {name:'送机订单',newCount:jsjCount.pickoffnumber||0}];
 
         return(
             <aside>
@@ -120,8 +136,9 @@ let Aside = React.createClass({
                              secondClick={this.handleSecondClick}
                              prefix="order_manager_"/>
 
-                <PrimaryItem id='jsj_order' childItems={jsjOrder} currItem={this.state.currItem}
-                             itemName="接送机订单"
+                <PrimaryItem id='jsj_order' itemName="接送机订单"
+                             childItems={jsjOrder}
+                             currItem={this.state.currItem}
                              secondItem={this.state.secondItem}
                              click={this.handClick}
                              secondClick={this.handleSecondClick} prefix="jsj_order_" />

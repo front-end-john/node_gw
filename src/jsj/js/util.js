@@ -24,3 +24,41 @@ export let decLocSearch=(search)=>{
     }
     return obj;
 };
+
+export let checkCacheConfig=(url,success,fail)=>{
+    fetch(url, {
+        method: 'GET',
+        mode: 'cors'
+    }).then((res)=>{
+        return res.json()
+    }).then(function(json) {
+        success(json);
+    }).catch((e)=>{
+        fail(e)
+    });
+};
+
+export let loadRemoteResource=(url,success,fail)=>{
+    fetch(url, {
+        method: 'GET',
+        mode: 'cors'
+    }).then((res)=>{
+        return res.text()
+    }).then(function(text) {
+        success(text);
+    }).catch((e)=>{
+        fail(e)
+    });
+};
+
+export let appendInDom=(text,type)=>{
+    if(type=="css"){
+        let style=document.createElement("style");
+        style.innerHTML=text;
+        document.head.appendChild(style);
+    }else if(type=="js"){
+        let script=document.createElement("script");
+        script.innerHTML=text;
+        document.body.appendChild(script);
+    }
+};

@@ -17,7 +17,6 @@ let Comment=React.createClass({
         return{starCount:5};
     },
     componentWillMount(){
-        document.title="评价我们";
         document.getElementById("appContainer").style.backgroundColor="#fff";
         let td=sessionStorage.getItem("TravelDetailInfo");
         td=JSON.parse(td);

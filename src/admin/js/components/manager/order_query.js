@@ -21,12 +21,11 @@ import Page from '../widgets/page';
 //import ModifyCarInfo from '../dialog/modify_car_info';
 //import ModifyPassword from '../dialog/modify_password';
 //import CustomerLabel from '../dialog/customer_label';
-import CustomerLabel from '../dialog/assign_driver';
+import ErrorTip from '../dialog/error_tip';
 
 
 let OrderQuery=React.createClass({
     getInitialState(){
-        "use strict";
         return{
             queryCondition:{
                 phone_no:"",
@@ -48,6 +47,7 @@ let OrderQuery=React.createClass({
 
     },
     handlePageClick(page,pageSize){
+        let mask=document.getElementById("dialogContainer");
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'all',page:page,pagesize:pageSize});
         fetch(url).then(function(res){
@@ -59,11 +59,16 @@ let OrderQuery=React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            //console.log(obj);
-            this.setState({orderData:obj.result});
-            this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
+            console.log(obj);
+            if(obj.code==0){
+                this.setState({orderData:obj.result});
+                this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
+            }else {
+                ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
+            }
         }).catch(function(e) {
             console.trace('错误:', e);
+            ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
     },
     handleChange(e){
@@ -103,10 +108,7 @@ let OrderQuery=React.createClass({
         console.log(this.state.queryCondition);
     },
     showDialog(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="block";
-        ReactDOM.render(<CustomerLabel />, mask);
+
     },
     adaptScreen(widths,titles){
         this.setState({titles});
@@ -136,27 +138,6 @@ let OrderQuery=React.createClass({
         let titles=['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态'];
         this.adaptScreen(widths,titles);
         this.handlePageClick(1,10);
-        /*let url="/admin/api/orders/query?";
-        url+=queryStr.stringify({ordertype:'all',page:1,pagesize:10});
-        console.log("订单初始化查询url：",url);
-        fetch(url).then(function(res){
-            //console.log("查询车型响应状态："+res.status);
-            if(+res.status < 400){
-                return res.text();
-            }else {
-                throw new Error("服务异常");
-            }
-        }).then((str)=>{
-            let obj=JSON.parse(str);
-            console.log(obj);
-            this.setState({orderData:obj.result});
-            this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
-            //sessionStorage.setItem("carTypeList",str);
-            //location.href="#/select_car_type";
-
-        }).catch(function(e) {
-            console.trace('错误:', e);
-        });*/
     },
     render(){
         let sumWidth=this.state.sumWidth;

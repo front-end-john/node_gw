@@ -2,6 +2,7 @@
 @import "variable";
 .jsj-index{
   .head-banner{
+    border-bottom: 1px solid #dcdcdc;
     img{
       width: 100%;height: auto;
       vertical-align: middle;
@@ -9,7 +10,9 @@
   }
   .middle-state{
     background-color: #fff;
+    border-top: 1px solid #dcdcdc;
     &>p{
+      color: #646464;
       height: 100px;
       line-height: 100px;
       position: relative;
@@ -31,6 +34,7 @@
         }
       }
       &:nth-of-type(2){
+        border-bottom: 1px solid #dcdcdc;
         em{
           width: 34px;
           height: 44px;
@@ -47,13 +51,16 @@
       position: relative;
       @include justify-content(center);
       @include align-items(center);
-      &>i{right: 30px;}
+      &>i{right: 30px;top:50%;@include translateY(-50%);}
+      &:active{background-color: rgb(245,245,245);}
       &>p{
+        text-align: center;
         font-size: 28px;
         color: #969696;
         em{
           color: #f9be00;
           font-size: 40px;
+          font-weight: bold;
         }
       }
     }
@@ -64,6 +71,8 @@
     &>div{
       margin-bottom: 20px;
       background-color: #fff;
+      border-bottom: 1px solid #dcdcdc;
+      border-top: 1px solid #dcdcdc;
       height: 160px;
       @include box-sizing(border-box);
       @include display-flex;
@@ -84,7 +93,7 @@
         line-height: 40px;
         &>em{
           font-size:$middleFont;
-          color:#646464;
+          color:#969696;
           font-weight: bold;
           span{color: #f9be00;}
         }
@@ -104,9 +113,9 @@
     }
     &>.oil-item{
       &>em{
-        width: 38px;
-        height: 40px;
-        background:url("/mobile/jsj/img/icon.png") no-repeat -44px -36px;
+        width: 40px;
+        height: 44px;
+        background:url("/mobile/jsj/img/icon.png") no-repeat -42px -34px;
       }
 
     }
@@ -131,27 +140,31 @@
     &>.start-end{
       margin-bottom: 20px;
       background-color: #fff;
-      padding: 0 30px 30px;
+      padding: 0 0 30px;
+      border-bottom: 1px solid #dcdcdc;
+      border-top: 1px solid #dcdcdc;
       &>li{
         font-size: $middleFont;
         color: #646464;
         label{color:#969696;}
+        padding: 0 30px;
         &:nth-of-type(1){
           margin-bottom: 30px;
           height: 90px;
+          border-bottom: 1px solid #dcdcdc;
           @include box-sizing(border-box);
           @include display-flex();
           position: relative;
           @include justify-content(space-between);
           @include align-items(center);
-          padding: 0 34px 0 60px;
+          padding: 0 64px 0 90px;
           &>em{
             position: absolute;
-            top:50%;left: 0;
+            top:50%;left: 30px;
             @include translateY(-50%);
           }
           &>p{color: #f9be00;}
-          &>i{right: 0;top:50%;@include translateY(-50%);}
+          &>i{right: 30px;top:50%;@include translateY(-50%);}
           &>em.jj{
             width: 37px;height: 33px;
             background:url("/mobile/jsj/img/icon.png") no-repeat -2px -111px;
@@ -160,4 +173,131 @@
       }
     }
   }
+}
+.more-service{
+  &>ul{
+    background-color: #fff;
+    li{
+      border-bottom: 1px solid #dcdcdc;
+      height: 100px;
+      @include box-sizing(border-box);
+      @include display-flex;
+      padding: 0 30px 0 88px;
+      @include justify-content(space-between);
+      @include align-items(center);
+      position: relative;
+      p:nth-of-type(1){
+        font-size: 32px;
+        color:#323232;
+        em{
+          position: absolute;
+          display: inline-block;
+          top:50%;left: 30px;
+          @include translateY(-50%);
+          width: 38px;
+          height: 40px;
+        }
+        .oil-type{
+          background:url("/mobile/jsj/img/icon.png") no-repeat -2px -218px;
+        }
+        .oil-num{
+          width: 34px;
+          background:url("/mobile/jsj/img/icon.png") no-repeat -2px -260px;
+        }
+        .oil-cash{
+          height: 40px;
+          background:url("/mobile/jsj/img/icon.png") no-repeat -2px -300px;
+        }
+      }
+      p:nth-of-type(2){
+        button{
+          width: 130px;
+          height: 60px;
+          padding: 0;
+          &:focus{outline: none;}
+          margin-left:20px;
+          background-color: #fff;
+          @include border-radius(4px);
+          border: 2px solid #c8c8c8;
+          font-size: $smallFont + 6px;
+          color: #c8c8c8;
+          -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        .selected{
+          color: #f9be00;
+          border-color: #F9BE00;
+        }
+      }
+    }
+  }
+  .tips{
+    border-bottom: 1px solid #dcdcdc;
+    padding: 30px;
+    background-color: #fff;
+    font-size: 24px;
+    color: #969696;
+    line-height: 36px;
+    p:nth-of-type(1){
+      font-size: 30px;
+    }
+  }
+  &>h2{
+    height: 90px;
+    line-height: 90px;
+    font-size: 36px;
+    color: #646464;
+    padding-left: 30px;
+  }
+  &>textarea{
+    border: none;
+    border-bottom: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+    background-color: #fff;
+    width: 100%;max-width: 100%;
+    height: 240px;max-height: 240px;
+    @include appearance(none);
+    font-size: 32px;
+    padding: 30px;
+  }
+}
+.scroll-container {
+  $imgs:2;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+  .img-scroll {
+    position: relative;
+    height: auto;
+    width: 100% * $imgs;
+    overflow: hidden;
+    @include translateX(0);
+    @include transition(all 0.5s ease);
+    & > li {
+      float: left;
+      img{vertical-align: middle;}
+    }
+  }
+  @for $i from 1 through $imgs {
+    .offsetX-#{$i} {
+      left:-($i - 1)*100%;
+    }
+  }
+}
+.dot {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  @include translateX(-50%);
+  & > em {
+    display: inline-block;
+    @include box-sizing(border-box);
+    border: 1px solid #dcdcdc;
+    margin: 0 7px;
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+    @include border-radius(51%);
+  }
+  .dot_red{background-color: #f00;}
 }

@@ -49,11 +49,14 @@ let routes = require('./routes/index');
 let users = require('./routes/users');
 let admin = require('./routes/admin');
 let jsj=require('./routes/jsj');
+let jsjAdmin=require('./routes/jsj_admin');
+
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admin', admin);
 app.use('/mobile/jsj', jsj);
+app.use('/jsj', jsjAdmin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

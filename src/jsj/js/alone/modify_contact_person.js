@@ -4,7 +4,7 @@ import PulldownTip from '../widgets/pulldown_tip';
 import {decLocSearch} from '../util';
 let Person=React.createClass({
     componentWillMount(){
-        document.title="联系人";
+
     },
     handleSave(){
         let name=this.nameInput.value.trim();

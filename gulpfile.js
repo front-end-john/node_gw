@@ -3,8 +3,13 @@ let sftp = require('gulp-sftp');
 let compass = require('gulp-compass');
 let merge = require('merge-stream');
 let watch = require('gulp-watch');
+const fs = require('fs');
+let log=require("./utils/mylog");
 let browserSync = require('browser-sync').create();
 let reload = browserSync.reload;
+/**
+ * 监听资源文件改变，自动同步刷新浏览器
+ */
 gulp.task('browser-sync', function() {
     browserSync.init({
         proxy: "127.0.0.1:8180"
@@ -15,21 +20,25 @@ gulp.task('browser-sync', function() {
     gulp.watch('./public/mobile/jsj/dist/*.js').on('change', reload);
 });
 
-
-//监听 scss编译并上传
+/**
+ * 监听 scss编译并上传
+ */
 gulp.task('watch-scss-compiled-upload', function() {
     gulp.watch(['./src/*/sass/*.scss'],
         ['scss-compiled-upload']);
 });
 
-//监听 react编译并上传
+/**
+ * 监听 react编译并上传
+ */
 gulp.task('watch-react-compiled-upload', function() {
     gulp.watch(['./public/admin/dist/*.js','./public/mobile/jsj/dist/*.js'],
         ['react-compiled-upload']);
 });
 
-
-//编译 scss
+/**
+ * 编译 scss
+ */
 gulp.task('compass', function() {
     let admin_scss=gulp.src('./src/admin/sass/admin.scss')
         .pipe(compass({
@@ -46,7 +55,9 @@ gulp.task('compass', function() {
     return merge(admin_scss,jsj_scss);
 });
 
-//scss编译并上传
+/**
+ * 编译后的css 上传服务器
+ */
 gulp.task('scss-compiled-upload',['compass'],function () {
     let admin_css=gulp.src('./public/admin/css/*.css')
         //只有改变才处理
@@ -69,10 +80,11 @@ gulp.task('scss-compiled-upload',['compass'],function () {
     return merge(admin_css,jsj_css);
 });
 
-//react编译并上传
+/**
+ * 编译后的js 上传服务器
+ */
 gulp.task('react-compiled-upload',function () {
     let admin_js=gulp.src('./public/admin/dist/*.js')
-        //只有改变才处理
         .pipe(watch('./public/admin/dist/*.js'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
@@ -81,7 +93,6 @@ gulp.task('react-compiled-upload',function () {
             remotePath:"/var/code/fronts/public/admin/dist/"
         }));
     let jsj_js=gulp.src('./public/mobile/jsj/dist/*.js')
-        //只有改变才处理
         .pipe(watch('./public/mobile/jsj/dist/*.js'))
         .pipe(sftp({
             host: 'dev.feibotong.com',
@@ -92,6 +103,36 @@ gulp.task('react-compiled-upload',function () {
     return merge(admin_js,jsj_js);
 });
 
+function getJsonObj(file) {
+    let text=fs.readFileSync(file,"utf-8");
+    return JSON.parse(text);
+}
+function writeJsonFile(json,file) {
+    let text=JSON.stringify(json,null,"  ");
+    fs.writeFileSync(file,text,"utf-8");
+    log.info(file+"成功更新");
+}
+
+/**
+ * 修改localStorage本地资源文件缓存配置
+ */
+gulp.task("update local.json",()=>{
+    watch(['./public/mobile/jsj/dist/index.js'],()=>{
+        let file="./public/mobile/jsj/local.json";
+        let json=getJsonObj(file);
+        json.index_js_update=new Date().getTime();
+        writeJsonFile(json,file);
+    });
+
+    gulp.src('./public/mobile/jsj/local.json')
+        .pipe(watch('./public/mobile/jsj/local.json'))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/mobile/jsj/"
+        }));
+});
 
 
 
