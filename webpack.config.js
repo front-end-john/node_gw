@@ -2,7 +2,6 @@ let webpack = require("webpack");
 module.exports=[{
     name:"jsj",
     entry:{
-        //jquery_family:['jquery','jquery-touch-events'],
         index:"./src/jsj/js/index.js",
         jsj_index:"./src/jsj/js/alone/jsj_index.js",
         order_pay:"./src/jsj/js/alone/order_pay.js",
@@ -34,14 +33,13 @@ module.exports=[{
     },
     plugins: [
         //文件压缩插件
-        /* new webpack.optimize.UglifyJsPlugin({
-         compress: {
-         warnings: false
-         },
-         output: {
-         comments: false
-         }
-         }),*/
+        new webpack.DefinePlugin({
+            'process.env': { NODE_ENV: JSON.stringify('production') }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+         compress: {warnings: false},
+         output: { comments: false}
+         })
         /*new webpack.optimize.CommonsChunkPlugin({
          name:['jquery_family'],
          minChunks: Infinity
