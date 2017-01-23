@@ -29137,7 +29137,7 @@
 	        this.setState({ isExpand: !this.state.isExpand });
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        if (nextProps != this.props) {
+	        if (nextProps.widths[0] == this.props.widths[0]) {
 	            _reactDom2.default.render(_react2.default.createElement(_empty2.default, null), this.refs.orderDetail);
 	            this.setState({ isExpand: false });
 	        }
@@ -31074,6 +31074,9 @@
 	    value: true
 	});
 	var decDatetime = exports.decDatetime = function decDatetime(timestamp) {
+	    if (!timestamp) {
+	        return { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0, week: 7 };
+	    }
 	    var d = new Date(timestamp);
 	    var year = d.getFullYear();
 	    var month = d.getMonth();month++;month = month < 10 ? "0" + month : month;
@@ -31085,6 +31088,17 @@
 	    return { year: year, month: month, day: day, hour: hour, minute: minute, second: second, week: week };
 	};
 
+	var getFormatDate = exports.getFormatDate = function getFormatDate(format, timestamp) {
+	    var _decDatetime = decDatetime(timestamp),
+	        year = _decDatetime.year,
+	        month = _decDatetime.month,
+	        day = _decDatetime.day,
+	        hour = _decDatetime.hour,
+	        minute = _decDatetime.minute,
+	        second = _decDatetime.second;
+
+	    return format.replace("yyyy", year).replace("mm", month).replace("dd", day).replace("hh", hour).replace("ii", minute).replace("ss", second);
+	};
 	var getStateMsg = exports.getStateMsg = function getStateMsg(number) {
 	    switch (number) {
 	        case -1:
@@ -31152,13 +31166,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/*
-	import ReactDOM from 'react-dom';
-	import TakeCar from '../order_process/take_car';
-	import MoveCar from '../order_process/move_car';
-	import InGarage from '../order_process/in_garage';
-	import SendCar from '../order_process/send_car';
-	*/
 	exports.default = _react2.default.createClass({
 	    displayName: 'jsj_order_detail',
 	    getInitialState: function getInitialState() {
@@ -31187,35 +31194,42 @@
 	    },
 	    handleAddRemark: function handleAddRemark() {
 	        var mask = document.getElementById("dialogContainer");
-	        _reactDom2.default.render(_react2.default.createElement(_add_remark2.default, { msg: '\u8BF7\u6C42\u63A5\u9001\u673A\u5217\u8868\u5F02\u5E38\uFF01' }), mask);
+	        _reactDom2.default.render(_react2.default.createElement(_add_remark2.default, { msg: '\u8BF7\u6C42\u63A5\u9001\u673A\u5217\u8868\u5F02\u5E38\uFF01', number: this.props.number }), mask);
 	    },
 	    render: function render() {
 	        var o = this.state.orderDetail || {};
 	        var user = o.userinfo || {};
-	        var car = o.cartypeinfo || {};
-	        var flight = o.flightinfo || {};
-	        var level = [];
-
-	        var _decDatetime = (0, _util.decDatetime)(o.createtime || 0),
-	            year = _decDatetime.year,
-	            month = _decDatetime.month,
-	            day = _decDatetime.day,
-	            hour = _decDatetime.hour,
-	            minute = _decDatetime.minute;
-
-	        var _decDatetime2 = (0, _util.decDatetime)(user.regtime || 0),
-	            year2 = _decDatetime2.year,
-	            mon2 = _decDatetime2.month,
-	            day2 = _decDatetime2.day,
-	            hour2 = _decDatetime2.hour,
-	            min2 = _decDatetime2.minute;
-
-	        var time1 = year + '-' + month + "-" + day + " " + hour + ":" + minute;
-	        var time2 = year2 + '-' + mon2 + "-" + day2 + " " + hour2 + ":" + min2;
+	        //let car=o.cartypeinfo||{};
+	        //let flight=o.flightinfo||{};
+	        var driver = o.driverinfo || {};
+	        var cmt = o.commentinfo || {};
+	        var rece = o.receiptinfo || {};
+	        var userLevel = [],
+	            cmtStars = [];
+	        var serviceRemark = (o.adminremark || []).map(function (item, index) {
+	            return _react2.default.createElement(
+	                'p',
+	                { key: index },
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    item.time,
+	                    '\u2003'
+	                ),
+	                item.remark
+	            );
+	        });
 	        for (var i = 0; i < user.level || 0; i++) {
-	            level[i] = _react2.default.createElement(
+	            userLevel[i] = _react2.default.createElement(
 	                'span',
 	                { key: i, style: { color: 'red' } },
+	                '\u2605'
+	            );
+	        }
+	        for (var _i = 0; _i < cmt.score || 0; _i++) {
+	            cmtStars[_i] = _react2.default.createElement(
+	                'span',
+	                { key: _i, style: { color: 'red' } },
 	                '\u2605'
 	            );
 	        }
@@ -31243,26 +31257,38 @@
 	                _react2.default.createElement(
 	                    'span',
 	                    null,
-	                    time1
+	                    (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.createtime)
 	                ),
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
 	                    '\u72B6\u6001: '
 	                ),
-	                _react2.default.createElement('span', { style: { color: 'red' } }),
+	                _react2.default.createElement(
+	                    'span',
+	                    { style: { color: 'red' } },
+	                    o.statusdescription
+	                ),
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
 	                    '\u53D6\u6D88\u4EBA: '
 	                ),
-	                _react2.default.createElement('span', null),
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    o.cancelperson
+	                ),
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
 	                    '\u53D6\u6D88\u65F6\u95F4: '
 	                ),
-	                _react2.default.createElement('span', null)
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.canceltime)
+	                )
 	            ),
 	            _react2.default.createElement(
 	                'div',
@@ -31325,7 +31351,7 @@
 	                                null,
 	                                '\u91CD\u8981\u7B49\u7EA7:'
 	                            ),
-	                            level
+	                            userLevel
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31335,7 +31361,11 @@
 	                                null,
 	                                '\u7528\u6237\u6765\u6E90:'
 	                            ),
-	                            _react2.default.createElement('span', null)
+	                            _react2.default.createElement(
+	                                'span',
+	                                null,
+	                                user.comefrom || ""
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31348,7 +31378,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                time2
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", user.regtime)
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31361,7 +31391,8 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
-	                                { style: { color: "#1AA0E5" }, onClick: this.handleAddRemark },
+	                                { style: { color: "#1AA0E5", cursor: "pointer" },
+	                                    onClick: function onClick() {} },
 	                                '\u6DFB\u52A0'
 	                            )
 	                        ),
@@ -31373,7 +31404,11 @@
 	                                null,
 	                                '\u5907\u2003\u2003\u6CE8: '
 	                            ),
-	                            _react2.default.createElement('span', null)
+	                            _react2.default.createElement(
+	                                'span',
+	                                null,
+	                                user.remark || ""
+	                            )
 	                        )
 	                    )
 	                ),
@@ -31394,9 +31429,14 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u63A5\u673A\u53F8\u673A:\u2002'
+	                                this.props.type == "1" ? "接机司机" : "送机司机",
+	                                ':\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                driver.realname
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31406,7 +31446,11 @@
 	                                null,
 	                                '\u53F8\u673A\u624B\u673A:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                driver.phoneno
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31416,7 +31460,14 @@
 	                                null,
 	                                '\u8F66\u8F86\u4FE1\u606F:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                driver.carbrand,
+	                                ' ',
+	                                driver.carno,
+	                                driver.grade
+	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -31433,7 +31484,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.bookingtime)
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31447,7 +31498,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.dispatchtime)
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31461,7 +31512,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.starttime)
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31475,7 +31526,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.finishtime)
 	                            )
 	                        )
 	                    )
@@ -31499,7 +31550,11 @@
 	                                null,
 	                                '\u652F\u4ED8\u91D1\u989D:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                o.realfee || ""
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31509,7 +31564,11 @@
 	                                null,
 	                                '\u652F\u4ED8\u65F6\u95F4:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", o.paytime)
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31519,7 +31578,11 @@
 	                                null,
 	                                '\u652F\u4ED8\u65B9\u5F0F:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                o.paytype || ""
+	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -31536,7 +31599,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                (0, _util.getFormatDate)("yyyy-mm-dd hh:ii", cmt.createtime)
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31550,7 +31613,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                cmtStars
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31564,7 +31627,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                cmt.content || ""
 	                            )
 	                        )
 	                    )
@@ -31588,7 +31651,11 @@
 	                                null,
 	                                '\u5F00\u7968\u91D1\u989D:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                rece.money || ""
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31598,7 +31665,11 @@
 	                                null,
 	                                '\u5F00\u7968\u62AC\u5934:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                rece.receipthead || ""
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'p',
@@ -31608,7 +31679,11 @@
 	                                null,
 	                                '\u5F00\u7968\u5185\u5BB9:\u2002'
 	                            ),
-	                            _react2.default.createElement('span', { style: { color: "#323232" } })
+	                            _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#323232" } },
+	                                rece.receiptcontent || ""
+	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -31625,7 +31700,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                rece.receivepersopn || ""
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31639,7 +31714,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                rece.receiptphoneno || ""
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -31653,7 +31728,7 @@
 	                            _react2.default.createElement(
 	                                'span',
 	                                null,
-	                                '2016-12-12 18:45'
+	                                rece.address || ""
 	                            )
 	                        )
 	                    )
@@ -31665,8 +31740,11 @@
 	                        'p',
 	                        null,
 	                        '\u5BA2\u670D\u5907\u6CE8:',
-	                        _react2.default.createElement('img', { src: '/admin/img/icon/13_1.png' })
-	                    )
+	                        _react2.default.createElement('img', { src: '/admin/img/icon/13_1.png', onClick: this.handleAddRemark,
+	                            style: { color: "#1AA0E5", cursor: "pointer" } })
+	                    ),
+	                    ' ',
+	                    serviceRemark
 	                )
 	            )
 	        );
@@ -31677,7 +31755,7 @@
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -31690,7 +31768,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	    displayName: "add_remark",
+	    displayName: 'add_remark',
+	    getInitialState: function getInitialState() {
+	        return { warn: '' };
+	    },
 	    componentWillMount: function componentWillMount() {
 	        var mask = document.getElementById("dialogContainer");
 	        mask.style.display = "block";
@@ -31700,50 +31781,92 @@
 	        mask.style.display = "none";
 	    },
 	    ensure: function ensure() {
-	        "use strict";
+	        var _this = this;
 
-	        var mask = document.getElementById("dialogContainer");
-	        mask.style.display = "none";
+	        var textarea = this.refs.text,
+	            text = textarea.value.trim();
+	        var warn = this.refs.warn;
+	        if (!text) {
+	            warn.style.display = "block";
+	            this.setState({ warn: "备注不能为空！" });
+	            return 0;
+	        }
+
+	        var url = "/jsj/system/addremark?" + queryStr.stringify({ serialnumber: this.props.number, remark: text });
+	        fetch(url).then(function (res) {
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
+	        }).then(function (str) {
+	            var obj = JSON.parse(str);
+	            console.log("添加备注的响应：", obj);
+	            if (obj.code == 0) {
+	                warn.style.display = "block";
+	                _this.setState({ warn: "备注添加成功！" });
+	                textarea.value = "";
+	            } else {
+	                warn.style.display = "block";
+	                _this.setState({ warn: "备注添加失败！" });
+	            }
+	        }).catch(function (e) {
+	            warn.style.display = "block";
+	            this.setState({ warn: "添加备注请求失败！" });
+	            console.trace('添加备注失败:', e);
+	        });
 	    },
 	    render: function render() {
-	        "use strict";
+	        var _this2 = this;
 
 	        return _react2.default.createElement(
-	            "div",
-	            { className: "dialog" },
+	            'div',
+	            { className: 'dialog' },
 	            _react2.default.createElement(
-	                "h2",
-	                { className: "title" },
-	                "\u6DFB\u52A0\u5907\u6CE8",
-	                _react2.default.createElement("i", { onClick: this.cancel })
+	                'h2',
+	                { className: 'title' },
+	                '\u6DFB\u52A0\u5907\u6CE8',
+	                _react2.default.createElement('i', { onClick: this.cancel })
 	            ),
 	            _react2.default.createElement(
-	                "div",
-	                { className: "dialog-important-user" },
+	                'div',
+	                { className: 'dialog-important-user' },
 	                _react2.default.createElement(
-	                    "p",
+	                    'p',
 	                    null,
 	                    _react2.default.createElement(
-	                        "em",
+	                        'em',
 	                        null,
-	                        "\u5907\u2003\u2003\u6CE8\uFF1A"
+	                        '\u5907\u2003\u2003\u6CE8\uFF1A'
 	                    ),
-	                    _react2.default.createElement("textarea", { placeholder: "\u586B\u5199\u5907\u6CE8" })
+	                    _react2.default.createElement('textarea', { placeholder: '\u586B\u5199\u5907\u6CE8', ref: 'text' })
 	                )
 	            ),
 	            _react2.default.createElement(
-	                "section",
-	                { className: "btn" },
+	                'section',
+	                { className: 'btn' },
 	                _react2.default.createElement(
-	                    "button",
+	                    'button',
 	                    { onClick: this.cancel },
-	                    "\u53D6\u6D88"
+	                    '\u53D6\u6D88'
 	                ),
 	                _react2.default.createElement(
-	                    "button",
+	                    'button',
 	                    { onClick: this.ensure },
-	                    "\u786E\u8BA4"
+	                    '\u786E\u8BA4'
 	                )
+	            ),
+	            _react2.default.createElement(
+	                'p',
+	                { className: 'mistake-warn', ref: 'warn' },
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    this.state.warn
+	                ),
+	                _react2.default.createElement('i', { onClick: function onClick() {
+	                        _this2.refs.warn.style.display = "none";
+	                    } })
 	            )
 	        );
 	    }
@@ -59993,7 +60116,7 @@
 	            _react2.default.createElement(
 	                "h2",
 	                { className: "title" },
-	                "\u5F02\u5E38\u9519\u8BEF",
+	                this.props.title || "错误",
 	                _react2.default.createElement("i", { onClick: this.cancel })
 	            ),
 	            _react2.default.createElement(
@@ -60002,9 +60125,7 @@
 	                _react2.default.createElement(
 	                    "a",
 	                    null,
-	                    this.props.msg,
-	                    _react2.default.createElement("br", null),
-	                    "\u8BF7\u8054\u7CFB\u5F00\u53D1\u7EF4\u62A4\u4EBA\u5458\uFF01"
+	                    this.props.msg
 	                )
 	            ),
 	            _react2.default.createElement(
@@ -61864,6 +61985,9 @@
 	        }
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        /**
+	         * flag值改变时切换订单状态，更新列表数据
+	         */
 	        if (nextProps != this.props) {
 	            this.props = nextProps;
 	            this.handleQueryList(1, 10);

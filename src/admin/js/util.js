@@ -1,4 +1,7 @@
 export let decDatetime=(timestamp)=>{
+    if(!timestamp){
+        return {year:0,month:0,day:0,hour:0,minute:0,second:0,week:7};
+    }
     let d=new Date(timestamp);
     let year=d.getFullYear();
     let month=d.getMonth();month++;month=month<10?"0"+month:month;
@@ -10,6 +13,15 @@ export let decDatetime=(timestamp)=>{
     return {year,month,day,hour,minute,second,week};
 };
 
+export let getFormatDate=(format,timestamp)=>{
+    let {year,month,day,hour,minute,second} =decDatetime(timestamp);
+    return format.replace("yyyy",year)
+        .replace("mm",month)
+        .replace("dd",day)
+        .replace("hh",hour)
+        .replace("ii",minute)
+        .replace("ss",second);
+};
 export let getStateMsg=(number)=>{
     switch(number){
         case -1:return "已取消";

@@ -3,6 +3,15 @@ es6.polyfill();
 import 'whatwg-fetch';
 import {checkCacheConfig,loadRemoteResource,appendInDom} from '../util';
 
+/**
+ * 加载本地缓存资源
+ */
+appendInDom(localStorage.getItem("jsj_index_css"),"css");
+appendInDom(localStorage.getItem("jsj_index_js"),"js");
+
+/**
+ * 异步更新资源,如果资源有改变
+ */
 let url="/mobile/jsj/local.json?t="+new Date().getTime();
 let curr=localStorage.getItem("jsj_index_config");
 checkCacheConfig(url,(json)=>{
@@ -63,7 +72,4 @@ checkCacheConfig(url,(json)=>{
     }
 },(e)=>{
     console.log("加载jsj_index的缓存配置失败：",e);
-    console.log();
-    appendInDom(localStorage.getItem("jsj_index_css"),"css");
-    appendInDom(localStorage.getItem("jsj_index_js"),"js");
 });

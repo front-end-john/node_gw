@@ -1,18 +1,15 @@
 import React from 'react';
 let Ensure=React.createClass({
     cancel(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
     },
     ensure(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
     },
 
     render(){
-        "use strict";
         return(
             <div className="dialog">
                 <h2 className="title">分配司机<i onClick={this.cancel}/></h2>

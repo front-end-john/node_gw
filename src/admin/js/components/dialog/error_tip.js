@@ -15,8 +15,8 @@ let Ensure=React.createClass({
     render(){
         return(
             <div className="dialog">
-                <h2 className="title">异常错误<i onClick={this.cancel}/></h2>
-                <p className="dialog-ensure"><a>{this.props.msg}<br/>请联系开发维护人员！</a></p>
+                <h2 className="title">{this.props.title||"错误"}<i onClick={this.cancel}/></h2>
+                <p className="dialog-ensure"><a>{this.props.msg}</a></p>
                 <section className="btn">
                     <button onClick={this.ensure}>确定</button>
                 </section>

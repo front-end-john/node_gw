@@ -1,4 +1,7 @@
 export let decDatetime=(timestamp)=>{
+    if(!timestamp){
+        return {year:0,month:0,day:0,hour:0,minute:0,second:0,week:7};
+    }
     let d=new Date(timestamp);
     let year=d.getFullYear();
     let month=d.getMonth();month++;month=month<10?"0"+month:month;

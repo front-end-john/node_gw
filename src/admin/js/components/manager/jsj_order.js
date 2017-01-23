@@ -33,6 +33,9 @@ let JSJOrder=React.createClass({
         }
     },
     componentWillReceiveProps(nextProps){
+        /**
+         * flag值改变时切换订单状态，更新列表数据
+         */
         if(nextProps!=this.props){
             this.props=nextProps;
             this.handleQueryList(1,10);

@@ -29,7 +29,7 @@ let TableLine=React.createClass({
         this.setState({isExpand:!this.state.isExpand});
     },
     componentWillReceiveProps(nextProps){
-        if(nextProps!=this.props){
+        if(nextProps.widths[0]==this.props.widths[0]){
             ReactDOM.render(<Empty />,this.refs.orderDetail);
             this.setState({isExpand:false});
         }
