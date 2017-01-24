@@ -41,10 +41,6 @@ module.exports=[{
          compress: {warnings: false},
          output: { comments: false}
          })
-        /*new webpack.optimize.CommonsChunkPlugin({
-         name:['jquery_family'],
-         minChunks: Infinity
-         })*/
     ]
 },{
     name:"admin",

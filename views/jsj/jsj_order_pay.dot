@@ -64,7 +64,7 @@
                     }, false);
                     refreshRem();
                 } else if ( isMobile && !matchScale && ( matchWidth && matchWidth[1] != 'device-width' ) ) { // 定宽
-                    var    width = parseInt(matchWidth[1]),
+                    var width = parseInt(matchWidth[1]),
                         iw = win.innerWidth || width,
                         ow = win.outerWidth || iw,
                         sw = win.screen.width || iw,

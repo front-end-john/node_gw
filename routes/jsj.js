@@ -8,12 +8,9 @@ const fs = require('fs');
 /**
  * jsj加载缓存配置
  */
-
 router.get('/local_cache', function(req, res, next) {
     let text=fs.readFileSync("public/local-cache.json","utf-8");
-    console.log(text);
     if(text){
-        res.type('application/json');
         res.json(JSON.parse(text));
     }else {
         res.status(305).end();

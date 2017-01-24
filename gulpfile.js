@@ -3,6 +3,10 @@ let sftp = require('gulp-sftp');
 let compass = require('gulp-compass');
 let merge = require('merge-stream');
 let watch = require('gulp-watch');
+
+let gulpif = require('gulp-if');
+let sprity = require('sprity');
+
 const fs = require('fs');
 let log=require("./utils/mylog");
 let browserSync = require('browser-sync').create();
@@ -145,4 +149,17 @@ gulp.task("update local-cache.json",()=>{
 });
 
 
+/**
+ * sprites test
+ */
 
+gulp.task('sprites', function () {
+    return sprity.src({
+            src: './__tests__/imgs/*.{png,jpg}',
+            style: './sprite.scss',
+            name:"icon",
+            base64: true,
+            processor: 'sass',
+        })
+        .pipe(gulpif('*.png', gulp.dest('./__tests__/dist/img/'), gulp.dest('./__tests__/dist/css/')))
+});
