@@ -29115,9 +29115,7 @@
 	var TableLine = _react2.default.createClass({
 	    displayName: 'TableLine',
 	    getInitialState: function getInitialState() {
-	        return {
-	            isExpand: false
-	        };
+	        return { isExpand: false };
 	    },
 	    handlePay: function handlePay() {
 	        var mask = document.getElementById("dialogContainer");
@@ -29126,19 +29124,19 @@
 	    },
 	    expandDetail: function expandDetail(orderNo) {
 	        if (this.state.isExpand) {
-	            _reactDom2.default.render(_react2.default.createElement(_empty2.default, null), this.refs.orderDetail);
+	            _reactDom2.default.render(_react2.default.createElement(_empty2.default, null), this.detailArea);
 	        } else {
 	            if (this.props.section == "jsj") {
-	                _reactDom2.default.render(_react2.default.createElement(_jsj_order_detail2.default, { type: this.props.type, number: orderNo }), this.refs.orderDetail);
+	                _reactDom2.default.render(_react2.default.createElement(_jsj_order_detail2.default, { type: this.props.type, number: orderNo }), this.detailArea);
 	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_order_detail2.default, { number: orderNo }), this.refs.orderDetail);
+	                _reactDom2.default.render(_react2.default.createElement(_order_detail2.default, { number: orderNo }), this.detailArea);
 	            }
 	        }
 	        this.setState({ isExpand: !this.state.isExpand });
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        if (nextProps.widths[0] == this.props.widths[0]) {
-	            _reactDom2.default.render(_react2.default.createElement(_empty2.default, null), this.refs.orderDetail);
+	            _reactDom2.default.render(_react2.default.createElement(_empty2.default, null), this.detailArea);
 	            this.setState({ isExpand: false });
 	        }
 	    },
@@ -29690,7 +29688,9 @@
 	            'ul',
 	            { className: 'table-line' },
 	            list,
-	            _react2.default.createElement('li', { ref: 'orderDetail' })
+	            _react2.default.createElement('li', { ref: function ref(c) {
+	                    return _this.detailArea = c;
+	                } })
 	        );
 	    }
 	});

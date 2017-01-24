@@ -7,9 +7,7 @@ import Empty from './empty';
 
 let TableLine=React.createClass({
     getInitialState(){
-        return{
-            isExpand:false
-        };
+        return{isExpand:false};
     },
     handlePay(){
         let mask=document.getElementById("dialogContainer");
@@ -18,19 +16,19 @@ let TableLine=React.createClass({
     },
     expandDetail(orderNo){
         if(this.state.isExpand){
-            ReactDOM.render(<Empty />,this.refs.orderDetail);
+            ReactDOM.render(<Empty />,this.detailArea);
         }else {
             if(this.props.section=="jsj"){
-                ReactDOM.render(<JSJOrderDetail type={this.props.type} number={orderNo}/>,this.refs.orderDetail);
+                ReactDOM.render(<JSJOrderDetail type={this.props.type} number={orderNo}/>,this.detailArea);
             }else {
-                ReactDOM.render(<OrderDetail number={orderNo}/>,this.refs.orderDetail);
+                ReactDOM.render(<OrderDetail number={orderNo}/>,this.detailArea);
             }
         }
         this.setState({isExpand:!this.state.isExpand});
     },
     componentWillReceiveProps(nextProps){
         if(nextProps.widths[0]==this.props.widths[0]){
-            ReactDOM.render(<Empty />,this.refs.orderDetail);
+            ReactDOM.render(<Empty />,this.detailArea);
             this.setState({isExpand:false});
         }
     },
@@ -334,7 +332,7 @@ let TableLine=React.createClass({
         return(
             <ul className="table-line">
                 {list}
-                <li ref="orderDetail" />
+                <li ref={(c)=>this.detailArea=c} />
             </ul>
         );
     }

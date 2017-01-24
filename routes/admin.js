@@ -2,6 +2,19 @@ let express = require('express');
 let fetch = require('node-fetch');
 let log=require('../utils/mylog');
 let router = express.Router();
+const fs = require('fs');
+
+/**
+ * admin加载缓存配置
+ */
+router.get('/local_cache', function(req, res, next) {
+    let text=fs.readFileSync("public/local-cache.json","utf-8");
+    if(text){
+        res.json(JSON.parse(text));
+    }else {
+        res.status(305).end();
+    }
+});
 
 /**
  * 后台首页

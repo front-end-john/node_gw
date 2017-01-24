@@ -1,17 +1,12 @@
----
-layout: ../layout/default.dot
-title: 后台管理首页
----
-
-[[##headSection:
-<link rel="stylesheet" type="text/css" href="/gw/pc/css/base.css">
-<link rel="stylesheet" type="text/css" href="/admin/css/admin.css">
-#]]
-[[##bodySection:
-    <div id="appContainer"> </div>
-    <div id="dialogContainer"> </div>
-#]]
-
-[[##scriptSection:
-<script src="/admin/dist/admin.js?t=0.1"></script>
-#]]
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>后台管理首页</title>
+    </head>
+    <body>
+        <div id="appContainer"> </div>
+        <div id="dialogContainer"> </div>
+        <script src="/admin/dist/resource_config.js"></script>
+    </body>
+</html>

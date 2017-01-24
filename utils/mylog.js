@@ -23,15 +23,15 @@ let getFormatDate=(format,date=new Date())=>{
 };
 
 let info=(msg,filename=null)=>{
-    console.log(clc.white.bold(getFormatDate("yyyy-mm-dd hh:ii")),
+    console.log(clc.white.bold(getFormatDate("yyyy-mm-dd hh:ii:ss")),
         clc.blue(filename?filename+'\r\n':''),clc.blue(msg));
 };
 let warn=(msg,filename=null)=>{
-    console.log(clc.white.bold(getFormatDate("yyyy-mm-dd hh:ii")),
+    console.log(clc.white.bold(getFormatDate("yyyy-mm-dd hh:ii:ss")),
         clc.blue(filename?filename+'\r\n':''),clc.yellow(msg));
 };
 let error=(msg,filename=null)=>{
-    console.log(clc.white.bold(getFormatDate("yyyy-mm-dd hh:ii")),
+    console.log(clc.white.bold(getFormatDate("yyyy-mm-dd hh:ii:ss")),
         clc.blue(filename?filename+'\r\n':''),clc.red.bold(msg));
 };
 module.exports={decDatetime,getFormatDate,info,warn,error};

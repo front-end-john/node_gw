@@ -88,11 +88,9 @@
     // 默认直接适配页面
     mobileUtil.fixScreen();
 </script>
-
-<!--<link href="/mobile/jsj/css/index.css" rel="stylesheet">-->
 </head>
     <body>
         <div id="appContainer"></div>
-        <script src="/mobile/jsj/dist/load_index.js"></script>
+        <script src="/mobile/jsj/dist/resource_config.js"></script>
     </body>
 </html>

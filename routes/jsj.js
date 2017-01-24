@@ -2,13 +2,30 @@ let express = require('express');
 let router = express.Router();
 let fetch = require('node-fetch');
 let log=require('../utils/mylog');
+const fs = require('fs');
+
+
+/**
+ * jsj加载缓存配置
+ */
+
+router.get('/local_cache', function(req, res, next) {
+    let text=fs.readFileSync("public/local-cache.json","utf-8");
+    console.log(text);
+    if(text){
+        res.type('application/json');
+        res.json(JSON.parse(text));
+    }else {
+        res.status(305).end();
+    }
+});
 
 /**
  * 微信接送机_首页
  */
 router.get('/main', function(req, res, next) {
     res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/jsj_index', {});
+    res.render('jsj/main', {});
 });
 
 /**

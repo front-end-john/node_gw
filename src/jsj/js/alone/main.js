@@ -14,7 +14,6 @@ let Index=React.createClass({
     },
 
     componentDidMount(){
-
     },
     render(){
         let imgList=[jsj_static_path+"/img/Banner.png",jsj_static_path+"/img/Banner.png"];
