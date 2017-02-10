@@ -14,7 +14,7 @@ export let decDatetime=(timestamp)=>{
 };
 
 export let getLocalTimestamp=(timeStr)=>{
-    let dt=new Date(timeStr.replace(/\-/g,'/'));
+    let dt=timeStr?new Date(timeStr.replace(/\-/g,'/')):new Date();
     return dt.getTime() + dt.getTimezoneOffset()*60000;
 };
 

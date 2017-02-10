@@ -63,6 +63,7 @@ checkCacheConfig(config_url,(json)=>{
             console.log(next_css.loadUrl+"资源更新成功");
             updateResource(text,"css");
             localStorage.setItem(local_css_key,text);
+            location.reload(true);
             /**
              * 更新当前配置
              */
@@ -89,6 +90,7 @@ checkCacheConfig(config_url,(json)=>{
             console.log(next_js.loadUrl+"资源更新成功");
             updateResource(text,"js");
             localStorage.setItem(local_js_key,text);
+            location.reload(true);
             /**
              * 更新当前配置
              */

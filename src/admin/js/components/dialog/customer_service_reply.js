@@ -2,22 +2,18 @@
 
  export default React.createClass({
     cancel(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
     },
     ensure(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
 
     },
     handleRadio(e){
-        "use strict";
         console.log(e.target.value);
     },
     render(){
-        "use strict";
         return(
             <div className="dialog">
                 <h2 className="title">客服回复<i onClick={this.cancel}/></h2>

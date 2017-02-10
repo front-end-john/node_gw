@@ -53,7 +53,7 @@
 
 	__webpack_require__(180);
 
-	var _util = __webpack_require__(461);
+	var _util = __webpack_require__(463);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -120,6 +120,7 @@
 	            console.log(next_css.loadUrl + "资源更新成功");
 	            (0, _util.updateResource)(text, "css");
 	            localStorage.setItem(local_css_key, text);
+	            location.reload(true);
 	            /**
 	             * 更新当前配置
 	             */
@@ -146,6 +147,7 @@
 	            console.log(next_js.loadUrl + "资源更新成功");
 	            (0, _util.updateResource)(text, "js");
 	            localStorage.setItem(local_js_key, text);
+	            location.reload(true);
 	            /**
 	             * 更新当前配置
 	             */
@@ -1987,7 +1989,7 @@
 
 /***/ },
 
-/***/ 461:
+/***/ 463:
 /***/ function(module, exports) {
 
 	'use strict';

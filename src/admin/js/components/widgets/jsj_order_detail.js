@@ -1,15 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AddRemark from '../dialog/add_remark';
-import {getFormatDate} from '../../util'
+import WarnTip from '../dialog/warn_tip';
+import Label from "../dialog/customer_label";
+import EditUser from "../dialog/edit_user_info";
+import {getFormatDate} from '../../util';
 
 export default React.createClass({
     getInitialState(){
-        return{
-            p_item:'p1'
-        };
+        return{p_item:'p1'};
     },
-    componentDidMount(){
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+    },
+    addLabel(id){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<Label tags={this.tags} url="/admin/api/users/marking"
+                               reload={this.loadOrderDetail} uid={id}/>, mask);
+    },
+    editUserInfo(){
+        let o=this.state.orderDetail||{};
+        let user=o.userinfo||{};
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<EditUser name={user.username} gender={user.sex} stars={user.stars}
+                                  remark={user.remark} tel={user.phoneno}
+                                  url="/admin/api/users/edit" reload={this.loadOrderDetail} />, mask);
+    },
+    loadOrderDetail(){
         let url="/jsj/system/orderdetail?serialnumber="+this.props.number;
         fetch(url).then(function(res){
             console.log("查询订单详情响应状态："+res.status);
@@ -19,22 +37,28 @@ export default React.createClass({
                 throw new Error("服务异常");
             }
         }).then((str)=>{
-            let obj=JSON.parse(str);
-            //console.log(obj);
-            this.setState({orderDetail:obj.record});
+            try{
+                let obj=JSON.parse(str);
+                this.setState({orderDetail:obj.record});
+            }catch(e){
+                this.showWarnTip("数据格式异常！");
+            }
         }).catch(function(e) {
+            this.showWarnTip("网络请求异常！");
             console.trace('错误:', e);
         });
     },
-    handleAddRemark(){
+    componentWillMount(){
+        this.loadOrderDetail();
+    },
+    addRemark(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<AddRemark msg="请求接送机列表异常！" number={this.props.number}/>, mask);
+        ReactDOM.render(<AddRemark reload={this.loadOrderDetail}
+                                   url="/jsj/system/addremark" number={this.props.number}/>, mask);
     },
     render(){
         let o=this.state.orderDetail||{};
         let user=o.userinfo||{};
-        //let car=o.cartypeinfo||{};
-        //let flight=o.flightinfo||{};
         let driver=o.driverinfo||{};
         let cmt=o.commentinfo||{};
         let rece=o.receiptinfo||{};
@@ -42,12 +66,16 @@ export default React.createClass({
         let serviceRemark=(o.adminremark||[]).map((item,index)=>{
             return (<p key={index}><span>{item.time}&emsp;</span>{item.remark}</p>);
         });
-        for(let i=0;i<user.level||0;i++){
+        for(let i=0;i<user.stars||0;i++){
             userLevel[i]=(<span key={i} style={{color:'red'}}>&#9733;</span>)
         }
         for(let i=0;i<cmt.score||0;i++){
             cmtStars[i]=(<span key={i} style={{color:'red'}}>&#9733;</span>)
         }
+        this.tags=user.tags||[];
+        let userTags=(user.tags||[]).map((item,index)=>{
+            return(<span key={index}>{item}&ensp;</span>)
+        });
         return(
             <section className="detail-section">
                 <p className="order-brief">
@@ -66,7 +94,9 @@ export default React.createClass({
                         <figure className="user-basic">
                             <img src={user.avater||"/admin/img/userheadimg.png"}/>
                             <figcaption>
-                                <p>姓名: <span style={{color:"#1AA0E5"}}>{user.username||''}</span></p>
+                                <p>姓名: <span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                             onClick={()=>this.editUserInfo()}>
+                                    {user.username||''}</span></p>
                                 <p>性别: <span>{ user.sex||""}</span></p>
                                 <p>手机: <span>{ user.phoneno||''}</span></p>
                             </figcaption>
@@ -76,9 +106,9 @@ export default React.createClass({
                             <p><label>用户来源:</label><span>{user.comefrom||""}</span></p>
                             <p><label>注册时间:</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.regtime)}</span></p>
-                            <p><label>标&emsp;&emsp;签:</label>
+                            <p><label>标&emsp;&emsp;签:</label><em>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                      onClick={()=>{}}>添加</span></p>
+                                      onClick={()=>this.addLabel(user.userid)}>添加</span></em></p>
                             <p className="note-field"><label>备&emsp;&emsp;注: </label>
                                 <span>{user.remark||""}</span></p>
                         </div>
@@ -136,7 +166,7 @@ export default React.createClass({
                         </div>
                     </div>
                     <div className="service-note" style={{width:"100%",borderRightWidth:0}}>
-                        <p>客服备注:<img src="/admin/img/icon/13_1.png" onClick={this.handleAddRemark}
+                        <p>客服备注:<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p> {serviceRemark}
                     </div>
                 </div>

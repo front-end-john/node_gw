@@ -10,7 +10,7 @@ let proxy=function(req, res) {
         log.info("响应状态："+res.status);
         return res.text();
     }).then(function(body) {
-        log.info("响应内容："+body);
+        //log.info("响应内容："+body);
         res.end(body);
     }).catch(function(e){
         log.error(e,__filename);

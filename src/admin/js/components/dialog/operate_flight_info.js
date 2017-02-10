@@ -2,19 +2,15 @@
 
  export default React.createClass({
     cancel(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
     },
     ensure(){
-        "use strict";
         let mask=document.getElementById("dialogContainer");
         mask.style.display="none";
     },
 
     render(){
-        "use strict";
-
         return(
             <div className="dialog">
                 <h2 className="title">{this.props.title}<i onClick={this.cancel}/></h2>

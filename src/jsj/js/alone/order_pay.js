@@ -11,21 +11,23 @@ import 'whatwg-fetch';
 global.jsj_static_path="/mobile/jsj";
 global.jsj_api_path="/jsj";
 let OrderPay=React.createClass({
+    getInitialState(){
+        return {ccp:{},detail:{}}
+    },
     componentWillMount(){
         this.carImgList=[jsj_static_path+"/img/07.png",jsj_static_path+"/img/08.png",
             jsj_static_path+"/img/09.png",jsj_static_path+"/img/10.png"];
         let detail=sessionStorage.getItem("TravelDetailInfo");
-        console.log(decLocSearch(location.search));
+        //console.log(decLocSearch(location.search));
         let {name,phonenumber}=decLocSearch(location.search);
         detail=detail?JSON.parse(detail):{};
         this.setState({detail});
         sessionStorage.setItem("ChangedContactPerson",JSON.stringify({name,phonenumber}));
     },
-
     componentDidMount(){
         let {serialnumber,openid}=decLocSearch(location.search);
-        sessionStorage.setItem("OpenId",openid);
-        sessionStorage.setItem("OrderSerialNumber",serialnumber);
+        openid && sessionStorage.setItem("OpenId",openid);
+        serialnumber && sessionStorage.setItem("OrderSerialNumber",serialnumber);
         let detail=sessionStorage.getItem("TravelDetailInfo");
         if(detail) return 0;
         /**
@@ -33,8 +35,6 @@ let OrderPay=React.createClass({
          */
         let dom=document.getElementById("dialog");
         ReactDOM.render(<Loading />,dom);
-        dom.style.display="block";
-
         let url=jsj_api_path+"/user/detail";
         url+="?serialnumber="+serialnumber;
         console.log("获取订单详情url",url);
@@ -91,19 +91,20 @@ let OrderPay=React.createClass({
          */
         let dom=document.getElementById("dialog");
         ReactDOM.render(<Loading />,dom);
-        dom.style.display="block";
         let serialnumber=sessionStorage.getItem("OrderSerialNumber");
         let userremark=sessionStorage.getItem("ChangedUserRemark");
-        let cp=this.state.ccp||{};
+        let cp=this.state.ccp;
         let actualname=cp.name,actualphone=cp.phonenumber;
         /**
          * 从后台获取微信支付验证参数
          */
         let openid=sessionStorage.getItem("OpenId");
-        let url=jsj_api_path+"/user/wechat/payconfig?"+queryStr.stringify({serialnumber,openid});
+        let url=jsj_api_path+"/user/wechat/payconfig?serialnumber="+serialnumber+"&openid="+openid;
+        //console.log(url);
         fetch(url).then((res)=>{
             console.log("请求微信支付参数响应状态：",res.status);
             dom.style.display="none";
+            console.log(res);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -129,9 +130,7 @@ let OrderPay=React.createClass({
                         signType: "MD5",
                         paySign: obj.record.sign,
                         success: function (res) {
-
                             let errMsg=res.errMsg;
-                            alert(errMsg);
                             if(errMsg=="chooseWXPay:cancel" || errMsg=="chooseWXPay:fail" ){
                                 ReactDOM.render(<PulldownTip msg="支付失败！" />,dom);
                                 return 0;

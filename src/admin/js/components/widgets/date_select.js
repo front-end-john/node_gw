@@ -1,23 +1,14 @@
 import React from 'react';
-import 'react-date-picker/index.css'
 import { DateField } from 'react-date-picker'
 
 export default React.createClass({
-    getInitialState(){
-        "use strict";
-        console.log(this.props.holdText);
-        return{};
-    },
-
     render(){
-        "use strict";
         return(
-            <div className="input-item">
+            <div className="date-select">
                 <label>{this.props.title}</label>
-                <DateField
-                    onChange={this.props.change }
-                    defaultValue={this.props.holdText}
-                    dateFormat="YYYY-MM-DD HH:mm"
+                <DateField onChange={this.props.change }
+                           dateFormat="YYYY-MM-DD HH:mm"
+                           style={{borderColor:"#ddd",width:"170px",height:"36px"}}
                 />
             </div>
         );

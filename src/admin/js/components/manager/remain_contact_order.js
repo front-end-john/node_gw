@@ -1,37 +1,56 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
 import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
-
+import ErrorTip from '../dialog/warn_tip';
+import Page from '../widgets/page';
 let RemainContactOrder=React.createClass({
     getInitialState(){
-        "use strict";
         return{
-            queryCondition:{
-                order_source:"",
-                order_no:"",
-                phone_no:""
-            }
+            queryCondition:{},
+            orderData:[],
+            pageObj:{}
         };
     },
     handleChange(e){
-        "use strict";
         let key=e.target.id;
         let val=e.target.value;
         if(key==="phone_no"){
-            this.state.queryCondition.phone_no=val;
+            this.state.queryCondition.phoneno=val;
         }else if(key==="order_source"){
-            this.state.queryCondition.order_source=val;
+            this.state.queryCondition.comefrom=val;
         }else if(key==="order_no"){
-            this.state.queryCondition.order_no=val;
+            this.state.queryCondition.serialnumber=val;
         }
     },
-    handleQuery(){
-        "use strict";
-        console.log(this.state.queryCondition);
+    handlePageQuery(page,pageSize){
+        let mask=document.getElementById("dialogContainer");
+        let url="/admin/api/orders/query?";
+        url+=queryStr.stringify({ordertype:'booking',page:page,pagesize:pageSize});
+        url+="&"+queryStr.stringify(this.state.queryCondition);
+        console.log("订单查询url",url);
+        fetch(url).then(function(res){
+            console.log("查询订单列表响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
+        }).then((str)=>{
+            let obj=JSON.parse(str);
+            if(obj.code==0){
+                this.setState({orderData:obj.result});
+                this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
+            }else {
+                ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
+            }
+        }).catch(function(e) {
+            console.trace('错误:', e);
+            ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
+        });
     },
     adaptScreen(widths,titles){
         this.setState({titles});
@@ -57,9 +76,10 @@ let RemainContactOrder=React.createClass({
         },false);
     },
     componentWillMount(){
-        let widths=[ 120,    120,  120,   100,      120,      120,     140,     130,      120,     120,    80];
+        let widths=[ 130,    120,  120,   100,      130,      120,     140,     130,      120,     120,    80];
         let titles=['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作'];
         this.adaptScreen(widths,titles);
+        this.handlePageQuery(1,10);
     },
     render(){
         let sumWidth=this.state.sumWidth;
@@ -69,17 +89,24 @@ let RemainContactOrder=React.createClass({
             return {name:item,width:widths[index]+'px'};
         });
         document.getElementById("appContainer").style.width=200+sumWidth+"px";
-        let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
-            {username:"中小屋",phone_no:"124578654",fieldName:'User'},
-            {trade:"发票",user_type:"关系客户",fieldName:'Label'},
-            {order_source:"携程",fieldName:'OrderSource'},
-            {order_time:"2016-8-9 15:14",fieldName:'OrderTime'},
-            {car_no:'奥B4878',car_color:'白色',car_brand:'宝马',fieldName:'Car'},
-            {city:'广州',terminal:'白云国际机场T1',fieldName:'OnwardTerminal'},
-            {session:"2016-8-9 15:14",fieldName:'Session'},
-            {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
-            {wash:'洗车',oil:'加油',fieldName:'MoreService'}
-            ,{op_items:["电话确认"],dialogs:[1],color:"#DB8800",fieldName:'Operation'}];
+
+        let list=this.state.orderData.map((item,index)=>{
+            let flight=item.returningflight=="null"?item.returningflight:"";
+            let returnDate=item.returningdate=="null"?item.returningdate:"";
+            let services=item.serviceorders;
+            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
+                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+                {tags:item.usertags,fieldName:'Label'},
+                {order_source:item.comefrom,fieldName:'OrderSource'},
+                {order_time:item.createtime,fieldName:'OrderTime'},
+                {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
+                {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
+                {session:item.bookingtime,fieldName:'Session'},
+                {back_flight:flight,back_time:returnDate,fieldName:'ReturnTicket'},
+                {wash:services[0]?'洗车':"",oil:services[1]?'加油':"",fieldName:'MoreService'},
+                {op_items:["电话确认"],color:"#DB8800",fieldName:'TelEnsureOperation'}];
+            return (<TableLine key={index} widths={widths} data={data} />);
+        });
         return(
             <section className="data-section" style={{width:sumWidth+'px'}}>
                 <TextScroll />
@@ -87,14 +114,14 @@ let RemainContactOrder=React.createClass({
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>
                     <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
                     <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
-                    <button className="query-btn" onClick={this.handleQuery}>查询</button>
+                    <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout">下单</button>
                 </div>
-                <TableHead data={headData} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
+                <div className="data-list">
+                    <TableHead data={headData} />
+                    {list}
+                    <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                </div>
             </section>
         );
     }

@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import PulldownTip from '../widgets/pulldown_tip';
 import {decDatetime} from '../util';
 export default React.createClass({
     componentWillMount(){
@@ -6,11 +8,23 @@ export default React.createClass({
         document.title=num?num.toUpperCase():"航班号";
     },
     handleClick(e){
+        let dom=document.getElementById("dialog");
         let orderType=sessionStorage.getItem("OrderType");
         let id=e.target.id;
         this["standout"+id].style.backgroundColor="#F9BE00";
         let flight=this.flightList[id];
-        console.log(flight);
+        let timestamp=new Date().getTime();
+        if(+orderType==1){
+            if(flight <= timestamp){
+                ReactDOM.render(<PulldownTip msg="该航班已降落，无法预约！" />,dom);
+                return 0;
+            }else if(flight - 1800*1000 <= timestamp){
+                ReactDOM.render(<PulldownTip msg="该航班即将降落，航班降落前30分钟内无法预约！" />,dom);
+                return 0;
+            }
+        }else {
+            //todo 送机航班限制
+        }
         sessionStorage.setItem('FlightInfo',JSON.stringify(flight));
         setTimeout(()=>{
             location.href="#/jsj_query?type="+orderType;

@@ -14,6 +14,16 @@ let TableLine=React.createClass({
         mask.style.display="block";
         ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
+    handleTelEnsure(){
+        let mask=document.getElementById("dialogContainer");
+        mask.style.display="block";
+        ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, mask);
+    },
+    showMoreTags(tags){
+        let mask=document.getElementById("dialogContainer");
+        mask.style.display="block";
+        ReactDOM.render(<Ensure title="更多标签" ensureContent={tags.join(" ")}/>, mask);
+    },
     expandDetail(orderNo){
         if(this.state.isExpand){
             ReactDOM.render(<Empty />,this.detailArea);
@@ -34,7 +44,6 @@ let TableLine=React.createClass({
     },
     render(){
         let widths=this.props.widths;
-
         let list=this.props.data.map((item,index) =>{
             if(item.fieldName=='OrderNo'){
                 return(
@@ -44,20 +53,22 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='User'){
-                return(
-                    <li key={index} style={{width:widths[index]} }>
-                        <p>{item.username}<br/>{item.phone_no}</p>
-                    </li>
-                );
-            }else if(item.fieldName=='Label'){
-                let arr=item.tags||[],list=[];
-                list[0]=(<span key={0}>{arr[0]}</span>);
-                for(let i=1,len=arr.length;i<len;i++){
-                    list[i]=(<span key={i}><br/>{arr[i]}</span>);
+                let content=(<p>{item.phone_no}</p>);
+                if(item.username!="null"&&item.username){
+                    content=(<p>{item.username}<br/>{item.phone_no}</p>);
                 }
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{list}</p>
+                        {content}
+                    </li>
+                );
+            }else if(item.fieldName=='Label'){
+                let arr=item.tags||[];
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p><span>{arr[0]}</span><br/><span>{arr[1]||""}</span>
+                            {arr.length>2?(<span style={{color:"#1A9FE5"}}
+                                                 onClick={()=>this.showMoreTags(arr)}>&ensp;更多</span>):""}</p>
                     </li>
                 );
             }else if(item.fieldName=='OrderSource'){
@@ -105,7 +116,7 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='Car'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.car_no}<br/>{item.car_color}&ensp;{item.car_brand}</p>
+                        <p>{item.car_no}<br/>{item.car_color}{item.car_brand?(<span>&ensp;{item.car_brand}</span>):""}</p>
                     </li>
                 );
             }else if(item.fieldName=='StartAddress'){
@@ -316,7 +327,29 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='Operation'){
-                let list=item.op_items.map(function(ele,i) {
+                let list=item.op_items.map((ele,i)=>{
+                    return (
+                        <em key={i}>&ensp;{ele}</em>
+                    );
+                });
+                return(
+                    <li key={index} style={{width:widths[index]}} className="list-end">
+                        <p style={{color:item.color||"inherit"}}>{list}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='TelEnsureOperation'){
+                let list=item.op_items.map((ele,i)=>{
+                    return (
+                        <em key={i} onClick={this.handleTelEnsure}>&ensp;{ele}</em>
+                    );
+                });
+                return(
+                    <li key={index} style={{width:widths[index]}} className="list-end">
+                        <p style={{color:item.color||"inherit"}}>{list}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='AssignTakeDriverOperation'){
+                let list=item.op_items.map((ele,i)=>{
                     return (
                         <em key={i}>&ensp;{ele}</em>
                     );
@@ -328,7 +361,6 @@ let TableLine=React.createClass({
                 );
             }
         });
-
         return(
             <ul className="table-line">
                 {list}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppRoute from "./routes/app_route";
@@ -7,34 +6,24 @@ let Login=React.createClass({
     getInitialState(){
         return {code:null};
     },
-    componentWillMount(){
 
-    },
-    componentDidMount(){
-        ReactDOM.render(AppRoute , document.getElementById("appContainer"));
-    },
     handleLogin(e){
         e.preventDefault();
-        let accountInput=this.refs.account,passInput=this.refs.password;
-        let loginName=accountInput.value,pass=passInput.value;
-        let url="/admin/login";
-        fetch(url,{
-            method: "POST",
-            body:JSON.stringify({account:loginName,password:pass}),
-            headers: {"Content-Type": "application/json"}
-        }).then(res=>{
-            console.log(res);
-            res.text().then(text=>{
-                console.log(text);
-                if(text==='reject'){
-                    this.refs.loginTip.className="warning";
-                }else if(text==='ok'){
-                    console.log("login success");
-                    ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
-                }
-            });
-        },err=>{
-            console.log(err);
+        let username=this.acountIn.value,password=this.passwdIn.value;
+        let url="http://"+location.hostname+"/admin/api/login.js?";
+        url+=queryStr.stringify({username,password,callback:"login_success"});
+        fetchJsonp(url,{credentials: 'include'}).then((res)=>{
+                return res.json();
+        }).then((json)=>{
+            console.log(' json', json);
+            if(json.code==0){
+                ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
+                sessionStorage.setItem("AdminInfo",JSON.stringify(json));
+            }else {
+                this.loginTip.className="warning";
+            }
+        }).catch((e)=>{
+            console.trace('网络请求异常', e);
         });
     },
 
@@ -48,9 +37,9 @@ let Login=React.createClass({
                 <div className="login-block">
                     <p className="login-logo"><img src="/admin/img/Logo.png" /></p>
                     <form className="login-form">
-                        <input ref="account" type="text" placeholder="请输入您的账号" />
-                        <input ref="password" type="password" placeholder="请输入密码" />
-                        <p ref="loginTip" className="warning hide-warning">账号或密码错误</p>
+                        <input ref={(c)=>this.acountIn=c } type="text" placeholder="请输入您的账号" />
+                        <input ref={(c)=>this.passwdIn=c } type="password" placeholder="请输入密码" />
+                        <p ref={(c)=>this.loginTip=c } className="warning hide-warning">账号或密码错误</p>
                         <button onClick={this.handleLogin}>登陆</button>
                     </form>
                 </div>

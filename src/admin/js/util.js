@@ -14,6 +14,7 @@ export let decDatetime=(timestamp)=>{
 };
 
 export let getFormatDate=(format,timestamp)=>{
+    if(!timestamp) return "";
     let {year,month,day,hour,minute,second} =decDatetime(timestamp);
     return format.replace("yyyy",year)
         .replace("mm",month)
@@ -21,6 +22,31 @@ export let getFormatDate=(format,timestamp)=>{
         .replace("hh",hour)
         .replace("ii",minute)
         .replace("ss",second);
+};
+
+export let addUniqueEle=(arr,e)=>{
+    for(let i=0,len=arr.length;i<len;i++){
+        if(arr[i]===e) return 0;
+    }
+    return arr.push(e);
+};
+
+export let delExitEle=(arr,e)=>{
+    for(let i=0,len=arr.length;i<len;i++){
+        if(arr[i]===e) {
+            return arr.splice(i,1);
+        }
+    }
+    return 0;
+};
+
+export let isExitValue=(arr,e)=>{
+    for(let i=0,len=arr.length;i<len;i++){
+        if(arr[i]===e) {
+            return true;
+        }
+    }
+    return false;
 };
 export let getStateMsg=(number)=>{
     switch(number){

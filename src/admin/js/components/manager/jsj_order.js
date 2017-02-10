@@ -4,41 +4,41 @@ import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
-import ErrorTip from '../dialog/error_tip';
+import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
 import {decDatetime} from '../../util';
 
 let JSJOrder=React.createClass({
     getInitialState(){
         return{
-            queryUrl:"/jsj/system/orderlist",
             orderData:[],
             pageObj:{},
-            queryCondition:{
-                username:"",
-                order_no:"",
-                phone_no:""
-            }
+            queryCondition:{}
         };
     },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value.trim();
         if(key==="phone_no"){
-            this.state.queryCondition.phone_no=val;
+            this.state.queryCondition.phoneno=val;
         }else if(key==="username"){
             this.state.queryCondition.username=val;
         }else if(key==="order_no"){
-            this.state.queryCondition.order_no=val;
+            this.state.queryCondition.serialnumber=val;
         }
     },
     componentWillReceiveProps(nextProps){
         /**
          * flag值改变时切换订单状态，更新列表数据
          */
-        if(nextProps!=this.props){
+        if(nextProps.location.query.flag!=this.props.location.query.flag){
             this.props=nextProps;
-            this.handleQueryList(1,10);
+            this.name.textIn.value="";
+            this.phone.textIn.value="";
+            this.number.textIn.value="";
+            this.setState({queryCondition:{}},()=>{
+                this.handlePageQuery(1,10);
+            });
         }
     },
     adaptScreen(widths,titles){
@@ -64,22 +64,13 @@ let JSJOrder=React.createClass({
             }
         },false);
     },
-    handleClickQuery(){
-        this.state.queryUrl="/jsj/system/query";
-        this.handleQueryList(1,10);
-    },
-    handleQueryList(page, pageSize){
-        let qc=this.state.queryCondition;
+    handlePageQuery(page, pageSize){
         let mask=document.getElementById("dialogContainer");
-        let url=this.state.queryUrl+"?";
+        let url="/jsj/system/query?";
         let ordertype=this.props.location.query.flag;
         let condition={ordertype,page,pagesize:pageSize};
-        if(url.indexOf("query")>-1){
-            condition.username=qc.username;
-            condition.phoneno=qc.phone_no;
-            condition.serialnumber=qc.order_no;
-        }
         url+=queryStr.stringify(condition);
+        url+="&"+queryStr.stringify(this.state.queryCondition);
         fetch(url).then(function(res){
             console.log("查询订单列表响应状态："+res.status);
             if(+res.status < 400){
@@ -94,10 +85,10 @@ let JSJOrder=React.createClass({
                 this.setState({orderData:obj.records||[]});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<ErrorTip msg={obj.message}/>, mask);
+                ReactDOM.render(<WarnTip msg={obj.message}/>, mask);
             }
         }).catch(function(e) {
-            ReactDOM.render(<ErrorTip msg="请求接送机列表异常！"/>, mask);
+            ReactDOM.render(<WarnTip msg="请求接送机列表异常！"/>, mask);
             console.trace('错误:', e);
         });
     },
@@ -105,7 +96,7 @@ let JSJOrder=React.createClass({
         let widths=[  140,   120,  110,  130,  120,    120,     130,      130,        120,     100];
         let titles=['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态'];
         this.adaptScreen(widths,titles);
-        this.handleQueryList(1,10);
+        this.handlePageQuery(1,10);
     },
     render(){
         let type=this.props.location.query.flag;
@@ -116,7 +107,6 @@ let JSJOrder=React.createClass({
             return {name:item,width:widths[index]+'px'};
         });
         document.getElementById("appContainer").style.width= 200+sumWidth+'px';
-
         let list=this.state.orderData.map((item,index)=>{
             let {year,month,day,hour,minute} =decDatetime(item.createtime);
             let {year:year1,month:mon1,day:day1,hour:hour1,minute:min1} =decDatetime(item.bookingtime);
@@ -139,14 +129,16 @@ let JSJOrder=React.createClass({
             <section className="data-section" style={{width:sumWidth}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <TextInput title="用户姓名:" change={this.handleChange} name="username" holdText="请输入用户姓名" />
-                    <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
-                    <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
-                    <button className="query-btn" onClick={this.handleClickQuery}>查询</button>
+                    <TextInput title="用户姓名:" ref={(c)=>this.name=c} change={this.handleChange} name="username" holdText="请输入用户姓名" />
+                    <TextInput title="用户手机:" ref={(c)=>this.phone=c} change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
+                    <TextInput title="订单号:" ref={(c)=>this.number=c} change={this.handleChange} name="order_no" holdText="请输入订单号" />
+                    <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
-                <TableHead data={headData} />
-                {list}
-                <Page {...this.state.pageObj} paging={this.handleQueryList}/>
+                <div className="data-list">
+                    <TableHead data={headData} />
+                    {list}
+                    <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                </div>
             </section>
         );
     }

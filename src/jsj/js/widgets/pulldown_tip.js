@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 export default React.createClass({
     getInitialState(){
-        return {show:""}
+        return {show:"0"}
     },
     componentDidMount(){
         let dom=document.getElementById("dialog");

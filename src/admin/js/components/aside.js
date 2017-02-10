@@ -53,6 +53,31 @@ let Aside = React.createClass({
             console.trace('错误:', e);
         });
     },
+    componentDidMount(){
+        let hash=location.hash;
+        hash=hash.substr(2).split("?");
+        //console.log("hash:",hash);
+        this.setState({currItem:hash[0]});
+        if(hash[1]){
+            this.setState({secondItem:hash[1].replace("flag=","jsj_order_")});
+        }else {
+            if(hash[0]=="remain_contact_order"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_1"});
+            }else if(hash[0]=="remain_assign_take_order"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_2"});
+            }else if(hash[0]=="ongoing_take_order"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_3"});
+            }else if(hash[0]=="airport_temp_park"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_4"});
+            }else if(hash[0]=="in_garage_car"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_5"});
+            }else if(hash[0]=="remain_assign_send_order"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_6"});
+            }else if(hash[0]=="ongoing_send_order"){
+                this.setState({currItem:"order_manager",secondItem:"order_manager_7"});
+            }
+        }
+    },
     handClick(id){
         this.setState({currItem:id});
         this.setState({secondItem:""});
@@ -135,20 +160,16 @@ let Aside = React.createClass({
                              click={this.handClick}
                              secondClick={this.handleSecondClick}
                              prefix="order_manager_"/>
-
                 <PrimaryItem id='jsj_order' itemName="接送机订单"
                              childItems={jsjOrder}
                              currItem={this.state.currItem}
                              secondItem={this.state.secondItem}
                              click={this.handClick}
                              secondClick={this.handleSecondClick} prefix="jsj_order_" />
-
                 <PrimaryItem id='user_manager' itemName="用户管理" currItem={this.state.currItem}
                              click={this.handClick} />
-
                 <PrimaryItem id='comment_manager' itemName="评价管理" currItem={this.state.currItem}
                              click={this.handClick} />
-
                 <PrimaryItem id='coupon_manager' itemName="优惠券管理" currItem={this.state.currItem}
                              click={this.handClick} />
             </aside>

@@ -115,6 +115,9 @@ html,body{
   }
   &>.data-section{
     margin-left: 200px;
+    .data-list{
+      padding-left: 20px;
+    }
   }
 }
 
@@ -342,10 +345,13 @@ html,body{
   &>section{
     @include column();
     width:80%;
+    height: 16px;
     overflow: hidden;
+    position: relative;
     &>p{
+      position: absolute;
       white-space:nowrap;
-      @include translateX(-50px);
+      //left:-50px;
     }
   }
 }
@@ -372,6 +378,16 @@ html,body{
     input{
       @include box-sizing(border-box);
       padding-left: 6px;
+    }
+
+  }
+  &>.date-select{
+    display: inline-block;
+    &>label{
+      padding-right: 12px;
+      padding-left: 20px;
+      position: relative;
+      top:1px;
     }
   }
   &>button{
@@ -515,8 +531,15 @@ html,body{
     &>.user-other{
       margin-left: 20px;
       &>p{
+        &:nth-last-of-type(2){
+          em{
+            vertical-align: top;
+            display: inline-block;
+            width: 250px;
+          }
+        }
         margin-bottom: 10px;
-        &>label{width: 60px;display: inline-block;}
+        &>label{width: 60px;display: inline-block;vertical-align: top;}
         &>span{color: #323232;}
       }
     }
@@ -908,6 +931,17 @@ $dialogHeadHeight:48px;
     }
   }
 }
+.warning-tip{
+  position: absolute;
+  top:100px;
+  padding: 15px 50px;
+  background-color: #2b2b2b;
+  left: 50%;
+  @include translateX(-50%);
+  @include border-radius(6px);
+  p{color: #CB6C2E;}
+
+}
 .dialog-ensure{
   text-align: center;
   height: 100px;
@@ -1062,6 +1096,15 @@ $dialogHeadHeight:48px;
       @include appearance(none);
       padding-left: 10px;
       @include box-sizing(border-box);
+    }
+
+  }
+  &>.date-select{
+    margin-bottom: 10px;
+    em {
+      font-size: 14px;
+      color: #323232;
+      vertical-align: middle;
     }
   }
 }

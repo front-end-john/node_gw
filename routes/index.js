@@ -55,5 +55,8 @@ router.get('/history(.html)?',function (req, res, next) {
     res.render('gw/mobile/history', {});
 });
 
+router.get('/price(.html)?',function (req, res, next) {
+    res.render('gw/mobile/price', {});
+});
 
 module.exports = router;

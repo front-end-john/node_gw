@@ -88,6 +88,7 @@
     // 默认直接适配页面
     mobileUtil.fixScreen();
 </script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" async></script>
 </head>
     <body>
         <div id="appContainer"></div>

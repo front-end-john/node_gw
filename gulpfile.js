@@ -150,6 +150,35 @@ gulp.task("update local-cache.json",()=>{
 
 
 /**
+ * 上传到测试服务器
+ */
+gulp.task("upload-test-env",()=>{
+    let files=[ {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
+                {src:"./config/*",      dest:"/var/code/fronts/config/"},
+                {src:"./logs/*",        dest:"/var/code/fronts/logs/"},
+                {src:"./public/**/*",   dest:"/var/code/fronts/public/"},
+                {src:"./routes/*",      dest:"/var/code/fronts/routes/"},
+                {src:"./utils/*",       dest:"/var/code/fronts/utils/"},
+                {src:"./views/**/*",    dest:"/var/code/fronts/views/"},
+                {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
+                {src:"./app.js",        dest:"/var/code/fronts/"},
+                {src:"./package.json",  dest:"/var/code/fronts/"},
+    ];
+    files.forEach((item)=>{
+        gulp.src(item.src)
+            .pipe(watch(item.src))
+            .pipe(sftp({
+                host: 'test.feibotong.com',
+                user: 'feiche',
+                port:18899,
+                keyLocation: "./utils/test",
+                remotePath:item.dest
+            }));
+    });
+
+});
+
+/**
  * sprites test
  */
 

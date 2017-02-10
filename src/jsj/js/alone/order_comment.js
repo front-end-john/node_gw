@@ -5,6 +5,7 @@ import Loading from '../widgets/loading';
 import Star from '../widgets/star'
 import {decLocSearch} from '../util';
 
+import queryStr from 'querystring';
 import es6 from "es6-promise";
 es6.polyfill();
 import 'whatwg-fetch';
