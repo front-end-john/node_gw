@@ -37,7 +37,8 @@ let TableLine=React.createClass({
         this.setState({isExpand:!this.state.isExpand});
     },
     componentWillReceiveProps(nextProps){
-        if(nextProps.widths[0]==this.props.widths[0]){
+        let t1=this.props.type,t2=nextProps.type;
+        if(t1 && t2 && t1!=t2){
             ReactDOM.render(<Empty />,this.detailArea);
             this.setState({isExpand:false});
         }
@@ -364,7 +365,7 @@ let TableLine=React.createClass({
         return(
             <ul className="table-line">
                 {list}
-                <li ref={(c)=>this.detailArea=c} />
+                <li ref={(c)=>this.detailArea=c} style={{overflow: "hidden"}}/>
             </ul>
         );
     }

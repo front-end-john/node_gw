@@ -8,7 +8,6 @@ import TableLine from '../widgets/table_line';
 
 let AirportTempPark=React.createClass({
     getInitialState(){
-        "use strict";
         return{
             queryCondition:{
                 order_source:"",

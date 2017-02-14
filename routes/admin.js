@@ -34,8 +34,7 @@ router.get('/',function (req, res, next) {
 let proxy=function(req, res) {
     let url=admin_url+req.originalUrl;
     log.info(url,__filename);
-    let cookie=`admin="${req.cookies.admin}";admin_skey="${req.cookies.admin_skey}";username=${req.cookies.username}`;
-    log.warn("cookie:"+cookie);
+
     fetch(url,{headers:req.headers}).then((res)=>{
         log.info("响应状态："+res.status);
         return res.text();
@@ -124,6 +123,13 @@ router.get('/api/users/edit', function(req, res, next){
  * 修改车辆信息
  */
 router.get('/api/cars/edit_car_info', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 修改返程航班信息
+ */
+router.get('/api/orders/edit_returning_info', function(req, res, next){
     proxy(req, res);
 });
 

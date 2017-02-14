@@ -51,10 +51,29 @@ export default React.createClass({
     componentWillMount(){
         this.loadOrderDetail();
     },
+    componentDidMount(){
+        this.adjustWidth();
+        window.addEventListener("resize",this.adjustWidth,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adjustWidth);
+    },
     addRemark(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<AddRemark reload={this.loadOrderDetail}
                                    url="/jsj/system/addremark" number={this.props.number}/>, mask);
+    },
+    adjustWidth(){
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        if(screenWidth>1614){
+            let incre=(screenWidth-1614)/4;
+            for(let i=1;i<5;i++){
+                let dom=this["block"+i];
+                let width=300+incre;
+                if(i==4) width=494+incre;
+                dom.style.width=width+"px";
+            }
+        }
     },
     render(){
         let o=this.state.orderDetail||{};
@@ -89,7 +108,7 @@ export default React.createClass({
                     <span>{getFormatDate("yyyy-mm-dd hh:ii",o.canceltime)}</span>
                 </p>
                 <div className="order-main">
-                    <div className="user-info" style={{width:340}}>
+                    <div className="user-info" ref={(c)=>this.block1=c}>
                         <h2>用户信息</h2>
                         <figure className="user-basic">
                             <img src={user.avater||"/admin/img/userheadimg.png"}/>
@@ -101,7 +120,7 @@ export default React.createClass({
                                 <p>手机: <span>{ user.phoneno||''}</span></p>
                             </figcaption>
                         </figure>
-                        <div className="user-other" style={{width:340}}>
+                        <div className="user-other">
                             <p><label>重要等级:</label>{userLevel}</p>
                             <p><label>用户来源:</label><span>{user.comefrom||""}</span></p>
                             <p><label>注册时间:</label>
@@ -113,7 +132,7 @@ export default React.createClass({
                                 <span>{user.remark||""}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" style={{width:340}}>
+                    <div className="order-info" ref={(c)=>this.block2=c}>
                         <h2>{this.props.type=="1"?"接机信息":"送机信息"}</h2>
                         <div className="up-section">
                             <p><label>{this.props.type=="1"?"接机司机":"送机司机"}:&ensp;</label>
@@ -131,7 +150,7 @@ export default React.createClass({
                             <p><label>服务完成时间:&ensp;</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.finishtime)}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" style={{width:360}}>
+                    <div className="order-info" ref={(c)=>this.block3=c}>
                         <h2>支付&评价</h2>
                         <div className="up-section">
                             <p><label>支付金额:&ensp;</label>
@@ -148,7 +167,7 @@ export default React.createClass({
                             <p><label>评价内容:&ensp;</label><span>{cmt.content||""}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" style={{width:630}}>
+                    <div className="order-info" style={{width:494}} ref={(c)=>this.block4=c}>
                         <h2>发票信息</h2>
                         <div className="up-section">
                             <p><label>开票金额:&ensp;</label>
@@ -167,7 +186,8 @@ export default React.createClass({
                     </div>
                     <div className="service-note" style={{width:"100%",borderRightWidth:0}}>
                         <p>客服备注:<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
-                                     style={{color:"#1AA0E5",cursor:"pointer"}} /></p> {serviceRemark}
+                                     style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
+                        {serviceRemark}
                     </div>
                 </div>
             </section>

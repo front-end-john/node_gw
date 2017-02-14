@@ -30,25 +30,51 @@
             return 0;
         }
         let url=this.props.url+"?"+queryStr.stringify({serialnumber:this.props.number,remark:text});
-        fetch(url).then(function(res){
-            console.log("添加备注的响应状态：",res.status);
-            if(+res.status < 400){
-                return res.text();
-            }else {
-                throw new Error("服务异常");
-            }
-        }).then((str)=>{
-            let obj=JSON.parse(str);
-            if(obj.code==0){
-                this.props.reload();
-                this.showWarnTip(null);
-            }else {
-                this.showWarnTip("备注添加失败！");
-            }
-        }).catch(function(e) {
-            this.showWarnTip("网络请求异常！");
-            console.trace('错误:', e);
-        });
+        if(this.props.type=="jsonp"){
+            let jsonpcallback="jQuery19102657889517686711_1486723379670";
+            let order_id=this.props.number;
+            let remark=text;
+            let callback="onRemarkCallback";
+            let _=new Date().getTime();
+            url="http://"+location.hostname+this.props.url+"?"+
+                queryStr.stringify({jsonpcallback,order_id,remark,callback,_});
+            console.log(url);
+            fetchJsonp(url,{credentials: 'include'}).then((res)=>{
+                return res.json();
+            }).then((json)=>{
+                console.log('添加备注的响应内容', json);
+                if(json.code==0){
+                    this.props.reload();
+                    this.cancel();
+                }else {
+                    this.showWarnTip(json.msg);
+                }
+            }).catch((e)=>{
+                this.showWarnTip("网络请求异常！");
+                console.trace('网络请求异常', e);
+            });
+        }else {
+            fetch(url).then(function(res){
+                console.log("添加备注的响应状态：",res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务异常");
+                }
+            }).then((str)=>{
+                let obj=JSON.parse(str);
+                console.log("添加备注的响应内容",obj);
+                if(obj.code==0){
+                    this.props.reload();
+                    this.showWarnTip(null);
+                }else {
+                    this.showWarnTip("备注添加失败！");
+                }
+            }).catch(function(e) {
+                this.showWarnTip("网络请求异常！");
+                console.trace('错误:', e);
+            });
+        }
     },
     render(){
         return(

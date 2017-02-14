@@ -12,7 +12,9 @@ let RemainContactOrder=React.createClass({
         return{
             queryCondition:{},
             orderData:[],
-            pageObj:{}
+            pageObj:{},
+            initWidths:[ 130,    120,  120,   100,      130,      120,     140,     130,      120,     120,    80],
+            titles:    ['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作']
         };
     },
     handleChange(e){
@@ -52,34 +54,32 @@ let RemainContactOrder=React.createClass({
             ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
     },
-    adaptScreen(widths,titles){
-        this.setState({titles});
-        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
-        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+    adaptScreen(){
+        /**
+         * offsetWidth两边的内边距之和
+         */
+        let initWidths=this.state.initWidths;
+        let offsetWidth=60,len=initWidths.length;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y,offsetWidth);
         let screenWidth=document.body.clientWidth||window.innerWidth;
+        screenWidth=screenWidth>1614?screenWidth:1614;
+        let sumWidth=initSumWidth,widths=initWidths;
         if(screenWidth-200 > initSumWidth){
             let incre=(screenWidth-200-initSumWidth)/len;
             widths=initWidths.map((item)=>item+incre);
             sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-            this.setState({sumWidth,widths});
-        }else {
-            this.setState({sumWidth,widths});
         }
-        window.addEventListener("resize",()=>{
-            let screenWidth=document.body.clientWidth||window.innerWidth;
-            if(screenWidth-200 > initSumWidth){
-                let incre=(screenWidth-200-initSumWidth)/len;
-                widths=initWidths.map((item)=>item+incre);
-                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-                this.setState({sumWidth,widths});
-            }
-        },false);
+        this.setState({sumWidth,widths});
     },
     componentWillMount(){
-        let widths=[ 130,    120,  120,   100,      130,      120,     140,     130,      120,     120,    80];
-        let titles=['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作'];
-        this.adaptScreen(widths,titles);
+        this.adaptScreen();
         this.handlePageQuery(1,10);
+    },
+    componentDidMount(){
+        window.addEventListener("resize",this.adaptScreen,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptScreen);
     },
     render(){
         let sumWidth=this.state.sumWidth;

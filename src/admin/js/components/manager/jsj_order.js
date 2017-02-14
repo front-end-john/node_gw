@@ -13,7 +13,9 @@ let JSJOrder=React.createClass({
         return{
             orderData:[],
             pageObj:{},
-            queryCondition:{}
+            queryCondition:{},
+            initWidths:[  140,   120,  110,  130,  120,    120,     130,      130,        120,     100],
+            titles:    ['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态']
         };
     },
     handleChange(e){
@@ -41,28 +43,32 @@ let JSJOrder=React.createClass({
             });
         }
     },
-    adaptScreen(widths,titles){
-        this.setState({titles});
-        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
-        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+    adaptScreen(){
+        /**
+         * offsetWidth两边的内边距之和
+         */
+        let initWidths=this.state.initWidths;
+        let offsetWidth=60,len=initWidths.length;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y,offsetWidth);
         let screenWidth=document.body.clientWidth||window.innerWidth;
+        screenWidth=screenWidth>1614?screenWidth:1614;
+        let sumWidth=initSumWidth,widths=initWidths;
         if(screenWidth-200 > initSumWidth){
             let incre=(screenWidth-200-initSumWidth)/len;
             widths=initWidths.map((item)=>item+incre);
             sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-            this.setState({sumWidth,widths});
-        }else {
-            this.setState({sumWidth,widths});
         }
-        window.addEventListener("resize",()=>{
-            let screenWidth=document.body.clientWidth||window.innerWidth;
-            if(screenWidth-200 > initSumWidth){
-                let incre=(screenWidth-200-initSumWidth)/len;
-                widths=initWidths.map((item)=>item+incre);
-                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-                this.setState({sumWidth,widths});
-            }
-        },false);
+        this.setState({sumWidth,widths});
+    },
+    componentWillMount(){
+        this.adaptScreen();
+        this.handlePageQuery(1,10);
+    },
+    componentDidMount(){
+        window.addEventListener("resize",this.adaptScreen,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptScreen);
     },
     handlePageQuery(page, pageSize){
         let mask=document.getElementById("dialogContainer");
@@ -92,12 +98,7 @@ let JSJOrder=React.createClass({
             console.trace('错误:', e);
         });
     },
-    componentWillMount(){
-        let widths=[  140,   120,  110,  130,  120,    120,     130,      130,        120,     100];
-        let titles=['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态'];
-        this.adaptScreen(widths,titles);
-        this.handlePageQuery(1,10);
-    },
+
     render(){
         let type=this.props.location.query.flag;
         let sumWidth=this.state.sumWidth;
@@ -122,7 +123,8 @@ let JSJOrder=React.createClass({
                 {booking_time:year1+"-"+mon1+"-"+day1+" "+hour1+":"+min1,fieldName:'BookingTime'},
                 {type:item.cartypename+'型',car_brief:item.cartypedescription,fieldName:'CarType'},
                 {status:item.statusdescription,color:"#f00",fieldName:'OrderStatus'}];
-            return (<TableLine key={index} widths={widths} data={data} section="jsj" type={type} />);
+            return (<TableLine key={index} widths={widths} data={data} section="jsj"
+                               type={type}  />);
         });
 
         return(

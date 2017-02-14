@@ -4,12 +4,14 @@
 
 $jeet: (
         gutter: 0,
-        max-width: 1920px
+        max-width: 4000px
 );
 html,body{
   height: 100%;
 }
-
+#appContainer{
+  height: 100%;
+}
 // login page style
 .login{
   height: 100%;
@@ -44,10 +46,10 @@ html,body{
   background-color: #fff;
   position: relative;
   z-index: 10;
-
 }
+
 .login-logo{
-  padding: 40px 0 60px;
+  padding: 50px 0;
   text-align: center;
 }
 .login-form{
@@ -89,22 +91,19 @@ html,body{
   position: absolute;
   text-align: center;
   font-size: 12px;
-  color: #fff;
+  color: rgb(150,150,150);
   line-height: 28px;
-  bottom: 0;
+  bottom: 10px;
   left: 50%;
   @include translateX(-50%);
 }
 
 // manager page style
-
 .app{
-  width: 100%;
-  height: 100%;
-  min-height:900px;
   background-color: #F6F6F6;
   position: relative;
   &>aside{
+    height:950px;
     width: 200px;
     position: absolute;
     left: 0;top:0;bottom: 0;
@@ -115,8 +114,11 @@ html,body{
   }
   &>.data-section{
     margin-left: 200px;
+    padding-right:20px;
     .data-list{
-      padding-left: 20px;
+      padding-left:20px;
+      height: 718px;
+      overflow-y: auto;
     }
   }
 }
@@ -136,6 +138,7 @@ html,body{
       &>img{
         width: 100%;
         height: 100%;
+        @include border-radius(3px);
       }
     }
     &:nth-of-type(2){
@@ -202,6 +205,31 @@ html,body{
     color: #fff;
     &>.item-icon{
       background-position:-20px -2px;
+    }
+    position: relative;
+    &:after{
+      content: "";
+      width: 4px;
+      height: 49px;
+      background-color:#F9BE00;
+      position: absolute;
+      left: 0;top:0;
+    }
+  }
+}
+.primary-item:nth-of-type(2){
+  &>.selected{
+    background-color: #314055;
+    &:after{
+      width: 0;
+    }
+  }
+}
+.primary-item:nth-of-type(3){
+  &>.selected{
+    background-color: #314055;
+    &:after{
+      width: 0;
     }
   }
 }
@@ -323,6 +351,15 @@ html,body{
   &>.highlight{
     background-color: #202E43;
     color: #fff;
+    position: relative;
+    &:after{
+      content: "";
+      width: 4px;
+      height: 29px;
+      background-color:#F9BE00;
+      position: absolute;
+      left: 0;top:0;
+    }
     &>span{
       color: #fff;
       background-color: #F9BE00;
@@ -402,9 +439,11 @@ html,body{
   background-color: #F9BE00;
   margin-left: 50px;
   margin-right: 20px;
+  font-size: 14px;
 }
 .checkout{
   background-color: #1A9FE5;
+  font-size: 14px;
 }
 .table-head{
   margin: 0 20px;
@@ -455,7 +494,8 @@ html,body{
 .detail-section{
   background-color: #D3EAFF;
   color: #969696;
-  width: 1680px;
+  min-width: 1394px;
+  width: 100%;
 }
 .paging{
   height: 60px;
@@ -494,6 +534,8 @@ html,body{
   @include center;
   div,p,li,h2{@include box-sizing(border-box);}
   border-top: 1px solid #B6D0E8;
+  min-width: 300*3+494px;
+  margin:0;
   &>div>h2{
     height: 36px;
     line-height: 36px;
@@ -504,8 +546,9 @@ html,body{
   }
   &>.user-info{
     @include column();
-    width: 320px;
-    height: 342px;
+    width: 300px;
+    min-height: 342px;
+    height: 100%;
     border-right:1px solid #B6D0E8;
     border-bottom:1px solid #B6D0E8;
     &>.user-basic{
@@ -535,7 +578,7 @@ html,body{
           em{
             vertical-align: top;
             display: inline-block;
-            width: 250px;
+            width: 230px;
           }
         }
         margin-bottom: 10px;
@@ -557,8 +600,9 @@ html,body{
   }
   &>.order-info{
     @include column();
-    width: 320px;
-    height: 342px;
+    width: 300px;
+    min-height: 342px;
+    height: 100%;
     border-right:1px solid #B6D0E8;
     border-bottom:1px solid #B6D0E8;
     &>.up-section{
@@ -582,8 +626,9 @@ html,body{
   }
   &>.service-info{
     @include column();
-    width: 364px;
-    height: 342px;
+    width: 300px;
+    min-height: 342px;
+    height: 100%;
     border-right:1px solid #B6D0E8;
     border-bottom:1px solid #B6D0E8;
     &>.extra-service{
@@ -609,8 +654,9 @@ html,body{
   }
   &>.process-info{
     @include column();
-    width: 676px;
-    height: 342px;
+    width: 494px;
+    min-height: 342px;
+    height: 100%;
     border-bottom:1px solid #B6D0E8;
     &>ul{
       @include center;
@@ -633,147 +679,145 @@ html,body{
         color: #1AA0E5;
       }
     }
-    .take-car{
-      height: 266px;
-      margin: 20px;
+
+    &>.process-area{
+      height: 100%;
+      min-height: 305px;
+      padding: 20px;
+      @include box-sizing(border-box);
       overflow: hidden;
-      &>.up-part{
-        float: left;
-      }
-      &>.down-part{
-        float: right;
-      }
-      &>section>p {
-        &>span { color: #323232; }
-        &>em { color: #DB8800; }
-        margin-bottom: 10px;
-      }
-      .pre-take-car{
-        width:120px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        color: #fff;
-        font-size: 14px;
-        background-color: #F9BE00;
-        position: relative;
-        top:50%;left: 50%;
-        @include translate(-50%,-50%);
-      }
-      .pre-send-car{
-        @extend .pre-take-car;
-        background-color: #1A9FE5;
-      }
-      .service-fee{
-        padding-top: 36px;
-        clear: both;
-        &>p {
+      .take-car{
+        &>.up-part{
+          float: left;
+        }
+        &>.down-part{
+          float: right;
+        }
+        &>section>p {
+          &>span { color: #323232; }
+          &>em { color: #DB8800; }
           margin-bottom: 10px;
-          & > span {
-            color: #323232;
+        }
+        .pre-take-car{
+          width:120px;
+          height: 36px;
+          line-height: 36px;
+          text-align: center;
+          color: #fff;
+          font-size: 14px;
+          background-color: #F9BE00;
+          position: relative;
+          top:50%;left: 50%;
+          @include translate(-50%,-50%);
+        }
+        .pre-send-car{
+          @extend .pre-take-car;
+          background-color: #1A9FE5;
+        }
+        .service-fee{
+          padding-top: 36px;
+          clear: both;
+          &>p {
+            margin-bottom: 10px;
+            & > span {
+              color: #323232;
+            }
           }
         }
       }
-    }
-    .move-car{
-      height: 266px;
-      margin: 20px 0;
-      overflow: hidden;
-      @include center;
-      &>.scroll-container{
-        @include column();
-        width: 360px;
-        height: 264px;
-        @include translateX(20px);
-        overflow: hidden;
-        position: relative;
-        .img-scroll{
-          height: 264px;
-          width: 1080px;
+      .move-car{
+        @include center;
+        &>.scroll-container{
+          @include column();
+          width: 180px;
+          height: 132px;
           overflow: hidden;
-          @include translateX(0);
-          @include transition(all 0.1s ease);
-          &>li{
-            float: left;
+          position: relative;
+          .img-scroll{
+            height: 132px;
+            width: 540px;
+            overflow: hidden;
+            @include translateX(0);
+            @include transition(all 0.1s ease);
+            &>li{
+              float: left;
+            }
+          }
+          .offset_1{@include translateX(0);}
+          .offset_2{@include translateX(-180px);}
+          .offset_3{@include translateX(-360px);}
+          .offset_4{@include translateX(-540px);}
+          .offset_5{@include translateX(-720px);}
+
+          .dot{
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            @include translateX(-50%);
+            &>em{
+              display: inline-block;
+              margin: 0 10px;
+              width: 10px;
+              height: 10px;
+              background-color: #fff;
+              @include border-radius(50%);
+            }
+            .dot_red{background-color: #f00;}
           }
         }
-        .offset_1{@include translateX(0);}
-        .offset_2{@include translateX(-360px);}
-        .offset_3{@include translateX(-720px);}
-        .offset_4{@include translateX(-1080px);}
-        .offset_5{@include translateX(-1440px);}
-
-        .dot{
-          position: absolute;
-          bottom: 20px;
-          left: 50%;
-          @include translateX(-50%);
-          &>em{
-            display: inline-block;
-            margin: 0 10px;
-            width: 10px;
-            height: 10px;
-            background-color: #fff;
-            @include border-radius(50%);
+        &>.move-car-msg{
+          @include column();
+          width: 254px;
+          height: 264px;
+          @include translateX(40px);
+          &>p{
+            margin-bottom: 10px;
+            &:nth-last-of-type(1){
+              margin-top: 36px;
+            }
+            &>span{
+              color: #323232;
+            }
           }
-          .dot_red{background-color: #f00;}
+        }
+        &>.in-garage{
+          @include column();
+          width: 254px;
+          height: 264px;
+          @include translateX(40px);
+          overflow: hidden;
+          &>p{
+            margin-bottom: 10px;
+
+            &:nth-of-type(1){
+              float: left;
+            }
+            &:nth-of-type(2){
+              float: right;
+            }
+            &:nth-of-type(3){
+              clear: both;
+            }
+            &>span{
+              color: #323232;
+            }
+          }
         }
       }
-      &>.move-car-msg{
-        @include column();
-        width: 254px;
-        height: 264px;
-        @include translateX(40px);
-        &>p{
-          margin-bottom: 10px;
-          &:nth-last-of-type(1){
-            margin-top: 36px;
-          }
-          &>span{
-            color: #323232;
-          }
-        }
-      }
-      &>.in-garage{
-        @include column();
-        width: 254px;
-        height: 264px;
-        @include translateX(40px);
-        overflow: hidden;
-        &>p{
-          margin-bottom: 10px;
-
-          &:nth-of-type(1){
-            float: left;
-          }
+      .evaluation{
+        &>section{
+          &>p{ margin-bottom: 10px;  }
           &:nth-of-type(2){
-            float: right;
-          }
-          &:nth-of-type(3){
-            clear: both;
-          }
-          &>span{
-            color: #323232;
+            margin-top: 36px;
+            &>p:nth-of-type(even){
+              color: #323232;
+            }
           }
         }
-      }
-    }
-    .evaluation{
-      height: 266px;
-      margin: 20px;
-      &>section{
-        &>p{ margin-bottom: 10px;  }
-        &:nth-of-type(2){
-          margin-top: 36px;
-          &>p:nth-of-type(even){
-            color: #323232;
-          }
-        }
-      }
 
+      }
     }
   }
-
   &>.service-note{
     @include column(1/2);
     @include translateX(1px);

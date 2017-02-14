@@ -11,6 +11,7 @@ import EditUser from "../dialog/edit_user_info";
 import AddRemark from '../dialog/add_remark';
 import EditCar from "../dialog/modify_car_info";
 import EditBook from "../dialog/modify_bookingtime";
+import EditFlightInfo from "../dialog/operate_flight_info";
 import {getStateMsg,getFormatDate} from '../../util'
 
 let OrderDetail=React.createClass({
@@ -23,7 +24,7 @@ let OrderDetail=React.createClass({
     },
     loadOrderDetail(){
         let url="/admin/api/orders/orderdetails?serialnumber="+this.props.number;
-        fetch(url).then(function(res){
+        fetch(url).then((res)=>{
             console.log("查询订单详情响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -31,13 +32,13 @@ let OrderDetail=React.createClass({
                 throw new Error("服务异常");
             }
         }).then((str)=>{
-            try{
-                let obj=JSON.parse(str);
+            let obj=JSON.parse(str);
+            if(obj.code==0){
                 this.setState({orderDetail:obj.order});
-            }catch(e){
-                this.showWarnTip("数据格式异常！");
+            }else {
+                this.showWarnTip(obj.msg);
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
             this.showWarnTip("网络请求异常！");
             console.trace('错误:', e);
         });
@@ -45,13 +46,11 @@ let OrderDetail=React.createClass({
     componentWillMount(){
         this.loadOrderDetail();
     },
-    componentDidMount(){
-        ReactDOM.render(<TakeCar /> , this.refs.processInfo);
-    },
+
     addRemark(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<AddRemark reload={this.loadOrderDetail}
-                                   url="/jsj/system/addremark" number={this.props.number}/>, mask);
+        ReactDOM.render(<AddRemark reload={this.loadOrderDetail} type="jsonp"
+                                   url="/admin/api/orders/remark.js" number={this.props.number}/>, mask);
     },
     editUserInfo(){
         let o=this.state.orderDetail||{};
@@ -76,26 +75,52 @@ let OrderDetail=React.createClass({
         ReactDOM.render(<Label tags={this.tags} url="/admin/api/users/marking"
                                reload={this.loadOrderDetail} uid={id}/>, mask);
     },
+    editFlightInfo(type,fno,fdate){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(< EditFlightInfo  type={type} url="/admin/api/orders/edit_returning_info"
+                                          number={this.props.number} fno={fno} fdate={fdate}
+                                          reload={this.loadOrderDetail}  />, mask);
+    },
     handleSwitch(e){
         if(e.target.nodeName==="LI"){
             if (e.target.id == "pro_1") {
                 this.setState({p_item:'p1'});
-                ReactDOM.render(<TakeCar /> , this.refs.processInfo);
+                ReactDOM.render(<TakeCar /> , this.process);
             } else if (e.target.id == "pro_2") {
                 this.setState({p_item:'p2'});
-                ReactDOM.render(<MoveCar /> , this.refs.processInfo);
+                ReactDOM.render(<MoveCar /> , this.process);
             } else if (e.target.id == "pro_3") {
                 this.setState({p_item:'p3'});
-                ReactDOM.render(<InGarage /> , this.refs.processInfo);
+                ReactDOM.render(<InGarage /> , this.process);
             } else if (e.target.id == "pro_4") {
                 this.setState({p_item:'p4'});
-                ReactDOM.render(<SendCar /> , this.refs.processInfo);
+                ReactDOM.render(<SendCar /> , this.process);
             } else if (e.target.id == "pro_5") {
                 this.setState({p_item:'p5'});
             } else if (e.target.id == "pro_6") {
                 this.setState({p_item:'p6'});
-                ReactDOM.render(<Evaluation /> , this.refs.processInfo);
+                ReactDOM.render(<Evaluation /> , this.process);
             }
+        }
+    },
+    componentDidMount(){
+        ReactDOM.render(<TakeCar /> , this.process);
+        this.adjustWidth();
+        window.addEventListener("resize",this.adjustWidth,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adjustWidth);
+    },
+    adjustWidth(){
+        let screenWidth=document.body.clientWidth||window.innerWidth;
+        let sideValue=1614;
+        screenWidth=screenWidth>sideValue?screenWidth:sideValue;
+        let incre=(screenWidth-sideValue)/4;
+        for(let i=1;i<5;i++){
+            let dom=this["block"+i];
+            let width=300+incre;
+            if(i==4) width=494+incre;
+            dom.style.width=width+"px";
         }
     },
     render(){
@@ -104,22 +129,23 @@ let OrderDetail=React.createClass({
         let car=o.car||{};
         let moreService=o.serviceorders||[];
         let driverNote=o.drivernote||[];
-        let level=[],serviceRemark,driverRemark,washCar="";
+
+        let level=[],driverRemark,washCar="";
         for(let i=0;i<user.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;</span>)
         }
         if(moreService.length==1){
-            serviceRemark=moreService[0].serviceremark.map((item,index)=>{
-                return (<p key={index}>{item}</p>);
-            });
             washCar=moreService[0].config.rainwashing=="1"?"下雨也洗车":"";
-
         }
+        let serviceRemark=(o.remark||[]).map((item,index)=>{
+            return (<p key={index}>{item.time}&emsp;{item.admin_name}&emsp;{item.remark}</p>);
+        });
         driverRemark=driverNote.map((item,index)=>{
             return (<p key={index}>{item.time}&ensp;
                 <span style={{color:'yellow'}}>{item.driver_name}:&ensp;</span>{item.remark}</p>);
         });
         this.tags=user.tags||[];
+        this.serialnumber=o.serialnumber;
         let userTags=(user.tags||[]).map((item,index)=>{
             return(<span key={index}>{item}&ensp;</span>)
         });
@@ -133,7 +159,7 @@ let OrderDetail=React.createClass({
                     <span style={{color:'red'}}>{getStateMsg(o.status)||""}</span>
                 </p>
                 <div className="order-main">
-                    <div className="user-info">
+                    <div className="user-info" ref={(c)=>this.block1=c}>
                         <h2>用户信息</h2>
                         <figure className="user-basic">
                             <img src={user.avatar||"/admin/img/userheadimg.png"}/>
@@ -150,14 +176,14 @@ let OrderDetail=React.createClass({
                             <p><label>用户来源:</label><span>{user.comefrom||''}</span></p>
                             <p><label>注册时间:</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime)}</span></p>
-                            <p><label>标&emsp;&emsp;签:</label><em style={{width:"230px"}}>{userTags}
+                            <p><label>标&emsp;&emsp;签:</label><em>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>添加</span></em></p>
                             <p className="note-field"><label>备&emsp;&emsp;注: </label>
                                 <span>{user.remark||''}</span></p>
                         </div>
                     </div>
-                    <div className="order-info">
+                    <div className="order-info" ref={(c)=>this.block2=c}>
                         <h2>预约信息</h2>
                         <div className="up-section">
                             <p><label>车辆信息:&ensp;</label>
@@ -176,18 +202,22 @@ let OrderDetail=React.createClass({
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.updatetime)}</span></p>
                             <p className="back-flight">
                                 <label>返程航班:&ensp;</label>
-                                <span style={{color:"#1AA0E5"}}>
-                                    {(o.returningflight||"")+" "+(o.returningdate||"")}</span>
-                                <img src="/admin/img/icon/10_1.png" />
+                                {o.returningflight?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                    onClick={()=>this.editFlightInfo("mod",o.returningflight,o.returningdate)}>
+                                    {(o.returningflight||"")+" "+(o.returningdate||"")}</span>):
+                                    (<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                           onClick={()=>this.editFlightInfo("add",o.returningflight,o.returningdate)}>添加</span>)}
+
+                               {/* <img src="/admin/img/icon/10_1.png" />*/}
                             </p>
                             <p><label>预计取车时间:&ensp;</label>
                                 <span style={{color:"#1AA0E5"}}>{o.returningtime||""}</span></p>
                             <p><label>回程航站楼:&ensp;</label><span>{o.returningterminalname||""}</span></p>
                             <p className="note-field"><label>渠道备注:</label>
-                                <span>{o.remark||""}</span></p>
+                                <span>{""}</span></p>
                         </div>
                     </div>
-                    <div className="service-info">
+                    <div className="service-info" ref={(c)=>this.block3=c}>
                         <h2>更多服务</h2>
                         <div className="extra-service">
                             <p><label>洗车:</label><span>{washCar}</span>
@@ -199,7 +229,7 @@ let OrderDetail=React.createClass({
                         </div>
                         <p className="note-field"><label>用户备注:</label><span>{o.userremark||""}</span></p>
                     </div>
-                    <div className="process-info" >
+                    <div className="process-info" ref={(c)=>this.block4=c}>
                         <ul onClick={this.handleSwitch}>
                             <li className={this.state.p_item=='p1'?"show-item":''} id="pro_1" >接车</li>
                             <li id="pro_2" className={this.state.p_item=='p2'?"show-item":''} >挪车</li>
@@ -208,7 +238,7 @@ let OrderDetail=React.createClass({
                             <li id="pro_5" className={this.state.p_item=='p5'?"show-item":''} >支付</li>
                             <li id="pro_6" className={this.state.p_item=='p6'?"show-item":''} >评价</li>
                         </ul>
-                        <div ref="processInfo" />
+                        <div ref={(c)=>this.process=c} className="process-area" />
                     </div>
                     <div className="service-note">
                         <p>客服备注:<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}

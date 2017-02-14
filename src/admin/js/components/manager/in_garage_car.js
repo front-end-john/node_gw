@@ -12,7 +12,9 @@ let InGarageCar=React.createClass({
         return{
             queryCondition:{},
             orderData:[],
-            pageObj:{}
+            pageObj:{},
+            initWidths:[ 130,    100,   110,   110,    110,  120,  110,       130,     120,      120,     120,     120],
+            titles:    ['订单号','用户','标签','订单来源','车辆','机场','接车司机','入库时间','停车时长','返程航班','更多服务','航班状态']
         };
     },
     handleChange(e){
@@ -55,35 +57,34 @@ let InGarageCar=React.createClass({
             console.trace('错误:', e);
         });
     },
-    adaptScreen(widths,titles){
-        this.setState({titles});
-        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
-        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+    adaptScreen(){
+        /**
+         * offsetWidth两边的内边距之和
+         */
+        let initWidths=this.state.initWidths;
+        let offsetWidth=60,len=initWidths.length;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y,offsetWidth);
         let screenWidth=document.body.clientWidth||window.innerWidth;
+        screenWidth=screenWidth>1614?screenWidth:1614;
+        let sumWidth=initSumWidth,widths=initWidths;
         if(screenWidth-200 > initSumWidth){
             let incre=(screenWidth-200-initSumWidth)/len;
             widths=initWidths.map((item)=>item+incre);
             sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-            this.setState({sumWidth,widths});
-        }else {
-            this.setState({sumWidth,widths});
         }
-        window.addEventListener("resize",()=>{
-            let screenWidth=document.body.clientWidth||window.innerWidth;
-            if(screenWidth-200 > initSumWidth){
-                let incre=(screenWidth-200-initSumWidth)/len;
-                widths=initWidths.map((item)=>item+incre);
-                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-                this.setState({sumWidth,widths});
-            }
-        },false);
+        this.setState({sumWidth,widths});
     },
     componentWillMount(){
-        let widths=[ 130,    100,   110,   110,    110,  120,  110,       130,     120,      120,     120,     120];
-        let titles=['订单号','用户','标签','订单来源','车辆','机场','接车司机','入库时间','停车时长','返程航班','更多服务','航班状态'];
-        this.adaptScreen(widths,titles);
+        this.adaptScreen();
+        this.handlePageQuery(1,10);
     },
-    componentDidMount(){ this.handlePageQuery(1,10); },
+    componentDidMount(){
+        window.addEventListener("resize",this.adaptScreen,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptScreen);
+    },
+
     render(){
         let sumWidth=this.state.sumWidth;
         let widths=this.state.widths;
@@ -107,18 +108,6 @@ let InGarageCar=React.createClass({
                 {status:'起飞',start_time:"2016-12-12 14:14",fieldName:'ReturnFlightLaunchStatus'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
-       /* let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
-            {username:"中小屋",phone_no:"124578654",fieldName:'User'},
-            {trade:"发票",user_type:"关系客户",fieldName:'Label'},
-            {order_source:"携程",fieldName:'OrderSource'},
-            {car_no:'奥B4878',car_color:'白色',car_brand:'宝马',fieldName:'Car'},
-            {airport:'广州白云',fieldName:'Airport'},
-            {take_driver:'周当啊',fieldName:'TakeDriver'},
-            {in_garage_time:"2016-8-9 15:14",fieldName:'InGarageTime'},
-            {park_time_long:"4小时25分钟",fieldName:'ParkTimeLong'},
-            {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
-            {wash:'下雨也洗车',oil:'汽油、92#、100元',fieldName:'MoreService'},
-            {status:'起飞',start_time:"2016-12-12 14:14",fieldName:'ReturnFlightLaunchStatus'}];*/
         return(
             <section className="data-section" style={{width:sumWidth+'px'}}>
                 <TextScroll />

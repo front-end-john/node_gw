@@ -15,7 +15,10 @@ let OrderQuery=React.createClass({
         return{
             queryCondition:{},
             orderData:[],
-            pageObj:{}
+            pageObj:{},
+
+            initWidths:[ 130,    110,    120,    128,  160,   190,       90,       130,         90,      130,    80],
+            titles:    ['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态']
         };
     },
     handlePageQuery(page,pageSize){
@@ -66,34 +69,34 @@ let OrderQuery=React.createClass({
     exportData(){
         console.log("导出数据");
     },
-    adaptScreen(widths,titles){
-        this.setState({titles});
-        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
-        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
+
+    adaptScreen(){
+        /**
+         * offsetWidth两边的内边距之和
+         */
+        let initWidths=this.state.initWidths;
+        let offsetWidth=60,len=initWidths.length;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y,offsetWidth);
         let screenWidth=document.body.clientWidth||window.innerWidth;
+        screenWidth=screenWidth>1614?screenWidth:1614;
+        let sumWidth=initSumWidth,widths=initWidths;
         if(screenWidth-200 > initSumWidth){
             let incre=(screenWidth-200-initSumWidth)/len;
             widths=initWidths.map((item)=>item+incre);
             sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-            this.setState({sumWidth,widths});
-        }else {
-            this.setState({sumWidth,widths});
         }
-        window.addEventListener("resize",()=>{
-            let screenWidth=document.body.clientWidth||window.innerWidth;
-            if(screenWidth-200 > initSumWidth){
-                let incre=(screenWidth-200-initSumWidth)/len;
-                widths=initWidths.map((item)=>item+incre);
-                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-                this.setState({sumWidth,widths});
-            }
-        },false);
+        this.setState({sumWidth,widths});
     },
     componentWillMount(){
-        let widths=[ 130,    110,    120,    128,  160,   190,       90,       130,         90,      130,    80];
-        let titles=['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态'];
-        this.adaptScreen(widths,titles);
+        this.adaptScreen();
         this.handlePageQuery(1,10);
+
+    },
+    componentDidMount(){
+        window.addEventListener("resize",this.adaptScreen,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptScreen);
     },
     render(){
         let sumWidth=this.state.sumWidth;
@@ -102,7 +105,7 @@ let OrderQuery=React.createClass({
         let headData = titles.map((item,index)=>{
             return {name:item,width:widths[index]+'px'};
         });
-        document.getElementById("appContainer").style.width=200+sumWidth+"px";
+        document.getElementById("appContainer").style.width=220+sumWidth+"px";
         let list=this.state.orderData.map((item,index)=>{
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
