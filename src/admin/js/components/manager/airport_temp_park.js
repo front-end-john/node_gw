@@ -5,19 +5,19 @@ import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
+import {maxNumber} from '../../util';
 
 let AirportTempPark=React.createClass({
     getInitialState(){
         return{
-            queryCondition:{
-                order_source:"",
-                order_no:"",
-                phone_no:""
-            }
+            queryCondition:{},
+            orderData:[],
+            pageObj:{},
+            initWidths:[ 120,    120,  120,    120,    120,   120,    130,     120,       130,         130],
+            titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','挪车司机','机场停放时间','开始挪车时间']
         };
     },
     handleChange(e){
-        "use strict";
         let key=e.target.id;
         let val=e.target.value;
         if(key==="phone_no"){
@@ -31,33 +31,31 @@ let AirportTempPark=React.createClass({
     handleQuery(){
         console.log(this.state.queryCondition);
     },
-    adaptScreen(widths,titles){
-        this.setState({titles});
-        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
-        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
-        let screenWidth=document.body.clientWidth||window.innerWidth;
-        if(screenWidth-200 > initSumWidth){
-            let incre=(screenWidth-200-initSumWidth)/len;
-            widths=initWidths.map((item)=>item+incre);
-            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-            this.setState({sumWidth,widths});
-        }else {
-            this.setState({sumWidth,widths});
-        }
-        window.addEventListener("resize",()=>{
-            let screenWidth=document.body.clientWidth||window.innerWidth;
-            if(screenWidth-200 > initSumWidth){
-                let incre=(screenWidth-200-initSumWidth)/len;
-                widths=initWidths.map((item)=>item+incre);
-                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-                this.setState({sumWidth,widths});
-            }
-        },false);
+    adaptScreen(){
+        let initWidths=this.state.initWidths;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y);
+        //补偿宽度
+        let offsetWidth=260;
+        //允许的最小宽度
+        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth;
+        let sumWidth=initSumWidth,widths=initWidths;
+        let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
+
+        let incre=(actulWidth-offsetWidth-initSumWidth)/len;
+        widths=initWidths.map((item)=>item+incre);
+        sumWidth=widths.reduce((x,y)=>x+y);
+        this.setState({sumWidth:sumWidth+40,widths});
     },
     componentWillMount(){
-        let widths=[ 120,    120,  120,    120,    120,   120,    130,     120,       130,         130];
-        let titles=['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','挪车司机','机场停放时间','开始挪车时间'];
-        this.adaptScreen(widths,titles);
+        this.adaptScreen();
+        //this.handlePageQuery(1,10);
+    },
+    componentDidMount(){
+        window.addEventListener("resize",this.adaptScreen,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptScreen);
     },
     render(){
         let sumWidth=this.state.sumWidth;
@@ -66,7 +64,7 @@ let AirportTempPark=React.createClass({
         let headData = titles.map((item,index)=>{
             return {name:item,width:widths[index]+'px'};
         });
-        document.getElementById("appContainer").style.width=200+sumWidth;
+        document.getElementById("appContainer").style.width=200+sumWidth+'px';
 
         let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
             {username:"中小屋",phone_no:"124578654",fieldName:'User'},
@@ -79,7 +77,7 @@ let AirportTempPark=React.createClass({
             {airport_park_time_long:"4小时25分钟",fieldName:'AirportParkTimeLong'},
             {start_move_time:"2016-12-12 14:24",fieldName:'StartMoveTime'}];
         return(
-            <section className="data-section" style={{width:sumWidth}}>
+            <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>

@@ -23800,6 +23800,11 @@
 	    getInitialState: function getInitialState() {
 	        return { code: null };
 	    },
+	    componentDidMount: function componentDidMount() {
+	        if (sessionStorage.getItem("AdminInfo")) {
+	            _reactDom2.default.render(_app_route2.default, document.getElementById("appContainer"));
+	        }
+	    },
 	    handleLogin: function handleLogin(e) {
 	        var _this = this;
 
@@ -23813,8 +23818,8 @@
 	        }).then(function (json) {
 	            console.log(' json', json);
 	            if (json.code == 0) {
-	                _reactDom2.default.render(_app_route2.default, document.getElementById("appContainer"));
 	                sessionStorage.setItem("AdminInfo", JSON.stringify(json));
+	                _reactDom2.default.render(_app_route2.default, document.getElementById("appContainer"));
 	            } else {
 	                _this.loginTip.className = "warning";
 	            }
@@ -23908,47 +23913,47 @@
 
 	var _order_query2 = _interopRequireDefault(_order_query);
 
-	var _remain_contact_order = __webpack_require__(453);
+	var _remain_contact_order = __webpack_require__(454);
 
 	var _remain_contact_order2 = _interopRequireDefault(_remain_contact_order);
 
-	var _remain_assign_take_order = __webpack_require__(454);
+	var _remain_assign_take_order = __webpack_require__(455);
 
 	var _remain_assign_take_order2 = _interopRequireDefault(_remain_assign_take_order);
 
-	var _remain_assign_send_order = __webpack_require__(455);
+	var _remain_assign_send_order = __webpack_require__(456);
 
 	var _remain_assign_send_order2 = _interopRequireDefault(_remain_assign_send_order);
 
-	var _ongoing_take_order = __webpack_require__(456);
+	var _ongoing_take_order = __webpack_require__(457);
 
 	var _ongoing_take_order2 = _interopRequireDefault(_ongoing_take_order);
 
-	var _airport_temp_park = __webpack_require__(457);
+	var _airport_temp_park = __webpack_require__(458);
 
 	var _airport_temp_park2 = _interopRequireDefault(_airport_temp_park);
 
-	var _in_garage_car = __webpack_require__(458);
+	var _in_garage_car = __webpack_require__(459);
 
 	var _in_garage_car2 = _interopRequireDefault(_in_garage_car);
 
-	var _ongoing_send_order = __webpack_require__(459);
+	var _ongoing_send_order = __webpack_require__(460);
 
 	var _ongoing_send_order2 = _interopRequireDefault(_ongoing_send_order);
 
-	var _user_manage = __webpack_require__(460);
+	var _user_manage = __webpack_require__(461);
 
 	var _user_manage2 = _interopRequireDefault(_user_manage);
 
-	var _evaluation_manage = __webpack_require__(462);
+	var _evaluation_manage = __webpack_require__(463);
 
 	var _evaluation_manage2 = _interopRequireDefault(_evaluation_manage);
 
-	var _coupon_manage = __webpack_require__(463);
+	var _coupon_manage = __webpack_require__(464);
 
 	var _coupon_manage2 = _interopRequireDefault(_coupon_manage);
 
-	var _jsj_order = __webpack_require__(465);
+	var _jsj_order = __webpack_require__(466);
 
 	var _jsj_order2 = _interopRequireDefault(_jsj_order);
 
@@ -28897,7 +28902,7 @@
 /* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -28907,10 +28912,12 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _util = __webpack_require__(263);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var PrimaryItem = _react2.default.createClass({
-	    displayName: "PrimaryItem",
+	    displayName: 'PrimaryItem',
 	    render: function render() {
 	        var _this = this;
 
@@ -28920,36 +28927,36 @@
 	            var list = items.map(function (item, index) {
 	                var id = _this.props.prefix + (index + 1);
 	                return _react2.default.createElement(
-	                    "li",
+	                    'li',
 	                    { id: id, key: index, onClick: function onClick() {
 	                            return _this.props.secondClick(id);
 	                        },
 	                        className: _this.props.secondItem == id ? "highlight" : "" },
 	                    item.name,
-	                    " ",
+	                    ' ',
 	                    _react2.default.createElement(
-	                        "span",
+	                        'span',
 	                        null,
 	                        item.newCount
 	                    )
 	                );
 	            });
 	            childLevel = _react2.default.createElement(
-	                "ul",
-	                { className: "primary-list" },
+	                'ul',
+	                { className: 'primary-list' },
 	                list
 	            );
 	        }
 	        return _react2.default.createElement(
-	            "section",
-	            { className: "primary-item" },
+	            'section',
+	            { className: 'primary-item' },
 	            _react2.default.createElement(
-	                "h2",
+	                'h2',
 	                { onClick: function onClick(e) {
 	                        return _this.props.click(_this.props.id);
 	                    },
 	                    className: this.props.id == this.props.currItem ? "selected" : "" },
-	                _react2.default.createElement("em", { className: "item-icon" }),
+	                _react2.default.createElement('em', { className: 'item-icon' }),
 	                this.props.itemName
 	            ),
 	            childLevel
@@ -28958,7 +28965,7 @@
 	});
 
 	var Aside = _react2.default.createClass({
-	    displayName: "Aside",
+	    displayName: 'Aside',
 	    getInitialState: function getInitialState() {
 	        return {
 	            currItem: "order_query",
@@ -28985,10 +28992,15 @@
 	            console.trace('错误:', e);
 	        });
 	    },
+	    adaptHeight: function adaptHeight() {
+	        var appHel = getComputedStyle(document.getElementsByClassName("app")[0]).height;
+	        appHel = parseFloat(appHel) + 20;
+	        var sHel = document.body.clientHeight;
+	        this.nav.style.height = (0, _util.maxNumber)(appHel, sHel, 860) + "px";
+	    },
 	    componentDidMount: function componentDidMount() {
 	        var hash = location.hash;
 	        hash = hash.substr(2).split("?");
-	        //console.log("hash:",hash);
 	        this.setState({ currItem: hash[0] });
 	        if (hash[1]) {
 	            this.setState({ secondItem: hash[1].replace("flag=", "jsj_order_") });
@@ -29009,24 +29021,26 @@
 	                this.setState({ currItem: "order_manager", secondItem: "order_manager_7" });
 	            }
 	        }
+	        this.adaptHeight();
+	        window.addEventListener("resize", this.adaptHeight, false);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        window.removeEventListener("resize", this.adaptHeight);
 	    },
 	    handClick: function handClick(id) {
 	        this.setState({ currItem: id });
-	        this.setState({ secondItem: "" });
 	        if (id === "order_query") {
 	            location.href = "#/order_query";
-	        } else if (id === "order_manager") {
-	            //this.setState({secondItem:0});
-
-	        } else if (id === "jsj_order") {
-	            //this.setState({secondItem:0});
-
-	        } else if (id === "user_manager") {
+	            this.setState({ secondItem: "" });
+	        } else if (id === "order_manager") {} else if (id === "jsj_order") {} else if (id === "user_manager") {
 	            location.href = "#/user_manager";
+	            this.setState({ secondItem: "" });
 	        } else if (id === "comment_manager") {
 	            location.href = "#/evaluation_manage";
+	            this.setState({ secondItem: "" });
 	        } else if (id === "coupon_manager") {
 	            location.href = "#/coupon_manage";
+	            this.setState({ secondItem: "" });
 	        }
 	    },
 	    handleSecondClick: function handleSecondClick(id) {
@@ -29065,68 +29079,70 @@
 	        var jsjOrder = [{ name: '接机订单', newCount: jsjCount.pickupnumber || 0 }, { name: '送机订单', newCount: jsjCount.pickoffnumber || 0 }];
 
 	        return _react2.default.createElement(
-	            "aside",
-	            null,
+	            'aside',
+	            { ref: function ref(c) {
+	                    return _this3.nav = c;
+	                } },
 	            _react2.default.createElement(
-	                "div",
-	                { id: "manager" },
+	                'div',
+	                { id: 'manager' },
 	                _react2.default.createElement(
-	                    "div",
+	                    'div',
 	                    null,
-	                    _react2.default.createElement("img", { src: "/admin/img/managerimg.png" })
+	                    _react2.default.createElement('img', { src: '/admin/img/managerimg.png' })
 	                ),
 	                _react2.default.createElement(
-	                    "div",
+	                    'div',
 	                    null,
 	                    _react2.default.createElement(
-	                        "p",
+	                        'p',
 	                        null,
-	                        "\u5BA2\u670D\u4EBA\u5458"
+	                        '\u5BA2\u670D\u4EBA\u5458'
 	                    ),
 	                    _react2.default.createElement(
-	                        "section",
+	                        'section',
 	                        { onClick: function onClick() {
 	                                var dom = _this3.refs.sysOpt,
 	                                    h = dom.style.height;
 	                                h == '80px' ? dom.style.height = 0 : dom.style.height = '80px';
 	                            } },
-	                        "\u7CFB\u7EDF\u7BA1\u7406\u5458",
-	                        _react2.default.createElement("img", { className: "arrow", src: "/admin/img/icon/07.png" }),
+	                        '\u7CFB\u7EDF\u7BA1\u7406\u5458',
+	                        _react2.default.createElement('img', { className: 'arrow', src: '/admin/img/icon/07.png' }),
 	                        _react2.default.createElement(
-	                            "ul",
-	                            { ref: "sysOpt" },
+	                            'ul',
+	                            { ref: 'sysOpt' },
 	                            _react2.default.createElement(
-	                                "li",
+	                                'li',
 	                                null,
-	                                "\u4FEE\u6539\u5BC6\u7801"
+	                                '\u4FEE\u6539\u5BC6\u7801'
 	                            ),
 	                            _react2.default.createElement(
-	                                "li",
+	                                'li',
 	                                null,
-	                                "\u9000\u51FA\u7CFB\u7EDF"
+	                                '\u9000\u51FA\u7CFB\u7EDF'
 	                            )
 	                        )
 	                    )
 	                )
 	            ),
-	            _react2.default.createElement(PrimaryItem, { id: "order_query", itemName: "\u8BA2\u5355\u67E5\u8BE2", currItem: this.state.currItem,
+	            _react2.default.createElement(PrimaryItem, { id: 'order_query', itemName: '\u8BA2\u5355\u67E5\u8BE2', currItem: this.state.currItem,
 	                click: this.handClick }),
-	            _react2.default.createElement(PrimaryItem, { id: "order_manager", childItems: orderManager, itemName: "\u8BA2\u5355\u7BA1\u7406",
+	            _react2.default.createElement(PrimaryItem, { id: 'order_manager', childItems: orderManager, itemName: '\u8BA2\u5355\u7BA1\u7406',
 	                secondItem: this.state.secondItem, currItem: this.state.currItem,
 	                click: this.handClick,
 	                secondClick: this.handleSecondClick,
-	                prefix: "order_manager_" }),
-	            _react2.default.createElement(PrimaryItem, { id: "jsj_order", itemName: "\u63A5\u9001\u673A\u8BA2\u5355",
+	                prefix: 'order_manager_' }),
+	            _react2.default.createElement(PrimaryItem, { id: 'jsj_order', itemName: '\u63A5\u9001\u673A\u8BA2\u5355',
 	                childItems: jsjOrder,
 	                currItem: this.state.currItem,
 	                secondItem: this.state.secondItem,
 	                click: this.handClick,
-	                secondClick: this.handleSecondClick, prefix: "jsj_order_" }),
-	            _react2.default.createElement(PrimaryItem, { id: "user_manager", itemName: "\u7528\u6237\u7BA1\u7406", currItem: this.state.currItem,
+	                secondClick: this.handleSecondClick, prefix: 'jsj_order_' }),
+	            _react2.default.createElement(PrimaryItem, { id: 'user_manager', itemName: '\u7528\u6237\u7BA1\u7406', currItem: this.state.currItem,
 	                click: this.handClick }),
-	            _react2.default.createElement(PrimaryItem, { id: "comment_manager", itemName: "\u8BC4\u4EF7\u7BA1\u7406", currItem: this.state.currItem,
+	            _react2.default.createElement(PrimaryItem, { id: 'comment_manager', itemName: '\u8BC4\u4EF7\u7BA1\u7406', currItem: this.state.currItem,
 	                click: this.handClick }),
-	            _react2.default.createElement(PrimaryItem, { id: "coupon_manager", itemName: "\u4F18\u60E0\u5238\u7BA1\u7406", currItem: this.state.currItem,
+	            _react2.default.createElement(PrimaryItem, { id: 'coupon_manager', itemName: '\u4F18\u60E0\u5238\u7BA1\u7406', currItem: this.state.currItem,
 	                click: this.handClick })
 	        );
 	    }
@@ -29174,11 +29190,11 @@
 
 	var _table_line2 = _interopRequireDefault(_table_line);
 
-	var _date_select = __webpack_require__(451);
+	var _date_select = __webpack_require__(452);
 
 	var _date_select2 = _interopRequireDefault(_date_select);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
 
@@ -29198,7 +29214,7 @@
 	            orderData: [],
 	            pageObj: {},
 
-	            initWidths: [130, 110, 120, 128, 160, 190, 90, 130, 90, 130, 80],
+	            initWidths: [150, 110, 120, 128, 160, 190, 90, 130, 90, 130, 100],
 	            titles: ['订单号', '用户', '订单来源', '车辆', '机场', '预约时间', '接车司机', '接车/入库时间', '送车司机', '送车时间', '状态']
 	        };
 	    },
@@ -29253,31 +29269,28 @@
 	        console.log("导出数据");
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -29298,16 +29311,18 @@
 	        var headData = titles.map(function (item, index) {
 	            return { name: item, width: widths[index] + 'px' };
 	        });
-	        document.getElementById("appContainer").style.width = 200 + sumWidth + "px";
+
+	        document.getElementById("appContainer").style.width = sumWidth + 200 + "px";
 	        var list = this.state.orderData.map(function (item, index) {
+	            var states = (0, _util.getStateInfo)(item.status);
 	            var data = [{ order_no: item.serialnumber, fieldName: 'OrderNo' }, { username: item.username, phone_no: item.userphoneno, fieldName: 'User' }, { order_source: item.comefrom, fieldName: 'OrderSource' }, { car_no: item.carno, car_color: item.carcolor, car_brand: item.brand, fieldName: 'Car' }, { airport: item.terminalname, fieldName: 'Airport' }, { order_time: item.bookingtime,
 	                back_time: (item.returningflight || "") + " " + (item.returningdate || ""), fieldName: 'AdvanceTime' }, { take_driver: item.parkingdrivername, fieldName: 'TakeDriver' }, { take_car_at: item.parkingstartedtime, in_garage_at: item.parkingfinishedtime, fieldName: 'TakeCarStatus' }, { send_driver: item.returningdrivername, fieldName: 'SendDriver' }, { send_car_start: item.returningstartedtime,
-	                send_car_end: item.returningfinishedtime, fieldName: 'SendCarStatus' }, { pay_status: (0, _util.getStateMsg)(item.status), fieldName: 'PayStatus' }];
+	                send_car_end: item.returningfinishedtime, fieldName: 'SendCarStatus' }, { pay_status: states[0], color: states[1], fieldName: 'PayStatus' }];
 	            return _react2.default.createElement(_table_line2.default, { key: index, widths: widths, data: data });
 	        });
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth + 'px' } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -29324,9 +29339,18 @@
 	                        'span',
 	                        null,
 	                        '\u8BA2\u2002\u5355\u2002\u53F7:'
-	                    ), change: this.handleTextInputChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleTextInputChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8F66\u724C\u53F7\u7801:', change: this.handleTextInputChange, name: 'car_no', holdText: '\u8BF7\u8F93\u5165\u8F66\u724C\u53F7' }),
+	                    ), change: this.handleTextInputChange,
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleTextInputChange,
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8F66\u724C\u53F7\u7801:', change: this.handleTextInputChange,
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, name: 'car_no', holdText: '\u8BF7\u8F93\u5165\u8F66\u724C\u53F7' }),
 	                _react2.default.createElement('hr', null),
 	                _react2.default.createElement(_select_input2.default, { title: '\u7B5B\u9009\u65F6\u95F4:', change: this.handleTextInputChange, name: 'time_type', defaultName: '\u9009\u62E9\u7B5B\u9009\u7684\u65F6\u95F4' }),
 	                _react2.default.createElement(_date_select2.default, { title: '\u5F00\u59CB\u65F6\u95F4:', change: function change(date) {
@@ -29452,8 +29476,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var TextInput = _react2.default.createClass({
-	    displayName: "TextInput",
+	exports.default = _react2.default.createClass({
+	    displayName: "text_input",
+	    handleEnter: function handleEnter(key) {
+	        if (key == 13) this.props.enter();
+	    },
 	    render: function render() {
 	        var _this = this;
 
@@ -29468,12 +29495,13 @@
 	            _react2.default.createElement("input", { type: "text", id: this.props.name, onChange: this.props.change,
 	                ref: function ref(c) {
 	                    return _this.textIn = c;
-	                }, placeholder: this.props.holdText })
+	                }, placeholder: this.props.holdText,
+	                onKeyDown: function onKeyDown(e) {
+	                    return _this.handleEnter(e.keyCode);
+	                } })
 	        );
 	    }
 	});
-
-	exports.default = TextInput;
 
 /***/ },
 /* 250 */
@@ -29654,11 +29682,11 @@
 
 	var _order_detail2 = _interopRequireDefault(_order_detail);
 
-	var _jsj_order_detail = __webpack_require__(449);
+	var _jsj_order_detail = __webpack_require__(450);
 
 	var _jsj_order_detail2 = _interopRequireDefault(_jsj_order_detail);
 
-	var _empty = __webpack_require__(450);
+	var _empty = __webpack_require__(451);
 
 	var _empty2 = _interopRequireDefault(_empty);
 
@@ -29685,13 +29713,16 @@
 	        _reactDom2.default.render(_react2.default.createElement(_ensure2.default, { title: '\u66F4\u591A\u6807\u7B7E', ensureContent: tags.join(" ") }), mask);
 	    },
 	    expandDetail: function expandDetail(orderNo) {
+	        var sumWidth = this.props.widths.reduce(function (x, y) {
+	            return x + y;
+	        });
 	        if (this.state.isExpand) {
 	            _reactDom2.default.render(_react2.default.createElement(_empty2.default, null), this.detailArea);
 	        } else {
 	            if (this.props.section == "jsj") {
-	                _reactDom2.default.render(_react2.default.createElement(_jsj_order_detail2.default, { type: this.props.type, number: orderNo }), this.detailArea);
+	                _reactDom2.default.render(_react2.default.createElement(_jsj_order_detail2.default, { width: sumWidth, type: this.props.type, number: orderNo }), this.detailArea);
 	            } else {
-	                _reactDom2.default.render(_react2.default.createElement(_order_detail2.default, { number: orderNo }), this.detailArea);
+	                _reactDom2.default.render(_react2.default.createElement(_order_detail2.default, { width: sumWidth, number: orderNo }), this.detailArea);
 	            }
 	        }
 	        this.setState({ isExpand: !this.state.isExpand });
@@ -30136,7 +30167,7 @@
 	                    { key: index, style: { width: widths[index] }, className: 'list-end' },
 	                    _react2.default.createElement(
 	                        'p',
-	                        { onClick: _this.handlePay },
+	                        { onClick: _this.handlePay, style: { color: item.color } },
 	                        item.pay_status
 	                    )
 	                );
@@ -30416,6 +30447,10 @@
 
 	var _evaluation2 = _interopRequireDefault(_evaluation);
 
+	var _pay = __webpack_require__(468);
+
+	var _pay2 = _interopRequireDefault(_pay);
+
 	var _warn_tip = __webpack_require__(261);
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
@@ -30440,7 +30475,7 @@
 
 	var _modify_bookingtime2 = _interopRequireDefault(_modify_bookingtime);
 
-	var _operate_flight_info = __webpack_require__(467);
+	var _operate_flight_info = __webpack_require__(449);
 
 	var _operate_flight_info2 = _interopRequireDefault(_operate_flight_info);
 
@@ -30451,7 +30486,7 @@
 	var OrderDetail = _react2.default.createClass({
 	    displayName: 'OrderDetail',
 	    getInitialState: function getInitialState() {
-	        return { p_item: 'p1' };
+	        return { p_item: 'p1', first: true };
 	    },
 	    showWarnTip: function showWarnTip(msg) {
 	        var mask = document.getElementById("dialogContainer");
@@ -30533,6 +30568,7 @@
 	                _reactDom2.default.render(_react2.default.createElement(_send_car2.default, null), this.process);
 	            } else if (e.target.id == "pro_5") {
 	                this.setState({ p_item: 'p5' });
+	                _reactDom2.default.render(_react2.default.createElement(_pay2.default, null), this.process);
 	            } else if (e.target.id == "pro_6") {
 	                this.setState({ p_item: 'p6' });
 	                _reactDom2.default.render(_react2.default.createElement(_evaluation2.default, null), this.process);
@@ -30548,15 +30584,29 @@
 	        window.removeEventListener("resize", this.adjustWidth);
 	    },
 	    adjustWidth: function adjustWidth() {
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        var sideValue = 1614;
-	        screenWidth = screenWidth > sideValue ? screenWidth : sideValue;
-	        var incre = (screenWidth - sideValue) / 4;
-	        for (var i = 1; i < 5; i++) {
-	            var dom = this["block" + i];
-	            var width = 300 + incre;
-	            if (i == 4) width = 494 + incre;
-	            dom.style.width = width + "px";
+	        var sumWidth = document.body.clientWidth - 260;
+	        //console.log("sumWidth",sumWidth);
+	        if (this.state.first) {
+	            sumWidth = this.props.width;
+	            this.setState({ first: false });
+	        }
+	        var helArr = [];
+	        var edgeValue = 1400;
+	        if (sumWidth > edgeValue) {
+	            var incre = (sumWidth - edgeValue) / 4;
+	            for (var i = 1; i < 5; i++) {
+	                var dom = this["block" + i];
+	                var width = 300 + incre;
+	                if (i == 1) this.userTag.style.width = width - 101 + 'px';
+	                if (i == 4) width = 494 + incre;
+	                dom.style.width = width + "px";
+	                helArr[i - 1] = parseFloat(getComputedStyle(dom).height);
+	            }
+	        }
+	        var maxHel = helArr.sort()[3];
+	        for (var _i = 1; _i < 5; _i++) {
+	            var _dom = this["block" + _i];
+	            _dom.style.height = maxHel + "px";
 	        }
 	    },
 	    render: function render() {
@@ -30617,6 +30667,7 @@
 	                '\u2002'
 	            );
 	        });
+	        var states = (0, _util.getStateInfo)(o.status);
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'detail-section' },
@@ -30660,8 +30711,8 @@
 	                ),
 	                _react2.default.createElement(
 	                    'span',
-	                    { style: { color: 'red' } },
-	                    (0, _util.getStateMsg)(o.status) || ""
+	                    { style: { color: states[1] } },
+	                    states[0]
 	                )
 	            ),
 	            _react2.default.createElement(
@@ -30784,7 +30835,9 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                'em',
-	                                null,
+	                                { ref: function ref(c) {
+	                                        return _this2.userTag = c;
+	                                    } },
 	                                userTags,
 	                                _react2.default.createElement(
 	                                    'span',
@@ -30923,10 +30976,16 @@
 	                                null,
 	                                '\u9884\u8BA1\u53D6\u8F66\u65F6\u95F4:\u2002'
 	                            ),
-	                            _react2.default.createElement(
+	                            o.returningtime ? _react2.default.createElement(
 	                                'span',
-	                                { style: { color: "#1AA0E5" } },
+	                                { style: { color: "#1AA0E5", cursor: "pointer" },
+	                                    onClick: function onClick() {} },
 	                                o.returningtime || ""
+	                            ) : _react2.default.createElement(
+	                                'span',
+	                                { style: { color: "#1AA0E5", cursor: "pointer" },
+	                                    onClick: function onClick() {} },
+	                                '\u6DFB\u52A0'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -32016,7 +32075,11 @@
 
 	    return format.replace("yyyy", year).replace("mm", month).replace("dd", day).replace("hh", hour).replace("ii", minute).replace("ss", second);
 	};
-
+	var maxNumber = exports.maxNumber = function maxNumber(a, b, c) {
+	    var max = a >= b ? a : b;
+	    max = max >= c ? max : c;
+	    return max;
+	};
 	var addUniqueEle = exports.addUniqueEle = function addUniqueEle(arr, e) {
 	    for (var i = 0, len = arr.length; i < len; i++) {
 	        if (arr[i] === e) return 0;
@@ -32041,44 +32104,50 @@
 	    }
 	    return false;
 	};
-	var getStateMsg = exports.getStateMsg = function getStateMsg(number) {
+	var getStateInfo = exports.getStateInfo = function getStateInfo(number) {
 	    switch (number) {
 	        case -1:
-	            return "已取消";
+	            return ["已取消", "#969696"];
+
 	        case 0:
-	            return "预约接车单生成";
+	            return ["预约成功", "#db8800"];
 	        case 1:
-	            return "客服已确认";
+	            return ["客服已确认", "#db8800"];
+
 	        case 3:
-	            return "调度司机中";
+	            return ["接车司机调度中 ", "#db8800"];
 	        case 5:
-	            return "司机已分配";
+	            return ["已分配接车司机", "#db8800"];
 	        case 8:
-	            return "司机已就位";
+	            return ["已就位", "#db8800"];
+
 	        case 10:
-	            return "已接车";
+	            return ["已接车", "#db8800"];
 	        case 15:
-	            return "已泊车";
+	            return ["已入库", "#db8800"];
 	        case 16:
-	            return "钥匙交出";
+	            return ["钥匙交出", "#db8800"];
+
 	        case 20:
-	            return "立即送车单生成";
+	            return ["立即送车", "#1a9fe5"];
 	        case 23:
-	            return "调度司机中";
+	            return ["送车司机调度中", "#1a9fe5"];
 	        case 25:
-	            return "司机已分配";
+	            return ["已分配送车司机", "#1a9fe5"];
+
 	        case 30:
-	            return "已出发";
+	            return ["预约成功", "#1a9fe5"];
 	        case 35:
-	            return "已交车";
+	            return ["预约成功", "#1a9fe5"];
 	        case 36:
-	            return "用户确认已交车";
+	            return ["预约成功", "#1a9fe5"];
+
 	        case 38:
-	            return "已支付";
+	            return ["已支付", "#323232"];
 	        case 50:
-	            return "订单完成";
+	            return ["已支付", "#323232"];
 	        default:
-	            return null;
+	            return ["", ""];
 	    }
 	};
 
@@ -32645,7 +32714,8 @@
 	                        null,
 	                        '\u5F53\u524D\u9884\u7EA6\u65F6\u95F4\uFF1A'
 	                    ),
-	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u822A\u73ED', defaultValue: this.props.bookingtime })
+	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u822A\u73ED', readOnly: true,
+	                        defaultValue: this.props.bookingtime })
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -60417,6 +60487,171 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _reactDatePicker = __webpack_require__(268);
+
+	var _warn_tip = __webpack_require__(261);
+
+	var _warn_tip2 = _interopRequireDefault(_warn_tip);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	    displayName: 'operate_flight_info',
+	    componentWillMount: function componentWillMount() {
+	        var mask = document.getElementById("dialogContainer");
+	        mask.style.display = "block";
+	    },
+	    showWarnTip: function showWarnTip(msg) {
+	        var mask = document.getElementById("dialogContainer");
+	        if (msg === null) {
+	            _reactDom2.default.render(_react2.default.createElement('i', null), mask);
+	            mask.style.display = "none";
+	        } else {
+	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: msg }), mask);
+	        }
+	    },
+	    cancel: function cancel() {
+	        var mask = document.getElementById("dialogContainer");
+	        _reactDom2.default.render(_react2.default.createElement('i', null), mask);
+	        mask.style.display = "none";
+	    },
+	    ensure: function ensure(is) {
+	        var _this = this;
+
+	        var serialnumber = this.props.number,
+	            sendmsg = is;
+	        var returningflight = this.fno || this.props.fno;
+	        var returningdate = this.fdate || this.props.fdate;
+	        var url = this.props.url + "?";
+	        url += queryStr.stringify({ serialnumber: serialnumber, returningflight: returningflight, returningdate: returningdate, sendmsg: sendmsg });
+	        fetch(url, { credentials: 'include' }).then(function (res) {
+	            console.log("修改返程航班响应状态：" + res.status);
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
+	            }
+	        }).then(function (str) {
+	            try {
+	                var obj = JSON.parse(str);
+	                if (obj.code == 0) {
+	                    _this.showWarnTip(null);
+	                    _this.props.reload();
+	                } else {
+	                    _this.showWarnTip(obj.msg);
+	                }
+	            } catch (e) {
+	                _this.showWarnTip("数据异常！");
+	                console.error("数据异常：", e);
+	                console.log("异常数据：", str);
+	            }
+	        }).catch(function (e) {
+	            _this.showWarnTip("网络请求异常！");
+	            console.trace('错误:', e);
+	        });
+	    },
+	    render: function render() {
+	        var _this2 = this;
+
+	        var btns = [];
+	        if (this.props.type == "add") {
+	            btns[0] = _react2.default.createElement(
+	                'button',
+	                { key: 0, onClick: this.cancel },
+	                '\u53D6\u6D88'
+	            );
+	            btns[1] = _react2.default.createElement(
+	                'button',
+	                { key: 1, onClick: function onClick() {
+	                        return _this2.ensure(false);
+	                    } },
+	                '\u786E\u8BA4'
+	            );
+	        } else {
+	            btns[0] = _react2.default.createElement(
+	                'button',
+	                { key: 0, onClick: function onClick() {
+	                        return _this2.ensure(false);
+	                    } },
+	                '\u4FEE\u6539\u4E0D\u53D1\u9001\u77ED\u4FE1'
+	            );
+	            btns[1] = _react2.default.createElement(
+	                'button',
+	                { key: 1, onClick: function onClick() {
+	                        return _this2.ensure(true);
+	                    } },
+	                '\u4FEE\u6539\u5E76\u53D1\u9001\u77ED\u4FE1'
+	            );
+	        }
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'dialog' },
+	            _react2.default.createElement(
+	                'h2',
+	                { className: 'title' },
+	                this.props.type == "add" ? "添加" : "修改",
+	                '\u8FD4\u7A0B\u822A\u73ED',
+	                _react2.default.createElement('i', { onClick: this.cancel })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'dialog-flight-info' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u8FD4\u7A0B\u822A\u73ED\uFF1A'
+	                    ),
+	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u822A\u73ED', onChange: function onChange(e) {
+	                            return _this2.fno = e.target.value;
+	                        },
+	                        defaultValue: this.props.fno })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'date-select' },
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u8FD4\u7A0B\u65F6\u95F4\uFF1A'
+	                    ),
+	                    _react2.default.createElement(_reactDatePicker.DateField, { onChange: function onChange(date) {
+	                            return _this2.fdate = date;
+	                        }, dateFormat: 'YYYY-MM-DD HH:mm',
+	                        style: { borderColor: "#ddd", width: "220px", height: "36px" },
+	                        defaultValue: this.props.fdate, placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u65F6\u95F4'
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'section',
+	                { className: 'btn' },
+	                btns
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 450 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
 	var _add_remark = __webpack_require__(265);
 
 	var _add_remark2 = _interopRequireDefault(_add_remark);
@@ -60440,7 +60675,7 @@
 	exports.default = _react2.default.createClass({
 	    displayName: 'jsj_order_detail',
 	    getInitialState: function getInitialState() {
-	        return { p_item: 'p1' };
+	        return { p_item: 'p1', first: true };
 	    },
 	    showWarnTip: function showWarnTip(msg) {
 	        var mask = document.getElementById("dialogContainer");
@@ -60498,15 +60733,29 @@
 	            url: '/jsj/system/addremark', number: this.props.number }), mask);
 	    },
 	    adjustWidth: function adjustWidth() {
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        if (screenWidth > 1614) {
-	            var incre = (screenWidth - 1614) / 4;
+	        var sumWidth = document.body.clientWidth - 260;
+	        //console.log("sumWidth",sumWidth);
+	        if (this.state.first) {
+	            sumWidth = this.props.width;
+	            this.setState({ first: false });
+	        }
+	        var helArr = [];
+	        var edgeValue = 1400;
+	        if (sumWidth > edgeValue) {
+	            var incre = (sumWidth - edgeValue) / 4;
 	            for (var i = 1; i < 5; i++) {
 	                var dom = this["block" + i];
 	                var width = 300 + incre;
+	                if (i == 1) this.userTag.style.width = width - 101 + 'px';
 	                if (i == 4) width = 494 + incre;
 	                dom.style.width = width + "px";
+	                helArr[i - 1] = parseFloat(getComputedStyle(dom).height);
 	            }
+	        }
+	        var maxHel = helArr.sort()[3];
+	        for (var _i = 1; _i < 5; _i++) {
+	            var _dom = this["block" + _i];
+	            _dom.style.height = maxHel + "px";
 	        }
 	    },
 	    render: function render() {
@@ -60539,10 +60788,10 @@
 	                '\u2605'
 	            );
 	        }
-	        for (var _i = 0; _i < cmt.score || 0; _i++) {
-	            cmtStars[_i] = _react2.default.createElement(
+	        for (var _i2 = 0; _i2 < cmt.score || 0; _i2++) {
+	            cmtStars[_i2] = _react2.default.createElement(
 	                'span',
-	                { key: _i, style: { color: 'red' } },
+	                { key: _i2, style: { color: 'red' } },
 	                '\u2605'
 	            );
 	        }
@@ -60718,7 +60967,9 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                'em',
-	                                null,
+	                                { ref: function ref(c) {
+	                                        return _this2.userTag = c;
+	                                    } },
 	                                userTags,
 	                                _react2.default.createElement(
 	                                    'span',
@@ -61091,7 +61342,7 @@
 	});
 
 /***/ },
-/* 450 */
+/* 451 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61117,7 +61368,7 @@
 	});
 
 /***/ },
-/* 451 */
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61154,7 +61405,7 @@
 	});
 
 /***/ },
-/* 452 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -61217,7 +61468,7 @@
 	});
 
 /***/ },
-/* 453 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61260,9 +61511,11 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
+
+	var _util = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61317,31 +61570,28 @@
 	        });
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -61373,7 +61623,7 @@
 	        });
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth + 'px' } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -61408,7 +61658,7 @@
 	exports.default = RemainContactOrder;
 
 /***/ },
-/* 454 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61451,9 +61701,11 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
+
+	var _util = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61508,31 +61760,28 @@
 	        });
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -61560,7 +61809,7 @@
 	        });
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth + 'px' } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -61590,7 +61839,7 @@
 	exports.default = RemainAssignTakeOrder;
 
 /***/ },
-/* 455 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61633,9 +61882,11 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
+
+	var _util = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61690,31 +61941,28 @@
 	        });
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -61743,7 +61991,7 @@
 
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -61773,7 +62021,7 @@
 	exports.default = RemainAssignSendOrder;
 
 /***/ },
-/* 456 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61816,9 +62064,11 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
+
+	var _util = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61873,31 +62123,28 @@
 	        });
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -61925,7 +62172,7 @@
 	        });
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -61955,7 +62202,7 @@
 	exports.default = OngoingTakeOrder;
 
 /***/ },
-/* 457 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61988,22 +62235,22 @@
 
 	var _table_line2 = _interopRequireDefault(_table_line);
 
+	var _util = __webpack_require__(263);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AirportTempPark = _react2.default.createClass({
 	    displayName: 'AirportTempPark',
 	    getInitialState: function getInitialState() {
 	        return {
-	            queryCondition: {
-	                order_source: "",
-	                order_no: "",
-	                phone_no: ""
-	            }
+	            queryCondition: {},
+	            orderData: [],
+	            pageObj: {},
+	            initWidths: [120, 120, 120, 120, 120, 120, 130, 120, 130, 130],
+	            titles: ['订单号', '用户', '标签', '订单来源', '车辆', '航站楼', '预约时间', '挪车司机', '机场停放时间', '开始挪车时间']
 	        };
 	    },
 	    handleChange: function handleChange(e) {
-	        "use strict";
-
 	        var key = e.target.id;
 	        var val = e.target.value;
 	        if (key === "phone_no") {
@@ -62017,52 +62264,39 @@
 	    handleQuery: function handleQuery() {
 	        console.log(this.state.queryCondition);
 	    },
-	    adaptScreen: function adaptScreen(widths, titles) {
-	        var _this = this;
-
-	        this.setState({ titles: titles });
-	        var offsetWidth = 60,
-	            len = widths.length,
-	            initWidths = widths.concat();
-	        var sumWidth = widths.reduce(function (x, y) {
+	    adaptScreen: function adaptScreen() {
+	        var initWidths = this.state.initWidths;
+	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth),
-	            initSumWidth = sumWidth;
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	                _this.setState({ sumWidth: sumWidth, widths: widths });
-	            })();
-	        } else {
-	            this.setState({ sumWidth: sumWidth, widths: widths });
-	        }
-	        window.addEventListener("resize", function () {
-	            var screenWidth = document.body.clientWidth || window.innerWidth;
-	            if (screenWidth - 200 > initSumWidth) {
-	                (function () {
-	                    var incre = (screenWidth - 200 - initSumWidth) / len;
-	                    widths = initWidths.map(function (item) {
-	                        return item + incre;
-	                    });
-	                    sumWidth = widths.reduce(function (x, y) {
-	                        return x + y;
-	                    }, offsetWidth);
-	                    _this.setState({ sumWidth: sumWidth, widths: widths });
-	                })();
-	            }
-	        }, false);
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
+	        var sumWidth = initSumWidth,
+	            widths = initWidths;
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
-	        var widths = [120, 120, 120, 120, 120, 120, 130, 120, 130, 130];
-	        var titles = ['订单号', '用户', '标签', '订单来源', '车辆', '航站楼', '预约时间', '挪车司机', '机场停放时间', '开始挪车时间'];
-	        this.adaptScreen(widths, titles);
+	        this.adaptScreen();
+	        //this.handlePageQuery(1,10);
+	    },
+	    componentDidMount: function componentDidMount() {
+	        window.addEventListener("resize", this.adaptScreen, false);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        window.removeEventListener("resize", this.adaptScreen);
 	    },
 	    render: function render() {
 	        var sumWidth = this.state.sumWidth;
@@ -62071,12 +62305,12 @@
 	        var headData = titles.map(function (item, index) {
 	            return { name: item, width: widths[index] + 'px' };
 	        });
-	        document.getElementById("appContainer").style.width = 200 + sumWidth;
+	        document.getElementById("appContainer").style.width = 200 + sumWidth + 'px';
 
 	        var data = [{ order_no: '1445515665454', fieldName: 'OrderNo' }, { username: "中小屋", phone_no: "124578654", fieldName: 'User' }, { trade: "发票", user_type: "关系客户", fieldName: 'Label' }, { order_source: "携程", fieldName: 'OrderSource' }, { car_no: '奥B4878', car_color: '白色', car_brand: '宝马', fieldName: 'Car' }, { city: '广州', terminal: '白云国际机场T1', fieldName: 'OnwardTerminal' }, { session: "2016-8-9 15:14", fieldName: 'Session' }, { move_driver: '周当啊', color: "#DB8800", fieldName: 'MoveDriver' }, { airport_park_time_long: "4小时25分钟", fieldName: 'AirportParkTimeLong' }, { start_move_time: "2016-12-12 14:24", fieldName: 'StartMoveTime' }];
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -62102,7 +62336,7 @@
 	exports.default = AirportTempPark;
 
 /***/ },
-/* 458 */
+/* 459 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62145,9 +62379,11 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
+
+	var _util = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62205,31 +62441,28 @@
 	        });
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -62257,7 +62490,7 @@
 	        });
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth + 'px' } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -62287,7 +62520,7 @@
 	exports.default = InGarageCar;
 
 /***/ },
-/* 459 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62330,9 +62563,11 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
+
+	var _util = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62387,31 +62622,28 @@
 	        });
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -62449,7 +62681,7 @@
 	            {start_send_time:"2016-8-9 15:14",fieldName:'StartSendTime'}];*/
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -62479,7 +62711,7 @@
 	exports.default = OngoingSendOrder;
 
 /***/ },
-/* 460 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62504,7 +62736,7 @@
 
 	var _table_head2 = _interopRequireDefault(_table_head);
 
-	var _user_line = __webpack_require__(461);
+	var _user_line = __webpack_require__(462);
 
 	var _user_line2 = _interopRequireDefault(_user_line);
 
@@ -62621,7 +62853,7 @@
 	exports.default = UserManager;
 
 /***/ },
-/* 461 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -62756,7 +62988,7 @@
 	});
 
 /***/ },
-/* 462 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62912,7 +63144,7 @@
 	exports.default = EvaluationManage;
 
 /***/ },
-/* 463 */
+/* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62937,7 +63169,7 @@
 
 	var _table_head2 = _interopRequireDefault(_table_head);
 
-	var _coupon_line = __webpack_require__(464);
+	var _coupon_line = __webpack_require__(465);
 
 	var _coupon_line2 = _interopRequireDefault(_coupon_line);
 
@@ -63056,7 +63288,7 @@
 	});
 
 /***/ },
-/* 464 */
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -63194,7 +63426,7 @@
 	});
 
 /***/ },
-/* 465 */
+/* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63233,7 +63465,7 @@
 
 	var _warn_tip2 = _interopRequireDefault(_warn_tip);
 
-	var _page = __webpack_require__(452);
+	var _page = __webpack_require__(453);
 
 	var _page2 = _interopRequireDefault(_page);
 
@@ -63280,31 +63512,28 @@
 	        }
 	    },
 	    adaptScreen: function adaptScreen() {
-	        /**
-	         * offsetWidth两边的内边距之和
-	         */
 	        var initWidths = this.state.initWidths;
-	        var offsetWidth = 60,
-	            len = initWidths.length;
 	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth);
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        screenWidth = screenWidth > 1614 ? screenWidth : 1614;
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
 	        var sumWidth = initSumWidth,
 	            widths = initWidths;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	            })();
-	        }
-	        this.setState({ sumWidth: sumWidth, widths: widths });
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
 	        this.adaptScreen();
@@ -63384,7 +63613,7 @@
 
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
@@ -63420,11 +63649,11 @@
 	exports.default = JSJOrder;
 
 /***/ },
-/* 466 */,
-/* 467 */
+/* 467 */,
+/* 468 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -63434,152 +63663,136 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _reactDatePicker = __webpack_require__(268);
-
-	var _warn_tip = __webpack_require__(261);
-
-	var _warn_tip2 = _interopRequireDefault(_warn_tip);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	    displayName: 'operate_flight_info',
-	    componentWillMount: function componentWillMount() {
-	        var mask = document.getElementById("dialogContainer");
-	        mask.style.display = "block";
-	    },
-	    showWarnTip: function showWarnTip(msg) {
-	        var mask = document.getElementById("dialogContainer");
-	        if (msg === null) {
-	            _reactDom2.default.render(_react2.default.createElement('i', null), mask);
-	            mask.style.display = "none";
-	        } else {
-	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: msg }), mask);
-	        }
-	    },
-	    cancel: function cancel() {
-	        var mask = document.getElementById("dialogContainer");
-	        _reactDom2.default.render(_react2.default.createElement('i', null), mask);
-	        mask.style.display = "none";
-	    },
-	    ensure: function ensure(is) {
-	        var _this = this;
-
-	        var serialnumber = this.props.number,
-	            sendmsg = is;
-	        var returningflight = this.fno || this.props.fno;
-	        var returningdate = this.fdate || this.props.fdate;
-	        var url = this.props.url + "?";
-	        url += queryStr.stringify({ serialnumber: serialnumber, returningflight: returningflight, returningdate: returningdate, sendmsg: sendmsg });
-	        fetch(url, { credentials: 'include' }).then(function (res) {
-	            console.log("修改返程航班响应状态：" + res.status);
-	            if (+res.status < 400) {
-	                return res.text();
-	            } else {
-	                throw new Error("服务异常");
-	            }
-	        }).then(function (str) {
-	            try {
-	                var obj = JSON.parse(str);
-	                if (obj.code == 0) {
-	                    _this.showWarnTip(null);
-	                    _this.props.reload();
-	                } else {
-	                    _this.showWarnTip(obj.msg);
-	                }
-	            } catch (e) {
-	                _this.showWarnTip("数据异常！");
-	                console.error("数据异常：", e);
-	                console.log("异常数据：", str);
-	            }
-	        }).catch(function (e) {
-	            _this.showWarnTip("网络请求异常！");
-	            console.trace('错误:', e);
-	        });
+	    displayName: "pay",
+	    getInitialState: function getInitialState() {
+	        return {};
 	    },
 	    render: function render() {
-	        var _this2 = this;
-
-	        var btns = [];
-	        if (this.props.type == "add") {
-	            btns[0] = _react2.default.createElement(
-	                'button',
-	                { key: 0, onClick: this.cancel },
-	                '\u53D6\u6D88'
-	            );
-	            btns[1] = _react2.default.createElement(
-	                'button',
-	                { key: 1, onClick: function onClick() {
-	                        return _this2.ensure(false);
-	                    } },
-	                '\u786E\u8BA4'
-	            );
-	        } else {
-	            btns[0] = _react2.default.createElement(
-	                'button',
-	                { key: 0, onClick: function onClick() {
-	                        return _this2.ensure(false);
-	                    } },
-	                '\u4FEE\u6539\u4E0D\u53D1\u9001\u77ED\u4FE1'
-	            );
-	            btns[1] = _react2.default.createElement(
-	                'button',
-	                { key: 1, onClick: function onClick() {
-	                        return _this2.ensure(true);
-	                    } },
-	                '\u4FEE\u6539\u5E76\u53D1\u9001\u77ED\u4FE1'
-	            );
-	        }
 	        return _react2.default.createElement(
-	            'div',
-	            { className: 'dialog' },
+	            "div",
+	            { className: "take-car" },
 	            _react2.default.createElement(
-	                'h2',
-	                { className: 'title' },
-	                this.props.type == "add" ? "添加" : "修改",
-	                '\u8FD4\u7A0B\u822A\u73ED',
-	                _react2.default.createElement('i', { onClick: this.cancel })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'dialog-flight-info' },
+	                "section",
+	                { className: "up-part" },
 	                _react2.default.createElement(
-	                    'p',
+	                    "p",
 	                    null,
 	                    _react2.default.createElement(
-	                        'em',
+	                        "label",
 	                        null,
-	                        '\u8FD4\u7A0B\u822A\u73ED\uFF1A'
+	                        "\u63A5\u8F66\u65F6\u95F4\uFF1A\u2002"
 	                    ),
-	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u822A\u73ED', onChange: function onChange(e) {
-	                            return _this2.fno = e.target.value;
-	                        },
-	                        defaultValue: this.props.fno })
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "2016-11-16 18:24"
+	                    )
 	                ),
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'date-select' },
+	                    "p",
+	                    null,
 	                    _react2.default.createElement(
-	                        'em',
+	                        "label",
 	                        null,
-	                        '\u8FD4\u7A0B\u65F6\u95F4\uFF1A'
+	                        "\u9001\u8F66\u65F6\u95F4\uFF1A\u2002"
 	                    ),
-	                    _react2.default.createElement(_reactDatePicker.DateField, { onChange: function onChange(date) {
-	                            return _this2.fdate = date;
-	                        }, dateFormat: 'YYYY-MM-DD HH:mm',
-	                        style: { borderColor: "#ddd", width: "220px", height: "36px" },
-	                        defaultValue: this.props.fdate, placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u65F6\u95F4'
-	                    })
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "2016-11-25 18:54"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "\u505C\u8F66\u65F6\u957F\uFF1A\u2002"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "3\u592915\u5C0F\u65F6"
+	                    )
 	                )
 	            ),
 	            _react2.default.createElement(
-	                'section',
-	                { className: 'btn' },
-	                btns
+	                "section",
+	                { className: "service-fee" },
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "\u8D39\u7528\u603B\u8BA1\uFF1A\u2002"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "\u8D39\u7528\u603B\u8BA1\uFF1A189\u5143(\u505C\u8F66\u8D3959\u5143+\u6D17\u8F66\u8D3930\u5143+\u52A0\u6CB9\u8D39100\u5143)"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "\u4F18\u60E0\u91D1\u989D\uFF1A\u2002"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "100\u5143"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "\u4F18\u60E0\u91D1\u989D\uFF1A\u2002"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "100\u5143"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "\u652F\u4ED8\u72B6\u6001\uFF1A\u2002"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        { style: { color: "#f00" } },
+	                        "\u672A\u652F\u4ED8"
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    _react2.default.createElement(
+	                        "label",
+	                        null,
+	                        "\u652F\u4ED8\u65F6\u95F4\uFF1A\u2002"
+	                    ),
+	                    _react2.default.createElement(
+	                        "span",
+	                        null,
+	                        "2016-11-16 18:24"
+	                    )
+	                )
 	            )
 	        );
 	    }

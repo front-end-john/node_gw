@@ -9,7 +9,7 @@ import TableLine from '../widgets/table_line';
 import DateSelect from '../widgets/date_select';
 import Page from '../widgets/page';
 import WarnTip from '../dialog/warn_tip';
-import {getStateMsg} from '../../util';
+import {getStateInfo,maxNumber} from '../../util';
 let OrderQuery=React.createClass({
     getInitialState(){
         return{
@@ -17,7 +17,7 @@ let OrderQuery=React.createClass({
             orderData:[],
             pageObj:{},
 
-            initWidths:[ 130,    110,    120,    128,  160,   190,       90,       130,         90,      130,    80],
+            initWidths:[ 150,    110,    120,    128,  160,   190,       90,       130,         90,      130,    100],
             titles:    ['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态']
         };
     },
@@ -69,28 +69,25 @@ let OrderQuery=React.createClass({
     exportData(){
         console.log("导出数据");
     },
-
     adaptScreen(){
-        /**
-         * offsetWidth两边的内边距之和
-         */
         let initWidths=this.state.initWidths;
-        let offsetWidth=60,len=initWidths.length;
-        let initSumWidth = initWidths.reduce((x,y)=>x+y,offsetWidth);
-        let screenWidth=document.body.clientWidth||window.innerWidth;
-        screenWidth=screenWidth>1614?screenWidth:1614;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y);
+        //补偿宽度
+        let offsetWidth=260;
+        //允许的最小宽度
+        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
-        if(screenWidth-200 > initSumWidth){
-            let incre=(screenWidth-200-initSumWidth)/len;
-            widths=initWidths.map((item)=>item+incre);
-            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-        }
-        this.setState({sumWidth,widths});
+        let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
+
+        let incre=(actulWidth-offsetWidth-initSumWidth)/len;
+        widths=initWidths.map((item)=>item+incre);
+        sumWidth=widths.reduce((x,y)=>x+y);
+        this.setState({sumWidth:sumWidth+40,widths});
     },
     componentWillMount(){
         this.adaptScreen();
         this.handlePageQuery(1,10);
-
     },
     componentDidMount(){
         window.addEventListener("resize",this.adaptScreen,false);
@@ -105,8 +102,10 @@ let OrderQuery=React.createClass({
         let headData = titles.map((item,index)=>{
             return {name:item,width:widths[index]+'px'};
         });
-        document.getElementById("appContainer").style.width=220+sumWidth+"px";
+
+        document.getElementById("appContainer").style.width=sumWidth+200+"px";
         let list=this.state.orderData.map((item,index)=>{
+            let states=getStateInfo(item.status);
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
@@ -119,20 +118,23 @@ let OrderQuery=React.createClass({
                 {send_driver:item.returningdrivername,fieldName:'SendDriver'},
                 {send_car_start:item.returningstartedtime,
                     send_car_end:item.returningfinishedtime,fieldName:'SendCarStatus'}
-                ,{pay_status:getStateMsg(item.status),fieldName:'PayStatus'}];
+                ,{pay_status:states[0],color:states[1],fieldName:'PayStatus'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+'px'}}>
+            <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源:" change={this.handleTextInputChange} name="order_source" defaultName="全部"/>
                     <SelectInput title="订单状态:" change={this.handleTextInputChange} name="order_status" defaultName="全部"/>
                     <SelectInput title={<span>机&emsp;&emsp;场:</span>} change={this.handleTextInputChange} name="airport" defaultName="全部"/>
                     <hr/>
-                    <TextInput title={<span>订&ensp;单&ensp;号:</span>} change={this.handleTextInputChange} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机:" change={this.handleTextInputChange} name="phone_no" holdText="请输入手机号"/>
-                    <TextInput title="车牌号码:" change={this.handleTextInputChange} name="car_no" holdText="请输入车牌号" />
+                    <TextInput title={<span>订&ensp;单&ensp;号:</span>} change={this.handleTextInputChange}
+                               enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
+                    <TextInput title="用户手机:" change={this.handleTextInputChange}
+                               enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>
+                    <TextInput title="车牌号码:" change={this.handleTextInputChange}
+                               enter={()=>this.handlePageQuery(1,10)} name="car_no" holdText="请输入车牌号" />
                     <hr/>
                     <SelectInput title="筛选时间:" change={this.handleTextInputChange} name="time_type" defaultName="选择筛选的时间"/>
                     <DateSelect title="开始时间:" change={(date)=>this.state.queryCondition.starttime=date} />

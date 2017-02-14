@@ -23,7 +23,11 @@ export let getFormatDate=(format,timestamp)=>{
         .replace("ii",minute)
         .replace("ss",second);
 };
-
+export let maxNumber=(a,b,c)=>{
+    let max=a>=b?a:b;
+    max=max>=c?max:c;
+    return max;
+};
 export let addUniqueEle=(arr,e)=>{
     for(let i=0,len=arr.length;i<len;i++){
         if(arr[i]===e) return 0;
@@ -48,25 +52,32 @@ export let isExitValue=(arr,e)=>{
     }
     return false;
 };
-export let getStateMsg=(number)=>{
+export let getStateInfo=(number)=>{
     switch(number){
-        case -1:return "已取消";
-        case 0:return "预约接车单生成";
-        case 1:return "客服已确认";
-        case 3:return "调度司机中";
-        case 5:return "司机已分配";
-        case 8:return "司机已就位";
-        case 10:return "已接车";
-        case 15:return "已泊车";
-        case 16:return "钥匙交出";
-        case 20:return "立即送车单生成";
-        case 23:return "调度司机中";
-        case 25:return "司机已分配";
-        case 30:return "已出发";
-        case 35:return "已交车";
-        case 36:return "用户确认已交车";
-        case 38:return "已支付";
-        case 50:return "订单完成";
-        default:return null;
+        case -1:return ["已取消","#969696"];
+
+        case 0:return ["预约成功","#db8800"];
+        case 1:return ["客服已确认","#db8800"];
+
+        case 3:return ["接车司机调度中 ","#db8800"];
+        case 5:return ["已分配接车司机","#db8800"];
+        case 8:return ["已就位","#db8800"];
+
+        case 10:return ["已接车","#db8800"];
+        case 15:return ["已入库","#db8800"];
+        case 16:return ["钥匙交出","#db8800"];
+
+        case 20:return ["立即送车","#1a9fe5"];
+        case 23:return ["送车司机调度中","#1a9fe5"];
+        case 25:return ["已分配送车司机","#1a9fe5"];
+
+        case 30:return ["预约成功","#1a9fe5"];
+        case 35:return ["预约成功","#1a9fe5"];
+        case 36:return ["预约成功","#1a9fe5"];
+
+        case 38:return ["已支付","#323232"];
+        case 50:return ["已支付","#323232"];
+        default:return ["",""];
     }
 };
+

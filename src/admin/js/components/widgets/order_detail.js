@@ -5,6 +5,7 @@ import MoveCar from '../order_process/move_car';
 import InGarage from '../order_process/in_garage';
 import SendCar from '../order_process/send_car';
 import Evaluation from '../order_process/evaluation';
+import Pay from '../order_process/pay';
 import WarnTip from '../dialog/warn_tip';
 import Label from "../dialog/customer_label";
 import EditUser from "../dialog/edit_user_info";
@@ -12,11 +13,11 @@ import AddRemark from '../dialog/add_remark';
 import EditCar from "../dialog/modify_car_info";
 import EditBook from "../dialog/modify_bookingtime";
 import EditFlightInfo from "../dialog/operate_flight_info";
-import {getStateMsg,getFormatDate} from '../../util'
+import {getStateInfo,getFormatDate} from '../../util'
 
 let OrderDetail=React.createClass({
     getInitialState(){
-        return{p_item:'p1'};
+        return{p_item:'p1',first:true};
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -97,6 +98,7 @@ let OrderDetail=React.createClass({
                 ReactDOM.render(<SendCar /> , this.process);
             } else if (e.target.id == "pro_5") {
                 this.setState({p_item:'p5'});
+                ReactDOM.render(<Pay /> , this.process);
             } else if (e.target.id == "pro_6") {
                 this.setState({p_item:'p6'});
                 ReactDOM.render(<Evaluation /> , this.process);
@@ -112,15 +114,29 @@ let OrderDetail=React.createClass({
         window.removeEventListener("resize",this.adjustWidth);
     },
     adjustWidth(){
-        let screenWidth=document.body.clientWidth||window.innerWidth;
-        let sideValue=1614;
-        screenWidth=screenWidth>sideValue?screenWidth:sideValue;
-        let incre=(screenWidth-sideValue)/4;
-        for(let i=1;i<5;i++){
-            let dom=this["block"+i];
-            let width=300+incre;
-            if(i==4) width=494+incre;
-            dom.style.width=width+"px";
+        let sumWidth=document.body.clientWidth-260;
+        //console.log("sumWidth",sumWidth);
+        if(this.state.first){
+            sumWidth=this.props.width;
+            this.setState({first:false});
+        }
+        let helArr=[];
+        let edgeValue=1400;
+        if(sumWidth>edgeValue){
+            let incre=(sumWidth-edgeValue)/4;
+            for(let i=1;i<5;i++) {
+                let dom = this["block" + i];
+                let width = 300 + incre;
+                if (i == 1) this.userTag.style.width=width-101+'px';
+                if (i == 4) width = 494 + incre;
+                dom.style.width = width + "px";
+                helArr[i - 1] = parseFloat(getComputedStyle(dom).height);
+            }
+        }
+        let maxHel=helArr.sort()[3];
+        for(let i=1;i<5;i++) {
+            let dom = this["block" + i];
+            dom.style.height = maxHel + "px";
         }
     },
     render(){
@@ -149,6 +165,7 @@ let OrderDetail=React.createClass({
         let userTags=(user.tags||[]).map((item,index)=>{
             return(<span key={index}>{item}&ensp;</span>)
         });
+        let states=getStateInfo(o.status);
         return(
             <section className="detail-section">
                 <p className="order-brief">
@@ -156,7 +173,7 @@ let OrderDetail=React.createClass({
                     <label style={{paddingLeft:'20px'}}>下单时间: </label><span>{o.createtime||''}</span>
                     <label style={{paddingLeft:'20px'}}>来源: </label><span>{o.comefrom||''}</span>
                     <label style={{paddingLeft:'20px'}}>状态: </label>
-                    <span style={{color:'red'}}>{getStateMsg(o.status)||""}</span>
+                    <span style={{color:states[1]}}>{states[0]}</span>
                 </p>
                 <div className="order-main">
                     <div className="user-info" ref={(c)=>this.block1=c}>
@@ -176,7 +193,7 @@ let OrderDetail=React.createClass({
                             <p><label>用户来源:</label><span>{user.comefrom||''}</span></p>
                             <p><label>注册时间:</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime)}</span></p>
-                            <p><label>标&emsp;&emsp;签:</label><em>{userTags}
+                            <p><label>标&emsp;&emsp;签:</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>添加</span></em></p>
                             <p className="note-field"><label>备&emsp;&emsp;注: </label>
@@ -211,7 +228,10 @@ let OrderDetail=React.createClass({
                                {/* <img src="/admin/img/icon/10_1.png" />*/}
                             </p>
                             <p><label>预计取车时间:&ensp;</label>
-                                <span style={{color:"#1AA0E5"}}>{o.returningtime||""}</span></p>
+                                {o.returningtime?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                                          onClick={()=>{}}>{o.returningtime||""}</span>):
+                                    (<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                           onClick={()=>{}}>添加</span>)}</p>
                             <p><label>回程航站楼:&ensp;</label><span>{o.returningterminalname||""}</span></p>
                             <p className="note-field"><label>渠道备注:</label>
                                 <span>{""}</span></p>

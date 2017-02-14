@@ -6,7 +6,7 @@ import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
-import {decDatetime} from '../../util';
+import {decDatetime,maxNumber} from '../../util';
 
 let JSJOrder=React.createClass({
     getInitialState(){
@@ -44,21 +44,20 @@ let JSJOrder=React.createClass({
         }
     },
     adaptScreen(){
-        /**
-         * offsetWidth两边的内边距之和
-         */
         let initWidths=this.state.initWidths;
-        let offsetWidth=60,len=initWidths.length;
-        let initSumWidth = initWidths.reduce((x,y)=>x+y,offsetWidth);
-        let screenWidth=document.body.clientWidth||window.innerWidth;
-        screenWidth=screenWidth>1614?screenWidth:1614;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y);
+        //补偿宽度
+        let offsetWidth=260;
+        //允许的最小宽度
+        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
-        if(screenWidth-200 > initSumWidth){
-            let incre=(screenWidth-200-initSumWidth)/len;
-            widths=initWidths.map((item)=>item+incre);
-            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-        }
-        this.setState({sumWidth,widths});
+        let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
+
+        let incre=(actulWidth-offsetWidth-initSumWidth)/len;
+        widths=initWidths.map((item)=>item+incre);
+        sumWidth=widths.reduce((x,y)=>x+y);
+        this.setState({sumWidth:sumWidth+40,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -128,7 +127,7 @@ let JSJOrder=React.createClass({
         });
 
         return(
-            <section className="data-section" style={{width:sumWidth}}>
+            <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
                     <TextInput title="用户姓名:" ref={(c)=>this.name=c} change={this.handleChange} name="username" holdText="请输入用户姓名" />

@@ -8,6 +8,7 @@ $jeet: (
 );
 html,body{
   height: 100%;
+  background-color: rgb(245,245,245);
 }
 #appContainer{
   height: 100%;
@@ -103,7 +104,7 @@ html,body{
   background-color: #F6F6F6;
   position: relative;
   &>aside{
-    height:950px;
+    height:860px;
     width: 200px;
     position: absolute;
     left: 0;top:0;bottom: 0;
@@ -114,9 +115,8 @@ html,body{
   }
   &>.data-section{
     margin-left: 200px;
-    padding-right:20px;
     .data-list{
-      padding-left:20px;
+      padding:0 20px;
       height: 718px;
       overflow-y: auto;
     }
@@ -189,7 +189,7 @@ html,body{
       position: absolute;
       margin-right: 10px;
       width: 16px;height: 16px;
-      left: 20px;top:18px;
+      left: 20px;top:17px;
       background: url("/admin/img/icon/icon.png") no-repeat -2px -2px;
     }
     &:hover{
@@ -217,22 +217,7 @@ html,body{
     }
   }
 }
-.primary-item:nth-of-type(2){
-  &>.selected{
-    background-color: #314055;
-    &:after{
-      width: 0;
-    }
-  }
-}
-.primary-item:nth-of-type(3){
-  &>.selected{
-    background-color: #314055;
-    &:after{
-      width: 0;
-    }
-  }
-}
+
 .primary-item:nth-of-type(2){
   &>h2{
     &>.item-icon{
@@ -245,6 +230,10 @@ html,body{
     }
   }
   &>.selected{
+    background-color: #314055;
+    &:after{
+      width: 0;
+    }
     &>.item-icon{
       background-position:-20px -20px;
     }
@@ -264,6 +253,10 @@ html,body{
     }
   }
   &>.selected{
+    background-color: #314055;
+    &:after{
+      width: 0;
+    }
     &>.item-icon{
       background-position:-20px -39px;
     }
@@ -388,7 +381,6 @@ html,body{
     &>p{
       position: absolute;
       white-space:nowrap;
-      //left:-50px;
     }
   }
 }
@@ -416,7 +408,6 @@ html,body{
       @include box-sizing(border-box);
       padding-left: 6px;
     }
-
   }
   &>.date-select{
     display: inline-block;
@@ -446,31 +437,33 @@ html,body{
   font-size: 14px;
 }
 .table-head{
-  margin: 0 20px;
   @include center;
   background-color: #314055;
   &>li{
     @include span();
-    @include translateX(20px);
     height: 48px;
     line-height: 48px;
     font-size: 14px;
     color: #fff;
+    &:nth-of-type(1){
+      @include box-sizing(border-box);
+      padding-left: 20px;
+    }
     &:nth-last-of-type(1){
       text-align: right;
+      @include box-sizing(border-box);
+      padding-right: 20px;
     }
   }
 }
 
 .table-line{
   background-color: #fff;
-  margin: 0 20px;
   @include center;
   font-size: 12px;
   border-bottom: 1px solid #ddd;
   &>li{
     @include span();
-    @include translateX(20px);
     @include box-sizing(border-box);
     height: 60px;
     &>p{
@@ -479,14 +472,19 @@ html,body{
       @include translateY(-50%);
       cursor:pointer;
     }
+    &:nth-of-type(1){
+      @include box-sizing(border-box);
+      padding-left: 20px;
+    }
     &:nth-last-of-type(1){
       height: auto;
-      @include translateX(0);
       overflow-x: auto;
     }
   }
   &>.list-end{
     text-align: right;
+    @include box-sizing(border-box);
+    padding-right: 20px;
     &>p{cursor: pointer;}
   }
 }
@@ -495,7 +493,6 @@ html,body{
   background-color: #D3EAFF;
   color: #969696;
   min-width: 1394px;
-  width: 100%;
 }
 .paging{
   height: 60px;
@@ -507,10 +504,9 @@ html,body{
   padding-top: 22px;
   &>em{
     display: inline-block;
-    width: 16px;
     height: 16px;
     cursor: pointer;
-    margin-right: 6px;
+    padding: 0 4px;
     color: #969696;
     text-align: center;
     line-height: 16px;
@@ -578,7 +574,7 @@ html,body{
           em{
             vertical-align: top;
             display: inline-block;
-            width: 230px;
+            width: 200px;
           }
         }
         margin-bottom: 10px;

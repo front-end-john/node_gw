@@ -49,7 +49,8 @@
             <div className="dialog">
                 <h2 className="title">修改预约时间<i onClick={this.cancel}/></h2>
                 <div className="dialog-flight-info">
-                    <p><em>当前预约时间：</em><input placeholder="请输入返程航班" defaultValue={this.props.bookingtime}/></p>
+                    <p><em>当前预约时间：</em><input placeholder="请输入返程航班" readOnly
+                                              defaultValue={this.props.bookingtime}/></p>
                     <div className="date-select"><em>改后预约时间：</em>
                         <DateField onChange={(date)=>this.bookingtime=date } dateFormat="YYYY-MM-DD HH:mm"
                         style={{borderColor:"#ddd",width:"220px",height:"36px"}} /></div>

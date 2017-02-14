@@ -25,13 +25,14 @@ let TableLine=React.createClass({
         ReactDOM.render(<Ensure title="更多标签" ensureContent={tags.join(" ")}/>, mask);
     },
     expandDetail(orderNo){
+        let sumWidth=this.props.widths.reduce((x,y)=>x+y);
         if(this.state.isExpand){
             ReactDOM.render(<Empty />,this.detailArea);
         }else {
             if(this.props.section=="jsj"){
-                ReactDOM.render(<JSJOrderDetail type={this.props.type} number={orderNo}/>,this.detailArea);
+                ReactDOM.render(<JSJOrderDetail width={sumWidth} type={this.props.type} number={orderNo}/>,this.detailArea);
             }else {
-                ReactDOM.render(<OrderDetail number={orderNo}/>,this.detailArea);
+                ReactDOM.render(<OrderDetail width={sumWidth} number={orderNo}/>,this.detailArea);
             }
         }
         this.setState({isExpand:!this.state.isExpand});
@@ -270,7 +271,7 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='PayStatus'){
                 return(
                     <li key={index} style={{width:widths[index]} } className="list-end">
-                        <p onClick={this.handlePay} >{item.pay_status}</p>
+                        <p onClick={this.handlePay} style={{color:item.color}} >{item.pay_status}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightStatus'){

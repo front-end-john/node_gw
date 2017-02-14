@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {maxNumber} from '../util';
 let PrimaryItem = React.createClass({
     render(){
         let items=this.props.childItems,childLevel=null;
@@ -53,10 +53,15 @@ let Aside = React.createClass({
             console.trace('错误:', e);
         });
     },
+    adaptHeight(){
+        let appHel=getComputedStyle(document.getElementsByClassName("app")[0]).height;
+        appHel=parseFloat(appHel)+20;
+        let sHel=document.body.clientHeight;
+        this.nav.style.height=maxNumber(appHel,sHel,860)+"px";
+    },
     componentDidMount(){
         let hash=location.hash;
         hash=hash.substr(2).split("?");
-        //console.log("hash:",hash);
         this.setState({currItem:hash[0]});
         if(hash[1]){
             this.setState({secondItem:hash[1].replace("flag=","jsj_order_")});
@@ -77,24 +82,30 @@ let Aside = React.createClass({
                 this.setState({currItem:"order_manager",secondItem:"order_manager_7"});
             }
         }
+        this.adaptHeight();
+        window.addEventListener("resize",this.adaptHeight,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptHeight);
     },
     handClick(id){
         this.setState({currItem:id});
-        this.setState({secondItem:""});
         if(id==="order_query"){
             location.href="#/order_query";
+            this.setState({secondItem:""});
         }else if(id==="order_manager"){
-            //this.setState({secondItem:0});
 
         }else if(id==="jsj_order"){
-            //this.setState({secondItem:0});
 
         }else if(id==="user_manager"){
             location.href="#/user_manager";
+            this.setState({secondItem:""});
         }else if(id==="comment_manager"){
             location.href="#/evaluation_manage";
+            this.setState({secondItem:""});
         }else if(id==="coupon_manager"){
             location.href="#/coupon_manage";
+            this.setState({secondItem:""});
         }
     },
     handleSecondClick(id){
@@ -135,7 +146,7 @@ let Aside = React.createClass({
             {name:'送机订单',newCount:jsjCount.pickoffnumber||0}];
 
         return(
-            <aside>
+            <aside ref={(c)=>this.nav=c}>
                 <div id="manager">
                     <div><img src="/admin/img/managerimg.png" /></div>
                     <div>

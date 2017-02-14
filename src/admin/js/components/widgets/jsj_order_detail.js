@@ -8,7 +8,7 @@ import {getFormatDate} from '../../util';
 
 export default React.createClass({
     getInitialState(){
-        return{p_item:'p1'};
+        return{p_item:'p1',first:true};
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -64,15 +64,29 @@ export default React.createClass({
                                    url="/jsj/system/addremark" number={this.props.number}/>, mask);
     },
     adjustWidth(){
-        let screenWidth=document.body.clientWidth||window.innerWidth;
-        if(screenWidth>1614){
-            let incre=(screenWidth-1614)/4;
+        let sumWidth=document.body.clientWidth-260;
+        //console.log("sumWidth",sumWidth);
+        if(this.state.first){
+            sumWidth=this.props.width;
+            this.setState({first:false});
+        }
+        let helArr=[];
+        let edgeValue=1400;
+        if(sumWidth>edgeValue){
+            let incre=(sumWidth-edgeValue)/4;
             for(let i=1;i<5;i++){
                 let dom=this["block"+i];
                 let width=300+incre;
+                if (i == 1) this.userTag.style.width=width-101+'px';
                 if(i==4) width=494+incre;
                 dom.style.width=width+"px";
+                helArr[i-1] = parseFloat(getComputedStyle(dom).height);
             }
+        }
+        let maxHel=helArr.sort()[3];
+        for(let i=1;i<5;i++) {
+            let dom = this["block" + i];
+            dom.style.height = maxHel + "px";
         }
     },
     render(){
@@ -125,7 +139,7 @@ export default React.createClass({
                             <p><label>用户来源:</label><span>{user.comefrom||""}</span></p>
                             <p><label>注册时间:</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.regtime)}</span></p>
-                            <p><label>标&emsp;&emsp;签:</label><em>{userTags}
+                            <p><label>标&emsp;&emsp;签:</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>添加</span></em></p>
                             <p className="note-field"><label>备&emsp;&emsp;注: </label>

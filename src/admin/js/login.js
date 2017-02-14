@@ -6,7 +6,11 @@ let Login=React.createClass({
     getInitialState(){
         return {code:null};
     },
-
+    componentDidMount(){
+        if(sessionStorage.getItem("AdminInfo")){
+            ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
+        }
+    },
     handleLogin(e){
         e.preventDefault();
         let username=this.acountIn.value,password=this.passwdIn.value;
@@ -17,8 +21,8 @@ let Login=React.createClass({
         }).then((json)=>{
             console.log(' json', json);
             if(json.code==0){
-                ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
                 sessionStorage.setItem("AdminInfo",JSON.stringify(json));
+                ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
             }else {
                 this.loginTip.className="warning";
             }
