@@ -75,7 +75,7 @@ let SelectInput=React.createClass({
         });
         return(
             <p className="input-item select-item">
-                <label>{this.props.title}</label>
+                <label style={{paddingLeft:this.props.pdl||20}}>{this.props.title}</label>
                 <select id={this.props.name}  onChange={this.props.change} >
                     <option value="">{this.props.defaultName}</option>
                     {list}

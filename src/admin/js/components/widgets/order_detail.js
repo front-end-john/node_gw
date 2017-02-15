@@ -13,11 +13,15 @@ import AddRemark from '../dialog/add_remark';
 import EditCar from "../dialog/modify_car_info";
 import EditBook from "../dialog/modify_bookingtime";
 import EditFlightInfo from "../dialog/operate_flight_info";
+import PredictTime from "../dialog/predict_getcar_time";
 import {getStateInfo,getFormatDate} from '../../util'
 
 let OrderDetail=React.createClass({
     getInitialState(){
-        return{p_item:'p1',first:true};
+        return{
+            p_item:'p1',first:true,
+            blocks:[]
+        };
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -82,6 +86,12 @@ let OrderDetail=React.createClass({
                                           number={this.props.number} fno={fno} fdate={fdate}
                                           reload={this.loadOrderDetail}  />, mask);
     },
+    editPredictGetCarTime(type,time){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(< PredictTime  type={type} url="/admin/api/orders/edit_returning_info"
+                                          number={this.props.number} time={time}
+                                          reload={this.loadOrderDetail}  />, mask);
+    },
     handleSwitch(e){
         if(e.target.nodeName==="LI"){
             if (e.target.id == "pro_1") {
@@ -116,27 +126,27 @@ let OrderDetail=React.createClass({
     adjustWidth(){
         let sumWidth=document.body.clientWidth-260;
         //console.log("sumWidth",sumWidth);
+        let bs=this.state.blocks;
+
         if(this.state.first){
             sumWidth=this.props.width;
             this.setState({first:false});
         }
-        let helArr=[];
+        let helArr=[],ws=[300,300,300,494];
         let edgeValue=1400;
         if(sumWidth>edgeValue){
             let incre=(sumWidth-edgeValue)/4;
-            for(let i=1;i<5;i++) {
-                let dom = this["block" + i];
-                let width = 300 + incre;
-                if (i == 1) this.userTag.style.width=width-101+'px';
-                if (i == 4) width = 494 + incre;
-                dom.style.width = width + "px";
-                helArr[i - 1] = parseFloat(getComputedStyle(dom).height);
+            for(let i=0;i<4;i++) {
+                ws[i]+=incre;
+                let block=bs[i];
+                block.style.width=ws[i]+'px';
+                if (i == 0) this.userTag.style.width= ws[i]-101+'px';
+                helArr[i] = parseFloat(getComputedStyle(block).height);
             }
         }
         let maxHel=helArr.sort()[3];
-        for(let i=1;i<5;i++) {
-            let dom = this["block" + i];
-            dom.style.height = maxHel + "px";
+        for(let i=0;i<4;i++) {
+            bs[i].style.height = maxHel + "px";
         }
     },
     render(){
@@ -163,62 +173,62 @@ let OrderDetail=React.createClass({
         this.tags=user.tags||[];
         this.serialnumber=o.serialnumber;
         let userTags=(user.tags||[]).map((item,index)=>{
-            return(<span key={index}>{item}&ensp;</span>)
+            return(<span key={index} style={{color:"#323232"}}>{item}&ensp;</span>)
         });
         let states=getStateInfo(o.status);
         return(
             <section className="detail-section">
                 <p className="order-brief">
-                    <label style={{paddingLeft:'20px'}}>订单号: </label><span>{o.serialnumber||''}</span>
-                    <label style={{paddingLeft:'20px'}}>下单时间: </label><span>{o.createtime||''}</span>
-                    <label style={{paddingLeft:'20px'}}>来源: </label><span>{o.comefrom||''}</span>
-                    <label style={{paddingLeft:'20px'}}>状态: </label>
+                    <label style={{paddingLeft:'20px'}}>订单号：</label><span>{o.serialnumber||''}</span>
+                    <label style={{paddingLeft:'20px'}}>下单时间：</label><span>{o.createtime||''}</span>
+                    <label style={{paddingLeft:'20px'}}>来源：</label><span>{o.comefrom||''}</span>
+                    <label style={{paddingLeft:'20px'}}>状态：</label>
                     <span style={{color:states[1]}}>{states[0]}</span>
                 </p>
                 <div className="order-main">
-                    <div className="user-info" ref={(c)=>this.block1=c}>
+                    <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >
                         <h2>用户信息</h2>
                         <figure className="user-basic">
                             <img src={user.avatar||"/admin/img/userheadimg.png"}/>
                             <figcaption>
-                                <p>姓名: <span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                <p>姓名：<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                              onClick={()=>this.editUserInfo()}>{user.realname||''}</span></p>
-                                <p>性别: <span>{user.sex==1?"男":"女"}</span></p>
-                                <p>手机: <span>{user.phoneno||''}</span></p>
+                                <p>性别：<span>{user.sex==1?"男":"女"}</span></p>
+                                <p>手机：<span>{user.phoneno||''}</span></p>
                             </figcaption>
                         </figure>
                         <div className="user-other">
-                            <p><label>重要等级:</label>{level}</p>
-                            <p><label>使用次数:</label><span>{user.bookcount||''}</span></p>
-                            <p><label>用户来源:</label><span>{user.comefrom||''}</span></p>
-                            <p><label>注册时间:</label>
+                            <p><label>重要等级：</label>{level}</p>
+                            <p><label>使用次数：</label><span>{user.bookcount||''}</span></p>
+                            <p><label>用户来源：</label><span>{user.comefrom||''}</span></p>
+                            <p><label>注册时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime)}</span></p>
-                            <p><label>标&emsp;&emsp;签:</label><em ref={(c)=>this.userTag=c}>{userTags}
+                            <p><label>标&emsp;&emsp;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                      onClick={()=>this.addLabel(user.userid)}>添加</span></em></p>
-                            <p className="note-field"><label>备&emsp;&emsp;注: </label>
+                                      onClick={()=>this.addLabel(user.userid)}>{userTags.length>0?"编辑":"添加"}</span></em></p>
+                            <p className="note-field"><label>备&emsp;&emsp;注：</label>
                                 <span>{user.remark||''}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" ref={(c)=>this.block2=c}>
+                    <div className="order-info" ref={(c)=>this.state.blocks[1]=c}>
                         <h2>预约信息</h2>
                         <div className="up-section">
-                            <p><label>车辆信息:&ensp;</label>
+                            <p><label>车辆信息：</label>
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.editCarInfo(car)}>
                                     {(car.carno||"")+" "+(car.color||"")+" "+(car.brand||"")}</span></p>
-                            <p><label>预约接车时间:&ensp;</label>
+                            <p><label>预约接车时间：</label>
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.editBookingTime(o.serialnumber,o.bookingtime)}>
                                     {o.bookingtime||""}</span></p>
-                            <p><label>去程航站楼:&ensp;</label>
+                            <p><label>去程航站楼：</label>
                                 <span>{o.parkingterminalname||""}</span></p>
                         </div>
                         <div className="down-section">
-                            <p><label>用户更新时间:&ensp;</label>
+                            <p><label>用户更新时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.updatetime)}</span></p>
                             <p className="back-flight">
-                                <label>返程航班:&ensp;</label>
+                                <label>返程航班：</label>
                                 {o.returningflight?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                     onClick={()=>this.editFlightInfo("mod",o.returningflight,o.returningdate)}>
                                     {(o.returningflight||"")+" "+(o.returningdate||"")}</span>):
@@ -227,29 +237,31 @@ let OrderDetail=React.createClass({
 
                                {/* <img src="/admin/img/icon/10_1.png" />*/}
                             </p>
-                            <p><label>预计取车时间:&ensp;</label>
+                            <p><label>预计取车时间：</label>
                                 {o.returningtime?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                                          onClick={()=>{}}>{o.returningtime||""}</span>):
+                                                          onClick={()=>this.editPredictGetCarTime("mod",o.returningtime)}>
+                                        {o.returningtime||""}</span>):
                                     (<span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                           onClick={()=>{}}>添加</span>)}</p>
-                            <p><label>回程航站楼:&ensp;</label><span>{o.returningterminalname||""}</span></p>
-                            <p className="note-field"><label>渠道备注:</label>
+                                           onClick={()=>this.editPredictGetCarTime("add",o.returningtime)}>添加</span>)}</p>
+                            <p><label>回程航站楼：</label><span>{o.returningterminalname||""}</span></p>
+                            <p className="note-field"><label>渠道备注：</label>
                                 <span>{""}</span></p>
                         </div>
                     </div>
-                    <div className="service-info" ref={(c)=>this.block3=c}>
+                    <div className="service-info" ref={(c)=>this.state.blocks[2]=c}>
                         <h2>更多服务</h2>
                         <div className="extra-service">
-                            <p><label>洗车:</label><span>{washCar}</span>
+                            <p><label>洗车：</label><span>{washCar}</span>
                                 <em>取消</em><em>编辑</em>
                             </p>
-                            <p style={{marginBottom:'62px'}}><label>加油:</label><span>无</span>
+
+                            <p style={{marginBottom:'62px'}}><label>加油：</label><span>无</span>
                                 <em>添加</em>
                             </p>
                         </div>
-                        <p className="note-field"><label>用户备注:</label><span>{o.userremark||""}</span></p>
+                        <p className="note-field"><label>用户备注：</label><span>{o.userremark||""}</span></p>
                     </div>
-                    <div className="process-info" ref={(c)=>this.block4=c}>
+                    <div className="process-info" ref={(c)=>this.state.blocks[3]=c} >
                         <ul onClick={this.handleSwitch}>
                             <li className={this.state.p_item=='p1'?"show-item":''} id="pro_1" >接车</li>
                             <li id="pro_2" className={this.state.p_item=='p2'?"show-item":''} >挪车</li>
@@ -261,12 +273,12 @@ let OrderDetail=React.createClass({
                         <div ref={(c)=>this.process=c} className="process-area" />
                     </div>
                     <div className="service-note">
-                        <p>客服备注:<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
+                        <p>客服备注：<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {serviceRemark}
                     </div>
                     <div className="driver-note">
-                        <p>司机备注:</p>
+                        <p>司机备注：</p>
                         {driverRemark}
                     </div>
                 </div>

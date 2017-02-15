@@ -69,8 +69,8 @@ let TableLine=React.createClass({
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p><span>{arr[0]}</span><br/><span>{arr[1]||""}</span>
-                            {arr.length>2?(<span style={{color:"#1A9FE5"}}
-                                                 onClick={()=>this.showMoreTags(arr)}>&ensp;更多</span>):""}</p>
+                            {/*arr.length>2?(<span style={{color:"#1A9FE5"}}
+                                                 onClick={()=>this.showMoreTags(arr)}>&ensp;更多</span>):""*/}</p>
                     </li>
                 );
             }else if(item.fieldName=='OrderSource'){
@@ -169,7 +169,7 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='OnwardTerminal'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.city}<br/>{item.terminal}</p>
+                        <p>{item.terminal}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnTerminal'){

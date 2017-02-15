@@ -13,7 +13,7 @@ let AirportTempPark=React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 120,    120,  120,    120,    120,   120,    130,     120,       130,         130],
+            initWidths:[ 150,    120,  120,    120,    120,   120,    130,     120,       130,         130],
             titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','挪车司机','机场停放时间','开始挪车时间']
         };
     },
@@ -80,16 +80,18 @@ let AirportTempPark=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
+                    <TextInput title="订单号：" change={this.handleChange} name="order_no" holdText="请输入订单号" />
+                    <TextInput title="用户手机：" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
                 </div>
-                <TableHead data={headData} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
+                <div className="data-list">
+                    <TableHead data={headData} />
+                    <TableLine widths={widths} data={data} />
+                    <TableLine widths={widths} data={data} />
+                    <TableLine widths={widths} data={data} />
+                    <TableLine widths={widths} data={data} />
+                </div>
             </section>
         );
     }

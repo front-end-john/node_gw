@@ -125,20 +125,23 @@ let OrderQuery=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <SelectInput title="订单来源:" change={this.handleTextInputChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="订单状态:" change={this.handleTextInputChange} name="order_status" defaultName="全部"/>
-                    <SelectInput title={<span>机&emsp;&emsp;场:</span>} change={this.handleTextInputChange} name="airport" defaultName="全部"/>
+                    <SelectInput title="订单来源：" change={this.handleTextInputChange} pdl="0"
+                                 name="order_source" defaultName="全部"/>
+                    <SelectInput title="订单状态：" change={this.handleTextInputChange} name="order_status" defaultName="全部"/>
+                    <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
+                                 change={this.handleTextInputChange} name="airport" defaultName="全部"/>
                     <hr/>
-                    <TextInput title={<span>订&ensp;单&ensp;号:</span>} change={this.handleTextInputChange}
+                    <TextInput title={<span>订&ensp;单&ensp;号：</span>} change={this.handleTextInputChange} pdl="0"
                                enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机:" change={this.handleTextInputChange}
+                    <TextInput title={<span>用户手机：</span>} change={this.handleTextInputChange}
                                enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>
-                    <TextInput title="车牌号码:" change={this.handleTextInputChange}
+                    <TextInput title={<span>&emsp;&emsp;车牌号码：</span>} change={this.handleTextInputChange}
                                enter={()=>this.handlePageQuery(1,10)} name="car_no" holdText="请输入车牌号" />
                     <hr/>
-                    <SelectInput title="筛选时间:" change={this.handleTextInputChange} name="time_type" defaultName="选择筛选的时间"/>
-                    <DateSelect title="开始时间:" change={(date)=>this.state.queryCondition.starttime=date} />
-                    <DateSelect title="结束时间:" change={(date)=>this.state.queryCondition.endtime=date}  />
+                    <SelectInput title="筛选时间：" change={this.handleTextInputChange} pdl="0"
+                                 name="time_type" defaultName="选择筛选的时间"/>
+                    <DateSelect title="开始时间：" change={(date)=>this.state.queryCondition.starttime=date} />
+                    <DateSelect title="结束时间：" change={(date)=>this.state.queryCondition.endtime=date}  />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout" onClick={this.exportData}>导出</button>
                 </div>

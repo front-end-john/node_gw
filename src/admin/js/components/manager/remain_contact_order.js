@@ -100,7 +100,7 @@ let RemainContactOrder=React.createClass({
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {order_time:item.createtime,fieldName:'OrderTime'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
-                {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
+                {terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
                 {back_flight:flight,back_time:returnDate,fieldName:'ReturnTicket'},
                 {wash:services[0]?'洗车':"",oil:services[1]?'加油':"",fieldName:'MoreService'},
@@ -111,9 +111,11 @@ let RemainContactOrder=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
+                    <TextInput title="订单号：" change={this.handleChange}
+                               enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
+                    <TextInput title="用户手机：" change={this.handleChange}
+                               enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout">下单</button>
                 </div>

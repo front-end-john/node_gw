@@ -21,12 +21,12 @@
         ReactDOM.render(<i/>, mask);
         mask.style.display="none";
     },
-    ensure(is){
-        let serialnumber=this.props.number,sendmsg=is;
-        let returningflight=this.fno||this.props.fno;
-        let returningdate=this.fdate||this.props.fdate;
+    ensure(){
+        return 0;
+        let serialnumber=this.props.number;
+        let time=this.fno||this.props.time;
         let url=this.props.url+"?";
-        url+=queryStr.stringify({serialnumber,returningflight,returningdate,sendmsg});
+        url+=queryStr.stringify({serialnumber,time});
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("修改返程航班响应状态："+res.status);
             if(+res.status < 400){
@@ -55,29 +55,19 @@
     },
 
     render(){
-        let btns=[];
-        if(this.props.type=="add"){
-            btns[0]=(<button key={0} onClick={this.cancel}>取消</button>);
-            btns[1]=(<button key={1} onClick={()=>this.ensure(false)}>确认</button>);
-        }else {
-            btns[0]=(<button key={0} onClick={()=>this.ensure(false)}>修改不发送短信</button>);
-            btns[1]=(<button key={1} onClick={()=>this.ensure(true)}>修改并发送短信</button>);
-        }
         return(
             <div className="dialog">
-                <h2 className="title">{this.props.type=="add"?"添加":"修改"}返程航班<i onClick={this.cancel}/></h2>
+                <h2 className="title">{this.props.type=="add"?"添加":"修改"}预计取车时间<i onClick={this.cancel}/></h2>
                 <div className="dialog-flight-info">
-                    <p><em>返程航班：</em>
-                        <input placeholder="请输入返程航班" onChange={(e)=>this.fno=e.target.value}
-                               defaultValue={this.props.fno}/></p>
-                    <div className="date-select"><em>返程时间：</em>
-                        <DateField onChange={(date)=>this.fdate=date } dateFormat="YYYY-MM-DD"
+                    <div className="date-select"><em>预计取车时间：</em>
+                        <DateField onChange={(date)=>this.fdate=date } dateFormat="YYYY-MM-DD HH:mm"
                                    style={{borderColor:"#ddd",width:"220px",height:"36px"}}
                                    defaultValue={this.props.fdate} placeholder="请输入返程时间"
                         /></div>
                 </div>
                 <section className="btn">
-                    {btns}
+                    <button onClick={this.cancel}>取消</button>
+                    <button onClick={()=>this.ensure()}>确认</button>
                 </section>
             </div>
         );
