@@ -23,7 +23,7 @@ let JSJOrder=React.createClass({
         let val=e.target.value.trim();
         if(key==="phone_no"){
             this.state.queryCondition.phoneno=val;
-        }else if(key==="username"){
+        }else if(key==="user_name"){
             this.state.queryCondition.username=val;
         }else if(key==="order_no"){
             this.state.queryCondition.serialnumber=val;
@@ -130,7 +130,7 @@ let JSJOrder=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <TextInput title="用户姓名：" ref={(c)=>this.name=c} change={this.handleChange} pdl="0" name="username"
+                    <TextInput title="用户姓名：" ref={(c)=>this.name=c} change={this.handleChange} pdl="0" name="user_name"
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入用户姓名" />
                     <TextInput title="用户手机：" ref={(c)=>this.phone=c} change={this.handleChange} name="phone_no"
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>

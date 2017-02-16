@@ -80,6 +80,12 @@ let Aside = React.createClass({
                 this.setState({currItem:"order_manager",secondItem:"order_manager_6"});
             }else if(hash[0]=="ongoing_send_order"){
                 this.setState({currItem:"order_manager",secondItem:"order_manager_7"});
+            }else if(hash[0]=="user_manager"){
+                this.setState({currItem:"user_manager",secondItem:""});
+            }else if(hash[0]=="evaluation_manage"){
+                this.setState({currItem:"comment_manager",secondItem:""});
+            }else if(hash[0]=="coupon_manage"){
+                this.setState({currItem:"coupon_manager",secondItem:""});
             }
         }
         this.adaptHeight();

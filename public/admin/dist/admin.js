@@ -29019,6 +29019,12 @@
 	                this.setState({ currItem: "order_manager", secondItem: "order_manager_6" });
 	            } else if (hash[0] == "ongoing_send_order") {
 	                this.setState({ currItem: "order_manager", secondItem: "order_manager_7" });
+	            } else if (hash[0] == "user_manager") {
+	                this.setState({ currItem: "user_manager", secondItem: "" });
+	            } else if (hash[0] == "evaluation_manage") {
+	                this.setState({ currItem: "comment_manager", secondItem: "" });
+	            } else if (hash[0] == "coupon_manage") {
+	                this.setState({ currItem: "coupon_manager", secondItem: "" });
 	            }
 	        }
 	        this.adaptHeight();
@@ -64455,7 +64461,7 @@
 	        var val = e.target.value.trim();
 	        if (key === "phone_no") {
 	            this.state.queryCondition.phoneno = val;
-	        } else if (key === "username") {
+	        } else if (key === "user_name") {
 	            this.state.queryCondition.username = val;
 	        } else if (key === "order_no") {
 	            this.state.queryCondition.serialnumber = val;
@@ -64586,7 +64592,7 @@
 	                { className: 'query-condition' },
 	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u59D3\u540D\uFF1A', ref: function ref(c) {
 	                        return _this3.name = c;
-	                    }, change: this.handleChange, pdl: '0', name: 'username',
+	                    }, change: this.handleChange, pdl: '0', name: 'user_name',
 	                    enter: function enter() {
 	                        return _this3.handlePageQuery(1, 10);
 	                    }, holdText: '\u8BF7\u8F93\u5165\u7528\u6237\u59D3\u540D' }),
