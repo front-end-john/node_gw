@@ -4,7 +4,7 @@ import Ensure from '../dialog/ensure';
 import OrderDetail from './order_detail';
 import JSJOrderDetail from './jsj_order_detail';
 import Empty from './empty';
-
+import AssignDriver from "../dialog/assign_driver";
 let TableLine=React.createClass({
     getInitialState(){
         return{isExpand:false};
@@ -18,6 +18,11 @@ let TableLine=React.createClass({
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
         ReactDOM.render(<Ensure title="电话确认" content="亲！是否已电话和客户确认过订单信息？"/>, mask);
+    },
+    handleAssignDriver(){
+        let mask=document.getElementById("dialogContainer");
+        mask.style.display="block";
+        ReactDOM.render(<AssignDriver name={this.driverName} />, mask);
     },
     showMoreTags(tags){
         let mask=document.getElementById("dialogContainer");
@@ -55,6 +60,7 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='User'){
+                this.driverName=item.username;
                 let content=(<p>{item.phone_no}</p>);
                 if(item.username!="null"&&item.username){
                     content=(<p>{item.username}<br/>{item.phone_no}</p>);
@@ -353,7 +359,7 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='AssignTakeDriverOperation'){
                 let list=item.op_items.map((ele,i)=>{
                     return (
-                        <em key={i}>&ensp;{ele}</em>
+                        <em key={i} onClick={this.handleAssignDriver}>&ensp;{ele}</em>
                     );
                 });
                 return(

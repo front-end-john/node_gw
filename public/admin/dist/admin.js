@@ -29548,11 +29548,19 @@
 	        var _this2 = this;
 
 	        var list = this.state.rushOrder.map(function (item, index) {
-	            return _react2.default.createElement(
+	            var li = _react2.default.createElement(
 	                'span',
-	                { key: index, style: { color: '#35BAFF' } },
-	                '\u8BA2\u5355\u2002(154454654651)\u200220\u5206\u949F\u540E\u63A5\u8F66;'
+	                { key: index, style: { color: '#DB8800' } },
+	                '\u8BA2\u5355\u2002(154454654651)\u200220\u5206\u949F\u540E\u63A5\u8F66;\u2003\u2003'
 	            );
+	            if (index % 2 == 0) {
+	                li = _react2.default.createElement(
+	                    'span',
+	                    { key: index, style: { color: '#35BAFF' } },
+	                    '\u8BA2\u5355\u2002(154454654651)\u200220\u5206\u949F\u540E\u9001\u8F66;\u2003\u2003'
+	                );
+	            }
+	            return li;
 	        });
 	        return _react2.default.createElement(
 	            'div',
@@ -29813,6 +29821,10 @@
 
 	var _empty2 = _interopRequireDefault(_empty);
 
+	var _assign_driver = __webpack_require__(257);
+
+	var _assign_driver2 = _interopRequireDefault(_assign_driver);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var TableLine = _react2.default.createClass({
@@ -29829,6 +29841,11 @@
 	        var mask = document.getElementById("dialogContainer");
 	        mask.style.display = "block";
 	        _reactDom2.default.render(_react2.default.createElement(_ensure2.default, { title: '\u7535\u8BDD\u786E\u8BA4', content: '\u4EB2\uFF01\u662F\u5426\u5DF2\u7535\u8BDD\u548C\u5BA2\u6237\u786E\u8BA4\u8FC7\u8BA2\u5355\u4FE1\u606F\uFF1F' }), mask);
+	    },
+	    handleAssignDriver: function handleAssignDriver() {
+	        var mask = document.getElementById("dialogContainer");
+	        mask.style.display = "block";
+	        _reactDom2.default.render(_react2.default.createElement(_assign_driver2.default, { name: this.driverName }), mask);
 	    },
 	    showMoreTags: function showMoreTags(tags) {
 	        var mask = document.getElementById("dialogContainer");
@@ -29877,6 +29894,7 @@
 	                    )
 	                );
 	            } else if (item.fieldName == 'User') {
+	                _this.driverName = item.username;
 	                var content = _react2.default.createElement(
 	                    'p',
 	                    null,
@@ -30426,7 +30444,7 @@
 	                var _list3 = item.op_items.map(function (ele, i) {
 	                    return _react2.default.createElement(
 	                        'em',
-	                        { key: i },
+	                        { key: i, onClick: _this.handleAssignDriver },
 	                        '\u2002',
 	                        ele
 	                    );
@@ -31520,7 +31538,8 @@
 	    },
 	    ensure: function ensure() {
 	        var name = this.driverData[this.dataIndex].name;
-	        this.props.updateName(name);
+	        var update = this.props.updateName;
+	        update && update(name);
 	        this.cancel();
 	    },
 	    render: function render() {
@@ -32146,7 +32165,7 @@
 	var Evaluation = _react2.default.createClass({
 	    displayName: 'Evaluation',
 	    getInitialState: function getInitialState() {
-	        return { isHide: false };
+	        return { isHide: false, isReply: true };
 	    },
 	    handleHideAndShow: function handleHideAndShow() {
 	        var mask = document.getElementById("dialogContainer");
@@ -32197,6 +32216,9 @@
 	            }
 	            list[i] = listItem;
 	        }
+	        var isReply = this.state.isReply;
+	        var replyClr = isReply ? "#c9c9c9" : "#1AA0E5";
+
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'evaluation' },
@@ -32250,7 +32272,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'em',
-	                        { style: { color: "#c9c9c9" }, onClick: this.handleReply },
+	                        { style: { color: replyClr }, onClick: this.handleReply },
 	                        '\u56DE\u590D'
 	                    ),
 	                    '\u2003',
@@ -61669,7 +61691,7 @@
 	        var userTags = (user.tags || []).map(function (item, index) {
 	            return _react2.default.createElement(
 	                'span',
-	                { key: index },
+	                { key: index, style: { color: "#323232" } },
 	                item,
 	                '\u2002'
 	            );
@@ -61683,7 +61705,7 @@
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
-	                    '\u8BA2\u5355\u53F7: '
+	                    '\u8BA2\u5355\u53F7\uFF1A'
 	                ),
 	                _react2.default.createElement(
 	                    'span',
@@ -61693,7 +61715,7 @@
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
-	                    '\u4E0B\u5355\u65F6\u95F4: '
+	                    '\u4E0B\u5355\u65F6\u95F4\uFF1A'
 	                ),
 	                _react2.default.createElement(
 	                    'span',
@@ -61703,7 +61725,7 @@
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
-	                    '\u72B6\u6001: '
+	                    '\u72B6\u6001\uFF1A'
 	                ),
 	                _react2.default.createElement(
 	                    'span',
@@ -61713,7 +61735,7 @@
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
-	                    '\u53D6\u6D88\u4EBA: '
+	                    '\u53D6\u6D88\u4EBA\uFF1A'
 	                ),
 	                _react2.default.createElement(
 	                    'span',
@@ -61723,7 +61745,7 @@
 	                _react2.default.createElement(
 	                    'label',
 	                    { style: { paddingLeft: '20px' } },
-	                    '\u53D6\u6D88\u65F6\u95F4: '
+	                    '\u53D6\u6D88\u65F6\u95F4\uFF1A'
 	                ),
 	                _react2.default.createElement(
 	                    'span',
@@ -61754,7 +61776,7 @@
 	                            _react2.default.createElement(
 	                                'p',
 	                                null,
-	                                '\u59D3\u540D: ',
+	                                '\u59D3\u540D\uFF1A',
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    { style: { color: "#1AA0E5", cursor: "pointer" },
@@ -61767,7 +61789,7 @@
 	                            _react2.default.createElement(
 	                                'p',
 	                                null,
-	                                '\u6027\u522B: ',
+	                                '\u6027\u522B\uFF1A',
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    null,
@@ -61777,7 +61799,7 @@
 	                            _react2.default.createElement(
 	                                'p',
 	                                null,
-	                                '\u624B\u673A: ',
+	                                '\u624B\u673A\uFF1A',
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    null,
@@ -61795,7 +61817,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u91CD\u8981\u7B49\u7EA7:'
+	                                '\u91CD\u8981\u7B49\u7EA7\uFF1A'
 	                            ),
 	                            userLevel
 	                        ),
@@ -61805,7 +61827,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u7528\u6237\u6765\u6E90:'
+	                                '\u7528\u6237\u6765\u6E90\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61819,7 +61841,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u6CE8\u518C\u65F6\u95F4:'
+	                                '\u6CE8\u518C\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61833,7 +61855,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u6807\u2003\u2003\u7B7E:'
+	                                '\u6807\u2003\u2003\u7B7E\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'em',
@@ -61857,7 +61879,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u5907\u2003\u2003\u6CE8: '
+	                                '\u5907\u2003\u2003\u6CE8\uFF1A '
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61887,7 +61909,7 @@
 	                                'label',
 	                                null,
 	                                this.props.type == "1" ? "接机司机" : "送机司机",
-	                                ':\u2002'
+	                                '\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61901,7 +61923,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u53F8\u673A\u624B\u673A:\u2002'
+	                                '\u53F8\u673A\u624B\u673A\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61915,7 +61937,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u8F66\u8F86\u4FE1\u606F:\u2002'
+	                                '\u8F66\u8F86\u4FE1\u606F\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61936,7 +61958,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u9884\u7EA6\u670D\u52A1\u65F6\u95F4:\u2002'
+	                                '\u9884\u7EA6\u670D\u52A1\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61950,7 +61972,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u5206\u914D\u53F8\u673A\u65F6\u95F4:\u2002'
+	                                '\u5206\u914D\u53F8\u673A\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61964,7 +61986,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u5F00\u59CB\u670D\u52A1\u65F6\u95F4:\u2002'
+	                                '\u5F00\u59CB\u670D\u52A1\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -61978,7 +62000,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u670D\u52A1\u5B8C\u6210\u65F6\u95F4:\u2002'
+	                                '\u670D\u52A1\u5B8C\u6210\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62007,7 +62029,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u652F\u4ED8\u91D1\u989D:\u2002'
+	                                '\u652F\u4ED8\u91D1\u989D\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62021,7 +62043,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u652F\u4ED8\u65F6\u95F4:\u2002'
+	                                '\u652F\u4ED8\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62035,7 +62057,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u652F\u4ED8\u65B9\u5F0F:\u2002'
+	                                '\u652F\u4ED8\u65B9\u5F0F\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62053,7 +62075,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u8BC4\u4EF7\u65F6\u95F4:\u2002'
+	                                '\u8BC4\u4EF7\u65F6\u95F4\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62067,7 +62089,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u8BC4\u4EF7\u661F\u7EA7:\u2002'
+	                                '\u8BC4\u4EF7\u661F\u7EA7\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62081,7 +62103,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u8BC4\u4EF7\u5185\u5BB9:\u2002'
+	                                '\u8BC4\u4EF7\u5185\u5BB9\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62110,7 +62132,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u5F00\u7968\u91D1\u989D:\u2002'
+	                                '\u5F00\u7968\u91D1\u989D\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62124,7 +62146,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u5F00\u7968\u62AC\u5934:\u2002'
+	                                '\u5F00\u7968\u62AC\u5934\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62138,7 +62160,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u5F00\u7968\u5185\u5BB9:\u2002'
+	                                '\u5F00\u7968\u5185\u5BB9\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62156,7 +62178,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u6536\u2002\u4EF6\u2002\u4EBA:\u2002'
+	                                '\u6536\u2002\u4EF6\u2002\u4EBA\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62170,7 +62192,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u6536\u4EF6\u7535\u8BDD:\u2002'
+	                                '\u6536\u4EF6\u7535\u8BDD\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62184,7 +62206,7 @@
 	                            _react2.default.createElement(
 	                                'label',
 	                                null,
-	                                '\u6536\u4EF6\u5730\u5740:\u2002'
+	                                '\u6536\u4EF6\u5730\u5740\uFF1A'
 	                            ),
 	                            _react2.default.createElement(
 	                                'span',
@@ -62200,7 +62222,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        '\u5BA2\u670D\u5907\u6CE8:',
+	                        '\u5BA2\u670D\u5907\u6CE8\uFF1A',
 	                        _react2.default.createElement('img', { src: '/admin/img/icon/13_1.png', onClick: this.addRemark,
 	                            style: { color: "#1AA0E5", cursor: "pointer" } })
 	                    ),
@@ -62292,6 +62314,9 @@
 
 	exports.default = _react2.default.createClass({
 	    displayName: "page",
+	    getInitialState: function getInitialState() {
+	        return { pageIndex: 0 };
+	    },
 	    render: function render() {
 	        var _props = this.props,
 	            page = _props.page,
@@ -62321,11 +62346,24 @@
 	                item
 	            );
 	        });
-
 	        return _react2.default.createElement(
 	            "p",
 	            { className: "paging" },
+	            _react2.default.createElement(
+	                "em",
+	                { className: "start-end", onClick: function onClick() {
+	                        return paging(1, pageSize);
+	                    } },
+	                "\u9996\u9875"
+	            ),
 	            list,
+	            _react2.default.createElement(
+	                "em",
+	                { className: "start-end", onClick: function onClick() {
+	                        return paging(pageCount, pageSize);
+	                    } },
+	                "\u5C3E\u9875"
+	            ),
 	            _react2.default.createElement(
 	                "label",
 	                null,
@@ -62690,9 +62728,16 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7:', change: this.handleChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90\uFF1A', change: this.handleChange, pdl: '0',
+	                    name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7\uFF1A', change: this.handleChange, name: 'order_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, name: 'phone_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: function onClick() {
@@ -62701,12 +62746,22 @@
 	                    '\u67E5\u8BE2'
 	                )
 	            ),
-	            _react2.default.createElement(
+	            list.length > 0 ? _react2.default.createElement(
 	                'div',
 	                { className: 'data-list' },
 	                _react2.default.createElement(_table_head2.default, { data: headData }),
 	                list,
 	                _react2.default.createElement(_page2.default, _extends({}, this.state.pageObj, { paging: this.handlePageQuery }))
+	            ) : _react2.default.createElement(
+	                'div',
+	                { className: 'data-none' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement('img', { src: '/admin/img/icon/06.png' }),
+	                    '\u6682\u65F6\u6CA1\u6709\u8BA2\u5355\u8BB0\u5F55'
+	                )
 	            )
 	        );
 	    }
@@ -62872,9 +62927,15 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7:', change: this.handleChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90\uFF1A', change: this.handleChange, pdl: '0', name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7\uFF1A', change: this.handleChange, name: 'order_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, name: 'phone_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: function onClick() {
@@ -62883,12 +62944,22 @@
 	                    '\u67E5\u8BE2'
 	                )
 	            ),
-	            _react2.default.createElement(
+	            list.length > 0 ? _react2.default.createElement(
 	                'div',
 	                { className: 'data-list' },
 	                _react2.default.createElement(_table_head2.default, { data: headData }),
 	                list,
 	                _react2.default.createElement(_page2.default, _extends({}, this.state.pageObj, { paging: this.handlePageQuery }))
+	            ) : _react2.default.createElement(
+	                'div',
+	                { className: 'data-none' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement('img', { src: '/admin/img/icon/06.png' }),
+	                    '\u6682\u65F6\u6CA1\u6709\u8BA2\u5355\u8BB0\u5F55'
+	                )
 	            )
 	        );
 	    }
@@ -63043,6 +63114,7 @@
 	        });
 	        document.getElementById("appContainer").style.width = 200 + sumWidth + "px";
 	        var list = this.state.orderData.map(function (item, index) {
+	            //console.log(item);
 	            var data = [{ order_no: item.serialnumber, fieldName: 'OrderNo' }, { username: item.username, phone_no: item.userphoneno, fieldName: 'User' }, { tags: item.usertags, fieldName: 'Label' }, { order_source: item.comefrom, fieldName: 'OrderSource' }, { car_no: item.carno, car_color: item.carcolor, car_brand: item.brand, fieldName: 'Car' }, { city: '', terminal: item.terminalname, fieldName: 'OnwardTerminal' }, { session: item.bookingtime, fieldName: 'Session' }, { take_driver: item.parkingdrivername, color: "#DB8800", fieldName: 'TakeDriver' }, { assign_time: item.parkingassignedtime, fieldName: 'AssignTime' }, { start_take_time: item.parkingstartedtime, fieldName: 'StartTakeTime' }];
 	            return _react2.default.createElement(_table_line2.default, { key: index, widths: widths, data: data });
 	        });
@@ -63053,9 +63125,15 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7:', change: this.handleChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90\uFF1A', change: this.handleChange, pdl: '0', name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7\uFF1A', change: this.handleChange, name: 'order_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, name: 'phone_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: function onClick() {
@@ -63064,12 +63142,22 @@
 	                    '\u67E5\u8BE2'
 	                )
 	            ),
-	            _react2.default.createElement(
+	            list.length > 0 ? _react2.default.createElement(
 	                'div',
 	                { className: 'data-list' },
 	                _react2.default.createElement(_table_head2.default, { data: headData }),
 	                list,
 	                _react2.default.createElement(_page2.default, _extends({}, this.state.pageObj, { paging: this.handlePageQuery }))
+	            ) : _react2.default.createElement(
+	                'div',
+	                { className: 'data-none' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement('img', { src: '/admin/img/icon/06.png' }),
+	                    '\u6682\u65F6\u6CA1\u6709\u8BA2\u5355\u8BB0\u5F55'
+	                )
 	            )
 	        );
 	    }
@@ -63304,16 +63392,17 @@
 	                throw new Error("服务异常");
 	            }
 	        }).then(function (str) {
+	            //console.log(str);
 	            try {
 	                var obj = JSON.parse(str);
 	                if (obj.code == 0) {
 	                    _this.setState({ orderData: obj.result });
 	                    _this.setState({ pageObj: { page: obj.page, pageCount: obj.pagecount, pageSize: obj.pagesize } });
 	                } else {
-	                    _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: '\u8BA2\u5355\u5217\u8868\u6570\u636E\u5F02\u5E38\uFF01' }), mask);
+	                    _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: obj.msg }), mask);
 	                }
 	            } catch (e) {
-	                _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: '\u83B7\u53D6\u7684\u6570\u636E\u683C\u5F0F\u5F02\u5E38\uFF01' }), mask);
+	                _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: '\u540E\u53F0\u670D\u52A1\u5F02\u5E38\uFF01' }), mask);
 	            }
 	        }).catch(function (e) {
 	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: '\u8BA2\u5355\u5217\u8868\u8BF7\u6C42\u5F02\u5E38\uFF01' }), mask);
@@ -63375,9 +63464,15 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7:', change: this.handleChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90\uFF1A', change: this.handleChange, pdl: '0', name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7\uFF1A', change: this.handleChange, name: 'order_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, name: 'phone_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: function onClick() {
@@ -63386,12 +63481,22 @@
 	                    '\u67E5\u8BE2'
 	                )
 	            ),
-	            _react2.default.createElement(
+	            list.length > 0 ? _react2.default.createElement(
 	                'div',
 	                { className: 'data-list' },
 	                _react2.default.createElement(_table_head2.default, { data: headData }),
 	                list,
 	                _react2.default.createElement(_page2.default, _extends({}, this.state.pageObj, { paging: this.handlePageQuery }))
+	            ) : _react2.default.createElement(
+	                'div',
+	                { className: 'data-none' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement('img', { src: '/admin/img/icon/06.png' }),
+	                    '\u6682\u65F6\u6CA1\u6709\u8BA2\u5355\u8BB0\u5F55'
+	                )
 	            )
 	        );
 	    }
@@ -63566,9 +63671,15 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7:', change: this.handleChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u8BA2\u5355\u6765\u6E90\uFF1A', change: this.handleChange, pdl: '0', name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7\uFF1A', change: this.handleChange, name: 'order_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, name: 'phone_no',
+	                    enter: function enter() {
+	                        return _this2.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: function onClick() {
@@ -63577,12 +63688,22 @@
 	                    '\u67E5\u8BE2'
 	                )
 	            ),
-	            _react2.default.createElement(
+	            list.length > 0 ? _react2.default.createElement(
 	                'div',
 	                { className: 'data-list' },
 	                _react2.default.createElement(_table_head2.default, { data: headData }),
 	                list,
 	                _react2.default.createElement(_page2.default, _extends({}, this.state.pageObj, { paging: this.handlePageQuery }))
+	            ) : _react2.default.createElement(
+	                'div',
+	                { className: 'data-none' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement('img', { src: '/admin/img/icon/06.png' }),
+	                    '\u6682\u65F6\u6CA1\u6709\u8BA2\u5355\u8BB0\u5F55'
+	                )
 	            )
 	        );
 	    }
@@ -63620,77 +63741,63 @@
 
 	var _user_line2 = _interopRequireDefault(_user_line);
 
+	var _util = __webpack_require__(247);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var UserManager = _react2.default.createClass({
 	    displayName: 'UserManager',
 	    getInitialState: function getInitialState() {
-	        "use strict";
-
 	        return {
-	            queryCondition: {
-	                phone_no: ""
-	            }
+	            orderData: [],
+	            pageObj: {},
+	            queryCondition: {},
+	            initWidths: [150, 120, 100, 130, 140, 140, 140, 120],
+	            titles: ['手机号', '姓名', '性别', '重要等级', '标注', '标星时间', '注册时间', '操作']
 	        };
 	    },
 	    handleChange: function handleChange(e) {
-	        "use strict";
-
 	        var key = e.target.id;
 	        var val = e.target.value;
 	        if (key === "phone_no") {
 	            this.state.queryCondition.phone_no = val;
 	        }
 	    },
-	    handleQuery: function handleQuery() {
+	    handlePageQuery: function handlePageQuery() {
 	        console.log(this.state.queryCondition);
 	    },
-	    adaptScreen: function adaptScreen(widths, titles) {
-	        var _this = this;
-
-	        this.setState({ titles: titles });
-	        var offsetWidth = 60,
-	            len = widths.length,
-	            initWidths = widths.concat();
-	        var sumWidth = widths.reduce(function (x, y) {
+	    adaptScreen: function adaptScreen() {
+	        var initWidths = this.state.initWidths;
+	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth),
-	            initSumWidth = sumWidth;
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	                _this.setState({ sumWidth: sumWidth, widths: widths });
-	            })();
-	        } else {
-	            this.setState({ sumWidth: sumWidth, widths: widths });
-	        }
-	        window.addEventListener("resize", function () {
-	            var screenWidth = document.body.clientWidth || window.innerWidth;
-	            if (screenWidth - 200 > initSumWidth) {
-	                (function () {
-	                    var incre = (screenWidth - 200 - initSumWidth) / len;
-	                    widths = initWidths.map(function (item) {
-	                        return item + incre;
-	                    });
-	                    sumWidth = widths.reduce(function (x, y) {
-	                        return x + y;
-	                    }, offsetWidth);
-	                    _this.setState({ sumWidth: sumWidth, widths: widths });
-	                })();
-	            }
-	        }, false);
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
+	        var sumWidth = initSumWidth,
+	            widths = initWidths;
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
-	        var widths = [130, 120, 100, 130, 140, 140, 140, 120];
-	        var titles = ['手机号', '姓名', '性别', '重要等级', '标注', '标星时间', '注册时间', '操作'];
-	        this.adaptScreen(widths, titles);
+	        this.adaptScreen();
+	    },
+	    componentDidMount: function componentDidMount() {
+	        window.addEventListener("resize", this.adaptScreen, false);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        window.removeEventListener("resize", this.adaptScreen);
 	    },
 	    render: function render() {
 	        var sumWidth = this.state.sumWidth;
@@ -63704,15 +63811,15 @@
 	        var data = [{ phone_no: '14572584545', fieldName: 'PhoneNo' }, { full_name: "中小屋", fieldName: 'FullName' }, { gender: "男", fieldName: 'Gender' }, { level: 3, fieldName: 'ImportantLevel' }, { mark: '重要客户', fieldName: 'Mark' }, { mark_star_time: '2016-8-9 15:14', fieldName: 'MarkStarTime' }, { logon_time: '2016-8-9 15:14', fieldName: 'LogonTime' }, { op_items: ["编辑", "取消星级"], dialogs: [2], color: "#1A9FE5", fieldName: 'Operation' }];
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, pdl: '0', name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
-	                    { className: 'query-btn', onClick: this.handleQuery },
+	                    { className: 'query-btn', onClick: this.handlePageQuery },
 	                    '\u67E5\u8BE2'
 	                ),
 	                _react2.default.createElement(
@@ -63721,11 +63828,15 @@
 	                    '\u65B0\u589E'
 	                )
 	            ),
-	            _react2.default.createElement(_table_head2.default, { data: headData }),
-	            _react2.default.createElement(_user_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_user_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_user_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_user_line2.default, { widths: widths, data: data })
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'data-list' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(_user_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_user_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_user_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_user_line2.default, { widths: widths, data: data })
+	            )
 	        );
 	    }
 	});
@@ -63901,26 +64012,22 @@
 
 	var _table_line2 = _interopRequireDefault(_table_line);
 
+	var _util = __webpack_require__(247);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var EvaluationManage = _react2.default.createClass({
 	    displayName: 'EvaluationManage',
-
-	    mixins: [],
 	    getInitialState: function getInitialState() {
-	        "use strict";
-
 	        return {
-	            queryCondition: {
-	                order_source: "",
-	                order_no: "",
-	                phone_no: ""
-	            }
+	            orderData: [],
+	            pageObj: {},
+	            queryCondition: {},
+	            initWidths: [150, 120, 120, 130, 130, 130, 160, 110, 120],
+	            titles: ['订单号', '用户', '车辆', '机场', '评价时间', '评价星级', '客服回复', '展现状态', '操作']
 	        };
 	    },
 	    handleChange: function handleChange(e) {
-	        "use strict";
-
 	        var key = e.target.id;
 	        var val = e.target.value;
 	        if (key === "phone_no") {
@@ -63931,55 +64038,41 @@
 	            this.state.queryCondition.order_no = val;
 	        }
 	    },
-	    handleQuery: function handleQuery() {
+	    handlePageQuery: function handlePageQuery() {
 	        console.log(this.state.queryCondition);
 	    },
-	    adaptScreen: function adaptScreen(widths, titles) {
-	        var _this = this;
-
-	        this.setState({ titles: titles });
-	        var offsetWidth = 60,
-	            len = widths.length,
-	            initWidths = widths.concat();
-	        var sumWidth = widths.reduce(function (x, y) {
+	    adaptScreen: function adaptScreen() {
+	        var initWidths = this.state.initWidths;
+	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth),
-	            initSumWidth = sumWidth;
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	                _this.setState({ sumWidth: sumWidth, widths: widths });
-	            })();
-	        } else {
-	            this.setState({ sumWidth: sumWidth, widths: widths });
-	        }
-	        window.addEventListener("resize", function () {
-	            var screenWidth = document.body.clientWidth || window.innerWidth;
-	            if (screenWidth - 200 > initSumWidth) {
-	                (function () {
-	                    var incre = (screenWidth - 200 - initSumWidth) / len;
-	                    widths = initWidths.map(function (item) {
-	                        return item + incre;
-	                    });
-	                    sumWidth = widths.reduce(function (x, y) {
-	                        return x + y;
-	                    }, offsetWidth);
-	                    _this.setState({ sumWidth: sumWidth, widths: widths });
-	                })();
-	            }
-	        }, false);
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
+	        var sumWidth = initSumWidth,
+	            widths = initWidths;
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
-	        var widths = [120, 120, 120, 130, 130, 130, 160, 110, 120];
-	        var titles = ['订单号', '用户', '车辆', '机场', '评价时间', '评价星级', '客服回复', '展现状态', '操作'];
-	        this.adaptScreen(widths, titles);
+	        this.adaptScreen();
+	    },
+	    componentDidMount: function componentDidMount() {
+	        window.addEventListener("resize", this.adaptScreen, false);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        window.removeEventListener("resize", this.adaptScreen);
 	    },
 	    render: function render() {
 	        var sumWidth = this.state.sumWidth;
@@ -63993,30 +64086,34 @@
 	        var data = [{ order_no: '1445515665454', fieldName: 'OrderNo' }, { username: "中小屋", phone_no: "124578654", fieldName: 'User' }, { car_no: '奥B4878', car_color: '白色', car_brand: '宝马', fieldName: 'Car' }, { airport: '广州白云', fieldName: 'Airport' }, { evaluate_time: '2016-12-12 14:14', fieldName: 'EvaluateTime' }, { evaluate_star_level: 5, fieldName: 'EvaluateStarLevel' }, { service_reply: "未回复", fieldName: 'CustomerServiceReply' }, { status: "仅此用户可见", fieldName: 'ShowStatus' }, { op_items: ['展现', '回复'], dialogs: [1, 2], color: "#1A9FE5", fieldName: 'Operation' }];
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
-	                _react2.default.createElement(_select_input2.default, { title: '\u5C55\u73B0\u72B6\u6001:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_select_input2.default, { title: '\u6CCA\u8F66\u53F8\u673A:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_select_input2.default, { title: '\u9001\u8F66\u53F8\u673A:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, pdl: '0', name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u5C55\u73B0\u72B6\u6001\uFF1A', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u6CCA\u8F66\u53F8\u673A\uFF1A', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u9001\u8F66\u53F8\u673A\uFF1A', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
 	                _react2.default.createElement('hr', null),
-	                _react2.default.createElement(_select_input2.default, { title: '\u670D\u52A1\u6253\u661F:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_select_input2.default, { title: '\u6CCA\u8F66\u6253\u661F:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
-	                _react2.default.createElement(_select_input2.default, { title: '\u9001\u8F66\u6253\u661F:', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u670D\u52A1\u6253\u661F\uFF1A', change: this.handleChange, pdl: '0', name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u6CCA\u8F66\u6253\u661F\uFF1A', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
+	                _react2.default.createElement(_select_input2.default, { title: '\u9001\u8F66\u6253\u661F\uFF1A', change: this.handleChange, name: 'order_source', defaultName: '\u5168\u90E8' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: this.handleQuery },
 	                    '\u67E5\u8BE2'
 	                )
 	            ),
-	            _react2.default.createElement(_table_head2.default, { data: headData }),
-	            _react2.default.createElement(_table_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_table_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_table_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_table_line2.default, { widths: widths, data: data })
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'data-list' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(_table_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_table_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_table_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_table_line2.default, { widths: widths, data: data })
+	            )
 	        );
 	    }
 	});
@@ -64053,23 +64150,22 @@
 
 	var _coupon_line2 = _interopRequireDefault(_coupon_line);
 
+	var _util = __webpack_require__(247);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
 	    displayName: 'coupon_manage',
 	    getInitialState: function getInitialState() {
-	        "use strict";
-
 	        return {
-	            queryCondition: {
-	                phone_no: "",
-	                wx_nick: ""
-	            }
+	            orderData: [],
+	            pageObj: {},
+	            queryCondition: {},
+	            initWidths: [150, 120, 100, 100, 120, 130, 130, 120, 120],
+	            titles: ['ID', '手机号', '类型', '状态', '金额', '领取时间', '截止时间', '活动来源', '操作']
 	        };
 	    },
 	    handleChange: function handleChange(e) {
-	        "use strict";
-
 	        var key = e.target.id;
 	        var val = e.target.value;
 	        if (key === "phone_no") {
@@ -64078,55 +64174,41 @@
 	            this.state.queryCondition.wx_nick = val;
 	        }
 	    },
-	    handleQuery: function handleQuery() {
+	    handlePageQuery: function handlePageQuery() {
 	        console.log(this.state.queryCondition);
 	    },
-	    adaptScreen: function adaptScreen(widths, titles) {
-	        var _this = this;
-
-	        this.setState({ titles: titles });
-	        var offsetWidth = 60,
-	            len = widths.length,
-	            initWidths = widths.concat();
-	        var sumWidth = widths.reduce(function (x, y) {
+	    adaptScreen: function adaptScreen() {
+	        var initWidths = this.state.initWidths;
+	        var initSumWidth = initWidths.reduce(function (x, y) {
 	            return x + y;
-	        }, offsetWidth),
-	            initSumWidth = sumWidth;
-	        var screenWidth = document.body.clientWidth || window.innerWidth;
-	        if (screenWidth - 200 > initSumWidth) {
-	            (function () {
-	                var incre = (screenWidth - 200 - initSumWidth) / len;
-	                widths = initWidths.map(function (item) {
-	                    return item + incre;
-	                });
-	                sumWidth = widths.reduce(function (x, y) {
-	                    return x + y;
-	                }, offsetWidth);
-	                _this.setState({ sumWidth: sumWidth, widths: widths });
-	            })();
-	        } else {
-	            this.setState({ sumWidth: sumWidth, widths: widths });
-	        }
-	        window.addEventListener("resize", function () {
-	            var screenWidth = document.body.clientWidth || window.innerWidth;
-	            if (screenWidth - 200 > initSumWidth) {
-	                (function () {
-	                    var incre = (screenWidth - 200 - initSumWidth) / len;
-	                    widths = initWidths.map(function (item) {
-	                        return item + incre;
-	                    });
-	                    sumWidth = widths.reduce(function (x, y) {
-	                        return x + y;
-	                    }, offsetWidth);
-	                    _this.setState({ sumWidth: sumWidth, widths: widths });
-	                })();
-	            }
-	        }, false);
+	        });
+	        //补偿宽度
+	        var offsetWidth = 260;
+	        //允许的最小宽度
+	        var minWidth = 1400 + offsetWidth,
+	            len = initWidths.length;
+	        var screenWidth = document.body.clientWidth;
+	        var sumWidth = initSumWidth,
+	            widths = initWidths;
+	        var actulWidth = (0, _util.maxNumber)(minWidth, screenWidth, sumWidth + offsetWidth);
+
+	        var incre = (actulWidth - offsetWidth - initSumWidth) / len;
+	        widths = initWidths.map(function (item) {
+	            return item + incre;
+	        });
+	        sumWidth = widths.reduce(function (x, y) {
+	            return x + y;
+	        });
+	        this.setState({ sumWidth: sumWidth + 40, widths: widths });
 	    },
 	    componentWillMount: function componentWillMount() {
-	        var widths = [130, 120, 100, 100, 120, 130, 130, 120, 120];
-	        var titles = ['ID', '手机号', '类型', '状态', '金额', '领取时间', '截止时间', '活动来源', '操作'];
-	        this.adaptScreen(widths, titles);
+	        this.adaptScreen();
+	    },
+	    componentDidMount: function componentDidMount() {
+	        window.addEventListener("resize", this.adaptScreen, false);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        window.removeEventListener("resize", this.adaptScreen);
 	    },
 	    render: function render() {
 	        var sumWidth = this.state.sumWidth;
@@ -64140,13 +64222,13 @@
 	        var data = [{ id: '1457', fieldName: 'CouponID' }, { phone_no: "1457258456", fieldName: 'PhoneNo' }, { type_msg: "停车优惠券(按天数)", fieldName: 'CouponType' }, { status: "已使用", fieldName: 'CouponStatus' }, { amount: '2天', fieldName: 'MoneyAmount' }, { receive_time: '2016-8-9', fieldName: 'ReceiveCouponTime' }, { deadline_time: '2016-8-9', fieldName: 'DeadlineTime' }, { source: '深圳航空客户专享', fieldName: 'ActivitySource' }, { op_items: ["删除"], dialogs: [1], color: "#1A9FE5", fieldName: 'Operation' }];
 	        return _react2.default.createElement(
 	            'section',
-	            { className: 'data-section', style: { width: sumWidth } },
+	            { className: 'data-section', style: { width: sumWidth + 20 } },
 	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u5FAE\u4FE1\u6635\u79F0:', change: this.handleChange, name: 'wx_nick', holdText: '\u8BF7\u8F93\u5165\u5FAE\u4FE1\u6635\u79F0' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', change: this.handleChange, pdl: '0', name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u5FAE\u4FE1\u6635\u79F0\uFF1A', change: this.handleChange, name: 'wx_nick', holdText: '\u8BF7\u8F93\u5165\u5FAE\u4FE1\u6635\u79F0' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: this.handleQuery },
@@ -64158,11 +64240,15 @@
 	                    '\u53D1\u653E\u4F18\u60E0\u5238'
 	                )
 	            ),
-	            _react2.default.createElement(_table_head2.default, { data: headData }),
-	            _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data }),
-	            _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data })
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'data-list' },
+	                _react2.default.createElement(_table_head2.default, { data: headData }),
+	                _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data }),
+	                _react2.default.createElement(_coupon_line2.default, { widths: widths, data: data })
+	            )
 	        );
 	    }
 	});
@@ -64498,15 +64584,24 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u59D3\u540D:', ref: function ref(c) {
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u59D3\u540D\uFF1A', ref: function ref(c) {
 	                        return _this3.name = c;
-	                    }, change: this.handleChange, name: 'username', holdText: '\u8BF7\u8F93\u5165\u7528\u6237\u59D3\u540D' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A:', ref: function ref(c) {
+	                    }, change: this.handleChange, pdl: '0', name: 'username',
+	                    enter: function enter() {
+	                        return _this3.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u7528\u6237\u59D3\u540D' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u7528\u6237\u624B\u673A\uFF1A', ref: function ref(c) {
 	                        return _this3.phone = c;
-	                    }, change: this.handleChange, name: 'phone_no', holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
-	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7:', ref: function ref(c) {
+	                    }, change: this.handleChange, name: 'phone_no',
+	                    enter: function enter() {
+	                        return _this3.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' }),
+	                _react2.default.createElement(_text_input2.default, { title: '\u8BA2\u5355\u53F7\uFF1A', ref: function ref(c) {
 	                        return _this3.number = c;
-	                    }, change: this.handleChange, name: 'order_no', holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
+	                    }, change: this.handleChange, name: 'order_no',
+	                    enter: function enter() {
+	                        return _this3.handlePageQuery(1, 10);
+	                    }, holdText: '\u8BF7\u8F93\u5165\u8BA2\u5355\u53F7' }),
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'query-btn', onClick: function onClick() {

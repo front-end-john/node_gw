@@ -107,18 +107,18 @@ export default React.createClass({
         }
         this.tags=user.tags||[];
         let userTags=(user.tags||[]).map((item,index)=>{
-            return(<span key={index}>{item}&ensp;</span>)
+            return(<span key={index} style={{color:"#323232"}}>{item}&ensp;</span>)
         });
         return(
             <section className="detail-section">
                 <p className="order-brief">
-                    <label style={{paddingLeft:'20px'}}>订单号: </label><span>{o.serialnumber||''}</span>
-                    <label style={{paddingLeft:'20px'}}>下单时间: </label>
+                    <label style={{paddingLeft:'20px'}}>订单号：</label><span>{o.serialnumber||''}</span>
+                    <label style={{paddingLeft:'20px'}}>下单时间：</label>
                     <span>{getFormatDate("yyyy-mm-dd hh:ii",o.createtime)}</span>
-                    <label style={{paddingLeft:'20px'}}>状态: </label>
+                    <label style={{paddingLeft:'20px'}}>状态：</label>
                     <span style={{color:'red'}}>{o.statusdescription}</span>
-                    <label style={{paddingLeft:'20px'}}>取消人: </label><span>{o.cancelperson}</span>
-                    <label style={{paddingLeft:'20px'}}>取消时间: </label>
+                    <label style={{paddingLeft:'20px'}}>取消人：</label><span>{o.cancelperson}</span>
+                    <label style={{paddingLeft:'20px'}}>取消时间：</label>
                     <span>{getFormatDate("yyyy-mm-dd hh:ii",o.canceltime)}</span>
                 </p>
                 <div className="order-main">
@@ -127,79 +127,79 @@ export default React.createClass({
                         <figure className="user-basic">
                             <img src={user.avater||"/admin/img/userheadimg.png"}/>
                             <figcaption>
-                                <p>姓名: <span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                <p>姓名：<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                              onClick={()=>this.editUserInfo()}>
                                     {user.username||''}</span></p>
-                                <p>性别: <span>{ user.sex||""}</span></p>
-                                <p>手机: <span>{ user.phoneno||''}</span></p>
+                                <p>性别：<span>{ user.sex||""}</span></p>
+                                <p>手机：<span>{ user.phoneno||''}</span></p>
                             </figcaption>
                         </figure>
                         <div className="user-other">
-                            <p><label>重要等级:</label>{userLevel}</p>
-                            <p><label>用户来源:</label><span>{user.comefrom||""}</span></p>
-                            <p><label>注册时间:</label>
+                            <p><label>重要等级：</label>{userLevel}</p>
+                            <p><label>用户来源：</label><span>{user.comefrom||""}</span></p>
+                            <p><label>注册时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.regtime)}</span></p>
-                            <p><label>标&emsp;&emsp;签:</label><em ref={(c)=>this.userTag=c}>{userTags}
+                            <p><label>标&emsp;&emsp;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>添加</span></em></p>
-                            <p className="note-field"><label>备&emsp;&emsp;注: </label>
+                            <p className="note-field"><label>备&emsp;&emsp;注： </label>
                                 <span>{user.remark||""}</span></p>
                         </div>
                     </div>
                     <div className="order-info" ref={(c)=>this.block2=c}>
                         <h2>{this.props.type=="1"?"接机信息":"送机信息"}</h2>
                         <div className="up-section">
-                            <p><label>{this.props.type=="1"?"接机司机":"送机司机"}:&ensp;</label>
+                            <p><label>{this.props.type=="1"?"接机司机":"送机司机"}：</label>
                                 <span style={{color:"#323232"}}>{driver.realname}</span></p>
-                            <p><label>司机手机:&ensp;</label>
+                            <p><label>司机手机：</label>
                                 <span style={{color:"#323232"}}>{driver.phoneno}</span></p>
-                            <p><label>车辆信息:&ensp;</label>
+                            <p><label>车辆信息：</label>
                                 <span style={{color:"#323232"}}>{driver.carbrand} {driver.carno}
                                 {driver.grade}</span></p>
                         </div>
                         <div className="down-section">
-                            <p><label>预约服务时间:&ensp;</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.bookingtime)}</span></p>
-                            <p><label>分配司机时间:&ensp;</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.dispatchtime)}</span></p>
-                            <p><label>开始服务时间:&ensp;</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.starttime)}</span></p>
-                            <p><label>服务完成时间:&ensp;</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.finishtime)}</span></p>
+                            <p><label>预约服务时间：</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.bookingtime)}</span></p>
+                            <p><label>分配司机时间：</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.dispatchtime)}</span></p>
+                            <p><label>开始服务时间：</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.starttime)}</span></p>
+                            <p><label>服务完成时间：</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.finishtime)}</span></p>
                         </div>
                     </div>
                     <div className="order-info" ref={(c)=>this.block3=c}>
                         <h2>支付&评价</h2>
                         <div className="up-section">
-                            <p><label>支付金额:&ensp;</label>
+                            <p><label>支付金额：</label>
                                 <span style={{color:"#323232"}}>{o.realfee||""}</span></p>
-                            <p><label>支付时间:&ensp;</label>
+                            <p><label>支付时间：</label>
                                 <span style={{color:"#323232"}}>{getFormatDate("yyyy-mm-dd hh:ii",o.paytime)}</span></p>
-                            <p><label>支付方式:&ensp;</label>
+                            <p><label>支付方式：</label>
                                 <span style={{color:"#323232"}}>{o.paytype||""}</span></p>
                         </div>
                         <div className="down-section">
-                            <p><label>评价时间:&ensp;</label>
+                            <p><label>评价时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",cmt.createtime)}</span></p>
-                            <p><label>评价星级:&ensp;</label><span>{cmtStars}</span></p>
-                            <p><label>评价内容:&ensp;</label><span>{cmt.content||""}</span></p>
+                            <p><label>评价星级：</label><span>{cmtStars}</span></p>
+                            <p><label>评价内容：</label><span>{cmt.content||""}</span></p>
                         </div>
                     </div>
                     <div className="order-info" style={{width:494}} ref={(c)=>this.block4=c}>
                         <h2>发票信息</h2>
                         <div className="up-section">
-                            <p><label>开票金额:&ensp;</label>
+                            <p><label>开票金额：</label>
                                 <span style={{color:"#323232"}}>{rece.money||""}</span></p>
-                            <p><label>开票抬头:&ensp;</label>
+                            <p><label>开票抬头：</label>
                                 <span style={{color:"#323232"}}>{rece.receipthead||""}</span></p>
-                            <p><label>开票内容:&ensp;</label>
+                            <p><label>开票内容：</label>
                                 <span style={{color:"#323232"}}>{rece.receiptcontent||""}</span></p>
                         </div>
                         <div className="down-section">
-                            <p><label>收&ensp;件&ensp;人:&ensp;</label>
+                            <p><label>收&ensp;件&ensp;人：</label>
                                 <span>{rece.receivepersopn||""}</span></p>
-                            <p><label>收件电话:&ensp;</label><span>{rece.receiptphoneno||""}</span></p>
-                            <p><label>收件地址:&ensp;</label><span>{rece.address||""}</span></p>
+                            <p><label>收件电话：</label><span>{rece.receiptphoneno||""}</span></p>
+                            <p><label>收件地址：</label><span>{rece.address||""}</span></p>
                         </div>
                     </div>
                     <div className="service-note" style={{width:"100%",borderRightWidth:0}}>
-                        <p>客服备注:<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
+                        <p>客服备注：<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {serviceRemark}
                     </div>

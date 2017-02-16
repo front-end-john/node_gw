@@ -5,21 +5,18 @@ import TextInput from '../widgets/text_input'
 import SelectInput from '../widgets/select_input'
 import TableHead from '../widgets/table_head'
 import TableLine from '../widgets/table_line'
-
+import {maxNumber} from '../../util';
 let EvaluationManage=React.createClass({
-    mixins:[],
     getInitialState(){
-        "use strict";
         return{
-            queryCondition:{
-                order_source:"",
-                order_no:"",
-                phone_no:""
-            }
+            orderData:[],
+            pageObj:{},
+            queryCondition:{},
+            initWidths:[ 150,   120,  120,  130,    130,     130,      160,     110,   120],
+            titles:    ['订单号','用户','车辆','机场','评价时间','评价星级','客服回复','展现状态','操作']
         };
     },
     handleChange(e){
-        "use strict";
         let key=e.target.id;
         let val=e.target.value;
         if(key==="phone_no"){
@@ -30,36 +27,33 @@ let EvaluationManage=React.createClass({
             this.state.queryCondition.order_no=val;
         }
     },
-    handleQuery(){
+    handlePageQuery(){
         console.log(this.state.queryCondition);
     },
-    adaptScreen(widths,titles){
-        this.setState({titles});
-        let offsetWidth=60,len=widths.length,initWidths=widths.concat();
-        let sumWidth = widths.reduce((x,y)=>x+y,offsetWidth),initSumWidth=sumWidth;
-        let screenWidth=document.body.clientWidth||window.innerWidth;
-        if(screenWidth-200 > initSumWidth){
-            let incre=(screenWidth-200-initSumWidth)/len;
-            widths=initWidths.map((item)=>item+incre);
-            sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-            this.setState({sumWidth,widths});
-        }else {
-            this.setState({sumWidth,widths});
-        }
-        window.addEventListener("resize",()=>{
-            let screenWidth=document.body.clientWidth||window.innerWidth;
-            if(screenWidth-200 > initSumWidth){
-                let incre=(screenWidth-200-initSumWidth)/len;
-                widths=initWidths.map((item)=>item+incre);
-                sumWidth = widths.reduce((x,y)=>x+y,offsetWidth);
-                this.setState({sumWidth,widths});
-            }
-        },false);
+    adaptScreen(){
+        let initWidths=this.state.initWidths;
+        let initSumWidth = initWidths.reduce((x,y)=>x+y);
+        //补偿宽度
+        let offsetWidth=260;
+        //允许的最小宽度
+        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth;
+        let sumWidth=initSumWidth,widths=initWidths;
+        let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
+
+        let incre=(actulWidth-offsetWidth-initSumWidth)/len;
+        widths=initWidths.map((item)=>item+incre);
+        sumWidth=widths.reduce((x,y)=>x+y);
+        this.setState({sumWidth:sumWidth+40,widths});
     },
     componentWillMount(){
-        let widths=[  120,   120,  120,  130,    130,     130,      160,     110,   120];
-        let titles=['订单号','用户','车辆','机场','评价时间','评价星级','客服回复','展现状态','操作'];
-        this.adaptScreen(widths,titles);
+        this.adaptScreen();
+    },
+    componentDidMount(){
+        window.addEventListener("resize",this.adaptScreen,false);
+    },
+    componentWillUnmount(){
+        window.removeEventListener("resize",this.adaptScreen);
     },
     render(){
         let sumWidth=this.state.sumWidth;
@@ -80,25 +74,27 @@ let EvaluationManage=React.createClass({
             {status:"仅此用户可见",fieldName:'ShowStatus'},
             {op_items:['展现','回复'],dialogs:[1,2],color:"#1A9FE5",fieldName:'Operation'}];
         return(
-            <section className="data-section" style={{width:sumWidth}}>
+            <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
 
-                    <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
-                    <SelectInput title="展现状态:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="泊车司机:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="送车司机:" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
+                    <SelectInput title="展现状态：" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="泊车司机：" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="送车司机：" change={this.handleChange} name="order_source" defaultName="全部"/>
                     <hr/>
-                    <SelectInput title="服务打星:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="泊车打星:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="送车打星:" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="服务打星：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
+                    <SelectInput title="泊车打星：" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="送车打星：" change={this.handleChange} name="order_source" defaultName="全部"/>
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
                 </div>
-                <TableHead data={headData} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
-                <TableLine widths={widths} data={data} />
+                <div className="data-list">
+                    <TableHead data={headData} />
+                    <TableLine widths={widths} data={data} />
+                    <TableLine widths={widths} data={data} />
+                    <TableLine widths={widths} data={data} />
+                    <TableLine widths={widths} data={data} />
+                </div>
             </section>
         );
     }

@@ -42,16 +42,17 @@ let InGarageCar=React.createClass({
                 throw new Error("服务异常");
             }
         }).then((str)=>{
+            //console.log(str);
             try {
                 let obj=JSON.parse(str);
                 if(obj.code==0){
                     this.setState({orderData:obj.result});
                     this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
                 }else {
-                    ReactDOM.render(<WarnTip msg="订单列表数据异常！"/>, mask);
+                    ReactDOM.render(<WarnTip msg={obj.msg}/>, mask);
                 }
             }catch(e){
-                ReactDOM.render(<WarnTip msg="获取的数据格式异常！"/>, mask);
+                ReactDOM.render(<WarnTip msg="后台服务异常！"/>, mask);
             }
         }).catch(function(e) {
             ReactDOM.render(<WarnTip msg="订单列表请求异常！"/>, mask);
@@ -112,16 +113,21 @@ let InGarageCar=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
+                    <TextInput title="订单号：" change={this.handleChange} name="order_no"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入订单号" />
+                    <TextInput title="用户手机：" change={this.handleChange} name="phone_no"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
-                <div className="data-list">
+                {list.length>0?(<div className="data-list">
                     <TableHead data={headData} />
                     {list}
                     <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
-                </div>
+                    </div>):(<div className="data-none">
+                        <TableHead data={headData} />
+                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                    </div>)}
             </section>
         );
     }

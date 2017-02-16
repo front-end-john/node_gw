@@ -130,9 +130,12 @@ let JSJOrder=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <TextInput title="用户姓名:" ref={(c)=>this.name=c} change={this.handleChange} name="username" holdText="请输入用户姓名" />
-                    <TextInput title="用户手机:" ref={(c)=>this.phone=c} change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
-                    <TextInput title="订单号:" ref={(c)=>this.number=c} change={this.handleChange} name="order_no" holdText="请输入订单号" />
+                    <TextInput title="用户姓名：" ref={(c)=>this.name=c} change={this.handleChange} pdl="0" name="username"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入用户姓名" />
+                    <TextInput title="用户手机：" ref={(c)=>this.phone=c} change={this.handleChange} name="phone_no"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>
+                    <TextInput title="订单号：" ref={(c)=>this.number=c} change={this.handleChange} name="order_no"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入订单号" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
                 <div className="data-list">

@@ -25,7 +25,8 @@ let Ensure=React.createClass({
     },
     ensure(){
         let name=this.driverData[this.dataIndex].name;
-        this.props.updateName(name);
+        let update=this.props.updateName;
+        update && update(name);
         this.cancel();
     },
     render(){

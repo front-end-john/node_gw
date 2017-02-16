@@ -90,6 +90,7 @@ let OngoingTakeOrder=React.createClass({
         });
         document.getElementById("appContainer").style.width=200+sumWidth+"px";
         let list=this.state.orderData.map((item,index)=>{
+            //console.log(item);
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
@@ -106,16 +107,22 @@ let OngoingTakeOrder=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
-                    <SelectInput title="订单来源:" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号:" change={this.handleChange} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机:" change={this.handleChange} name="phone_no" holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
+                    <TextInput title="订单号：" change={this.handleChange} name="order_no"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入订单号" />
+                    <TextInput title="用户手机：" change={this.handleChange} name="phone_no"
+                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
-                <div className="data-list">
-                    <TableHead data={headData} />
-                    {list}
-                    <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
-                </div>
+
+                {list.length>0?(<div className="data-list">
+                        <TableHead data={headData} />
+                        {list}
+                        <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                    </div>):(<div className="data-none">
+                        <TableHead data={headData} />
+                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                    </div>)}
             </section>
         );
     }

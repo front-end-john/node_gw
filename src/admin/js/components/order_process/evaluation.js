@@ -4,7 +4,7 @@ import Ensure from "../dialog/ensure";
 import Reply from "../dialog/customer_service_reply";
 let Evaluation=React.createClass({
     getInitialState(){
-        return{isHide:false}
+        return{isHide:false,isReply:true}
     },
     handleHideAndShow(){
         let mask=document.getElementById("dialogContainer");
@@ -45,6 +45,9 @@ let Evaluation=React.createClass({
             }
             list[i]=listItem;
         }
+        let isReply=this.state.isReply;
+        let replyClr=isReply?"#c9c9c9":"#1AA0E5";
+
         return (<div className="evaluation">
                     <section>
                         <p><label>服务评价：</label> {list[0]}</p>
@@ -53,7 +56,7 @@ let Evaluation=React.createClass({
                     </section>
                     <section>
                         <p><label>评价内容：</label>
-                            <em style={{color:"#c9c9c9"}} onClick={this.handleReply}>回复</em>&emsp;
+                            <em style={{color:replyClr}} onClick={this.handleReply}>回复</em>&emsp;
                             <em style={{color:"#1AA0E5"}} onClick={this.handleHideAndShow}>
                                 {this.state.isHide?"展现":"关闭"}</em></p>
                         <p>屁啊是你的</p>

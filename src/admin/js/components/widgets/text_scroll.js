@@ -19,7 +19,11 @@ let TextScroll=React.createClass({
     },
     render(){
         let list=this.state.rushOrder.map((item,index)=>{
-            return (<span key={index} style={{color:'#35BAFF'}}>订单&ensp;(154454654651)&ensp;20分钟后接车;</span>)
+            let li=(<span key={index} style={{color:'#DB8800'}}>订单&ensp;(154454654651)&ensp;20分钟后接车;&emsp;&emsp;</span>);
+            if(index%2==0){
+                li=(<span key={index} style={{color:'#35BAFF'}}>订单&ensp;(154454654651)&ensp;20分钟后送车;&emsp;&emsp;</span>);
+            }
+            return li;
         });
         return(
             <div className="scroll-text">

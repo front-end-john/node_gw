@@ -73,6 +73,8 @@ html,body{
     border: none;
     font-size: 16px;
     color: #fff;
+    cursor: pointer;
+    &:hover{background-color: #0f1825;}
     background-color: #1F2E43;
   }
 }
@@ -115,10 +117,24 @@ html,body{
   }
   &>.data-section{
     margin-left: 200px;
-    .data-list{
+    &>.data-list{
       padding:0 20px;
       height: 718px;
       overflow-y: auto;
+    }
+    &>.data-none{
+      padding:0 20px;
+      &>p{
+        text-align: center;
+        padding-top:40px;
+        line-height: 24px;
+        &>img{
+          vertical-align: middle;
+          padding-right: 10px;
+          position: relative;
+          top:-2px;
+        }
+      }
     }
   }
 }
@@ -512,16 +528,26 @@ html,body{
     display: inline-block;
     height: 16px;
     cursor: pointer;
-    padding: 0 4px;
+    padding: 0 5px;
     color: #969696;
     text-align: center;
     line-height: 16px;
+    &:hover{color: #314055;}
+    margin-left: 5px;
   }
   &>.curr-page{
     background-color:#314055;
     color: #fff;
+    &:hover{color: #fff;}
     @include border-radius(2px);
   }
+  &>.start-end{
+    &:hover{
+      color:#314055;
+    }
+    @include border-radius(2px);
+  }
+  &>label{padding-left: 10px;color: #969696;}
 }
 .order-brief{
   height: 35px;
@@ -578,6 +604,7 @@ html,body{
       margin-left: 20px;
       &>p{
         &:nth-last-of-type(2){
+          line-height: 25px;
           em{
             vertical-align: top;
             display: inline-block;
@@ -858,12 +885,14 @@ html,body{
     @include column(1/2);
     @include translateX(1px);
     border-right:1px solid #CDE3F6;
-    padding: 18px 0 10px 20px;
+    padding: 18px 20px 10px;
     &>p{
       margin-bottom: 8px;
       color: #323232;
+      line-height: 25px;
       &:nth-of-type(1){
         color: #969696;
+        line-height:inherit;
         &>label{
           vertical-align: text-top;
         }
@@ -876,10 +905,11 @@ html,body{
   &>.driver-note{
     @include column(1/2);
     border-left:1px solid #CDE3F6;
-    padding: 18px 0 10px 20px;
+    padding: 18px 20px 10px;
     &>p{
       margin-bottom: 8px;
       color: #323232;
+      line-height: 25px;
       &:nth-of-type(1){
         margin-bottom: 10px;
         color: #969696;
