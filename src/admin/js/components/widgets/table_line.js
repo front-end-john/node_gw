@@ -17,7 +17,7 @@ let TableLine=React.createClass({
     handleTelEnsure(){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
-        ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, mask);
+        ReactDOM.render(<Ensure title="电话确认" content="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
     showMoreTags(tags){
         let mask=document.getElementById("dialogContainer");

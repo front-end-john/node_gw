@@ -1,14 +1,17 @@
  import React from 'react';
-
+ import ReactDOM from 'react-dom';
  export default React.createClass({
-    cancel(){
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-    },
+     componentWillMount(){
+         let mask=document.getElementById("dialogContainer");
+         mask.style.display="block";
+     },
+     cancel(){
+         let mask=document.getElementById("dialogContainer");
+         ReactDOM.render(<i/>, mask);
+         mask.style.display="none";
+     },
     ensure(){
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-
+        this.cancel();
     },
     handleRadio(e){
         console.log(e.target.value);

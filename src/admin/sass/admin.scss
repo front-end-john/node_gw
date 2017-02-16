@@ -429,10 +429,18 @@ html,body{
   margin-left: 50px;
   margin-right: 20px;
   font-size: 14px;
+  cursor: pointer;
+  &:hover{
+    background-color: #E8B100;
+  }
 }
 .checkout{
   background-color: #1A9FE5;
   font-size: 14px;
+  cursor: pointer;
+  &:hover{
+    background-color: #118FD1;
+  }
 }
 .table-head{
   @include center;
@@ -601,7 +609,7 @@ html,body{
     border-right:1px solid #CDE3F6;
     border-bottom:1px solid #CDE3F6;
     &>.up-section{
-      margin: 20px 0 30px 20px;
+      margin: 20px 0 35px 20px;
     }
     &>.down-section{
       margin-left: 20px;
@@ -610,7 +618,7 @@ html,body{
         &>img{
           position: absolute;
           right: 20px;
-          top:-7.5px;
+          top:-8px;
         }
       }
     }
@@ -627,7 +635,8 @@ html,body{
     border-right:1px solid #CDE3F6;
     border-bottom:1px solid #CDE3F6;
     &>.extra-service{
-      margin: 20px 0 50px 20px;
+      margin: 20px 0 61px 20px;
+      i{font-style: normal;}
       &>p{
         margin-bottom: 10px;
         &>span{color: #323232;}
@@ -637,6 +646,7 @@ html,body{
         &>em{
           float: right;
           color: #1AA0E5;
+          cursor: pointer;
           &:nth-of-type(2){
             margin-right: 10px;
           }
@@ -655,7 +665,8 @@ html,body{
     border-bottom:1px solid #CDE3F6;
     &>ul{
       @include center;
-      cursor:pointer;
+      position: relative;
+      z-index: 10;
       &>li{
         @include span(1/6);
         height: 36px;
@@ -665,6 +676,7 @@ html,body{
         border-bottom:1px solid #CDE3F6;
         border-right:1px solid #CDE3F6;
         color: #323232;
+        cursor: pointer;
         &:nth-last-of-type(1){
           border-right:none;
         }
@@ -677,11 +689,13 @@ html,body{
 
     &>.process-area{
       height: 100%;
-      min-height: 305px;
       padding: 20px;
+      @include translateY(-18px);
       @include box-sizing(border-box);
       overflow: hidden;
       .take-car{
+        overflow: hidden;
+        padding-top: 18px;
         &>.up-part{
           float: left;
         }
@@ -690,27 +704,11 @@ html,body{
         }
         &>section>p {
           &>span { color: #323232; }
-          &>em { color: #DB8800; }
+          &>em { color: #DB8800;cursor: pointer; }
           margin-bottom: 10px;
         }
-        .pre-take-car{
-          width:120px;
-          height: 36px;
-          line-height: 36px;
-          text-align: center;
-          color: #fff;
-          font-size: 14px;
-          background-color: #F9BE00;
-          position: relative;
-          top:50%;left: 50%;
-          @include translate(-50%,-50%);
-        }
-        .pre-send-car{
-          @extend .pre-take-car;
-          background-color: #1A9FE5;
-        }
         .service-fee{
-          padding-top: 36px;
+          padding-top: 51px;
           clear: both;
           &>p {
             margin-bottom: 10px;
@@ -720,8 +718,40 @@ html,body{
           }
         }
       }
+      .pre-take-car{
+        width:120px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        color: #fff;
+        font-size: 14px;
+        background-color: #F9BE00;
+        position: relative;
+        top:50%;left: 50%;
+        @include translate(-50%,-50%);
+        @include border-radius(2px);
+        cursor: pointer;
+        &:hover{
+          background-color: #E8B100;
+        }
+      }
+      .cancel-take-car{
+        @extend .pre-take-car;
+        background-color: #C8C8C8;
+        &:hover{
+          background-color: #C8C8C8;
+        }
+      }
+      .pre-send-car{
+        @extend .pre-take-car;
+        background-color: #1A9FE5;
+        &:hover{
+          background-color: #118FD1;
+        }
+      }
       .move-car{
         @include center;
+        padding-top: 18px;
         &>.scroll-container{
           @include column();
           width: 180px;
@@ -736,6 +766,7 @@ html,body{
             @include transition(all 0.1s ease);
             &>li{
               float: left;
+              &>img{width: 180px;height: auto;}
             }
           }
           .offset_1{@include translateX(0);}
@@ -743,17 +774,17 @@ html,body{
           .offset_3{@include translateX(-360px);}
           .offset_4{@include translateX(-540px);}
           .offset_5{@include translateX(-720px);}
-
-          .dot{
+          &>.dot{
             position: absolute;
-            bottom: 20px;
-            left: 50%;
-            @include translateX(-50%);
+            width: 100%;height: 13px;
+            background-color: rgba(#000000,0.6);
+            bottom: 0;left: 0;
+            text-align: center;
             &>em{
               display: inline-block;
-              margin: 0 10px;
-              width: 10px;
-              height: 10px;
+              margin: 0 5px 4px;
+              width: 5px;
+              height: 5px;
               background-color: #fff;
               @include border-radius(50%);
             }
@@ -776,6 +807,7 @@ html,body{
           }
         }
         &>.in-garage{
+          padding-top: 18px;
           @include column();
           width: 254px;
           height: 264px;
@@ -800,16 +832,25 @@ html,body{
         }
       }
       .evaluation{
+        padding-top: 18px;
         &>section{
-          &>p{ margin-bottom: 10px;  }
+          &>p{
+            margin-bottom: 10px;
+            &>span{
+
+            }
+          }
           &:nth-of-type(2){
             margin-top: 36px;
+
             &>p:nth-of-type(even){
               color: #323232;
             }
+            &>p:nth-of-type(1){
+              &>em{ cursor: pointer;}
+            }
           }
         }
-
       }
     }
   }
@@ -822,12 +863,12 @@ html,body{
       margin-bottom: 8px;
       color: #323232;
       &:nth-of-type(1){
-        margin-bottom: 10px;
         color: #969696;
-        position: relative;
+        &>label{
+          vertical-align: text-top;
+        }
         &>img{
-          position: absolute;
-          left: 64px;top:3px;
+          vertical-align: middle;
         }
       }
     }
@@ -848,11 +889,11 @@ html,body{
 }
 
 // dialog style
-
 #dialogContainer{
   position: fixed;
   top:0;left: 0;
   bottom: 0;right: 0;
+  z-index: 20;
   background-color: rgba(20,20,20,0.3);
   display: none;
 }
@@ -867,7 +908,6 @@ $dialogHeadHeight:48px;
   left: 50%;
   @include translateX(-50%);
   @include border-radius(2px);
-  overflow: hidden;
   &>.title{
     text-align: center;
     height: $dialogHeadHeight;
@@ -876,14 +916,20 @@ $dialogHeadHeight:48px;
     color: #fff;
     font-size: 16px;
     position: relative;
+    @include border-top-left-radius(2px);
+    @include border-top-right-radius(2px);
+    overflow: hidden;
     &>i{
       display: inline-block;
-      width: 12px;
-      height: 12px;
+      width: 48px;
+      height: 48px;
       position: absolute;
-      top:18px;
-      right: 18px;
-
+      top:0;
+      right: 0;
+      @include border-top-right-radius(2px);
+      &:hover{
+        background-color: #202E43;
+      }
       cursor: pointer;
       &:after{
         content: "";
@@ -892,7 +938,7 @@ $dialogHeadHeight:48px;
         height: 16px;
         background-color: #fff;
         @include rotate(-45deg);
-        top:-2px;right:5px;
+        top:16px;right:22px;
       }
       &:before{
         content: "";
@@ -901,7 +947,7 @@ $dialogHeadHeight:48px;
         height: 16px;
         background-color: #fff;
         @include rotate(45deg);
-        top:-2px;right:5px;
+        top:16px;right:22px;
       }
     }
   }
@@ -919,11 +965,18 @@ $dialogHeadHeight:48px;
       @include border-radius(2px);
       border: 1px solid #ddd;
       &:nth-of-type(1){
+          background-color: #fff;
           color: #646464;
+          &:hover{
+            background-color: #f5f5f5;
+          }
       }&:nth-of-type(2){
           background-color: #F9BE00;
           color: #fff;border:0;
           margin-left:40px;
+          &:hover{
+            background-color: #E8B100;
+          }
       }
     }
   }
@@ -987,7 +1040,6 @@ $dialogHeadHeight:48px;
   text-align: center;
   height: 100px;
   font-size:14px;
-  border-bottom: 1px solid #ddd;
   @include display-flex();
   @include justify-content(center);
   @include align-items(center);
@@ -1003,25 +1055,29 @@ $dialogHeadHeight:48px;
     margin-bottom: 10px;
     height: 140px;
     clear: both;
+    padding: 10px;
+    @include box-sizing(border-box);
   }
   &>p{
     font-size: 12px;
     color: #646464;
-    line-height: 12px;
+    height: 18px;
     text-align: justify;
-    overflow: hidden;
-    span:nth-of-type(2){
-      float: right;
+    &>span{
+      padding-left: 24px;
+      &:nth-of-type(2) {
+        float: right;
+      }
     }
     $radioSize:15px;
-    span>input{
-      position: relative;
-      margin-right: 10px;
+    &>span>input{
+      position: absolute;
+      margin-left: -24px;
+      margin-top: 1.5px;
       cursor: pointer;
       width: $radioSize;
       height: $radioSize;
       @include appearance(none);
-      top:3px;
       &:focus{outline: none;}
       &:after{
         content: "";
@@ -1031,6 +1087,7 @@ $dialogHeadHeight:48px;
         position: absolute;
         background-color:#fff;
         border: 1px solid #DCDCDC;
+        @include box-sizing(border-box);
         left: 0;top: 0;
       }
       &:checked{
@@ -1112,7 +1169,7 @@ $dialogHeadHeight:48px;
       border: 1px solid #DCDCDC;
       background-color: #fff;
       @include appearance(none);
-      padding-left: 10px;
+      padding: 10px;
       @include box-sizing(border-box);
     }
   }
@@ -1122,12 +1179,12 @@ $dialogHeadHeight:48px;
   padding: 40px 0 30px;
   &>p {
     margin-bottom: 10px;
-    em {
+    &>em {
       font-size: 14px;
       color: #323232;
       vertical-align: middle;
     }
-    input{
+    &>input{
       width: 220px;
       height: 36px;
       vertical-align: middle;
@@ -1138,7 +1195,14 @@ $dialogHeadHeight:48px;
       padding-left: 10px;
       @include box-sizing(border-box);
     }
-
+    &>i{
+      position: absolute;
+      color: #f00;
+      font-size: 12px;
+      margin-top:10px;
+      margin-left:8px;
+      font-style: normal;
+    }
   }
   &>.date-select{
     margin-bottom: 10px;
@@ -1173,6 +1237,7 @@ $dialogHeadHeight:48px;
     text-align: center;
     line-height: 36px;
     @include box-sizing(border-box);
+    cursor: pointer;
     &:hover{
       border:none;
       background-color: #f5f5f5;
@@ -1201,17 +1266,21 @@ $dialogHeadHeight:48px;
     @include display-flex();
     border-bottom: 1px solid #DCDCDC;
     padding: 0 12px;
-    .selected{
+    cursor: pointer;
+    &.selected{
       background-color: #202E43;
-      p{color: #fff !important;}
+      p{color: #fff;}
+      &:hover{
+        background-color: #f5f5f5;
+        p{color: inherit}
+      }
     }
     &:hover{
-      background-color: #202E43;
-      p{color: #fff !important;}
+      background-color: #f5f5f5;
     }
     .urgent{color:#f00;}
-    .sending{color:#DB8800;}
-    .taking{color:#1A9FE5;}
+    .taking{color:#DB8800;}
+    .sending{color:#1A9FE5;}
     p{
       height: 40px;
       line-height: 40px;

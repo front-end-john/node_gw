@@ -50,7 +50,9 @@
             <div className="dialog">
                 <h2 className="title">用户信息编辑<i onClick={this.cancel}/></h2>
                 <div className="dialog-important-user">
-                    <p><em>用户姓名：</em><input  defaultValue={this.props.name} className="username" readOnly/>
+                    <p><em>用户姓名：</em>
+                        <input  defaultValue={this.props.name} className="username" readOnly
+                        style={{border:"none",backgroundColor:"#f5f5f5",color:"#646464"}}/>
                         <select className="user-gender" ref={(c)=>this.genderSel=c}
                                 defaultValue={this.props.gender=="男"?1:0}>
                             <option value="1" >男</option>
@@ -60,12 +62,12 @@
                     <p><em>用户星级：</em>
                         <select defaultValue={this.props.stars} ref={(c)=>this.starSel=c}>
                             <option value="0">无</option>
-                            <option value="1" >☆</option>
-                            <option value="2" >☆☆</option>
+                            <option value="1" >&#9733;</option>
+                            <option value="2" >&#9733;&#9733;</option>
                         </select><i className="select-arrow"/>
                     </p>
-                    <p><em>备&emsp;&emsp;注：</em><textarea placeholder="填写备注" ref={(c)=>this.remarkArea=c}
-                                                         defaultValue={this.props.remark} /></p>
+                    <p><em>备&emsp;&emsp;注：</em>
+                        <textarea placeholder="填写备注" ref={(c)=>this.remarkArea=c} defaultValue={this.props.remark} /></p>
                 </div>
                 <section className="btn">
                     <button onClick={this.cancel}>取消</button>

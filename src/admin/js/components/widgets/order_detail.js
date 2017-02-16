@@ -14,6 +14,8 @@ import EditCar from "../dialog/modify_car_info";
 import EditBook from "../dialog/modify_bookingtime";
 import EditFlightInfo from "../dialog/operate_flight_info";
 import PredictTime from "../dialog/predict_getcar_time";
+import WashService from "../dialog/wash_service";
+import OilService from "../dialog/oil_service";
 import {getStateInfo,getFormatDate} from '../../util'
 
 let OrderDetail=React.createClass({
@@ -61,7 +63,7 @@ let OrderDetail=React.createClass({
         let o=this.state.orderDetail||{};
         let user=o.user||{};
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<EditUser name={user.username} gender={user.sex} stars={user.stars}
+        ReactDOM.render(<EditUser name={user.realname} gender={user.sex} stars={user.stars}
                                   remark={user.remark} tel={user.phoneno}
                                   url="/admin/api/users/edit" reload={this.loadOrderDetail} />, mask);
     },
@@ -82,15 +84,27 @@ let OrderDetail=React.createClass({
     },
     editFlightInfo(type,fno,fdate){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(< EditFlightInfo  type={type} url="/admin/api/orders/edit_returning_info"
+        ReactDOM.render(<EditFlightInfo  type={type} url="/admin/api/orders/edit_returning_info"
                                           number={this.props.number} fno={fno} fdate={fdate}
                                           reload={this.loadOrderDetail}  />, mask);
     },
     editPredictGetCarTime(type,time){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(< PredictTime  type={type} url="/admin/api/orders/edit_returning_info"
+        ReactDOM.render(<PredictTime  type={type} url="/admin/api/orders/edit_returning_info"
                                           number={this.props.number} time={time}
                                           reload={this.loadOrderDetail}  />, mask);
+    },
+    editWashService(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<WashService   url="/admin/api/orders/edit_returning_info"
+                                       number={this.props.number}
+                                       reload={this.loadOrderDetail}  />, mask);
+    },
+    editOilService(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<OilService   url="/admin/api/orders/edit_returning_info"
+                                       number={this.props.number}
+                                       reload={this.loadOrderDetail}  />, mask);
     },
     handleSwitch(e){
         if(e.target.nodeName==="LI"){
@@ -158,7 +172,7 @@ let OrderDetail=React.createClass({
 
         let level=[],driverRemark,washCar="";
         for(let i=0;i<user.stars;i++){
-            level[i]=(<span key={i} style={{color:'red'}}>&#9733;</span>)
+            level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
         }
         if(moreService.length==1){
             washCar=moreService[0].config.rainwashing=="1"?"下雨也洗车":"";
@@ -203,10 +217,10 @@ let OrderDetail=React.createClass({
                             <p><label>用户来源：</label><span>{user.comefrom||''}</span></p>
                             <p><label>注册时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime)}</span></p>
-                            <p><label>标&emsp;&emsp;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
+                            <p><label>标&#8195;&#8195;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>{userTags.length>0?"编辑":"添加"}</span></em></p>
-                            <p className="note-field"><label>备&emsp;&emsp;注：</label>
+                            <p className="note-field"><label>备&#8195;&#8195;注：</label>
                                 <span>{user.remark||''}</span></p>
                         </div>
                     </div>
@@ -216,7 +230,7 @@ let OrderDetail=React.createClass({
                             <p><label>车辆信息：</label>
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.editCarInfo(car)}>
-                                    {(car.carno||"")+" "+(car.color||"")+" "+(car.brand||"")}</span></p>
+                                    {(car.carno||"")}&emsp;{(car.color||"")+(car.brand||"")}</span></p>
                             <p><label>预约接车时间：</label>
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.editBookingTime(o.serialnumber,o.bookingtime)}>
@@ -235,9 +249,9 @@ let OrderDetail=React.createClass({
                                     (<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                            onClick={()=>this.editFlightInfo("add",o.returningflight,o.returningdate)}>添加</span>)}
 
-                               {/* <img src="/admin/img/icon/10_1.png" />*/}
+                               {<img src="/admin/img/icon/10_1.png" />}
                             </p>
-                            <p><label>预计取车时间：</label>
+                            <p><label>预约取车时间：</label>
                                 {o.returningtime?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                                           onClick={()=>this.editPredictGetCarTime("mod",o.returningtime)}>
                                         {o.returningtime||""}</span>):
@@ -251,12 +265,12 @@ let OrderDetail=React.createClass({
                     <div className="service-info" ref={(c)=>this.state.blocks[2]=c}>
                         <h2>更多服务</h2>
                         <div className="extra-service">
-                            <p><label>洗车：</label><span>{washCar}</span>
-                                <em>取消</em><em>编辑</em>
+                            <p><label>洗车：</label><span>{washCar||"无"}</span>
+                                {washCar?(<em><i onClick={this.editWashService}>编辑</i>&ensp;<i>取消</i></em>):
+                                    (<em onClick={this.editWashService}>添加</em>)}
                             </p>
-
-                            <p style={{marginBottom:'62px'}}><label>加油：</label><span>无</span>
-                                <em>添加</em>
+                            <p><label>加油：</label><span>无</span>
+                                <em onClick={this.editOilService}>添加</em>
                             </p>
                         </div>
                         <p className="note-field"><label>用户备注：</label><span>{o.userremark||""}</span></p>
@@ -273,7 +287,7 @@ let OrderDetail=React.createClass({
                         <div ref={(c)=>this.process=c} className="process-area" />
                     </div>
                     <div className="service-note">
-                        <p>客服备注：<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
+                        <p><label>客服备注：</label><img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {serviceRemark}
                     </div>

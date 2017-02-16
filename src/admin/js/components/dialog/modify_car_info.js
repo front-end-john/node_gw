@@ -21,7 +21,12 @@
         }
     },
     ensure(){
+        let reg=/^[\u4E00-\u9FA5][A-Z][\da-zA-Z]{5,6}$/;
         let carno=this.carno.value,color=this.color.value,brand=this.brand.value;
+        if(!reg.test(carno)){
+            this.tip.innerHTML="格式错误";
+            return 0;
+        }
         let url=this.props.url+"?"+queryStr.stringify({carid:this.props.cid,carno,color,brand});
         console.log(url);
         fetch(url,{credentials: 'include'}).then((res)=>{
@@ -51,7 +56,8 @@
             <div className="dialog">
                 <h2 className="title">修改车辆信息<i onClick={this.cancel}/></h2>
                 <div className="dialog-modify-car">
-                    <p><em>车牌号码：</em><input  defaultValue={this.props.carno} ref={(c)=>this.carno=c}/></p>
+                    <p><em>车牌号码：</em><input  defaultValue={this.props.carno} ref={(c)=>this.carno=c}/>
+                        <i ref={(c)=>this.tip=c}/></p>
                     <p><em>车辆颜色：</em><input  defaultValue={this.props.color} ref={(c)=>this.color=c}/></p>
                     <p><em>车辆品牌：</em><input  defaultValue={this.props.brand} ref={(c)=>this.brand=c}/></p>
                 </div>
