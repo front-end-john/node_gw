@@ -1,21 +1,31 @@
  import React from 'react';
-
+ import ReactDOM from 'react-dom';
+ import { DateField } from 'react-date-picker';
+ import WarnTip from '../dialog/warn_tip';
  export default React.createClass({
-    cancel(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-    },
+     componentWillMount(){
+         let mask=document.getElementById("dialogContainer");
+         mask.style.display="block";
+     },
+     showWarnTip(msg){
+         let mask=document.getElementById("dialogContainer");
+         if(msg===null){
+             ReactDOM.render(<i/>, mask);
+             mask.style.display="none";
+         }else {
+             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+         }
+     },
+     cancel(){
+         let mask=document.getElementById("dialogContainer");
+         ReactDOM.render(<i/>, mask);
+         mask.style.display="none";
+     },
     ensure(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
+        this.cancel();
 
     },
-
     render(){
-        "use strict";
-
         return(
             <div className="dialog">
                 <h2 className="title">客服下单<i onClick={this.cancel}/></h2>
@@ -49,7 +59,10 @@
                             <option value="2" >女</option>
                         </select><i className="select-arrow"/>
                     </p>
-                    <p><em>预约时间：</em><input type="datetime-local" placeholder="请输入预约时间" /></p>
+                    <div className="date-select"><em>预约时间：</em>
+                        <DateField onChange={(date)=>this.bookingtime=date }
+                                   dateFormat="YYYY-MM-DD HH:mm" placeholder="请输入预约时间"
+                                   style={{borderColor:"#ddd",width:"220px",height:"36px"}} /></div>
                 </div>
                 <section className="btn">
                     <button onClick={this.cancel}>取消</button>

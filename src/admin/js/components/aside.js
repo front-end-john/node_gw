@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import ModPasswd from './dialog/modify_password';
+import Ensure from './dialog/ensure';
 import {maxNumber} from '../util';
 let PrimaryItem = React.createClass({
     render(){
@@ -17,7 +20,7 @@ let PrimaryItem = React.createClass({
                             </ul>);
         }
         return (
-            <section className="primary-item">
+            <section className="primary-item" style={{backgroundColor:this.props.id==this.props.currItem?"#202E43":"inherit"}}>
                 <h2  onClick={(e)=> this.props.click(this.props.id)}
                 className={this.props.id==this.props.currItem?"selected":""}>
                     <em className="item-icon" />
@@ -52,6 +55,14 @@ let Aside = React.createClass({
         }).catch(function(e) {
             console.trace('错误:', e);
         });
+    },
+    handlePasswordModify(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<ModPasswd />, mask);
+    },
+    handleLogout(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<Ensure title="退出系统" content="确认退出系统吗？" />, mask);
     },
     adaptHeight(){
         let appHel=getComputedStyle(document.getElementsByClassName("app")[0]).height;
@@ -95,23 +106,22 @@ let Aside = React.createClass({
         window.removeEventListener("resize",this.adaptHeight);
     },
     handClick(id){
-        this.setState({currItem:id});
         if(id==="order_query"){
             location.href="#/order_query";
-            this.setState({secondItem:""});
+            this.setState({secondItem:"",currItem:id});
         }else if(id==="order_manager"){
 
         }else if(id==="jsj_order"){
 
         }else if(id==="user_manager"){
             location.href="#/user_manager";
-            this.setState({secondItem:""});
+            this.setState({secondItem:"",currItem:id});
         }else if(id==="comment_manager"){
             location.href="#/evaluation_manage";
-            this.setState({secondItem:""});
+            this.setState({secondItem:"",currItem:id});
         }else if(id==="coupon_manager"){
             location.href="#/coupon_manage";
-            this.setState({secondItem:""});
+            this.setState({secondItem:"",currItem:id});
         }
     },
     handleSecondClick(id){
@@ -150,7 +160,6 @@ let Aside = React.createClass({
             {name:'进行中的送车单',newCount:115}];
         let jsjOrder=[{name:'接机订单',newCount:jsjCount.pickupnumber||0},
             {name:'送机订单',newCount:jsjCount.pickoffnumber||0}];
-
         return(
             <aside ref={(c)=>this.nav=c}>
                 <div id="manager">
@@ -163,8 +172,8 @@ let Aside = React.createClass({
                         }}>
                             系统管理员<img className="arrow" src="/admin/img/icon/07.png"/>
                             <ul ref='sysOpt'>
-                                <li>修改密码</li>
-                                <li>退出系统</li>
+                                <li onClick={this.handlePasswordModify}>修改密码</li>
+                                <li onClick={this.handleLogout}>退出系统</li>
                             </ul>
                         </section>
                     </div>

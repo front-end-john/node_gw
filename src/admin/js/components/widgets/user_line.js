@@ -1,25 +1,37 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
+import EditImportantUser from "../dialog/operate_important_user";
+import Ensure from "../dialog/ensure";
 
 export default React.createClass({
     getInitialState(){
-        "use strict";
-        return{
-
-        };
+        return{};
     },
-
+    handleCancelStar(name,phone){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<Ensure title="取消用户星级"  content={"确定要取消“"+name+"（"+phone+"）”的星际吗？"}
+                                url="/admin/api/users/marking"
+                            reload={this.loadOrderDetail} />, mask);
+    },
+    handleImportantUser(type){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<EditImportantUser type={type}
+                                           phone={this.phone} stars={this.stars} remark={""}
+                                url="/admin/api/users/marking"
+                                reload={this.loadOrderDetail} />, mask);
+    },
     render(){
-        "use strict";
         let widths=this.props.widths;
         let list=this.props.data.map((item,index) =>{
             if(item.fieldName=='PhoneNo') {
+                this.phone=item.phone_no;
                 return (
                     <li key={index} style={{width: widths[index]} }>
                         <p>{item.phone_no}</p>
                     </li>
                 );
             }else if(item.fieldName=='FullName'){
+                this.name=item.full_name;
                 return (
                     <li key={index} style={{width: widths[index]} }>
                         <p>{item.full_name}</p>
@@ -33,6 +45,7 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='ImportantLevel'){
                 let list=[];
+                this.stars=item.level;
                 for(let i=0;i<item.level;i++){
                     list[i]=(<span key={i}>&#9733;&ensp;</span>);
                 }
@@ -60,14 +73,12 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='Operation'){
-                let list=item.op_items.map(function(ele,i) {
-                    return (
-                        <em key={i}>&ensp;{ele}</em>
-                    );
-                });
                 return (
                     <li key={index} style={{width: widths[index]} } className="list-end" >
-                        <p style={{color:"#1AA0E5"}}>{list}</p>
+                        <p style={{color:"#1AA0E5"}}>
+                            <em onClick={()=>this.handleImportantUser("mod")}>{item.op_items[0]}</em>
+                            <em onClick={()=>this.handleCancelStar(this.name,this.phone)}>&ensp;{item.op_items[1]}</em>
+                        </p>
                     </li>
                 );
             }

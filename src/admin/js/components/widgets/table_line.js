@@ -5,10 +5,39 @@ import OrderDetail from './order_detail';
 import JSJOrderDetail from './jsj_order_detail';
 import Empty from './empty';
 import AssignDriver from "../dialog/assign_driver";
+import Reply from "../dialog/customer_service_reply";
+
 let TableLine=React.createClass({
     getInitialState(){
-        return{isExpand:false};
+        return{isExpand:false,isHide:false,isReply:true};
     },
+
+    handleHideAndShow(){
+        let mask=document.getElementById("dialogContainer");
+        let is=this.state.isHide,title="",content="";
+        if(is){
+            title="展现评论及回复";
+            content="确定要展现评论及回复吗？";
+        }else {
+            title="关闭评论及回复";
+            content="确定要关闭评论及回复吗？";
+        }
+        ReactDOM.render(<Ensure url="/admin/api/orders/remark.js"
+                                title={title} content={content}
+                                change={this.switchHide}
+                                number={this.props.number}/>, mask);
+    },
+    handleReply(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<Reply url="/admin/api/orders/remark.js"
+                               number={this.props.number}/>, mask);
+
+    },
+    switchHide(){
+        let is=this.state.isHide;
+        this.setState({isHide:!is});
+    },
+
     handlePay(){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
@@ -343,6 +372,18 @@ let TableLine=React.createClass({
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:item.color||"inherit"}}>{list}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='CommentOperation'){
+                let isReply=this.state.isReply;
+                let replyClr=isReply?"#c9c9c9":"#1AA0E5";
+                let event=isReply?"none":"auto";
+                return(
+                    <li key={index} style={{width:widths[index]}} className="list-end">
+                        <p style={{color:"#1AA0E5"}}>
+                            <em onClick={this.handleHideAndShow}>{this.state.isHide?"展现":"关闭"}</em>
+                            <em style={{color:replyClr,pointerEvents:event}}  onClick={this.handleReply}>&ensp;回复</em>
+                        </p>
                     </li>
                 );
             }else if(item.fieldName=='TelEnsureOperation'){

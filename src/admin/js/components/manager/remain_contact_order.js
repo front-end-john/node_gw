@@ -6,6 +6,7 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import ErrorTip from '../dialog/warn_tip';
+import CreateOrder from '../dialog/customer_service_order';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 let RemainContactOrder=React.createClass({
@@ -17,6 +18,10 @@ let RemainContactOrder=React.createClass({
             initWidths:[ 130,    120,  120,   100,      130,      120,     140,     130,      120,     120,    80],
             titles:    ['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作']
         };
+    },
+    handleCreateOrder(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<CreateOrder />, mask);
     },
     handleChange(e){
         let key=e.target.id;
@@ -117,7 +122,7 @@ let RemainContactOrder=React.createClass({
                     <TextInput title="用户手机：" change={this.handleChange}
                                enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
-                    <button className="checkout">下单</button>
+                    <button className="checkout" onClick={this.handleCreateOrder}>下单</button>
                 </div>
                 <div className="data-list">
                     <TableHead data={headData} />

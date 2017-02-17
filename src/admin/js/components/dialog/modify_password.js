@@ -1,21 +1,29 @@
  import React from 'react';
-
+ import ReactDOM from 'react-dom';
+ import WarnTip from '../dialog/warn_tip';
  export default React.createClass({
-    cancel(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-    },
+     componentWillMount(){
+         let mask=document.getElementById("dialogContainer");
+         mask.style.display="block";
+     },
+     showWarnTip(msg){
+         let mask=document.getElementById("dialogContainer");
+         if(msg===null){
+             ReactDOM.render(<i/>, mask);
+             mask.style.display="none";
+         }else {
+             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+         }
+     },
+     cancel(){
+         let mask=document.getElementById("dialogContainer");
+         ReactDOM.render(<i/>, mask);
+         mask.style.display="none";
+     },
     ensure(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-
+        this.cancel();
     },
-
     render(){
-        "use strict";
-
         return(
             <div className="dialog">
                 <h2 className="title">修改密码<i onClick={this.cancel}/></h2>

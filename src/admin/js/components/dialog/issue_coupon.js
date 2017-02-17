@@ -1,20 +1,30 @@
  import React from 'react';
-
+ import ReactDOM from 'react-dom';
+ import WarnTip from '../dialog/warn_tip';
+ import { DateField } from 'react-date-picker';
  export default React.createClass({
-    cancel(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-    },
-    ensure(){
-        "use strict";
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="none";
-
-    },
-
-    render(){
-        "use strict";
+     componentWillMount(){
+         let mask=document.getElementById("dialogContainer");
+         mask.style.display="block";
+     },
+     showWarnTip(msg){
+         let mask=document.getElementById("dialogContainer");
+         if(msg===null){
+             ReactDOM.render(<i/>, mask);
+             mask.style.display="none";
+         }else {
+             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+         }
+     },
+     cancel(){
+         let mask=document.getElementById("dialogContainer");
+         ReactDOM.render(<i/>, mask);
+         mask.style.display="none";
+     },
+     ensure(){
+         this.cancel();
+     },
+     render(){
 
         return(
             <div className="dialog">
@@ -36,7 +46,9 @@
                         </select><i className="select-arrow"/>
                     </p>
                     <p><em>优惠时长：</em><input placeholder="请输入天数" /></p>
-                    <p><em>截止时间：</em><input type="date"  /></p>
+                    <div className="date-select"><em>截止时间：</em>
+                        <DateField onChange={(date)=>this.deadline=date } dateFormat="YYYY-MM-DD"
+                                   style={{borderColor:"#ddd",width:"220px",height:"36px",borderRadius:2}} /></div>
                     <p><em>备&emsp;&emsp;注：</em><textarea placeholder="填写备注" /></p>
                 </div>
                 <section className="btn">
@@ -45,5 +57,5 @@
                 </section>
             </div>
         );
-    }
-});
+     }
+ });

@@ -1,16 +1,17 @@
 import React from 'react';
-
-
+import ReactDOM from 'react-dom';
+import Ensure from "../dialog/ensure";
 export default React.createClass({
     getInitialState(){
-        "use strict";
-        return{
-
-        };
+        return{};
     },
-
+    handleDelete(id){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<Ensure id={id} title="删除优惠券"  content={"确定删除优惠券吗？"}
+                                url="/admin/api/users/marking"
+                                reload={this.loadOrderDetail} />, mask);
+    },
     render(){
-        "use strict";
         let widths=this.props.widths;
         let list=this.props.data.map((item,index) =>{
             if(item.fieldName=='PhoneNo') {
@@ -26,6 +27,7 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='CouponID'){
+                this.cid=item.id;
                 return (
                     <li key={index} style={{width: widths[index]} }>
                         <p>{item.id}</p>
@@ -62,14 +64,9 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='Operation'){
-                let list=item.op_items.map(function(ele,i) {
-                    return (
-                        <em key={i}>&ensp;{ele}</em>
-                    );
-                });
                 return (
                     <li key={index} style={{width: widths[index]} } className="list-end" >
-                        <p style={{color:"#1AA0E5"}}>{list}</p>
+                        <p style={{color:"#1AA0E5"}} onClick={()=>this.handleDelete(this.cid)}><em>删除</em></p>
                     </li>
                 );
             }

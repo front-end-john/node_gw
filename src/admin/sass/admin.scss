@@ -185,7 +185,7 @@ html,body{
             @include box-sizing(border-box);
             line-height: 40px;
             padding-left: 20px;
-            &:nth-of-type(1){
+            &:hover{
               background-color:#F5F5F5;
               color: #202E43;
             }
@@ -217,7 +217,6 @@ html,body{
     }
   }
   &>.selected{
-    background-color: #202E43;
     color: #fff;
     &>.item-icon{
       background-position:-20px -2px;
@@ -235,6 +234,7 @@ html,body{
 }
 
 .primary-item:nth-of-type(2){
+  padding-bottom: 10px;
   &>h2{
     &>.item-icon{
       background-position:-2px -20px;
@@ -246,7 +246,6 @@ html,body{
     }
   }
   &>.selected{
-    background-color: #314055;
     &:after{
       width: 0;
     }
@@ -256,6 +255,7 @@ html,body{
   }
 }
 .primary-item:nth-of-type(3){
+  padding-bottom: 10px;
   &>h2{
     &>.item-icon{
       width: 14px;height: 8px;
@@ -269,7 +269,6 @@ html,body{
     }
   }
   &>.selected{
-    background-color: #314055;
     &:after{
       width: 0;
     }
@@ -358,7 +357,7 @@ html,body{
     }
   }
   &>.highlight{
-    background-color: #202E43;
+    //background-color: #202E43;
     color: #fff;
     position: relative;
     &:after{
@@ -562,21 +561,24 @@ html,body{
   @include center;
   div,p,li,h2{@include box-sizing(border-box);}
   border-top: 1px solid #CDE3F6;
-  min-width: 300*3+494px;
-  margin:0;
-  &>div>h2{
-    height: 36px;
-    line-height: 36px;
-    text-align: center;
-    font-size: 14px;
-    border-bottom:1px solid #CDE3F6;
-    color: #202E43;
+  min-width: 1400px;
+  width: 100%;
+  &>div{
+    /*@include span(3/14);
+    &:nth-of-type(4){@include span(5/14);}*/
+    &>h2{
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      font-size: 14px;
+      border-bottom:1px solid #CDE3F6;
+      color: #202E43;
+    }
   }
   &>.user-info{
     @include column();
     width: 300px;
-    min-height: 342px;
-    height: 100%;
+    min-height: 350px;
     border-right:1px solid #CDE3F6;
     border-bottom:1px solid #CDE3F6;
     &>.user-basic{
@@ -631,8 +633,7 @@ html,body{
   &>.order-info{
     @include column();
     width: 300px;
-    min-height: 342px;
-    height: 100%;
+    min-height: 350px;
     border-right:1px solid #CDE3F6;
     border-bottom:1px solid #CDE3F6;
     &>.up-section{
@@ -657,8 +658,7 @@ html,body{
   &>.service-info{
     @include column();
     width: 300px;
-    min-height: 342px;
-    height: 100%;
+    min-height: 350px;
     border-right:1px solid #CDE3F6;
     border-bottom:1px solid #CDE3F6;
     &>.extra-service{
@@ -687,8 +687,7 @@ html,body{
   &>.process-info{
     @include column();
     width: 494px;
-    min-height: 342px;
-    height: 100%;
+    min-height: 350px;
     border-bottom:1px solid #CDE3F6;
     &>ul{
       @include center;
@@ -913,6 +912,7 @@ html,body{
       &:nth-of-type(1){
         margin-bottom: 10px;
         color: #969696;
+        line-height:inherit;
       }
     }
   }
@@ -1187,9 +1187,9 @@ $dialogHeadHeight:48px;
     }
     .user-gender,.username{
       width: 100px;margin-right: 10px;
-      color: #646464;
+      //color: #646464;
     }
-    .user-gender{color: #c8c8c8;}
+    //.user-gender{color: #c8c8c8;}
     textarea{
       width: 300px;
       max-width: 300px;
@@ -1201,6 +1201,13 @@ $dialogHeadHeight:48px;
       @include appearance(none);
       padding: 10px;
       @include box-sizing(border-box);
+    }
+  }
+  &>.date-select{
+    margin-bottom: 10px;
+    em {
+      font-size: 14px;
+      color: #323232;
     }
   }
 }
@@ -1285,6 +1292,7 @@ $dialogHeadHeight:48px;
 .dialog-place-order{
   @extend .dialog-important-user;
   padding: 40px 0 30px 54px;
+  &>.date-select>em{font-size: 14px;}
 }
 .dialog-assign-driver{
   height: 360px;

@@ -1,9 +1,11 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
 import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
 import TableHead from '../widgets/table_head';
 import CouponLine from '../widgets/coupon_line';
+import IssueCoupon from "../dialog/issue_coupon";
+
 import {maxNumber} from '../../util';
 export default React.createClass({
     getInitialState(){
@@ -52,6 +54,12 @@ export default React.createClass({
     componentWillUnmount(){
         window.removeEventListener("resize",this.adaptScreen);
     },
+
+    handleCouponIssue(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<IssueCoupon  url="/admin/api/users/marking"
+                                reload={this.loadOrderDetail} />, mask);
+    },
     render(){
         let sumWidth=this.state.sumWidth;
         let widths=this.state.widths;
@@ -69,7 +77,7 @@ export default React.createClass({
             {receive_time:'2016-8-9',fieldName:'ReceiveCouponTime'},
             {deadline_time:'2016-8-9',fieldName:'DeadlineTime'},
             {source:'深圳航空客户专享',fieldName:'ActivitySource'},
-            {op_items:["删除"],dialogs:[1],color:"#1A9FE5",fieldName:'Operation'}];
+            {fieldName:'Operation'}];
         return(
             <section className="data-section"  style={{width:sumWidth+20}}>
                 <TextScroll />
@@ -77,7 +85,7 @@ export default React.createClass({
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
                     <TextInput title="微信昵称：" change={this.handleChange} name="wx_nick" holdText="请输入微信昵称" />
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
-                    <button className="checkout" >发放优惠券</button>
+                    <button className="checkout" onClick={this.handleCouponIssue}>发放优惠券</button>
                 </div>
                 <div className="data-list">
                     <TableHead data={headData} />

@@ -72,20 +72,20 @@ let EvaluationManage=React.createClass({
             {evaluate_star_level:5,fieldName:'EvaluateStarLevel'},
             {service_reply:"未回复",fieldName:'CustomerServiceReply'},
             {status:"仅此用户可见",fieldName:'ShowStatus'},
-            {op_items:['展现','回复'],dialogs:[1,2],color:"#1A9FE5",fieldName:'Operation'}];
+            {fieldName:'CommentOperation'}];
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <TextScroll />
                 <div className="query-condition">
 
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
-                    <SelectInput title="展现状态：" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="泊车司机：" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="送车司机：" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="展现状态：" change={this.handleChange} name="show_status" />
+                    <SelectInput title="泊车司机：" change={this.handleChange} name="parking_driver" />
+                    <SelectInput title="送车司机：" change={this.handleChange} name="sending_driver" />
                     <hr/>
-                    <SelectInput title="服务打星：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
-                    <SelectInput title="泊车打星：" change={this.handleChange} name="order_source" defaultName="全部"/>
-                    <SelectInput title="送车打星：" change={this.handleChange} name="order_source" defaultName="全部"/>
+                    <SelectInput title="服务打星：" change={this.handleChange} pdl="0" name="service_star" />
+                    <SelectInput title="泊车打星：" change={this.handleChange} name="parking_star" />
+                    <SelectInput title="送车打星：" change={this.handleChange} name="sending_star" />
                     <button className="query-btn" onClick={this.handleQuery}>查询</button>
                 </div>
                 <div className="data-list">
