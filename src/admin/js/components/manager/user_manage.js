@@ -78,7 +78,6 @@ let UserManager=React.createClass({
             {op_items:["编辑","取消星级"],color:"#1A9FE5",fieldName:'Operation'}];
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
                     <button className="query-btn" onClick={this.handlePageQuery}>查询</button>

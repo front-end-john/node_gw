@@ -75,7 +75,6 @@ let EvaluationManage=React.createClass({
             {fieldName:'CommentOperation'}];
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
 
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>

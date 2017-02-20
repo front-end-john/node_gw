@@ -14,6 +14,7 @@ import UserManager from "../components/manager/user_manage";
 import EvaluationManage from "../components/manager/evaluation_manage";
 import CouponManage from "../components/manager/coupon_manage";
 import JsjOrder from "../components/manager/jsj_order";
+import TextScroll from '../components/widgets/text_scroll';
 
 
 let App=React.createClass({
@@ -21,6 +22,7 @@ let App=React.createClass({
         return (
             <div className="app"  >
                 <Aside />
+                <TextScroll />
                 {this.props.children}
             </div>
         );

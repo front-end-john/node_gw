@@ -90,7 +90,7 @@ let OrderDetail=React.createClass({
     },
     editPredictGetCarTime(type,time){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<PredictTime  type={type} url="/admin/api/orders/edit_returning_info"
+        ReactDOM.render(<PredictTime  type={type} url="/admin/api/orders/set_flight_landing_time"
                                           number={this.props.number} time={time}
                                           reload={this.loadOrderDetail}  />, mask);
     },
@@ -256,7 +256,7 @@ let OrderDetail=React.createClass({
                                                           onClick={()=>this.editPredictGetCarTime("mod",o.returningtime)}>
                                         {o.returningtime||""}</span>):
                                     (<span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                           onClick={()=>this.editPredictGetCarTime("add",o.returningtime)}>添加</span>)}</p>
+                                           onClick={()=>this.editPredictGetCarTime("add",'')}>添加</span>)}</p>
                             <p><label>回程航站楼：</label><span>{o.returningterminalname||""}</span></p>
                             <p className="note-field"><label>渠道备注：</label>
                                 <span>{""}</span></p>

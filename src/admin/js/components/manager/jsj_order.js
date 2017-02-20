@@ -128,7 +128,6 @@ let JSJOrder=React.createClass({
 
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
                     <TextInput title="用户姓名：" ref={(c)=>this.name=c} change={this.handleChange} pdl="0" name="user_name"
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入用户姓名" />

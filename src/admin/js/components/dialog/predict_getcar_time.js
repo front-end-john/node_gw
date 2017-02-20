@@ -22,11 +22,10 @@
         mask.style.display="none";
     },
     ensure(){
-        return 0;
-        let serialnumber=this.props.number;
-        let time=this.fno||this.props.time;
+        let order_id=this.props.number;
+        let flightlandingtime=this.fdate||this.props.time;
         let url=this.props.url+"?";
-        url+=queryStr.stringify({serialnumber,time});
+        url+=queryStr.stringify({order_id,flightlandingtime});
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("修改返程航班响应状态："+res.status);
             if(+res.status < 400){
@@ -62,7 +61,7 @@
                     <div className="date-select"><em>预计取车时间：</em>
                         <DateField onChange={(date)=>this.fdate=date } dateFormat="YYYY-MM-DD HH:mm"
                                    style={{borderColor:"#ddd",width:"220px",height:"36px"}}
-                                   defaultValue={this.props.fdate} placeholder="请输入返程时间"
+                                   defaultValue={this.props.time} placeholder="请输入返程时间"
                         /></div>
                 </div>
                 <section className="btn">

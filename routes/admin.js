@@ -31,51 +31,22 @@ router.get('/',function (req, res, next) {
     })
 });
 
-let proxy=function(req, res) {
-    let url=admin_url+req.originalUrl;
+let proxy=function(proxyReq, proxyRes) {
+    let url=admin_url+proxyReq.originalUrl;
     log.info(url,__filename);
-
-    fetch(url,{headers:req.headers}).then((res)=>{
+    fetch(url,{headers:proxyReq.headers}).then((res)=>{
         log.info("响应状态："+res.status);
+        proxyRes.status(res.status);
         return res.text();
     }).then(function(body) {
         //log.info("响应内容："+body);
-        res.end(body);
+        proxyRes.end(body);
     }).catch(function(e){
         log.error(e,__filename);
-        res.status(500).end();
+        proxyRes.status(500).end();
     });
 };
 
-let proxyWithCookie=(req, res)=>{
-    let cookie=`admin="${req.cookies.admin}";admin_skey="${req.cookies.admin_skey}";username=${req.cookies.username}`;
-    let host=admin_url.replace(/^https?:\/\//,"");
-    log.warn("cookie:"+cookie);
-    console.dir(req.headers);
-    let options = {
-        "method": "GET",
-        "hostname": host,
-        "port": null,
-        "path": req.originalUrl,
-        "headers": req.headers
-    };
-    let proxyReq = http.request(options, (proxyRes)=>{
-        let chunks = [];
-        proxyRes.on("data", function (chunk) {
-            chunks.push(chunk);
-        });
-        proxyRes.on("end", function () {
-            let body = Buffer.concat(chunks);
-            body = body.toString();
-            log.info("响应内容："+body);
-            res.end(body);
-        });
-    });
-    proxyReq.on('error', (e) => {
-        log.error(`problem with request: ${e.message}`);
-    });
-    proxyReq.end();
-};
 
 /**
  * 获取订单查询列表
@@ -130,6 +101,20 @@ router.get('/api/cars/edit_car_info', function(req, res, next){
  * 修改返程航班信息
  */
 router.get('/api/orders/edit_returning_info', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 修改航班落地时间
+ */
+router.get('/api/orders/set_flight_landing_time', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 获取紧急订单
+ */
+router.get('/api/orders/check_new', function(req, res, next){
     proxy(req, res);
 });
 

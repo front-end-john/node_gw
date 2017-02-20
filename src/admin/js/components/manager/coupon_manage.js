@@ -80,7 +80,6 @@ export default React.createClass({
             {fieldName:'Operation'}];
         return(
             <section className="data-section"  style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
                     <TextInput title="微信昵称：" change={this.handleChange} name="wx_nick" holdText="请输入微信昵称" />

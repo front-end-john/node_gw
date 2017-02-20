@@ -23945,17 +23945,21 @@
 
 	var _user_manage2 = _interopRequireDefault(_user_manage);
 
-	var _evaluation_manage = __webpack_require__(471);
+	var _evaluation_manage = __webpack_require__(472);
 
 	var _evaluation_manage2 = _interopRequireDefault(_evaluation_manage);
 
-	var _coupon_manage = __webpack_require__(472);
+	var _coupon_manage = __webpack_require__(473);
 
 	var _coupon_manage2 = _interopRequireDefault(_coupon_manage);
 
-	var _jsj_order = __webpack_require__(474);
+	var _jsj_order = __webpack_require__(476);
 
 	var _jsj_order2 = _interopRequireDefault(_jsj_order);
+
+	var _text_scroll = __webpack_require__(252);
+
+	var _text_scroll2 = _interopRequireDefault(_text_scroll);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23966,6 +23970,7 @@
 	            'div',
 	            { className: 'app' },
 	            _react2.default.createElement(_aside2.default, null),
+	            _react2.default.createElement(_text_scroll2.default, null),
 	            this.props.children
 	        );
 	    }
@@ -29536,10 +29541,6 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _text_scroll = __webpack_require__(252);
-
-	var _text_scroll2 = _interopRequireDefault(_text_scroll);
-
 	var _text_input = __webpack_require__(253);
 
 	var _text_input2 = _interopRequireDefault(_text_input);
@@ -29689,7 +29690,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -29778,46 +29778,86 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var TextScroll = _react2.default.createClass({
-	    displayName: 'TextScroll',
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	exports.default = _react2.default.createClass(_defineProperty({
+	    displayName: 'text_scroll',
 	    getInitialState: function getInitialState() {
-	        return { rushOrder: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] };
+	        return { rushOrder: [] };
 	    },
-	    componentDidMount: function componentDidMount() {
+	    flashRushOrder: function flashRushOrder() {
 	        var _this = this;
 
-	        var wh = getComputedStyle(this.wrap).width;
-	        var th = getComputedStyle(this.text).width;
-	        var start = 0;
-	        this.timer = setInterval(function () {
-	            _this.text.style.left = -start + "px";
-	            start += 1;
-	            if (start >= parseFloat(th)) {
-	                start = 0;
+	        var url = "/admin/api/orders/check_new";
+	        fetch(url, { credentials: 'include' }).then(function (res) {
+	            if (+res.status < 400) {
+	                return res.text();
+	            } else {
+	                throw new Error("服务异常");
 	            }
-	        }, 30);
+	        }).then(function (str) {
+	            try {
+	                var obj = JSON.parse(str);
+	                if (obj.code == 0) {
+	                    _this.setState({ rushOrder: obj.parkings });
+	                } else {
+	                    console.log(obj);
+	                }
+	            } catch (e) {
+	                console.error("数据异常：", e);
+	                console.log("异常数据：", str);
+	            }
+	        }).catch(function (e) {
+	            console.trace('错误:', e);
+	        });
 	    },
-	    render: function render() {
+	    componentWillMount: function componentWillMount() {
+	        this.flashRushOrder();
+	        this.flashTimer = setInterval(this.flashRushOrder, 3000);
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        clearInterval(this.flashTimer);
+	    },
+	    componentDidMount: function componentDidMount() {
 	        var _this2 = this;
 
-	        var list = this.state.rushOrder.map(function (item, index) {
-	            var li = _react2.default.createElement(
-	                'span',
-	                { key: index, style: { color: '#DB8800' } },
-	                '\u8BA2\u5355\u2002(154454654651)\u200220\u5206\u949F\u540E\u63A5\u8F66;\u2003\u2003'
-	            );
-	            if (index % 2 == 0) {
-	                li = _react2.default.createElement(
-	                    'span',
-	                    { key: index, style: { color: '#35BAFF' } },
-	                    '\u8BA2\u5355\u2002(154454654651)\u200220\u5206\u949F\u540E\u9001\u8F66;\u2003\u2003'
-	                );
+	        var ww = parseFloat(getComputedStyle(this.wrap).width);
+	        var tw = parseFloat(getComputedStyle(this.text).width);
+	        console.log("ww=" + ww, "tw=" + tw);
+	        var start = -ww / 2,
+	            frame = void 0;
+	        var scroll = function scroll() {
+	            start++;
+	            frame = requestAnimationFrame(scroll);
+	            _this2.text.style.left = -start + "px";
+	            if (start >= tw) {
+	                start = -ww / 2;
 	            }
-	            return li;
+	        };
+	        if (tw > ww) scroll();
+	        this.text.addEventListener("hover", function () {
+	            frame && cancelAnimationFrame(frame);
+	        }, false);
+	        this.text.addEventListener("leave", function () {
+	            if (tw > ww) scroll();
+	        }, false);
+	    },
+	    render: function render() {
+	        var _this3 = this;
+
+	        var list = this.state.rushOrder.map(function (item, index) {
+	            var clr = item.indexOf("送车") == -1 ? '#DB8800' : '#35BAFF';
+	            return _react2.default.createElement(
+	                'span',
+	                { key: index, style: { color: clr } },
+	                item,
+	                '\u2003\u2003'
+	            );
 	        });
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'scroll-text' },
+	            _react2.default.createElement('em', null),
 	            _react2.default.createElement(
 	                'label',
 	                null,
@@ -29826,24 +29866,21 @@
 	            _react2.default.createElement(
 	                'section',
 	                { ref: function ref(c) {
-	                        return _this2.wrap = c;
+	                        return _this3.wrap = c;
 	                    } },
 	                _react2.default.createElement(
 	                    'p',
 	                    { ref: function ref(c) {
-	                            return _this2.text = c;
+	                            return _this3.text = c;
 	                        } },
 	                    list
 	                )
 	            )
 	        );
-	    },
-	    componentWillUnmount: function componentWillUnmount() {
-	        clearInterval(this.timer);
 	    }
-	});
-
-	exports.default = TextScroll;
+	}, 'componentWillUnmount', function componentWillUnmount() {
+	    clearInterval(this.timer);
+	}));
 
 /***/ },
 /* 253 */
@@ -30940,7 +30977,7 @@
 	    },
 	    editPredictGetCarTime: function editPredictGetCarTime(type, time) {
 	        var mask = document.getElementById("dialogContainer");
-	        _reactDom2.default.render(_react2.default.createElement(_predict_getcar_time2.default, { type: type, url: '/admin/api/orders/edit_returning_info',
+	        _reactDom2.default.render(_react2.default.createElement(_predict_getcar_time2.default, { type: type, url: '/admin/api/orders/set_flight_landing_time',
 	            number: this.props.number, time: time,
 	            reload: this.loadOrderDetail }), mask);
 	    },
@@ -31395,7 +31432,7 @@
 	                                'span',
 	                                { style: { color: "#1AA0E5", cursor: "pointer" },
 	                                    onClick: function onClick() {
-	                                        return _this2.editPredictGetCarTime("add", o.returningtime);
+	                                        return _this2.editPredictGetCarTime("add", '');
 	                                    } },
 	                                '\u6DFB\u52A0'
 	                            )
@@ -61386,11 +61423,10 @@
 	    ensure: function ensure() {
 	        var _this = this;
 
-	        return 0;
-	        var serialnumber = this.props.number;
-	        var time = this.fno || this.props.time;
+	        var order_id = this.props.number;
+	        var flightlandingtime = this.fdate || this.props.time;
 	        var url = this.props.url + "?";
-	        url += queryStr.stringify({ serialnumber: serialnumber, time: time });
+	        url += queryStr.stringify({ order_id: order_id, flightlandingtime: flightlandingtime });
 	        fetch(url, { credentials: 'include' }).then(function (res) {
 	            console.log("修改返程航班响应状态：" + res.status);
 	            if (+res.status < 400) {
@@ -61445,7 +61481,7 @@
 	                            return _this2.fdate = date;
 	                        }, dateFormat: 'YYYY-MM-DD HH:mm',
 	                        style: { borderColor: "#ddd", width: "220px", height: "36px" },
-	                        defaultValue: this.props.fdate, placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u65F6\u95F4'
+	                        defaultValue: this.props.time, placeholder: '\u8BF7\u8F93\u5165\u8FD4\u7A0B\u65F6\u95F4'
 	                    })
 	                )
 	            ),
@@ -62815,7 +62851,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -63224,7 +63259,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -63423,7 +63457,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -63621,7 +63654,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -63775,7 +63807,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -63960,7 +63991,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -64167,7 +64197,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -64245,7 +64274,7 @@
 
 	var _user_line2 = _interopRequireDefault(_user_line);
 
-	var _operate_important_user = __webpack_require__(476);
+	var _operate_important_user = __webpack_require__(471);
 
 	var _operate_important_user2 = _interopRequireDefault(_operate_important_user);
 
@@ -64329,7 +64358,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -64380,7 +64408,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _operate_important_user = __webpack_require__(476);
+	var _operate_important_user = __webpack_require__(471);
 
 	var _operate_important_user2 = _interopRequireDefault(_operate_important_user);
 
@@ -64543,6 +64571,135 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _warn_tip = __webpack_require__(248);
+
+	var _warn_tip2 = _interopRequireDefault(_warn_tip);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	    displayName: 'operate_important_user',
+	    componentWillMount: function componentWillMount() {
+	        var mask = document.getElementById("dialogContainer");
+	        mask.style.display = "block";
+	    },
+	    showWarnTip: function showWarnTip(msg) {
+	        var mask = document.getElementById("dialogContainer");
+	        if (msg === null) {
+	            _reactDom2.default.render(_react2.default.createElement('i', null), mask);
+	            mask.style.display = "none";
+	        } else {
+	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: msg }), mask);
+	        }
+	    },
+	    cancel: function cancel() {
+	        var mask = document.getElementById("dialogContainer");
+	        _reactDom2.default.render(_react2.default.createElement('i', null), mask);
+	        mask.style.display = "none";
+	    },
+	    ensure: function ensure() {
+	        this.cancel();
+	    },
+	    render: function render() {
+	        var type = this.props.type;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'dialog' },
+	            _react2.default.createElement(
+	                'h2',
+	                { className: 'title' },
+	                type == "add" ? "新增重要用户" : "编辑重要用户",
+	                _react2.default.createElement('i', { onClick: this.cancel })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'dialog-important-user' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u7528\u6237\u624B\u673A\uFF1A'
+	                    ),
+	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7', defaultValue: this.props.phone })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u7528\u6237\u661F\u7EA7\uFF1A'
+	                    ),
+	                    _react2.default.createElement(
+	                        'select',
+	                        { defaultValue: this.props.stars },
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '' },
+	                            '\u8BF7\u9009\u62E9'
+	                        ),
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '1' },
+	                            '\u2605'
+	                        ),
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '2' },
+	                            '\u2605\u2605'
+	                        )
+	                    ),
+	                    _react2.default.createElement('i', { className: 'select-arrow' })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u5907\u2003\u2003\u6CE8\uFF1A'
+	                    ),
+	                    _react2.default.createElement('textarea', { placeholder: '\u586B\u5199\u5907\u6CE8', defaultValue: this.props.remark })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'section',
+	                { className: 'btn' },
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.cancel },
+	                    '\u53D6\u6D88'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.ensure },
+	                    '\u786E\u8BA4'
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 472 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _text_scroll = __webpack_require__(252);
 
 	var _text_scroll2 = _interopRequireDefault(_text_scroll);
@@ -64638,7 +64795,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -64672,7 +64828,7 @@
 	exports.default = EvaluationManage;
 
 /***/ },
-/* 472 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -64701,11 +64857,11 @@
 
 	var _table_head2 = _interopRequireDefault(_table_head);
 
-	var _coupon_line = __webpack_require__(473);
+	var _coupon_line = __webpack_require__(474);
 
 	var _coupon_line2 = _interopRequireDefault(_coupon_line);
 
-	var _issue_coupon = __webpack_require__(477);
+	var _issue_coupon = __webpack_require__(475);
 
 	var _issue_coupon2 = _interopRequireDefault(_issue_coupon);
 
@@ -64787,7 +64943,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -64818,7 +64973,7 @@
 	});
 
 /***/ },
-/* 473 */
+/* 474 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -64967,7 +65122,191 @@
 	});
 
 /***/ },
-/* 474 */
+/* 475 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _warn_tip = __webpack_require__(248);
+
+	var _warn_tip2 = _interopRequireDefault(_warn_tip);
+
+	var _reactDatePicker = __webpack_require__(272);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	    displayName: 'issue_coupon',
+	    componentWillMount: function componentWillMount() {
+	        var mask = document.getElementById("dialogContainer");
+	        mask.style.display = "block";
+	    },
+	    showWarnTip: function showWarnTip(msg) {
+	        var mask = document.getElementById("dialogContainer");
+	        if (msg === null) {
+	            _reactDom2.default.render(_react2.default.createElement('i', null), mask);
+	            mask.style.display = "none";
+	        } else {
+	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: msg }), mask);
+	        }
+	    },
+	    cancel: function cancel() {
+	        var mask = document.getElementById("dialogContainer");
+	        _reactDom2.default.render(_react2.default.createElement('i', null), mask);
+	        mask.style.display = "none";
+	    },
+	    ensure: function ensure() {
+	        this.cancel();
+	    },
+	    render: function render() {
+	        var _this = this;
+
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'dialog' },
+	            _react2.default.createElement(
+	                'h2',
+	                { className: 'title' },
+	                '\u53D1\u653E\u4F18\u60E0\u5238',
+	                _react2.default.createElement('i', { onClick: this.cancel })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'dialog-important-user' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u7528\u6237\u624B\u673A\uFF1A'
+	                    ),
+	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u7528\u6237\u6765\u6E90\uFF1A'
+	                    ),
+	                    _react2.default.createElement(
+	                        'select',
+	                        null,
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '' },
+	                            '\u5BA2\u670D'
+	                        ),
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '1' },
+	                            '\u643A\u7A0B'
+	                        ),
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '2' },
+	                            '\u53BB\u54EA\u513F'
+	                        )
+	                    ),
+	                    _react2.default.createElement('i', { className: 'select-arrow' })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u4F18\u60E0\u7C7B\u578B\uFF1A'
+	                    ),
+	                    _react2.default.createElement(
+	                        'select',
+	                        null,
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '' },
+	                            '\u6309\u5929\u6570'
+	                        ),
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '1' },
+	                            '\u6309\u91D1\u989D'
+	                        ),
+	                        _react2.default.createElement(
+	                            'option',
+	                            { value: '2' },
+	                            '\u6309\u6298\u6263'
+	                        )
+	                    ),
+	                    _react2.default.createElement('i', { className: 'select-arrow' })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u4F18\u60E0\u65F6\u957F\uFF1A'
+	                    ),
+	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u5929\u6570' })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'date-select' },
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u622A\u6B62\u65F6\u95F4\uFF1A'
+	                    ),
+	                    _react2.default.createElement(_reactDatePicker.DateField, { onChange: function onChange(date) {
+	                            return _this.deadline = date;
+	                        }, dateFormat: 'YYYY-MM-DD',
+	                        style: { borderColor: "#ddd", width: "220px", height: "36px", borderRadius: 2 } })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'em',
+	                        null,
+	                        '\u5907\u2003\u2003\u6CE8\uFF1A'
+	                    ),
+	                    _react2.default.createElement('textarea', { placeholder: '\u586B\u5199\u5907\u6CE8' })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'section',
+	                { className: 'btn' },
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.cancel },
+	                    '\u53D6\u6D88'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.ensure },
+	                    '\u786E\u8BA4'
+	                )
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65155,7 +65494,6 @@
 	        return _react2.default.createElement(
 	            'section',
 	            { className: 'data-section', style: { width: sumWidth + 20 } },
-	            _react2.default.createElement(_text_scroll2.default, null),
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'query-condition' },
@@ -65197,320 +65535,6 @@
 	});
 
 	exports.default = JSJOrder;
-
-/***/ },
-/* 475 */,
-/* 476 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _warn_tip = __webpack_require__(248);
-
-	var _warn_tip2 = _interopRequireDefault(_warn_tip);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'operate_important_user',
-	    componentWillMount: function componentWillMount() {
-	        var mask = document.getElementById("dialogContainer");
-	        mask.style.display = "block";
-	    },
-	    showWarnTip: function showWarnTip(msg) {
-	        var mask = document.getElementById("dialogContainer");
-	        if (msg === null) {
-	            _reactDom2.default.render(_react2.default.createElement('i', null), mask);
-	            mask.style.display = "none";
-	        } else {
-	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: msg }), mask);
-	        }
-	    },
-	    cancel: function cancel() {
-	        var mask = document.getElementById("dialogContainer");
-	        _reactDom2.default.render(_react2.default.createElement('i', null), mask);
-	        mask.style.display = "none";
-	    },
-	    ensure: function ensure() {
-	        this.cancel();
-	    },
-	    render: function render() {
-	        var type = this.props.type;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'dialog' },
-	            _react2.default.createElement(
-	                'h2',
-	                { className: 'title' },
-	                type == "add" ? "新增重要用户" : "编辑重要用户",
-	                _react2.default.createElement('i', { onClick: this.cancel })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'dialog-important-user' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u7528\u6237\u624B\u673A\uFF1A'
-	                    ),
-	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7', defaultValue: this.props.phone })
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u7528\u6237\u661F\u7EA7\uFF1A'
-	                    ),
-	                    _react2.default.createElement(
-	                        'select',
-	                        { defaultValue: this.props.stars },
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '' },
-	                            '\u8BF7\u9009\u62E9'
-	                        ),
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '1' },
-	                            '\u2605'
-	                        ),
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '2' },
-	                            '\u2605\u2605'
-	                        )
-	                    ),
-	                    _react2.default.createElement('i', { className: 'select-arrow' })
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u5907\u2003\u2003\u6CE8\uFF1A'
-	                    ),
-	                    _react2.default.createElement('textarea', { placeholder: '\u586B\u5199\u5907\u6CE8', defaultValue: this.props.remark })
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'section',
-	                { className: 'btn' },
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.cancel },
-	                    '\u53D6\u6D88'
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.ensure },
-	                    '\u786E\u8BA4'
-	                )
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 477 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _warn_tip = __webpack_require__(248);
-
-	var _warn_tip2 = _interopRequireDefault(_warn_tip);
-
-	var _reactDatePicker = __webpack_require__(272);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	    displayName: 'issue_coupon',
-	    componentWillMount: function componentWillMount() {
-	        var mask = document.getElementById("dialogContainer");
-	        mask.style.display = "block";
-	    },
-	    showWarnTip: function showWarnTip(msg) {
-	        var mask = document.getElementById("dialogContainer");
-	        if (msg === null) {
-	            _reactDom2.default.render(_react2.default.createElement('i', null), mask);
-	            mask.style.display = "none";
-	        } else {
-	            _reactDom2.default.render(_react2.default.createElement(_warn_tip2.default, { msg: msg }), mask);
-	        }
-	    },
-	    cancel: function cancel() {
-	        var mask = document.getElementById("dialogContainer");
-	        _reactDom2.default.render(_react2.default.createElement('i', null), mask);
-	        mask.style.display = "none";
-	    },
-	    ensure: function ensure() {
-	        this.cancel();
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'dialog' },
-	            _react2.default.createElement(
-	                'h2',
-	                { className: 'title' },
-	                '\u53D1\u653E\u4F18\u60E0\u5238',
-	                _react2.default.createElement('i', { onClick: this.cancel })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'dialog-important-user' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u7528\u6237\u624B\u673A\uFF1A'
-	                    ),
-	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u624B\u673A\u53F7' })
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u7528\u6237\u6765\u6E90\uFF1A'
-	                    ),
-	                    _react2.default.createElement(
-	                        'select',
-	                        null,
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '' },
-	                            '\u5BA2\u670D'
-	                        ),
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '1' },
-	                            '\u643A\u7A0B'
-	                        ),
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '2' },
-	                            '\u53BB\u54EA\u513F'
-	                        )
-	                    ),
-	                    _react2.default.createElement('i', { className: 'select-arrow' })
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u4F18\u60E0\u7C7B\u578B\uFF1A'
-	                    ),
-	                    _react2.default.createElement(
-	                        'select',
-	                        null,
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '' },
-	                            '\u6309\u5929\u6570'
-	                        ),
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '1' },
-	                            '\u6309\u91D1\u989D'
-	                        ),
-	                        _react2.default.createElement(
-	                            'option',
-	                            { value: '2' },
-	                            '\u6309\u6298\u6263'
-	                        )
-	                    ),
-	                    _react2.default.createElement('i', { className: 'select-arrow' })
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u4F18\u60E0\u65F6\u957F\uFF1A'
-	                    ),
-	                    _react2.default.createElement('input', { placeholder: '\u8BF7\u8F93\u5165\u5929\u6570' })
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'date-select' },
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u622A\u6B62\u65F6\u95F4\uFF1A'
-	                    ),
-	                    _react2.default.createElement(_reactDatePicker.DateField, { onChange: function onChange(date) {
-	                            return _this.deadline = date;
-	                        }, dateFormat: 'YYYY-MM-DD',
-	                        style: { borderColor: "#ddd", width: "220px", height: "36px", borderRadius: 2 } })
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'em',
-	                        null,
-	                        '\u5907\u2003\u2003\u6CE8\uFF1A'
-	                    ),
-	                    _react2.default.createElement('textarea', { placeholder: '\u586B\u5199\u5907\u6CE8' })
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'section',
-	                { className: 'btn' },
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.cancel },
-	                    '\u53D6\u6D88'
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.ensure },
-	                    '\u786E\u8BA4'
-	                )
-	            )
-	        );
-	    }
-	});
 
 /***/ }
 /******/ ]);

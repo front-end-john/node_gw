@@ -105,7 +105,6 @@ let OngoingTakeOrder=React.createClass({
         });
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
                     <TextInput title="订单号：" change={this.handleChange} name="order_no"

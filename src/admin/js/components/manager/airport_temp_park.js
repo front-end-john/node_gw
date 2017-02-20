@@ -78,7 +78,6 @@ let AirportTempPark=React.createClass({
             {start_move_time:"2016-12-12 14:24",fieldName:'StartMoveTime'}];
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
                     <TextInput title="订单号：" change={this.handleChange} name="order_no" holdText="请输入订单号" />

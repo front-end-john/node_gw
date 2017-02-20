@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import TextScroll from '../widgets/text_scroll';
+
 import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
@@ -123,7 +123,6 @@ let OrderQuery=React.createClass({
         });
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
-                <TextScroll />
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleTextInputChange} pdl="0"
                                  name="order_source" defaultName="全部"/>

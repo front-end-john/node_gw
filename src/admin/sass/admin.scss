@@ -2,16 +2,13 @@
 @import "compass/css3";
 @import "jeet/index";
 
-$jeet: (
-        gutter: 0,
-        max-width: 4000px
-);
+$jeet: (gutter: 0, max-width: 4000px);
 html,body{
   height: 100%;
   background-color: rgb(245,245,245);
 }
 #appContainer{
-  height: 100%;
+  min-height: 100%;
 }
 // login page style
 .login{
@@ -105,10 +102,12 @@ html,body{
 .app{
   background-color: #F6F6F6;
   position: relative;
+  height: 100%;
   &>aside{
     height:860px;
     width: 200px;
     position: absolute;
+    z-index: 20;
     left: 0;top:0;bottom: 0;
     background-color: #314055;
     color: #8095A8;
@@ -382,6 +381,12 @@ html,body{
   @include center;
   padding-top: 16px;
   font-size: 12px;
+  @include translateX(20px);
+  &>em{
+    @include column();
+    width: 180px;
+    height:20px;
+  }
   &>label{
     @include column();
     width: 70px;
