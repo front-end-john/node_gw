@@ -69,13 +69,13 @@ module.exports=[{
     },
     plugins: [
         //文件压缩插件
-       /* new webpack.DefinePlugin({
+        new webpack.DefinePlugin({
             'process.env': { NODE_ENV: JSON.stringify('production') }
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},
             output: { comments: false}
-        })*/
+        })
         /*new webpack.optimize.CommonsChunkPlugin({
          name:['jquery_family'],
          minChunks: Infinity
