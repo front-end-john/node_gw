@@ -4,34 +4,28 @@ import EditImportantUser from "../dialog/operate_important_user";
 import Ensure from "../dialog/ensure";
 
 export default React.createClass({
-    getInitialState(){
-        return{};
-    },
-    handleCancelStar(name,phone){
+    handleCancelStar(uid,name,phone){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<Ensure title="取消用户星级"  content={"确定要取消“"+name+"（"+phone+"）”的星际吗？"}
-                                url="/admin/api/users/marking"
-                            reload={this.loadOrderDetail} />, mask);
+                                url="/admin/api/users/clear_stars" user_id={uid}
+                            reload={this.props.updateList} />, mask);
     },
-    handleImportantUser(type){
+    handleImportantUser(type,phone,stars,remark){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<EditImportantUser type={type}
-                                           phone={this.phone} stars={this.stars} remark={""}
-                                url="/admin/api/users/marking"
-                                reload={this.loadOrderDetail} />, mask);
+        ReactDOM.render(<EditImportantUser type={type} phone={phone} stars={stars} remark={remark}
+                                url="/admin/api/users/edit"
+                                reload={this.props.updateList} />, mask);
     },
     render(){
         let widths=this.props.widths;
         let list=this.props.data.map((item,index) =>{
             if(item.fieldName=='PhoneNo') {
-                this.phone=item.phone_no;
                 return (
                     <li key={index} style={{width: widths[index]} }>
                         <p>{item.phone_no}</p>
                     </li>
                 );
             }else if(item.fieldName=='FullName'){
-                this.name=item.full_name;
                 return (
                     <li key={index} style={{width: widths[index]} }>
                         <p>{item.full_name}</p>
@@ -40,7 +34,7 @@ export default React.createClass({
             }else if(item.fieldName=='Gender'){
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.gender}</p>
+                        <p>{item.gender==0?"女":"男"}</p>
                     </li>
                 );
             }else if(item.fieldName=='ImportantLevel'){
@@ -76,8 +70,8 @@ export default React.createClass({
                 return (
                     <li key={index} style={{width: widths[index]} } className="list-end" >
                         <p style={{color:"#1AA0E5"}}>
-                            <em onClick={()=>this.handleImportantUser("mod")}>{item.op_items[0]}</em>
-                            <em onClick={()=>this.handleCancelStar(this.name,this.phone)}>&ensp;{item.op_items[1]}</em>
+                            <em onClick={()=>this.handleImportantUser("mod",item.phone,item.stars,item.remark)}>编辑</em>
+                            {item.stars>0 && (<em onClick={()=>this.handleCancelStar(item.id,item.name,item.phone)}>&ensp;取消星级</em>)}
                         </p>
                     </li>
                 );

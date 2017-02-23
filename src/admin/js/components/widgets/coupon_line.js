@@ -7,9 +7,9 @@ export default React.createClass({
     },
     handleDelete(id){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<Ensure id={id} title="删除优惠券"  content={"确定删除优惠券吗？"}
-                                url="/admin/api/users/marking"
-                                reload={this.loadOrderDetail} />, mask);
+        ReactDOM.render(<Ensure coupon_id={id} title="删除优惠券"  content="确定删除优惠券吗？"
+                                reload={this.props.updateList}
+                                url="/admin/api/coupons/delete"/>, mask);
     },
     render(){
         let widths=this.props.widths;
@@ -27,10 +27,9 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='CouponID'){
-                this.cid=item.id;
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.id}</p>
+                        <p>{item.coupon_id}</p>
                     </li>
                 );
             }else if(item.fieldName=='CouponType'){
@@ -40,9 +39,17 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='CouponStatus'){
+                let statusMsg="";
+                if(item.status==-1){
+                    statusMsg="已删除";
+                }else if(item.status==1){
+                    statusMsg="未使用";
+                }else if(item.status==2){
+                    statusMsg="已使用";
+                }
                 return (
                     <li key={index} style={{width: widths[index]} }>
-                        <p>{item.status}</p>
+                        <p>{statusMsg}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReceiveCouponTime'){
@@ -66,7 +73,7 @@ export default React.createClass({
             }else if(item.fieldName=='Operation'){
                 return (
                     <li key={index} style={{width: widths[index]} } className="list-end" >
-                        <p style={{color:"#1AA0E5"}} onClick={()=>this.handleDelete(this.cid)}><em>删除</em></p>
+                        <p style={{color:"#1AA0E5"}} onClick={()=>this.handleDelete(item.coupon_id)}><em>删除</em></p>
                     </li>
                 );
             }

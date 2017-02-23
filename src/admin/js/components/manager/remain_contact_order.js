@@ -14,7 +14,7 @@ let RemainContactOrder=React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 130,    120,  120,   100,      130,      120,     140,     130,      120,     120,    80],
+            initWidths:[ 150,    100,  100,   100,      130,    100,     150,     130,      120,     100,    80],
             titles:    ['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作']
         };
     },

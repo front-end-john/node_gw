@@ -50,7 +50,6 @@
         this.setState({show:e.target.value});
     },
     render(){
-        //let show=this.state.show==undefined?this.props.public_show:this.state.show;
         let show=this.props.public_show;
         let optList=[];
         if(show==0){

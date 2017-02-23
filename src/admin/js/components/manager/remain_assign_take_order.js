@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';

@@ -1,6 +1,7 @@
 let express = require('express');
 let fetch = require('node-fetch');
 let log=require('../utils/mylog');
+let FormData = require('form-data');
 let router = express.Router();
 let http = require("http");
 const fs = require('fs');
@@ -46,7 +47,6 @@ let proxy=function(proxyReq, proxyRes) {
         proxyRes.status(500).end();
     });
 };
-
 
 /**
  * 获取订单查询列表
@@ -206,6 +206,57 @@ router.get('/api/orders/switchcommentshow', function(req, res, next){
  */
 router.get('/api/orders/responsecomment', function(req, res, next){
     proxy(req, res);
+});
+
+/**
+ * 创建优惠券
+ */
+router.get('/api/coupons/createcoupon', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 获取优惠券列表
+ */
+router.get('/api/coupons/list', function(req, res, next){
+    proxy(req, res);
+});
+
+let proxyPost=function(proxyReq, proxyRes,data) {
+    let url=admin_url+proxyReq.originalUrl;
+    log.info(url,__filename);
+    fetch(url,{method: 'POST',headers:proxyReq.headers,body:data}).then((res)=>{
+        log.info("响应状态："+res.status);
+        proxyRes.status(res.status);
+        return res.text();
+    }).then(function(body){
+        //log.info("响应内容："+body);
+        proxyRes.end(body);
+    }).catch(function(e){
+        log.error(e,__filename);
+        proxyRes.status(500).end();
+    });
+};
+
+/**
+ * 删除优惠券
+ */
+router.get('/api/coupons/delete', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
+ * 获取用户列表
+ */
+router.get('/api/users/query', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
+ * 取消用户星级
+ */
+router.get('/api/users/clear_stars', function(req, res, next){
+    proxy(req,res);
 });
 
 module.exports = router;

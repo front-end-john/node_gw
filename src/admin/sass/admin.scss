@@ -217,6 +217,7 @@ html,body{
   }
   &>.selected{
     color: #fff;
+    background-color: #202E43;
     &>.item-icon{
       background-position:-20px -2px;
     }
@@ -236,21 +237,18 @@ html,body{
   padding-bottom: 10px;
   &>h2{
     &>.item-icon{
-      background-position:-2px -20px;
+      background: url("/admin/img/icon/icon1.png") no-repeat -20px -20px;
     }
+    cursor: default;
+    color: #0E1F38;
     &:hover{
-      &>.item-icon{
-        background-position:-20px -20px;
-      }
+      color: #0E1F38;
+      background-color: #314055;
     }
   }
   &>.selected{
-    &:after{
-      width: 0;
-    }
-    &>.item-icon{
-      background-position:-20px -20px;
-    }
+    background-color: #314055;
+    &:after{  width: 0;  }
   }
 }
 .primary-item:nth-of-type(3){
@@ -259,21 +257,18 @@ html,body{
     &>.item-icon{
       width: 14px;height: 8px;
       left: 21px;top:22px;
-      background-position:-2px -39px;
+      background: url("/admin/img/icon/icon1.png") no-repeat -20px -39px;
     }
+    cursor: default;
+    color: #0E1F38;
     &:hover{
-      &>.item-icon{
-        background-position:-20px -39px;
-      }
+      color: #0E1F38;
+      background-color: #314055;
     }
   }
   &>.selected{
-    &:after{
-      width: 0;
-    }
-    &>.item-icon{
-      background-position:-20px -39px;
-    }
+    background-color: #314055;
+    &:after{  width: 0;  }
   }
 }
 .primary-item:nth-of-type(4){
@@ -1172,7 +1167,7 @@ $dialogHeadHeight:48px;
 
 .dialog-important-user{
   padding: 40px 60px 30px;
-  &>p{
+  &>p:not(.group-radio){
     margin-bottom: 10px;
     em{
       font-size: 14px;
@@ -1192,9 +1187,8 @@ $dialogHeadHeight:48px;
     }
     .user-gender,.username{
       width: 100px;margin-right: 10px;
-      //color: #646464;
     }
-    //.user-gender{color: #c8c8c8;}
+
     textarea{
       width: 300px;
       max-width: 300px;
@@ -1206,6 +1200,50 @@ $dialogHeadHeight:48px;
       @include appearance(none);
       padding: 10px;
       @include box-sizing(border-box);
+    }
+  }
+  &>.group-radio{
+    margin-bottom: 10px;
+    em{
+      font-size: 14px;
+      color: #323232;
+      vertical-align: middle;
+    }
+    $radioSize:15px;
+    &>span{padding-left: 18px;padding-right:11px; }
+    &>span>input{
+      position: absolute;
+      margin-left: -18px;
+      margin-top: 4.5px;
+      cursor: pointer;
+      width: $radioSize;
+      height: $radioSize;
+      @include appearance(none);
+      &:focus{outline: none;}
+      &:after{
+        content: "";
+        width: $radioSize;
+        height: $radioSize;
+        @include border-radius(51%);
+        position: absolute;
+        background-color:#fff;
+        border: 1px solid #DCDCDC;
+        @include box-sizing(border-box);
+        left: 0;top: 0;
+      }
+      &:checked{
+        &:after{background-color:#314055;border:0;}
+        &:before{
+          content: "";
+          width: 5px;
+          height: 5px;
+          @include border-radius(51%);
+          position: absolute;
+          background-color:#fff;
+          left: ($radioSize - 5)/2 ;top: ($radioSize - 5)/2;
+          z-index: 3;
+        }
+      }
     }
   }
   &>.date-select{

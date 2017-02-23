@@ -21,8 +21,7 @@ import {getStateInfo,getFormatDate} from '../../util'
 let OrderDetail=React.createClass({
     getInitialState(){
         return{
-            p_item:'p1',first:true,
-            blocks:[]
+            p_item:'p1',first:true, blocks:[]
         };
     },
     showWarnTip(msg){

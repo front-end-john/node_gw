@@ -14,7 +14,7 @@ let OngoingTakeOrder=React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  130,   120,   120,  120,    120,    120,    130,     120,      130,      130],
+            initWidths:[  150,   100,   100,  100,    110,    150,    130,     100,      130,      130],
             titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','接车司机','分配时间','开始接车时间']
         };
     },

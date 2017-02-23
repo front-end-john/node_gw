@@ -3,6 +3,9 @@
  import WarnTip from '../dialog/warn_tip';
  import { DateField } from 'react-date-picker';
  export default React.createClass({
+     getInitialState(){
+         return {couponType:"3"};
+     },
      componentWillMount(){
          let mask=document.getElementById("dialogContainer");
          mask.style.display="block";
@@ -21,35 +24,105 @@
          ReactDOM.render(<i/>, mask);
          mask.style.display="none";
      },
+     handleRadio(e){
+         this.setState({couponType:e.target.value});
+     },
      ensure(){
-         this.cancel();
+         let phoneno=this.phone.value.trim();
+         let comefrom=this.comefrom.value;
+         let coupontype=this.state.couponType;
+         let days=this.long?this.long.value:"";
+         let money=this.money?this.money.value:"";
+         let discount=this.discount?this.discount.value:"";
+         let expiretime=this.deadline;
+         let remark=this.remark.value;
+         let url="/admin/api/coupons/createcoupon?";
+         url+=queryStr.stringify({phoneno,comefrom,coupontype,days,money,discount,expiretime,remark});
+         fetch(url,{credentials: 'include'}).then((res)=>{
+             if(+res.status < 400){
+                 return res.text();
+             }else {
+                 throw new Error("服务端异常");
+             }
+         }).then((str)=>{
+             try{
+                 let obj=JSON.parse(str);
+                 if(obj.code==0){
+                     this.cancel();
+                     this.props.updateList();
+                 }else{
+                     this.showWarnTip(obj.message);
+                 }
+             }catch(e){
+                 this.showWarnTip("数据异常");
+                 console.error("json数据异常：",e);
+                 console.log("异常数据为：",str);
+             }
+         }).catch((e)=>{
+             this.showWarnTip("请求异常");
+             console.trace('请求错误:', e);
+         });
+     },
+     handlePhoneChange(e){
+         let val=e.target.value;
+         if(/^1\d{10}$/.test(val)){
+             let url="/admin/api/users/userinfo?phoneno="+val;
+             fetch(url,{credentials: 'include'}).then((res)=>{
+                 if(+res.status < 400){
+                     return res.text();
+                 }else {
+                     throw new Error("服务端异常");
+                 }
+             }).then((str)=>{
+                 try{
+                     let obj=JSON.parse(str);
+                     if(obj.code==0){
+                         this.setState({user:obj.user});
+                     }else {
+                         console.log("后台提示：",obj);
+                     }
+                 }catch(e){
+                     console.error("json数据异常：",e);
+                     console.log("异常数据为：",str);
+                 }
+             }).catch((e)=>{
+                 console.trace('请求错误:', e);
+             });
+         }
      },
      render(){
-
+        let type=this.state.couponType,couponValue;
+        if(type==3){
+            couponValue=(<p><em>优惠时长：</em><input placeholder="请输入天数" type="number"
+                                                 ref={(c)=>this.long=c}/></p>);
+        }else if(type==1){
+            couponValue=(<p><em>优惠金额：</em><input placeholder="请输入金额" type="number"
+                                                 ref={(c)=>this.money=c}/></p>);
+        }else if(type==0){
+            couponValue=(<p><em>优惠折扣：</em><input placeholder="请输入折扣" type="number"
+                                                 ref={(c)=>this.discount=c}/></p>);
+        }
         return(
             <div className="dialog">
                 <h2 className="title">发放优惠券<i onClick={this.cancel}/></h2>
                 <div className="dialog-important-user">
-                    <p><em>用户手机：</em><input placeholder="请输入手机号" /></p>
+                    <p><em>用户手机：</em><input placeholder="请输入手机号" ref={(c)=>this.phone=c }/></p>
                     <p><em>用户来源：</em>
-                        <select>
-                            <option value="">客服</option>
-                            <option value="1" >携程</option>
-                            <option value="2" >去哪儿</option>
+                        <select ref={(c)=>this.comefrom=c}>
+                            <option value="service">客服</option>
+                            <option value="FEIBOTONG_TAOBAO">淘宝</option>
                         </select><i className="select-arrow"/>
                     </p>
-                    <p><em>优惠类型：</em>
-                        <select>
-                            <option value="">按天数</option>
-                            <option value="1" >按金额</option>
-                            <option value="2" >按折扣</option>
-                        </select><i className="select-arrow"/>
+                    <p className="group-radio"><em>优惠类型：</em>
+                        <span><input onClick={this.handleRadio} type="radio" value="3" name="coupontype"/>按天数</span>
+                        <span><input onClick={this.handleRadio} type="radio" value="1" name="coupontype"/>按金额</span>
+                        <span><input onClick={this.handleRadio} type="radio" value="0" name="coupontype"/>按折扣</span>
                     </p>
-                    <p><em>优惠时长：</em><input placeholder="请输入天数" /></p>
+                    {couponValue}
                     <div className="date-select"><em>截止时间：</em>
                         <DateField onChange={(date)=>this.deadline=date } dateFormat="YYYY-MM-DD"
                                    style={{borderColor:"#ddd",width:"220px",height:"36px",borderRadius:2}} /></div>
-                    <p><em>备&emsp;&emsp;注：</em><textarea placeholder="填写备注" /></p>
+                    <p><em>备&emsp;&emsp;注：</em><textarea placeholder="填写备注" ref={(c)=>this.remark=c}/></p>
                 </div>
                 <section className="btn">
                     <button onClick={this.cancel}>取消</button>

@@ -3,33 +3,7 @@ import ReactDOM from 'react-dom';
 import ModPasswd from './dialog/modify_password';
 import Ensure from './dialog/ensure';
 import {maxNumber} from '../util';
-let PrimaryItem = React.createClass({
-    render(){
-        let items=this.props.childItems,childLevel=null;
-        if(items){
-            let list = items.map((item, index) => {
-                let id = this.props.prefix + (index + 1);
-                return (
-                    <li id={id} key={index} onClick={()=>this.props.secondClick(id)}
-                        className={this.props.secondItem == id?"highlight" : ""}>
-                        {item.name} <span>{item.newCount}</span></li>
-                );
-            });
-            childLevel = (<ul className="primary-list">
-                                {list}
-                            </ul>);
-        }
-        return (
-            <section className="primary-item" style={{backgroundColor:this.props.id==this.props.currItem?"#202E43":"inherit"}}>
-                <h2  onClick={(e)=> this.props.click(this.props.id)}
-                className={this.props.id==this.props.currItem?"selected":""}>
-                    <em className="item-icon" />
-                    {this.props.itemName}</h2>
-                  {childLevel}
-            </section>
-        );
-    }
-});
+import PrimaryItem from './widgets/nav_item';
 
 let Aside = React.createClass({
     getInitialState(){
@@ -50,9 +24,8 @@ let Aside = React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            //console.log("jsj订单数量：",obj);
             this.setState({jsjCount:obj.record||{}});
-        }).catch(function(e) {
+        }).catch(function(e){
             console.trace('错误:', e);
         });
     },

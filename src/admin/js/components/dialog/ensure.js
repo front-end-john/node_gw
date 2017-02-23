@@ -17,11 +17,15 @@ let Ensure=React.createClass({
         mask.style.display="none";
     },
     ensure(){
+        let url=this.props.url;
         let order_id=this.props.order_id;
-        let showpublic=this.props.public_show;
         if(order_id){
-            let url=this.props.url+"?order_id="+order_id+"&showpublic="+showpublic;
-            fetch(url,{credentials: 'include'}).then(function(res){
+            /**
+             *关闭或展现评论
+             */
+            let showpublic=this.props.public_show;
+            url+="?order_id="+order_id+"&showpublic="+showpublic;
+            fetch(url,{credentials: 'include'}).then((res)=>{
                 console.log("关闭或展现评论响应状态："+res.status);
                 if(+res.status < 400){
                     return res.text();
@@ -41,14 +45,73 @@ let Ensure=React.createClass({
                 }catch(e){
                     this.showWarnTip("数据异常");
                 }
-            }).catch(function(e) {
+            }).catch((e)=>{
                 this.showWarnTip("请求异常");
                 console.trace('错误:', e);
             });
         }
-        /*let change=this.props.change;
-        change && change();*/
-
+        let coupon_id=this.props.coupon_id;
+        if(coupon_id){
+            /**
+             *删除优惠券
+             */
+            url+="?couponid="+coupon_id;
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                console.log("删除优惠券响应："+res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务异常");
+                }
+            }).then((str)=>{
+                //console.log(str);
+                try {
+                    let obj=JSON.parse(str);
+                    if(obj.code==0){
+                        this.props.reload();
+                        this.cancel();
+                    }else {
+                        this.showWarnTip(obj.msg);
+                    }
+                }catch(e){
+                    this.showWarnTip("数据异常");
+                }
+            }).catch((e)=>{
+                this.showWarnTip("请求异常");
+                console.trace('错误:', e);
+            });
+        }
+        let user_id=this.props.user_id;
+        if(user_id){
+            /**
+             *取消用户星级
+             */
+            url+="?userid="+user_id;
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                console.log("取消用户星级响应："+res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务异常");
+                }
+            }).then((str)=>{
+                //console.log(str);
+                try {
+                    let obj=JSON.parse(str);
+                    if(obj.code==0){
+                        this.props.reload();
+                        this.cancel();
+                    }else {
+                        this.showWarnTip(obj.msg);
+                    }
+                }catch(e){
+                    this.showWarnTip("数据异常");
+                }
+            }).catch((e)=>{
+                this.showWarnTip("请求异常");
+                console.trace('错误:', e);
+            });
+        }
     },
     render(){
         return(
