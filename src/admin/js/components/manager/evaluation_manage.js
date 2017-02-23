@@ -1,10 +1,11 @@
 import React from 'react'
-
-import TextScroll from '../widgets/text_scroll'
+import ReactDOM from 'react-dom';
 import TextInput from '../widgets/text_input'
 import SelectInput from '../widgets/select_input'
 import TableHead from '../widgets/table_head'
 import TableLine from '../widgets/table_line'
+import WarnTip from '../dialog/warn_tip';
+import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 let EvaluationManage=React.createClass({
     getInitialState(){
@@ -16,19 +17,57 @@ let EvaluationManage=React.createClass({
             titles:    ['订单号','用户','车辆','机场','评价时间','评价星级','客服回复','展现状态','操作']
         };
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
         if(key==="phone_no"){
-            this.state.queryCondition.phone_no=val;
-        }else if(key==="order_source"){
-            this.state.queryCondition.order_source=val;
-        }else if(key==="order_no"){
-            this.state.queryCondition.order_no=val;
+            this.state.queryCondition.phoneno=val;
+        }else if(key==="show_status"){
+            this.state.queryCondition.state=val;
+        }else if(key==="parking_driver"){
+            this.state.queryCondition.parkingdriverid=val;
+        }else if(key==="sending_driver"){
+            this.state.queryCondition.returningdriverid=val;
+        }else if(key==="service_star"){
+            this.state.queryCondition.servicescore=val;
+        }else if(key==="parking_star"){
+            this.state.queryCondition.parkingscore=val;
+        }else if(key==="sending_star"){
+            this.state.queryCondition.returningscore=val;
         }
     },
-    handlePageQuery(){
-        console.log(this.state.queryCondition);
+    handlePageQuery(page,pageSize){
+        let url="/admin/api/comments/list?";
+        url+=queryStr.stringify({page:page,pagesize:pageSize});
+        url+="&"+queryStr.stringify(this.state.queryCondition);
+        fetch(url,{credentials: 'include'}).then(function(res){
+            console.log("查询评价列表响应状态："+res.status);
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务异常");
+            }
+        }).then((str)=>{
+            //console.log(str);
+            try {
+                let obj=JSON.parse(str);
+                if(obj.code==0){
+                    this.setState({orderData:obj.result});
+                    this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
+                }else {
+                    this.showWarnTip(obj.msg);
+                }
+            }catch(e){
+                this.showWarnTip("数据异常");
+            }
+        }).catch(function(e) {
+            this.showWarnTip("请求异常");
+            console.trace('错误:', e);
+        });
     },
     adaptScreen(){
         let initWidths=this.state.initWidths;
@@ -48,6 +87,7 @@ let EvaluationManage=React.createClass({
     },
     componentWillMount(){
         this.adaptScreen();
+        this.handlePageQuery(1,10);
     },
     componentDidMount(){
         window.addEventListener("resize",this.adaptScreen,false);
@@ -63,20 +103,22 @@ let EvaluationManage=React.createClass({
             return {name:item,width:widths[index]+'px'};
         });
         document.getElementById("appContainer").style.width=sumWidth+200+'px';
+        let list=this.state.orderData.map((item,index)=>{
+            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
+                {username:item.username,phone_no:item.phoneno,fieldName:'User'},
+                {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
+                {airport:item.terminalname,fieldName:'Airport'},
+                {evaluate_time:item.commentcreatetime,fieldName:'EvaluateTime'},
+                {evaluate_star_level:item.servicescore,fieldName:'EvaluateStarLevel'},
+                {service_reply:item.responsecontent,fieldName:'CustomerServiceReply'},
+                {status:item.showpublic,fieldName:'ShowStatus'},
+                {order_id:item.orderid,show:item.showpublic,reply:item.responsecontent,fieldName:'CommentOperation'}];
+            return (<TableLine key={index} widths={widths} data={data} />);
+        });
 
-        let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
-            {username:"中小屋",phone_no:"124578654",fieldName:'User'},
-            {car_no:'奥B4878',car_color:'白色',car_brand:'宝马',fieldName:'Car'},
-            {airport:'广州白云',fieldName:'Airport'},
-            {evaluate_time:'2016-12-12 14:14',fieldName:'EvaluateTime'},
-            {evaluate_star_level:5,fieldName:'EvaluateStarLevel'},
-            {service_reply:"未回复",fieldName:'CustomerServiceReply'},
-            {status:"仅此用户可见",fieldName:'ShowStatus'},
-            {fieldName:'CommentOperation'}];
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
-
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
                     <SelectInput title="展现状态：" change={this.handleChange} name="show_status" />
                     <SelectInput title="泊车司机：" change={this.handleChange} name="parking_driver" />
@@ -85,15 +127,16 @@ let EvaluationManage=React.createClass({
                     <SelectInput title="服务打星：" change={this.handleChange} pdl="0" name="service_star" />
                     <SelectInput title="泊车打星：" change={this.handleChange} name="parking_star" />
                     <SelectInput title="送车打星：" change={this.handleChange} name="sending_star" />
-                    <button className="query-btn" onClick={this.handleQuery}>查询</button>
+                    <button className="query-btn" onClick={()=>this.handleQuery(1,10)}>查询</button>
                 </div>
-                <div className="data-list">
-                    <TableHead data={headData} />
-                    <TableLine widths={widths} data={data} />
-                    <TableLine widths={widths} data={data} />
-                    <TableLine widths={widths} data={data} />
-                    <TableLine widths={widths} data={data} />
-                </div>
+                {list.length>0?(<div className="data-list">
+                        <TableHead data={headData} />
+                        {list}
+                        <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                    </div>):(<div className="data-none">
+                        <TableHead data={headData} />
+                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                    </div>)}
             </section>
         );
     }

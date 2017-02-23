@@ -146,4 +146,66 @@ router.get('/api/orders/neworder', function(req, res, next){
     proxy(req, res);
 });
 
+/**
+ * 添加洗车服务
+ */
+router.get('/api/serviceorder/add_washing', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 修改洗车服务
+ */
+router.get('/api/serviceorder/edit_washing', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 添加加油服务
+ */
+router.get('/api/serviceorder/add_oil', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 修改加油服务
+ */
+router.get('/api/serviceorder/edit_oil', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 取消增值服务订单
+ */
+router.get('/api/serviceorder/cancel', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 取消增值服务订单
+ */
+router.get('/api/serviceorder/cancel', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 获取评价管理列表
+ */
+router.get('/api/comments/list', function(req, res, next){
+    proxy(req, res);
+});
+/**
+ * 切换评论的展现和关闭
+ */
+router.get('/api/orders/switchcommentshow', function(req, res, next){
+    proxy(req, res);
+});
+
+/**
+ * 客服回复
+ */
+router.get('/api/orders/responsecomment', function(req, res, next){
+    proxy(req, res);
+});
+
 module.exports = router;

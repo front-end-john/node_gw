@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextScroll from '../widgets/text_scroll';
 import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
-import ErrorTip from '../dialog/warn_tip';
+import WarnTip from '../dialog/warn_tip';
 import CreateOrder from '../dialog/customer_service_order';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
@@ -19,9 +18,13 @@ let RemainContactOrder=React.createClass({
             titles:    ['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作']
         };
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+    },
     handleCreateOrder(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<CreateOrder />, mask);
+        ReactDOM.render(<CreateOrder updateList={()=>this.handlePageQuery(1,10)}/>, mask);
     },
     handleChange(e){
         let key=e.target.id;
@@ -40,7 +43,7 @@ let RemainContactOrder=React.createClass({
         url+=queryStr.stringify({ordertype:'booking',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("订单查询url",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials: 'include'}).then(function(res){
             console.log("查询订单列表响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();

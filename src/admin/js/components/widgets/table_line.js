@@ -8,34 +8,40 @@ import AssignDriver from "../dialog/assign_driver";
 import Reply from "../dialog/customer_service_reply";
 
 let TableLine=React.createClass({
-    getInitialState(){
-        return{isExpand:false,isHide:false,isReply:true};
-    },
-
-    handleHideAndShow(){
+    getInitialState(){return {};},
+    handleHideAndShow(id,show){
         let mask=document.getElementById("dialogContainer");
-        let is=this.state.isHide,title="",content="";
-        if(is){
+        let title="",content="";
+        this.setState({show:show});
+        if(show==0){
             title="展现评论及回复";
             content="确定要展现评论及回复吗？";
         }else {
             title="关闭评论及回复";
             content="确定要关闭评论及回复吗？";
         }
-        ReactDOM.render(<Ensure url="/admin/api/orders/remark.js"
+
+        ReactDOM.render(<Ensure url="/admin/api/orders/switchcommentshow"
                                 title={title} content={content}
                                 change={this.switchHide}
-                                number={this.props.number}/>, mask);
+                                public_show={show==0?1:0}
+                                order_id={id}/>, mask);
     },
-    handleReply(){
+    handleReply(id,show){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<Reply url="/admin/api/orders/remark.js"
-                               number={this.props.number}/>, mask);
+        ReactDOM.render(<Reply url="/admin/api/orders/responsecomment"
+                               cancel={this.cancelReply}
+                               public_show={show}
+                               order_id={id} />, mask);
 
     },
+    cancelReply(){
+        this.setState({isReply:true});
+    },
     switchHide(){
-        let is=this.state.isHide;
-        this.setState({isHide:!is});
+        let is=this.state.show;
+        let show=is==0?1:0;
+        this.setState({show});
     },
 
     handlePay(){
@@ -145,9 +151,10 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='ShowStatus'){
+                let msg=item.status==1?"都可见":"仅此用户可见";
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.status}</p>
+                        <p>{msg}</p>
                     </li>
                 );
             }else if(item.fieldName=='Car'){
@@ -375,14 +382,16 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='CommentOperation'){
-                let isReply=this.state.isReply;
+                let isReply=this.state.isReply===undefined?!!item.reply:this.state.isReply;
                 let replyClr=isReply?"#c9c9c9":"#1AA0E5";
                 let event=isReply?"none":"auto";
+                let publicShow=this.state.show===undefined?item.show:this.state.show;
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#1AA0E5"}}>
-                            <em onClick={this.handleHideAndShow}>{this.state.isHide?"展现":"关闭"}</em>
-                            <em style={{color:replyClr,pointerEvents:event}}  onClick={this.handleReply}>&ensp;回复</em>
+                            <em onClick={()=>this.handleHideAndShow(item.order_id,publicShow)}>{publicShow==0?"展现":"关闭"}</em>
+                            <em style={{color:replyClr,pointerEvents:event}}
+                                onClick={()=>this.handleReply(item.order_id,publicShow)}>&ensp;回复</em>
                         </p>
                     </li>
                 );

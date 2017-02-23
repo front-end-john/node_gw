@@ -94,17 +94,69 @@ let OrderDetail=React.createClass({
                                           number={this.props.number} time={time}
                                           reload={this.loadOrderDetail}  />, mask);
     },
-    editWashService(){
+    editWashService(type,url){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<WashService   url="/admin/api/orders/edit_returning_info"
+        let rainwashing="",remark="",serviceorderid="";
+        if(type=="mod"){
+            let moreService= this.state.orderDetail.serviceorders;
+            let type1=(moreService[0]||{}).servicetype;
+            let wash=moreService[0]||{};
+            if(type1==10) wash=moreService[1]||{};
+
+            rainwashing=wash.config.rainwashing;
+            remark=wash.serviceremark[0].remark;
+            serviceorderid=wash.serviceorderid;
+        }
+        ReactDOM.render(<WashService   url={url} type={type} remark={remark}
+                                       rainwashing={rainwashing}
                                        number={this.props.number}
+                                       soid={serviceorderid}
                                        reload={this.loadOrderDetail}  />, mask);
     },
-    editOilService(){
+    editOilService(type,url){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<OilService   url="/admin/api/orders/edit_returning_info"
-                                       number={this.props.number}
-                                       reload={this.loadOrderDetail}  />, mask);
+        let oillabel="",money="",serviceorderid="",oiltype="",remark="";
+        if(type=="mod"){
+            let moreService= this.state.orderDetail.serviceorders;
+            let type1=(moreService[0]||{}).servicetype;
+            let oil=moreService[0]||{};
+            if(type1==1) oil=moreService[1]||{};
+            oillabel=oil.config.oillabel;
+            money=oil.config.money;
+            oiltype=oil.config.oiltype;
+            remark=oil.serviceremark[0].remark;
+            serviceorderid=oil.serviceorderid;
+        }
+        ReactDOM.render(<OilService   url={url} type={type} label={oillabel} oiltype={oiltype}
+                                      money={money} soid={serviceorderid} remark={remark}
+                                      number={this.props.number}
+                                      reload={this.loadOrderDetail}  />, mask);
+    },
+    cancelExtraService(id){
+        let url="/admin/api/serviceorder/cancel?serviceorderid="+id;
+        fetch(url,{credentials: 'include'}).then((res)=>{
+            if(+res.status < 400){
+                return res.text();
+            }else {
+                throw new Error("服务端异常");
+            }
+        }).then((str)=>{
+            try{
+                let obj=JSON.parse(str);
+                if(obj.code==0){
+                    this.loadOrderDetail();
+                }else {
+                    this.showWarnTip(obj.msg);
+                }
+            }catch(e){
+                this.showWarnTip("数据异常");
+                console.error("json数据异常：",e);
+                console.log("异常数据为：",str);
+            }
+        }).catch((e)=>{
+            this.showWarnTip("请求错误");
+            console.trace('请求错误:', e);
+        });
     },
     handleSwitch(e){
         if(e.target.nodeName==="LI"){
@@ -139,7 +191,6 @@ let OrderDetail=React.createClass({
     },
     adjustWidth(){
         let sumWidth=document.body.clientWidth-260;
-        //console.log("sumWidth",sumWidth);
         let bs=this.state.blocks;
 
         if(this.state.first){
@@ -170,13 +221,18 @@ let OrderDetail=React.createClass({
         let moreService=o.serviceorders||[];
         let driverNote=o.drivernote||[];
 
-        let level=[],driverRemark,washCar="";
+        let level=[],driverRemark;
         for(let i=0;i<user.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
         }
-        if(moreService.length==1){
-            washCar=moreService[0].config.rainwashing=="1"?"下雨也洗车":"";
-        }
+        let type1=(moreService[0]||{}).servicetype,type2=(moreService[1]||{}).servicetype;
+        let wash=moreService[0]||{},oil=moreService[1]||{};
+        if(type1==10) oil=moreService[0];
+        if(type2==1) wash=moreService[1];
+
+        let washConfig=wash.config,oilConfig=oil.config;
+        let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
+        let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
         let serviceRemark=(o.remark||[]).map((item,index)=>{
             return (<p key={index}>{item.time}&emsp;{item.admin_name}&emsp;{item.remark}</p>);
         });
@@ -265,12 +321,16 @@ let OrderDetail=React.createClass({
                     <div className="service-info" ref={(c)=>this.state.blocks[2]=c}>
                         <h2>更多服务</h2>
                         <div className="extra-service">
-                            <p><label>洗车：</label><span>{washCar||"无"}</span>
-                                {washCar?(<em><i onClick={this.editWashService}>编辑</i>&ensp;<i>取消</i></em>):
-                                    (<em onClick={this.editWashService}>添加</em>)}
+                            <p><label>洗车：</label><span>{washCar}</span>
+                                {washConfig?(<em><i onClick={
+                                    ()=>this.editWashService("mod","/admin/api/serviceorder/edit_washing")}>编辑</i>&ensp;
+                                        <i onClick={()=>this.cancelExtraService(wash.serviceorderid)}>取消</i></em>):
+                                    (<em onClick={()=>this.editWashService("add","/admin/api/serviceorder/add_washing")}>添加</em>)}
                             </p>
-                            <p><label>加油：</label><span>无</span>
-                                <em onClick={this.editOilService}>添加</em>
+                            <p><label>加油：</label><span>{addOil}</span>
+                                {oilConfig?(<em><i onClick={()=>this.editOilService("mod","/admin/api/serviceorder/edit_oil")}>编辑</i>&ensp;
+                                        <i onClick={()=>this.cancelExtraService(oil.serviceorderid)}>取消</i></em>):
+                                    (<em onClick={()=>this.editOilService("add","/admin/api/serviceorder/add_oil")}>添加</em>)}
                             </p>
                         </div>
                         <p className="note-field"><label>用户备注：</label><span>{o.userremark||""}</span></p>

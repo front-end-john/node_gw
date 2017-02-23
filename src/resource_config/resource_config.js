@@ -5,7 +5,7 @@ import {checkCacheConfig,loadRemoteResource,appendResource,updateResource} from 
 
 
 let href=location.href;
-let local_config_key="gloal_cache_config";
+let local_config_key="global_cache_config";
 let local_js_key="jsj_index_js";
 let local_css_key="jsj_common_css";
 let config_url="/mobile/jsj/local_cache?t="+new Date().getTime();

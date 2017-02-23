@@ -17,6 +17,10 @@ let InGarageCar=React.createClass({
             titles:    ['订单号','用户','标签','订单来源','车辆','机场','接车司机','入库时间','停车时长','返程航班','更多服务','航班状态']
         };
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
@@ -33,7 +37,7 @@ let InGarageCar=React.createClass({
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'parkingparked',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        fetch(url).then(function(res){
+        fetch(url,{credentials: 'include'}).then(function(res){
             console.log("查询订单列表响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();
