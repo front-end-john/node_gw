@@ -36,26 +36,30 @@ export default React.createClass({
     componentWillUnmount(){
         clearInterval(this.flashTimer);
     },
-    componentDidMount(){
+    handleScrollOrder(){
         let ww=parseFloat(getComputedStyle(this.wrap).width);
-        let tw=parseFloat(getComputedStyle(this.text).width);
+        let tw=parseFloat(getComputedStyle(this.scroll).width);
+        console.log(getComputedStyle(this.scroll).width);
         console.log("ww="+ww,"tw="+tw);
         let start=-ww/2,frame;
         let scroll=()=>{
             start++;
             frame=requestAnimationFrame(scroll);
-            this.text.style.left=-start+"px";
+            this.scroll.style.left=-start+"px";
             if(start>=tw){
                 start=-ww/2;
             }
         };
-        if(tw>ww) scroll();
-        this.text.addEventListener("hover",()=>{
+        if(tw > ww) scroll();
+        this.scroll.addEventListener("hover",()=>{
             frame && cancelAnimationFrame(frame);
         },false);
-        this.text.addEventListener("leave",()=>{
-            if(tw>ww) scroll();
+        this.scroll.addEventListener("leave",()=>{
+            if(tw > ww) scroll();
         },false);
+    },
+    componentDidMount(){
+        setTimeout(this.handleScrollOrder,1000);
     },
     render(){
         let list=this.state.rushOrder.map((item,index)=>{
@@ -67,12 +71,9 @@ export default React.createClass({
                 <em/>
                 <label>紧急订单:</label>
                 <section ref={(c)=> this.wrap=c}>
-                    <p ref={(c)=> this.text=c}>{list}</p>
+                    <p ref={(c)=>this.scroll=c}>{list}</p>
                 </section>
             </div>
         );
-    },
-    componentWillUnmount(){
-        clearInterval(this.timer);
     }
 });

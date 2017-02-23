@@ -112,6 +112,11 @@ let Ensure=React.createClass({
                 console.trace('错误:', e);
             });
         }
+        let option=this.props.option;
+        if(option=="logout"){
+            sessionStorage.removeItem("AdminInfo");
+            location.reload();
+        }
     },
     render(){
         return(

@@ -52,7 +52,7 @@
     "loadUrl": "/admin/css/admin.css"
   },
   "admin_index_js": {
-    "update": 1487842439365,
+    "update": 1487845359769,
     "loadUrl": "/admin/dist/admin.js"
   }
 }

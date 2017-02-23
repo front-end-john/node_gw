@@ -35,7 +35,7 @@ let Aside = React.createClass({
     },
     handleLogout(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<Ensure title="退出系统" content="确认退出系统吗？" />, mask);
+        ReactDOM.render(<Ensure title="退出系统" content="确认退出系统吗？" option="logout" />, mask);
     },
     adaptHeight(){
         let appHel=getComputedStyle(document.getElementsByClassName("app")[0]).height;
