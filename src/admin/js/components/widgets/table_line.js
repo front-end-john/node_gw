@@ -54,10 +54,10 @@ let TableLine=React.createClass({
         mask.style.display="block";
         ReactDOM.render(<Ensure title="电话确认" content="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
-    handleAssignDriver(){
+    handleAssignDriver(type,aid,oid,did){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
-        ReactDOM.render(<AssignDriver name={this.driverName} />, mask);
+        ReactDOM.render(<AssignDriver reload={this.props.updateList} type={type} airport_id={aid} order_id={oid} driver_id={did} />, mask);
     },
     showMoreTags(tags){
         let mask=document.getElementById("dialogContainer");
@@ -394,7 +394,6 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='TelEnsureOperation'){
-
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#DB8800"}}>
@@ -402,11 +401,10 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='AssignTakeDriverOperation'){
-
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:"DB8800"}}>
-                            <em  onClick={this.handleAssignDriver}>分配接车司机</em></p>
+                        <p style={{color:"#DB8800"}}>
+                            <em  onClick={()=>this.handleAssignDriver("parking",item.aid,item.oid,null)}>分配接车司机</em></p>
                     </li>
                 );
             }

@@ -20,7 +20,12 @@ let RemainContactOrder=React.createClass({
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
     },
     handleCreateOrder(){
         let mask=document.getElementById("dialogContainer");
@@ -38,12 +43,11 @@ let RemainContactOrder=React.createClass({
         }
     },
     handlePageQuery(page,pageSize){
-        let mask=document.getElementById("dialogContainer");
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'booking',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("订单查询url",url);
-        fetch(url,{credentials: 'include'}).then(function(res){
+        fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("查询订单列表响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -56,11 +60,11 @@ let RemainContactOrder=React.createClass({
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
+                this.showWarnTip("数据异常！");
             }
-        }).catch(function(e) {
+        }).catch((e)=> {
+            this.showWarnTip("请求异常！");
             console.trace('错误:', e);
-            ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
     },
     adaptScreen(){

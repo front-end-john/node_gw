@@ -2,21 +2,30 @@ import React from 'react';
 import ImgScroll from '../widgets/img_scroll';
 let InGarage=React.createClass({
     getInitialState(){
-        return{
-            status:0
-        };
+        return{ status:0};
+    },
+    componentWillMount(){
+        if(this.props.data){
+            this.setState({status:1});
+        }
     },
     render(){
-        let imgData=["/admin/img/carimg.png","/admin/img/carimg.png","/admin/img/carimg.png"];
-        return (<div className="move-car">
-                   <ImgScroll imgs={imgData} />
-                    <section className="in-garage">
-                        <p><label>车位：</label><span>233</span></p>
-                        <p><label>钥匙位：</label><span>A243</span></p>
-                        <p><label>里程数：</label><span>2345</span></p>
-                        <p><label>入库时间：</label><span>2016-12-12 17:45</span></p>
-                    </section>
-                </div>);
+        let status=this.state.status,html=null;
+        if(status==0){
+            html=(<p className="cancel-take-car">暂无车辆信息</p>);
+        }else {
+            let {parkingspot,keyspot,mileage,inTime,pictures}=this.props.data;
+            html=(<div className="move-car">
+                <ImgScroll imgs={pictures} />
+                <section className="in-garage">
+                    <p><label>车位：</label><span>{parkingspot}</span></p>
+                    <p><label>钥匙位：</label><span>{keyspot}</span></p>
+                    <p><label>里程数：</label><span>{mileage}</span></p>
+                    <p><label>入库时间：</label><span>{inTime}</span></p>
+                </section>
+            </div>);
+        }
+        return html;
     }
 });
 

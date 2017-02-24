@@ -32,7 +32,7 @@ logger.setLevel(log4js.levels.INFO);
 app.use(log4js.connectLogger(logger));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
     resave: false,

@@ -17,7 +17,9 @@ export default React.createClass({
             try{
                 let obj=JSON.parse(str);
                 if(obj.code==0){
-                    this.setState({rushOrder:obj.parkings});
+                    this.setState({rushOrder:obj.parkings},()=>{
+                        this.handleScrollOrder();
+                    });
                 }else {
                     console.log(obj);
                 }
@@ -50,10 +52,10 @@ export default React.createClass({
             }
         };
         if(tw > ww) scroll();
-        this.scroll.addEventListener("hover",()=>{
+        this.scroll.addEventListener("mouseover",()=>{
             frame && cancelAnimationFrame(frame);
         },false);
-        this.scroll.addEventListener("leave",()=>{
+        this.scroll.addEventListener("mouseleave",()=>{
             if(tw > ww) scroll();
         },false);
     },

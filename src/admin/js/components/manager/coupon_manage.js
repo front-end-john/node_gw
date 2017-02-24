@@ -39,7 +39,7 @@ export default React.createClass({
         let url="/admin/api/coupons/list?";
         url+=queryStr.stringify({page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        fetch(url,{credentials: 'include'}).then(function(res){
+        fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("查询优惠券："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -59,7 +59,7 @@ export default React.createClass({
             }catch(e){
                 this.showWarnTip("数据异常");
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
             this.showWarnTip("请求异常");
             console.trace('错误:', e);
         });

@@ -259,4 +259,18 @@ router.get('/api/users/clear_stars', function(req, res, next){
     proxy(req,res);
 });
 
+/**
+ * 获取司机列表
+ */
+router.get('/api/drivers/list', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
+ * 分配接车司机
+ */
+router.get('/api/orders/assign_parking_driver', function(req, res, next){
+    proxy(req,res);
+});
+
 module.exports = router;

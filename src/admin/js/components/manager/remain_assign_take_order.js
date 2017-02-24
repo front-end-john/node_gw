@@ -4,7 +4,7 @@ import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
-import ErrorTip from '../dialog/warn_tip';
+import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 
@@ -18,6 +18,15 @@ let RemainAssignTakeOrder=React.createClass({
             titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','剩余接车时间','操作']
         };
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
@@ -30,12 +39,11 @@ let RemainAssignTakeOrder=React.createClass({
         }
     },
     handlePageQuery(page,pageSize){
-        let mask=document.getElementById("dialogContainer");
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'parkingassigning',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("订单查询url",url);
-        fetch(url).then(function(res){
+        fetch(url).then((res)=>{
             console.log("查询订单列表响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -48,11 +56,11 @@ let RemainAssignTakeOrder=React.createClass({
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
+                this.showWarnTip(obj.msg);
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
+            this.showWarnTip("请求异常！");
             console.trace('错误:', e);
-            ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
     },
     adaptScreen(){
@@ -98,8 +106,8 @@ let RemainAssignTakeOrder=React.createClass({
                 {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
                 {remain_time:item.timeleft,fieldName:'RemainTakeCarTime'},
-                {fieldName:'AssignTakeDriverOperation'}];
-            return (<TableLine key={index} widths={widths} data={data} />);
+                {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignTakeDriverOperation'}];
+            return (<TableLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)}/>);
         });
         return(
             <section className="data-section" style={{width:sumWidth+20}}>

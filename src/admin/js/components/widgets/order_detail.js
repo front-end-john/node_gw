@@ -26,7 +26,12 @@ let OrderDetail=React.createClass({
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
     },
     loadOrderDetail(){
         let url="/admin/api/orders/orderdetails?serialnumber="+this.props.number;
@@ -157,31 +162,54 @@ let OrderDetail=React.createClass({
             console.trace('请求错误:', e);
         });
     },
-    handleSwitch(e){
-        if(e.target.nodeName==="LI"){
-            if (e.target.id == "pro_1") {
-                this.setState({p_item:'p1'});
-                ReactDOM.render(<TakeCar /> , this.process);
-            } else if (e.target.id == "pro_2") {
-                this.setState({p_item:'p2'});
-                ReactDOM.render(<MoveCar /> , this.process);
-            } else if (e.target.id == "pro_3") {
-                this.setState({p_item:'p3'});
-                ReactDOM.render(<InGarage /> , this.process);
-            } else if (e.target.id == "pro_4") {
-                this.setState({p_item:'p4'});
-                ReactDOM.render(<SendCar /> , this.process);
-            } else if (e.target.id == "pro_5") {
-                this.setState({p_item:'p5'});
-                ReactDOM.render(<Pay /> , this.process);
-            } else if (e.target.id == "pro_6") {
-                this.setState({p_item:'p6'});
-                ReactDOM.render(<Evaluation /> , this.process);
-            }
+    handleSwitch(item){
+        let order=this.state.orderDetail||{};
+        let take=order.parkingdrivername?{driverName:order.parkingdrivername,
+                assignTime:order.parkingassignedtime, startTime:order.parkingstartedtime,
+            finishTime:order.parkingfinishedtime}:null;
+        let move=order.movingdrivername?{driverName:order.movingdrivername,
+                 bufferTime:order.bufferparkedtime,moveTime:order.movingstartedtime,
+            moveRemark:order.movingremark,pictures:order.bufferpictures}:null;
+
+        let garage=order.parkingspot?{parkingspot:order.parkingspot,
+                keyspot:order.keyspot,mileage:order.mileage,
+                inTime:order.parkingfinishedtime,pictures:order.parkingpictures}:null;
+
+        let pay=order.payment||{};
+        let send=order.returningdrivername?{driverName:order.returningdrivername,
+                assignTime:order.returningassignedtime, startTime:order.returningstartedtime,
+                finishTime:order.returningfinishedtime,
+                totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney}:null;
+        let payment=pay.totalfee?{
+            takeTime:order.parkingstartedtime,sendTime:order.returningfinishedtime,
+                parkLong:"",totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney,
+                payTime:pay.paymenttime
+            }:null;
+        if (item == "pro_1") {
+            this.setState({p_item:'p1'});
+            ReactDOM.render(<TakeCar  data={take}/> , this.process);
+        } else if (item == "pro_2") {
+            this.setState({p_item:'p2'});
+            ReactDOM.render(<MoveCar data={move}/> , this.process);
+        } else if (item == "pro_3") {
+            this.setState({p_item:'p3'});
+            ReactDOM.render(<InGarage data={garage}/> , this.process);
+        } else if (item == "pro_4") {
+            this.setState({p_item:'p4'});
+            ReactDOM.render(<SendCar data={send} /> , this.process);
+        } else if (item == "pro_5") {
+            this.setState({p_item:'p5'});
+            ReactDOM.render(<Pay data={payment} /> , this.process);
+        } else if (item == "pro_6") {
+            this.setState({p_item:'p6'});
+            ReactDOM.render(<Evaluation /> , this.process);
         }
+
     },
     componentDidMount(){
-        ReactDOM.render(<TakeCar /> , this.process);
+        setTimeout(()=>{
+            this.handleSwitch("pro_1");
+        },500);
         this.adjustWidth();
         window.addEventListener("resize",this.adjustWidth,false);
     },
@@ -335,13 +363,19 @@ let OrderDetail=React.createClass({
                         <p className="note-field"><label>用户备注：</label><span>{o.userremark||""}</span></p>
                     </div>
                     <div className="process-info" ref={(c)=>this.state.blocks[3]=c} >
-                        <ul onClick={this.handleSwitch}>
-                            <li className={this.state.p_item=='p1'?"show-item":''} id="pro_1" >接车</li>
-                            <li id="pro_2" className={this.state.p_item=='p2'?"show-item":''} >挪车</li>
-                            <li id="pro_3" className={this.state.p_item=='p3'?"show-item":''} >在库</li>
-                            <li id="pro_4" className={this.state.p_item=='p4'?"show-item":''} >送车</li>
-                            <li id="pro_5" className={this.state.p_item=='p5'?"show-item":''} >支付</li>
-                            <li id="pro_6" className={this.state.p_item=='p6'?"show-item":''} >评价</li>
+                        <ul>
+                            <li className={this.state.p_item=='p1'?"show-item":''}
+                                onClick={()=>this.handleSwitch("pro_1")}>接车</li>
+                            <li className={this.state.p_item=='p2'?"show-item":''}
+                                onClick={()=>this.handleSwitch("pro_2")}>挪车</li>
+                            <li className={this.state.p_item=='p3'?"show-item":''}
+                                onClick={()=>this.handleSwitch("pro_3")}>在库</li>
+                            <li className={this.state.p_item=='p4'?"show-item":''}
+                                onClick={()=>this.handleSwitch("pro_4")}>送车</li>
+                            <li className={this.state.p_item=='p5'?"show-item":''}
+                                onClick={()=>this.handleSwitch("pro_5")}>支付</li>
+                            <li className={this.state.p_item=='p6'?"show-item":''}
+                                onClick={()=>this.handleSwitch("pro_6")}>评价</li>
                         </ul>
                         <div ref={(c)=>this.process=c} className="process-area" />
                     </div>
