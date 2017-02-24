@@ -39,8 +39,7 @@ export default React.createClass({
     handleScrollOrder(){
         let ww=parseFloat(getComputedStyle(this.wrap).width);
         let tw=parseFloat(getComputedStyle(this.scroll).width);
-        console.log(getComputedStyle(this.scroll).width);
-        console.log("ww="+ww,"tw="+tw);
+        //console.log("ww="+ww,"tw="+tw);
         let start=-ww/2,frame;
         let scroll=()=>{
             start++;

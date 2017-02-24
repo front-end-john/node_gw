@@ -4,55 +4,55 @@
     "loadUrl": "/mobile/jsj/css/index.css"
   },
   "jsj_index_js": {
-    "update": 1487736218644,
+    "update": 1487901928704,
     "loadUrl": "/mobile/jsj/dist/index.js"
   },
   "jsj_main_js": {
-    "update": 1487736218584,
+    "update": 1487901928788,
     "loadUrl": "/mobile/jsj/dist/main.js"
   },
   "jsj_order_pay_js": {
-    "update": 1487736218660,
+    "update": 1487901928799,
     "loadUrl": "/mobile/jsj/dist/order_pay.js"
   },
   "jsj_order_status_js": {
-    "update": 1487736218666,
+    "update": 1487901928784,
     "loadUrl": "/mobile/jsj/dist/order_status.js"
   },
   "jsj_check_order_detail_js": {
-    "update": 1487736218588,
+    "update": 1487901928698,
     "loadUrl": "/mobile/jsj/dist/check_order_detail.js"
   },
   "jsj_modify_contact_person_js": {
-    "update": 1487736218611,
+    "update": 1487901928780,
     "loadUrl": "/mobile/jsj/dist/modify_contact_person.js"
   },
   "jsj_order_comment_js": {
-    "update": 1487736218636,
+    "update": 1487901928803,
     "loadUrl": "/mobile/jsj/dist/order_comment.js"
   },
   "jsj_cancel_order_rule_js": {
-    "update": 1487736218579,
+    "update": 1487901928670,
     "loadUrl": "/mobile/jsj/dist/cancel_order_rule.js"
   },
   "jsj_cancel_order_know_js": {
-    "update": 1487736218574,
+    "update": 1487901928650,
     "loadUrl": "/mobile/jsj/dist/cancel_order_know.js"
   },
   "jsj_more_service_js": {
-    "update": 1487736218629,
+    "update": 1487901928816,
     "loadUrl": "/mobile/jsj/dist/more_service.js"
   },
   "jsj_order_list_js": {
-    "update": 1487736218653,
+    "update": 1487901928811,
     "loadUrl": "/mobile/jsj/dist/order_list.js"
   },
   "admin_index_css": {
-    "update": 1487842191810,
+    "update": 1487907064996,
     "loadUrl": "/admin/css/admin.css"
   },
   "admin_index_js": {
-    "update": 1487845359769,
+    "update": 1487907069070,
     "loadUrl": "/admin/dist/admin.js"
   }
 }

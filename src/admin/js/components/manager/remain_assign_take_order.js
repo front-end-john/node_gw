@@ -98,7 +98,7 @@ let RemainAssignTakeOrder=React.createClass({
                 {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
                 {remain_time:item.timeleft,fieldName:'RemainTakeCarTime'},
-                {op_items:["分配接车司机"],color:"#DB8800",fieldName:'AssignTakeDriverOperation'}];
+                {fieldName:'AssignTakeDriverOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(

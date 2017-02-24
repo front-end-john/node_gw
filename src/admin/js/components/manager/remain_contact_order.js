@@ -101,7 +101,15 @@ let RemainContactOrder=React.createClass({
         let list=this.state.orderData.map((item,index)=>{
             let flight=item.returningflight=="null"?item.returningflight:"";
             let returnDate=item.returningdate=="null"?item.returningdate:"";
-            let services=item.serviceorders;
+            let moreService=item.serviceorders;
+            let type1=(moreService[0]||{}).servicetype,type2=(moreService[1]||{}).servicetype;
+            let wash=moreService[0]||{},oil=moreService[1]||{};
+            if(type1==10) oil=moreService[0];
+            if(type2==1) wash=moreService[1];
+            let washConfig=wash.config,oilConfig=oil.config;
+            let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"";
+            let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"";
+
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
@@ -111,8 +119,8 @@ let RemainContactOrder=React.createClass({
                 {terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
                 {back_flight:flight,back_time:returnDate,fieldName:'ReturnTicket'},
-                {wash:services[0]?'洗车':"",oil:services[1]?'加油':"",fieldName:'MoreService'},
-                {op_items:["电话确认"],color:"#DB8800",fieldName:'TelEnsureOperation'}];
+                {wash:washCar,oil:addOil,fieldName:'MoreService'},
+                {fieldName:'TelEnsureOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(

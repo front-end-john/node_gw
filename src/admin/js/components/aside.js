@@ -70,6 +70,8 @@ let Aside = React.createClass({
                 this.setState({currItem:"comment_manager",secondItem:""});
             }else if(hash[0]=="coupon_manage"){
                 this.setState({currItem:"coupon_manager",secondItem:""});
+            }else if(hash[0]=="order_query"){
+                this.setState({currItem:"order_query",secondItem:""});
             }
         }
         this.adaptHeight();

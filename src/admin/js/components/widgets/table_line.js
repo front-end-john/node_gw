@@ -109,9 +109,7 @@ let TableLine=React.createClass({
                 let arr=item.tags||[];
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p><span>{arr[0]}</span><br/><span>{arr[1]||""}</span>
-                            {/*arr.length>2?(<span style={{color:"#1A9FE5"}}
-                                                 onClick={()=>this.showMoreTags(arr)}>&ensp;更多</span>):""*/}</p>
+                        <p><span>{arr[0]}</span><br/><span>{arr[1]||""}</span></p>
                     </li>
                 );
             }else if(item.fieldName=='OrderSource'){
@@ -198,7 +196,7 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='OrderStatus'){
                 return(
                     <li key={index} style={{width:widths[index]} } className="list-end">
-                        <p style={{color:item.color||"inherit"}}>
+                        <p style={{color:item.color||"inherit",cursor:"default"}}>
                             {item.status}</p>
                     </li>
                 );
@@ -396,25 +394,19 @@ let TableLine=React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='TelEnsureOperation'){
-                let list=item.op_items.map((ele,i)=>{
-                    return (
-                        <em key={i} onClick={this.handleTelEnsure}>&ensp;{ele}</em>
-                    );
-                });
+
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:item.color||"inherit"}}>{list}</p>
+                        <p style={{color:"#DB8800"}}>
+                            <em onClick={this.handleTelEnsure}>电话确认</em></p>
                     </li>
                 );
             }else if(item.fieldName=='AssignTakeDriverOperation'){
-                let list=item.op_items.map((ele,i)=>{
-                    return (
-                        <em key={i} onClick={this.handleAssignDriver}>&ensp;{ele}</em>
-                    );
-                });
+
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:item.color||"inherit"}}>{list}</p>
+                        <p style={{color:"DB8800"}}>
+                            <em  onClick={this.handleAssignDriver}>分配接车司机</em></p>
                     </li>
                 );
             }
