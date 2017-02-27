@@ -273,4 +273,25 @@ router.get('/api/orders/assign_parking_driver', function(req, res, next){
     proxy(req,res);
 });
 
+/**
+ * admin登陆 暂无用
+ */
+/*router.get('/api/login', function(req, res, next){
+    proxy(req,res);
+});*/
+
+/**
+ * admin 客服备注
+ */
+router.get('/api/orders/remark', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
+ * 修改预约接车时间
+ */
+router.get('/api/orders/edit_bookingtime', function(req, res, next){
+    proxy(req,res);
+});
+
 module.exports = router;

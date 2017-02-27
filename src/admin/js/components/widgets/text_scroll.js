@@ -7,7 +7,7 @@ export default React.createClass({
     },
     flashRushOrder(){
         let url="/admin/api/orders/check_new";
-        fetch(url,{credentials: 'include'}).then((res)=>{
+        fetch(url,{credentials:'include'}).then((res)=>{
             if(+res.status < 400){
                 return res.text();
             }else {

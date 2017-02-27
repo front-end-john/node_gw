@@ -1,6 +1,6 @@
 import React from 'react';
 
-let SelectInput=React.createClass({
+export default React.createClass({
     getInitialState(){
         return {
             list:[]
@@ -21,14 +21,14 @@ let SelectInput=React.createClass({
                 {name:"停车入库时间",value:"parkingfinishedtime"}, {name:"预约送车时间",value:"WUHANSHENGYI"},
                 {name:"开始送车时间",value:"returningstartedtime"},{name:"完成送车时间",value:"returningfinishedtime"}];
         }else if(type=="service_star" || type=="parking_star" || type=="sending_star"){
-            dataList=[{name:"所有",value:''},{name:"五星",value:"5"},{name:"四星及以上",value:"4"},
+            dataList=[{name:"全部",value:''},{name:"五星",value:"5"},{name:"四星及以上",value:"4"},
                 {name:"三星及以下",value:"3"}, {name:"二星及以下",value:"2"},
                 {name:"一星",value:"0"}];
         }else if(type=="show_status"){
-            dataList=[{name:"所有",value:''},{name:"未回复",value:"0"},{name:"已回复且全部用户可见",value:"11"},
+            dataList=[{name:"全部",value:''},{name:"未回复",value:"0"},{name:"已回复且全部用户可见",value:"11"},
                 {name:"已回复且仅此用户可见",value:"10"}];
         }else if(type=="parking_driver" || type=="sending_driver"){
-            dataList=[{name:"所有",value:''},{name:"梁飞",value:"5"},{name:"韩松岩",value:"8"},{name:"农万斌",value:"10"}];
+            dataList=[{name:"全部",value:''},{name:"梁飞",value:"5"},{name:"韩松岩",value:"8"},{name:"农万斌",value:"10"}];
         }
         this.setState({list:dataList});
     },
@@ -53,7 +53,7 @@ let SelectInput=React.createClass({
             });
         }else if(this.props.name=="order_source") {
             let url = "/admin/api/orders/get_comefroms";
-            fetch(url).then(function (res) {
+            fetch(url).then((res)=>{
                 //console.log("获取机场列表响应状态：" + res.status);
                 if (+res.status < 400) {
                     return res.text();
@@ -72,7 +72,7 @@ let SelectInput=React.createClass({
                 }else {
                     console.log("订单来源列表获取失败！");
                 }
-            }).catch(function (e) {
+            }).catch((e)=>{
                 console.trace('错误:', e);
             });
         }
@@ -93,5 +93,3 @@ let SelectInput=React.createClass({
         );
     }
 });
-
-export default SelectInput;

@@ -505,7 +505,7 @@ html,body{
       position: relative;
       top:50%;
       @include translateY(-50%);
-      cursor:pointer;
+      cursor: default;
     }
     &:nth-of-type(1){
       @include box-sizing(border-box);
@@ -520,7 +520,7 @@ html,body{
     text-align: right;
     @include box-sizing(border-box);
     padding-right: 20px;
-    &>p{cursor: pointer;}
+    &>p{cursor: default;}
   }
 }
 // order detail

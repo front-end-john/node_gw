@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
-import ErrorTip from '../dialog/warn_tip';
+import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
-let RemainAssignSendOrder=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             queryCondition:{},
@@ -17,19 +16,25 @@ let RemainAssignSendOrder=React.createClass({
             titles:    ['订单号','用户','标签','订单来源','车辆','机场','返程航班','航班状态','回程航站楼','预约取车时间','更多服务','操作']
         };
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
-        if(key==="phone_no"){
-            this.state.queryCondition.phoneno=val;
-        }else if(key==="order_source"){
+        if(key==="order_source"){
             this.state.queryCondition.comefrom=val;
-        }else if(key==="order_no"){
-            this.state.queryCondition.serialnumber=val;
+        }else if(key==="airport"){
+            this.state.queryCondition.airportid=val;
         }
     },
     handlePageQuery(page,pageSize){
-        let mask=document.getElementById("dialogContainer");
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'returningassigning',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
@@ -47,11 +52,11 @@ let RemainAssignSendOrder=React.createClass({
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
+                this.showWarnTip(obj.msg);
             }
         }).catch((e)=>{
+            this.showWarnTip("请求异常！");
             console.trace('错误:', e);
-            ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
     },
     adaptScreen(){
@@ -125,5 +130,3 @@ let RemainAssignSendOrder=React.createClass({
         );
     }
 });
-
-export default RemainAssignSendOrder;

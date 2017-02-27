@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
@@ -8,7 +7,7 @@ import WarnTip from '../dialog/warn_tip';
 import CreateOrder from '../dialog/customer_service_order';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
-let RemainContactOrder=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             queryCondition:{},
@@ -34,12 +33,10 @@ let RemainContactOrder=React.createClass({
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
-        if(key==="phone_no"){
-            this.state.queryCondition.phoneno=val;
-        }else if(key==="order_source"){
+        if(key==="order_source"){
             this.state.queryCondition.comefrom=val;
-        }else if(key==="order_no"){
-            this.state.queryCondition.serialnumber=val;
+        }else if(key==="airport"){
+            this.state.queryCondition.airportid=val;
         }
     },
     handlePageQuery(page,pageSize){
@@ -127,10 +124,6 @@ let RemainContactOrder=React.createClass({
                 {fieldName:'TelEnsureOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
-        /*<TextInput title="订单号：" change={this.handleChange}
-         enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
-         <TextInput title="用户手机：" change={this.handleChange}
-         enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>*/
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
@@ -149,5 +142,3 @@ let RemainContactOrder=React.createClass({
         );
     }
 });
-
-export default RemainContactOrder;

@@ -22,14 +22,11 @@
          }
      },
     ensure(){
-        let jsonpcallback="jQuery19109662385523694312_1486710323773";
         let order_id=this.props.oid;
         let bookingtime=this.bookingtime;
-        let callback="onBookingTimeCallback";
-        let _=new Date().getTime();
-        let url="http://"+location.hostname+"/admin/api/orders/edit_bookingtime.js?";
-        url+=queryStr.stringify({jsonpcallback,order_id,bookingtime,callback,_});
-        fetchJsonp(url,{credentials: 'include'}).then((res)=>{
+        let url="/admin/api/orders/edit_bookingtime?";
+        url+=queryStr.stringify({order_id,bookingtime});
+        fetch(url,{credentials: 'include'}).then((res)=>{
             return res.json();
         }).then((json)=>{
             console.log('json', json);

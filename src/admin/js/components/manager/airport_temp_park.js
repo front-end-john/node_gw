@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import Page from '../widgets/page';
+import WarnTip from '../dialog/warn_tip';
 import {maxNumber} from '../../util';
-let AirportTempPark=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             queryCondition:{},
@@ -16,19 +16,25 @@ let AirportTempPark=React.createClass({
             titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','挪车司机','机场停放时间','开始挪车时间']
         };
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
-        if(key==="phone_no"){
-            this.state.queryCondition.phoneno=val;
-        }else if(key==="order_source"){
+        if(key==="order_source"){
             this.state.queryCondition.comefrom=val;
-        }else if(key==="order_no"){
-            this.state.queryCondition.serialnumber=val;
+        }else if(key==="airport"){
+            this.state.queryCondition.airportid=val;
         }
     },
     handlePageQuery(page,pageSize){
-        let mask=document.getElementById("dialogContainer");
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'parkingbuffer',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
@@ -46,11 +52,11 @@ let AirportTempPark=React.createClass({
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
+                this.showWarnTip(obj.msg);
             }
         }).catch((e)=>{
+            this.showWarnTip("请求异常！");
             console.trace('错误:', e);
-            ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
     },
     adaptScreen(){
@@ -121,5 +127,3 @@ let AirportTempPark=React.createClass({
         );
     }
 });
-
-export default AirportTempPark;

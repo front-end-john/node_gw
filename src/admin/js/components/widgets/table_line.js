@@ -6,8 +6,7 @@ import JSJOrderDetail from './jsj_order_detail';
 import Empty from './empty';
 import AssignDriver from "../dialog/assign_driver";
 import Reply from "../dialog/customer_service_reply";
-
-let TableLine=React.createClass({
+export default React.createClass({
     getInitialState(){return {};},
     handleHideAndShow(id,show){
         let mask=document.getElementById("dialogContainer");
@@ -42,12 +41,6 @@ let TableLine=React.createClass({
         let is=this.state.show;
         let show=is==0?1:0;
         this.setState({show});
-    },
-
-    handlePay(){
-        let mask=document.getElementById("dialogContainer");
-        mask.style.display="block";
-        ReactDOM.render(<Ensure title="电话确认" ensureContent="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
     handleTelEnsure(){
         let mask=document.getElementById("dialogContainer");
@@ -91,7 +84,7 @@ let TableLine=React.createClass({
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p onClick={()=>this.expandDetail(item.order_no)}
-                           style={{color:"#1A9FE5"}}>{item.order_no}</p>
+                           style={{color:"#1A9FE5",cursor:"pointer"}}>{item.order_no}</p>
                     </li>
                 );
             }else if(item.fieldName=='User'){
@@ -311,7 +304,7 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='PayStatus'){
                 return(
                     <li key={index} style={{width:widths[index]} } className="list-end">
-                        <p onClick={this.handlePay} style={{color:item.color}} >{item.pay_status}</p>
+                        <p  style={{color:item.color}} >{item.pay_status}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightStatus'){
@@ -368,17 +361,6 @@ let TableLine=React.createClass({
                         <p>{item.start_move_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Operation'){
-                let list=item.op_items.map((ele,i)=>{
-                    return (
-                        <em key={i}>&ensp;{ele}</em>
-                    );
-                });
-                return(
-                    <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:item.color||"inherit"}}>{list}</p>
-                    </li>
-                );
             }else if(item.fieldName=='CommentOperation'){
                 let isReply=this.state.isReply===undefined?!!item.reply:this.state.isReply;
                 let replyClr=isReply?"#c9c9c9":"#1AA0E5";
@@ -386,7 +368,7 @@ let TableLine=React.createClass({
                 let publicShow=this.state.show===undefined?item.show:this.state.show;
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:"#1AA0E5"}}>
+                        <p style={{color:"#1AA0E5",cursor:"pointer"}}>
                             <em onClick={()=>this.handleHideAndShow(item.order_id,publicShow)}>{publicShow==0?"展现":"关闭"}</em>
                             <em style={{color:replyClr,pointerEvents:event}}
                                 onClick={()=>this.handleReply(item.order_id,publicShow)}>&ensp;回复</em>
@@ -396,14 +378,14 @@ let TableLine=React.createClass({
             }else if(item.fieldName=='TelEnsureOperation'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:"#DB8800"}}>
+                        <p style={{color:"#DB8800",cursor:"pointer"}}>
                             <em onClick={this.handleTelEnsure}>电话确认</em></p>
                     </li>
                 );
             }else if(item.fieldName=='AssignTakeDriverOperation'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:"#DB8800"}}>
+                        <p style={{color:"#DB8800",cursor:"pointer"}}>
                             <em  onClick={()=>this.handleAssignDriver("parking",item.aid,item.oid,null)}>分配接车司机</em></p>
                     </li>
                 );
@@ -418,4 +400,3 @@ let TableLine=React.createClass({
     }
 });
 
-export default TableLine;

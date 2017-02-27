@@ -7,7 +7,7 @@ import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
 import EditImportantUser from "../dialog/operate_important_user";
 import {maxNumber} from '../../util';
-let UserManager=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             orderData:[],
@@ -133,5 +133,3 @@ let UserManager=React.createClass({
         );
     }
 });
-
-export default UserManager;

@@ -19,7 +19,12 @@ let EvaluationManage=React.createClass({
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
     },
     handleChange(e){
         let key=e.target.id;

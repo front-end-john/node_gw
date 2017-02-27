@@ -60,8 +60,8 @@ let OrderDetail=React.createClass({
 
     addRemark(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<AddRemark reload={this.loadOrderDetail} type="jsonp"
-                                   url="/admin/api/orders/remark.js" number={this.props.number}/>, mask);
+        ReactDOM.render(<AddRemark reload={this.loadOrderDetail} type="admin"
+                                   url="/admin/api/orders/remark" number={this.props.number}/>, mask);
     },
     editUserInfo(){
         let o=this.state.orderDetail||{};
@@ -167,6 +167,7 @@ let OrderDetail=React.createClass({
         let take=order.parkingdrivername?{driverName:order.parkingdrivername,
                 assignTime:order.parkingassignedtime, startTime:order.parkingstartedtime,
             finishTime:order.parkingfinishedtime}:null;
+
         let move=order.movingdrivername?{driverName:order.movingdrivername,
                  bufferTime:order.bufferparkedtime,moveTime:order.movingstartedtime,
             moveRemark:order.movingremark,pictures:order.bufferpictures}:null;
@@ -265,7 +266,7 @@ let OrderDetail=React.createClass({
         });
         driverRemark=driverNote.map((item,index)=>{
             return (<p key={index}>{item.time}&ensp;
-                <span style={{color:'yellow'}}>{item.driver_name}:&ensp;</span>{item.remark}</p>);
+                <span style={{color:'#DB8800'}}>{item.driver_name}:&ensp;</span>{item.remark}</p>);
         });
         this.tags=user.tags||[];
         this.serialnumber=o.serialnumber;

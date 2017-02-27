@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
@@ -8,7 +7,7 @@ import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 
-let RemainAssignTakeOrder=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             queryCondition:{},
@@ -30,12 +29,10 @@ let RemainAssignTakeOrder=React.createClass({
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
-        if(key==="phone_no"){
-            this.state.queryCondition.phoneno=val;
-        }else if(key==="order_source"){
+        if(key==="order_source"){
             this.state.queryCondition.comefrom=val;
-        }else if(key==="order_no"){
-            this.state.queryCondition.serialnumber=val;
+        }else if(key==="airport"){
+            this.state.queryCondition.airportid=val;
         }
     },
     handlePageQuery(page,pageSize){
@@ -129,5 +126,3 @@ let RemainAssignTakeOrder=React.createClass({
         );
     }
 });
-
-export default RemainAssignTakeOrder;

@@ -15,13 +15,17 @@ export default React.createClass({
             html=(<p className="cancel-take-car">暂无挪车信息</p>);
         }else {
             let {driverName,bufferTime,moveTime,moveRemark,pictures}=this.props.data;
+            let list=(moveRemark||[]).map((item,index)=>{
+                return (<span key={index} style={{lineHeight:"24px"}}><br/>{item.time}&emsp;{item.remark}</span>);
+            });
+
             html=(<div className="move-car">
                 <ImgScroll imgs={pictures} />
                 <section className="move-car-msg">
                     <p><label>&emsp;&emsp;挪车司机：</label><span>{driverName}</span></p>
                     <p><label>停放开始时间：</label><span>{bufferTime}</span></p>
                     <p><label>挪车开始时间：</label><span>{moveTime}</span></p>
-                    <p><label>备注：</label><span>{moveRemark}</span></p>
+                    <p><label>备注：</label>{list}</p>
                 </section>
             </div>);
         }
