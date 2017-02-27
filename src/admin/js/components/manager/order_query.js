@@ -125,10 +125,10 @@ let OrderQuery=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleTextInputChange} pdl="0"
-                                 name="order_source" defaultName="全部"/>
-                    <SelectInput title="订单状态：" change={this.handleTextInputChange} name="order_status" defaultName="全部"/>
+                                 name="order_source"  />
+                    <SelectInput title="订单状态：" change={this.handleTextInputChange} name="order_status" />
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
-                                 change={this.handleTextInputChange} name="airport" defaultName="全部"/>
+                                 change={this.handleTextInputChange} name="airport" />
                     <hr/>
                     <TextInput title={<span>订&ensp;单&ensp;号：</span>} change={this.handleTextInputChange} pdl="0"
                                enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
@@ -143,6 +143,7 @@ let OrderQuery=React.createClass({
                     <DateSelect title="结束时间：" change={(date)=>this.state.queryCondition.endtime=date}  />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout" onClick={this.exportData}>导出</button>
+                    <button className="reset" onClick={this.exportData}>清空查询条件</button>
                 </div>
                 <div className="data-list">
                     <TableHead data={headData} />

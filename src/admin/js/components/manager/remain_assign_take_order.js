@@ -112,12 +112,9 @@ let RemainAssignTakeOrder=React.createClass({
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
-                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0"
-                                 name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号：" change={this.handleChange} name="order_no"
-                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入订单号" />
-                    <TextInput title="用户手机：" change={this.handleChange} name="phone_no"
-                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" />
+                    <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
+                                 change={this.handleTextInputChange} name="airport" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
                 {list.length>0?(<div className="data-list">

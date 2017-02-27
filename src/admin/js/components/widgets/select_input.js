@@ -47,7 +47,7 @@ let SelectInput=React.createClass({
                 let dataList=obj.airports.map((item)=>{
                     return {name:item.cityname+item.name,value:item.airportid}
                 });
-                this.setState({list:dataList});
+                this.setState({list:[{name:"全部",value:''},...dataList]});
             }).catch(function (e) {
                 console.trace('错误:', e);
             });
@@ -68,7 +68,7 @@ let SelectInput=React.createClass({
                     let dataList=keys.map((item)=>{
                         return {name:cf[item],value:item}
                     });
-                    this.setState({list:dataList});
+                    this.setState({list:[{name:"全部",value:''},...dataList]});
                 }else {
                     console.log("订单来源列表获取失败！");
                 }

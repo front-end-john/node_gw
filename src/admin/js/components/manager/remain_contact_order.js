@@ -127,14 +127,16 @@ let RemainContactOrder=React.createClass({
                 {fieldName:'TelEnsureOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
+        /*<TextInput title="订单号：" change={this.handleChange}
+         enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
+         <TextInput title="用户手机：" change={this.handleChange}
+         enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>*/
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
-                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号：" change={this.handleChange}
-                               enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
-                    <TextInput title="用户手机：" change={this.handleChange}
-                               enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
+                    <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
+                                 change={this.handleTextInputChange} name="airport" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout" onClick={this.handleCreateOrder}>下单</button>
                 </div>

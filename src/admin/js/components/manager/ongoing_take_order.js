@@ -35,7 +35,7 @@ let OngoingTakeOrder=React.createClass({
         url+=queryStr.stringify({ordertype:'parkinggoing',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("订单查询url",url);
-        fetch(url).then(function(res){
+        fetch(url).then((res)=>{
             console.log("查询订单列表响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -50,7 +50,7 @@ let OngoingTakeOrder=React.createClass({
             }else {
                 ReactDOM.render(<ErrorTip msg="订单列表数据异常！"/>, mask);
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
             console.trace('错误:', e);
             ReactDOM.render(<ErrorTip msg="订单列表请求异常！"/>, mask);
         });
@@ -106,11 +106,9 @@ let OngoingTakeOrder=React.createClass({
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
-                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" defaultName="全部"/>
-                    <TextInput title="订单号：" change={this.handleChange} name="order_no"
-                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入订单号" />
-                    <TextInput title="用户手机：" change={this.handleChange} name="phone_no"
-                               enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>
+                    <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
+                    <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
+                                 change={this.handleTextInputChange} name="airport" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
 

@@ -457,6 +457,20 @@ html,body{
     background-color: #118FD1;
   }
 }
+.reset{
+  background-color: #fff;
+  font-size: 14px;
+  color: #646464 !important;
+  cursor: pointer;
+  width: 120px;
+  height: 36px;
+  margin-left: 20px;
+  @include border-radius(2px);
+  border:1px solid #dcdcdc !important;
+  &:hover{
+    background-color: #F5F5F5;
+  }
+}
 .table-head{
   @include center;
   background-color: #314055;
