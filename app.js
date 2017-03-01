@@ -6,9 +6,17 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
 let os = require('os');
+const fs = require('fs');
 if(os.platform()=='linux'){
-    global.wx_jsj_url="http://dev.feibotong.com";
-    global.admin_url="http://dev.feibotong.com";
+    let text=fs.readFileSync("host.tag","utf-8");
+    hostType=text.trim();
+    if(hostType=="test"){
+        global.wx_jsj_url="http://test.feibotong.com";
+        global.admin_url="http://test.feibotong.com";
+    }else if(hostType=="dev"){
+        global.wx_jsj_url="http://dev.feibotong.com";
+        global.admin_url="http://dev.feibotong.com";
+    }
 }else {
     global.wx_jsj_url="http://192.168.1.181:8080/txj-jsj";
     global.admin_url="http://dev.feibotong.com";

@@ -166,6 +166,7 @@ gulp.task("upload-test-env",()=>{
                 {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
                 {src:"./app.js",        dest:"/var/code/fronts/"},
                 {src:"./package.json",  dest:"/var/code/fronts/"},
+                {src:"./ecosystem.config.js",  dest:"/var/code/fronts/"},
     ];
     files.forEach((item)=>{
         gulp.src(item.src)

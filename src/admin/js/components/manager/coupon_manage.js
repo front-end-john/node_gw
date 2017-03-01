@@ -14,7 +14,7 @@ export default React.createClass({
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[  150, 120,   100,  100,  120,    130,     130,      120,   120],
+            initWidths:[ 150, 120,   100,  100,  120,    130,     130,      120,   120],
             titles:    ['ID','手机号','类型','状态','金额','领取时间','截止时间','活动来源','操作']
         };
     },
