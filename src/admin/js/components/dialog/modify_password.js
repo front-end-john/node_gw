@@ -29,6 +29,7 @@
              return 0;
          }
          let url="admin/api/modifypassword?oldpassword="+old+"&newpassword="+fresh;
+         console.log("修改密码url",url);
          fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("修改密码响应："+res.status);
             if(+res.status < 400){

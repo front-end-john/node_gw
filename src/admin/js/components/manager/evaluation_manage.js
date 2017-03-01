@@ -5,6 +5,7 @@ import SelectInput from '../widgets/select_input'
 import TableHead from '../widgets/table_head'
 import TableLine from '../widgets/table_line'
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 let EvaluationManage=React.createClass({
@@ -24,6 +25,15 @@ let EvaluationManage=React.createClass({
             mask.style.display="none";
         }else {
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
         }
     },
     handleChange(e){
@@ -49,8 +59,11 @@ let EvaluationManage=React.createClass({
         let url="/admin/api/comments/list?";
         url+=queryStr.stringify({page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        fetch(url,{credentials: 'include'}).then(function(res){
-            console.log("查询评价列表响应状态："+res.status);
+        console.log("评价列表url",url);
+        this.switchLoading(true);
+        fetch(url,{credentials: 'include'}).then((res)=>{
+            console.log("评价列表响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -69,7 +82,7 @@ let EvaluationManage=React.createClass({
             }catch(e){
                 this.showWarnTip("数据异常");
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
             this.showWarnTip("请求异常");
             console.trace('错误:', e);
         });

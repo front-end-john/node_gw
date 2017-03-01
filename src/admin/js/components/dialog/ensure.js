@@ -25,6 +25,7 @@ let Ensure=React.createClass({
              */
             let showpublic=this.props.public_show;
             url+="?order_id="+order_id+"&showpublic="+showpublic;
+            console.log("关闭或展现评论url",url);
             fetch(url,{credentials: 'include'}).then((res)=>{
                 console.log("关闭或展现评论响应状态："+res.status);
                 if(+res.status < 400){
@@ -56,6 +57,7 @@ let Ensure=React.createClass({
              *删除优惠券
              */
             url+="?couponid="+coupon_id;
+            console.log("删除优惠券url",url);
             fetch(url,{credentials: 'include'}).then((res)=>{
                 console.log("删除优惠券响应："+res.status);
                 if(+res.status < 400){
@@ -87,6 +89,7 @@ let Ensure=React.createClass({
              *取消用户星级
              */
             url+="?userid="+user_id;
+            console.log("取消星级url",url);
             fetch(url,{credentials: 'include'}).then((res)=>{
                 console.log("取消用户星级响应："+res.status);
                 if(+res.status < 400){
@@ -101,6 +104,35 @@ let Ensure=React.createClass({
                     if(obj.code==0){
                         this.props.reload();
                         this.cancel();
+                    }else {
+                        this.showWarnTip(obj.msg);
+                    }
+                }catch(e){
+                    this.showWarnTip("数据异常");
+                }
+            }).catch((e)=>{
+                this.showWarnTip("请求异常");
+                console.trace('错误:', e);
+            });
+        }
+        let number=this.props.serialnumber;
+        if(number){
+            url+="?serialnumber="+number;
+            console.log("电话确认url",url);
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                console.log("电话确认响应："+res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务异常");
+                }
+            }).then((str)=>{
+                //console.log(str);
+                try {
+                    let obj=JSON.parse(str);
+                    if(obj.code==0){
+                        this.props.reload();
+                        this.showWarnTip(obj.msg);
                     }else {
                         this.showWarnTip(obj.msg);
                     }

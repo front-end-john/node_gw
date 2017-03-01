@@ -30,6 +30,7 @@
              let serviceorderid=this.props.soid;
              url+=queryStr.stringify({serviceorderid,rainwashing,remark});
          }
+         console.log("增改洗车服务url",url);
          fetch(url,{credentials: 'include'}).then((res)=>{
              if(+res.status < 400){
                  return res.text();

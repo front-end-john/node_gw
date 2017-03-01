@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TextScroll from '../widgets/text_scroll';
+
 import TextInput from '../widgets/text_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {decDatetime,maxNumber} from '../../util';
 
@@ -17,6 +18,24 @@ let JSJOrder=React.createClass({
             initWidths:[  140,   120,  110,  130,  120,    120,     130,      130,        120,     100],
             titles:    ['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态']
         };
+    },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }
     },
     handleChange(e){
         let key=e.target.id;
@@ -70,14 +89,16 @@ let JSJOrder=React.createClass({
         window.removeEventListener("resize",this.adaptScreen);
     },
     handlePageQuery(page, pageSize){
-        let mask=document.getElementById("dialogContainer");
         let url="/jsj/system/query?";
         let ordertype=this.props.location.query.flag;
         let condition={ordertype,page,pagesize:pageSize};
         url+=queryStr.stringify(condition);
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        fetch(url).then(function(res){
-            console.log("查询订单列表响应状态："+res.status);
+        console.log("jsj订单列表url",url);
+        this.switchLoading(true);
+        fetch(url).then((res)=>{
+            console.log("jsj订单列表响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else{
@@ -85,15 +106,14 @@ let JSJOrder=React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            console.log("接送机列表数据：",obj);
             if(obj.code==0){
                 this.setState({orderData:obj.records||[]});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<WarnTip msg={obj.message}/>, mask);
+                this.showWarnTip(obj.message);
             }
-        }).catch(function(e) {
-            ReactDOM.render(<WarnTip msg="请求接送机列表异常！"/>, mask);
+        }).catch((e)=>{
+            this.showWarnTip("请求接送机列表异常！");
             console.trace('错误:', e);
         });
     },

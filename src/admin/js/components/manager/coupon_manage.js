@@ -5,6 +5,7 @@ import TableHead from '../widgets/table_head';
 import CouponLine from '../widgets/coupon_line';
 import IssueCoupon from "../dialog/issue_coupon";
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 export default React.createClass({
@@ -26,6 +27,15 @@ export default React.createClass({
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
         }
     },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
@@ -39,8 +49,11 @@ export default React.createClass({
         let url="/admin/api/coupons/list?";
         url+=queryStr.stringify({page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
+        console.log("优惠券查询url",url);
+        this.switchLoading(true);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("查询优惠券："+res.status);
+            console.log("优惠券列表响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {

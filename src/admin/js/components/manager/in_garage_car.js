@@ -4,6 +4,7 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 export default React.createClass({
@@ -12,8 +13,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 130,    100,   110,   110,    110,  120,  110,       130,     120,      120,     120,     120],
-            titles:    ['订单号','用户','标签','订单来源','车辆','机场','接车司机','入库时间','停车时长','返程航班','更多服务','航班状态']
+            initWidths:[ 150,    100,   110,   110,    110,  160,  100,       130,     120,      120,     120,    ],// 120
+            titles:    ['订单号','用户','标签','订单来源','车辆','机场','接车司机','入库时间','停车时长','返程航班','更多服务',]//'航班状态'
         };
     },
     showWarnTip(msg){
@@ -23,6 +24,15 @@ export default React.createClass({
             mask.style.display="none";
         }else {
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
         }
     },
     handleChange(e){
@@ -38,8 +48,11 @@ export default React.createClass({
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'parkingparked',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
+        console.log("在库车辆订单url",url);
+        this.switchLoading(true);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("查询订单列表响应状态："+res.status);
+            console.log("在库车辆订单响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -99,18 +112,29 @@ export default React.createClass({
         });
         document.getElementById("appContainer").style.width=200+sumWidth+"px";
         let list=this.state.orderData.map((item,index)=>{
+
+            let moreService=item.serviceorders||[];
+            let type1=(moreService[0]||{}).servicetype,type2=(moreService[1]||{}).servicetype;
+            let wash=moreService[0]||{},oil=moreService[1]||{};
+            if(type1==10) oil=moreService[0];
+            if(type2==1) wash=moreService[1];
+
+            let washConfig=wash.config,oilConfig=oil.config;
+            let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
+            let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
+
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
-                {airport:'广州白云',fieldName:'Airport'},
-                {take_driver:'周当啊',fieldName:'TakeDriver'},
-                {in_garage_time:"2016-8-9 15:14",fieldName:'InGarageTime'},
-                {park_time_long:"4小时25分钟",fieldName:'ParkTimeLong'},
-                {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
-                {wash:'下雨也洗车',oil:'汽油、92#、100元',fieldName:'MoreService'},
-                {status:'起飞',start_time:"2016-12-12 14:14",fieldName:'ReturnFlightLaunchStatus'}];
+                {airport:item.terminalname,fieldName:'Airport'},
+                {take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
+                {in_garage_time:item.parkingfinishedtime,fieldName:'InGarageTime'},
+                {park_time_long:item.parkingtime,fieldName:'ParkTimeLong'},
+                {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
+                {wash:washCar,oil:addOil,is_end:1,fieldName:'MoreService'},];
+               // {status:'起飞',start_time:"2016-12-12 14:14",fieldName:'ReturnFlightLaunchStatus'}
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(

@@ -16,7 +16,7 @@ export default React.createClass({
                 {list}
             </ul>);
         }
-        //style={{backgroundColor:this.props.id==this.props.currItem?"#202E43":"inherit"}}
+
         return (
             <section className="primary-item" >
                 <h2  onClick={(e)=> this.props.click(this.props.id)}

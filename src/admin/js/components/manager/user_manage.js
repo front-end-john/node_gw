@@ -5,6 +5,7 @@ import TableHead from '../widgets/table_head';
 import UserLine from '../widgets/user_line';
 import WarnTip from '../dialog/warn_tip';
 import Page from '../widgets/page';
+import Loading from "../dialog/loading";
 import EditImportantUser from "../dialog/operate_important_user";
 import {maxNumber} from '../../util';
 export default React.createClass({
@@ -26,6 +27,15 @@ export default React.createClass({
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
         }
     },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
@@ -37,8 +47,11 @@ export default React.createClass({
         let url="/admin/api/users/query?";
         url+=queryStr.stringify({page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        fetch(url,{credentials: 'include'}).then(function(res){
-            console.log("查询用户："+res.status);
+        console.log("用户列表url",url);
+        this.switchLoading(true);
+        fetch(url,{credentials: 'include'}).then((res)=>{
+            console.log("用户列表响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -57,7 +70,7 @@ export default React.createClass({
             }catch(e){
                 this.showWarnTip("数据异常");
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
             this.showWarnTip("请求异常");
             console.trace('错误:', e);
         });

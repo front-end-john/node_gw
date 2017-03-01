@@ -20,9 +20,7 @@ import {getStateInfo,getFormatDate} from '../../util'
 
 let OrderDetail=React.createClass({
     getInitialState(){
-        return{
-            p_item:'p1',first:true, blocks:[]
-        };
+        return{p_item:'p1',first:true, blocks:[],orderDetail:{}};
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -57,7 +55,16 @@ let OrderDetail=React.createClass({
     componentWillMount(){
         this.loadOrderDetail();
     },
-
+    componentDidUpdate(prevProps, prevState){
+        let order=this.state.orderDetail;
+        let parkDriverName=order.parkingdrivername;
+        let returnDriverName=order.returningdrivername;
+        if(parkDriverName && parkDriverName!=prevState.orderDetail.parkingdrivername){
+            this.handleSwitch("pro_1");
+        }else if(returnDriverName && returnDriverName!=prevState.orderDetail.returningdrivername){
+            this.handleSwitch("pro_4");
+        }
+    },
     addRemark(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<AddRemark reload={this.loadOrderDetail} type="admin"
@@ -166,7 +173,7 @@ let OrderDetail=React.createClass({
         let order=this.state.orderDetail||{};
         let take=order.parkingdrivername?{driverName:order.parkingdrivername,
                 assignTime:order.parkingassignedtime, startTime:order.parkingstartedtime,
-            finishTime:order.parkingfinishedtime,orderId:order.serialnumber}:null;
+            finishTime:order.parkingfinishedtime}:null;
 
         let move=order.movingdrivername?{driverName:order.movingdrivername,
                  bufferTime:order.bufferparkedtime,moveTime:order.movingstartedtime,
@@ -177,9 +184,10 @@ let OrderDetail=React.createClass({
                 inTime:order.parkingfinishedtime,pictures:order.parkingpictures}:null;
 
         let pay=order.payment||{};
+
         let send=order.returningdrivername?{driverName:order.returningdrivername,
                 assignTime:order.returningassignedtime, startTime:order.returningstartedtime,
-                finishTime:order.returningfinishedtime,orderId:order.serialnumber,
+                finishTime:order.returningfinishedtime,
                 totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney}:null;
         let payment=pay.totalfee?{
             takeTime:order.parkingstartedtime,sendTime:order.returningfinishedtime,
@@ -188,7 +196,8 @@ let OrderDetail=React.createClass({
             }:null;
         if (item == "pro_1") {
             this.setState({p_item:'p1'});
-            ReactDOM.render(<TakeCar  data={take}/> , this.process);
+            ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber}
+                                      reload={this.loadOrderDetail}/> , this.process);
         } else if (item == "pro_2") {
             this.setState({p_item:'p2'});
             ReactDOM.render(<MoveCar data={move}/> , this.process);
@@ -197,7 +206,8 @@ let OrderDetail=React.createClass({
             ReactDOM.render(<InGarage data={garage}/> , this.process);
         } else if (item == "pro_4") {
             this.setState({p_item:'p4'});
-            ReactDOM.render(<SendCar data={send} /> , this.process);
+            ReactDOM.render(<SendCar data={send} order_id={order.serialnumber}
+                                     reload={this.loadOrderDetail} /> , this.process);
         } else if (item == "pro_5") {
             this.setState({p_item:'p5'});
             ReactDOM.render(<Pay data={payment} /> , this.process);

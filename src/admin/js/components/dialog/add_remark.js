@@ -29,11 +29,11 @@
             this.showWarnTip("备注不能为空！");
             return 0;
         }
-        let url=this.props.url+"?"+queryStr.stringify({serialnumber:this.props.number,remark:text});
+        let url=this.props.url+"?";
         if(this.props.type=="admin"){
             let order_id=this.props.number;
-            url=this.props.url+"?"+ queryStr.stringify({order_id,remark:text});
-            console.log(url);
+            url+=queryStr.stringify({order_id,remark:text});
+            console.log("admin添加备注url:",url);
             fetch(url,{credentials: 'include'}).then((res)=>{
                 return res.json();
             }).then((json)=>{
@@ -49,6 +49,8 @@
                 console.trace('网络请求异常', e);
             });
         }else {
+            url+=queryStr.stringify({serialnumber:this.props.number,remark:text});
+            console.log("jsj添加备注url:",url);
             fetch(url).then((res)=>{
                 console.log("添加备注的响应状态：",res.status);
                 if(+res.status < 400){

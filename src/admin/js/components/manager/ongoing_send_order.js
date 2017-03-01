@@ -4,6 +4,7 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 export default React.createClass({
@@ -12,7 +13,7 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  120,   120,  110,  120,  120,    120,     130,      130,        120,       130],
+            initWidths:[  150,   100,  110,  110,  140,    120,     130,      130,        100,       130],
             titles:    ['订单号','用户','标签','车辆','机场','返程航班','航班状态','预约取车时间','送车司机','开始送车时间']
         };
     },
@@ -23,6 +24,15 @@ export default React.createClass({
             mask.style.display="none";
         }else {
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
         }
     },
     handleChange(e){
@@ -36,11 +46,13 @@ export default React.createClass({
     },
     handlePageQuery(page,pageSize){
         let url="/admin/api/orders/query?";
-        url+=queryStr.stringify({ordertype:'returningassigning',page:page,pagesize:pageSize});
+        url+=queryStr.stringify({ordertype:'returninggoing',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        console.log("订单查询url",url);
+        console.log("进行中的送车单查询url",url);
+        this.switchLoading(true);
         fetch(url).then((res)=>{
             console.log("查询订单列表响应状态："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -98,24 +110,15 @@ export default React.createClass({
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
-                {airport:'广州白云',fieldName:'Airport'},
-                {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
-                {status:'落地',start_time:"已过去10分钟",fieldName:'ReturnFlightStatus'},
-                {order_fetch_time:"2016-8-9 15:14",fieldName:'OrderFetchTime'},
-                {send_driver:'周当啊',color:"#1A9FE5",fieldName:'SendDriver'},
-                {start_send_time:"2016-8-9 15:14",fieldName:'StartSendTime'}];
+                {airport:item.terminalname,fieldName:'Airport'},
+                {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
+                {status:item.flightstatus,post_time:item.posttime,fieldName:'ReturnFlightStatus'},
+                {order_fetch_time:item.bookingtime,fieldName:'OrderFetchTime'},
+                {send_driver:item.returningdrivername, color:"#1A9FE5",fieldName:'SendDriver'},
+                {start_send_time:item.returningtime,fieldName:'StartSendTime'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
-        /*let data=[{order_no:'1445515665454',fieldName:'OrderNo'},
-            {username:"中小屋",phone_no:"124578654",fieldName:'User'},
-            {trade:"发票",user_type:"关系客户",fieldName:'Label'},
-            {car_no:'奥B4878',car_color:'白色',car_brand:'宝马',fieldName:'Car'},
-            {airport:'广州白云',fieldName:'Airport'},
-            {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
-            {status:'落地',start_time:"已过去10分钟",fieldName:'ReturnFlightStatus'},
-            {order_fetch_time:"2016-8-9 15:14",fieldName:'OrderFetchTime'},
-            {send_driver:'周当啊',color:"#1A9FE5",fieldName:'SendDriver'},
-            {start_send_time:"2016-8-9 15:14",fieldName:'StartSendTime'}];*/
+
         return(
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">

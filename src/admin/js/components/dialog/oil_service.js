@@ -34,6 +34,7 @@
              let serviceorderid=this.props.soid;
              url+=queryStr.stringify({serviceorderid,oiltype,oillabel,money,remark});
          }
+         console.log("oil添加或修改url",url);
          fetch(url,{credentials: 'include'}).then((res)=>{
              if(+res.status < 400){
                  return res.text();

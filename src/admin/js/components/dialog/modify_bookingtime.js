@@ -26,6 +26,7 @@
         let bookingtime=this.bookingtime;
         let url="/admin/api/orders/edit_bookingtime?";
         url+=queryStr.stringify({order_id,bookingtime});
+        console.log("修改预约时间url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
             return res.json();
         }).then((json)=>{

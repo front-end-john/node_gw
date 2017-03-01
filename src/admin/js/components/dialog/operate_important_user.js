@@ -21,13 +21,13 @@
          mask.style.display="none";
      },
      ensure(){
-         //let type=this.props.type;
+
          let stars=this.star.value;
          let phoneno=this.phone.value.trim();
          let remark=this.remark.value.trim();
-
          let url=this.props.url+"?";
          url+=queryStr.stringify({stars,phoneno,remark});
+         console.log("增改重要用户url",url);
          fetch(url,{credentials: 'include'}).then((res)=>{
              if(+res.status < 400){
                  return res.text();

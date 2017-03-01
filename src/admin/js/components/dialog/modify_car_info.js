@@ -28,22 +28,21 @@
             return 0;
         }
         let url=this.props.url+"?"+queryStr.stringify({carid:this.props.cid,carno,color,brand});
-        console.log(url);
+        console.log("修改车辆url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("修改用户的响应状态：",res.status);
+            console.log("修改车辆响应：",res.status);
             if(+res.status < 400){
                 return res.text();
             }else {
                 throw new Error("服务异常");
             }
         }).then((str)=>{
-            console.log("修改用户的响应内容",str);
             let obj=JSON.parse(str);
             if(obj.code==0){
                 this.props.reload();
                 this.cancel();
             }else {
-                this.showWarnTip("修改用户信息失败！");
+                this.showWarnTip(obj.msg);
             }
         }).catch((e)=>{
             this.showWarnTip("网络请求异常！");

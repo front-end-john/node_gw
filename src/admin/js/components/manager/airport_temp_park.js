@@ -5,6 +5,7 @@ import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import Page from '../widgets/page';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import {maxNumber} from '../../util';
 export default React.createClass({
     getInitialState(){
@@ -25,6 +26,15 @@ export default React.createClass({
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
         }
     },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }
+    },
     handleChange(e){
         let key=e.target.id;
         let val=e.target.value;
@@ -38,9 +48,11 @@ export default React.createClass({
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'parkingbuffer',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        console.log("订单查询url",url);
+        console.log("机场暂停订单查询url",url);
+        this.switchLoading(true);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("查询订单列表响应状态："+res.status);
+            console.log("机场暂停订单响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {

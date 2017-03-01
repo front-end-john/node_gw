@@ -48,11 +48,11 @@
     "loadUrl": "/mobile/jsj/dist/order_list.js"
   },
   "admin_index_css": {
-    "update": 1488279209834,
+    "update": 1488359207841,
     "loadUrl": "/admin/css/admin.css"
   },
   "admin_index_js": {
-    "update": 1488331541587,
+    "update": 1488361326223,
     "loadUrl": "/admin/dist/admin.js"
   }
 }

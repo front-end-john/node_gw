@@ -4,6 +4,7 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import CreateOrder from '../dialog/customer_service_order';
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
@@ -26,6 +27,15 @@ export default React.createClass({
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
         }
     },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }
+    },
     handleCreateOrder(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<CreateOrder updateList={()=>this.handlePageQuery(1,10)}/>, mask);
@@ -43,9 +53,11 @@ export default React.createClass({
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'booking',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        console.log("订单查询url",url);
+        console.log("待联系订单url",url);
+        this.switchLoading(true);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("查询订单列表响应状态："+res.status);
+            console.log("待联系订单响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -121,8 +133,8 @@ export default React.createClass({
                 {session:item.bookingtime,fieldName:'Session'},
                 {back_flight:flight,back_time:returnDate,fieldName:'ReturnTicket'},
                 {wash:washCar,oil:addOil,fieldName:'MoreService'},
-                {fieldName:'TelEnsureOperation'}];
-            return (<TableLine key={index} widths={widths} data={data} />);
+                {oid:item.serialnumber,fieldName:'TelEnsureOperation'}];
+            return (<TableLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)}/>);
         });
         return(
             <section className="data-section" style={{width:sumWidth+20}}>

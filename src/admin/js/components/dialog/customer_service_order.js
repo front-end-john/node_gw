@@ -32,7 +32,6 @@
                      cities[name].terminals.push({name:item.name,id:item.terminalid});
                  }
              }
-             //console.log("cities:",cities);
              this.setState({cities:cities});
          }).catch((e)=>{
              console.trace('异常:', e);

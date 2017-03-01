@@ -35,8 +35,9 @@ let Ensure=React.createClass({
     },
     handleMark(label,state){
         let url=this.props.url+"?"+queryStr.stringify({user_id:this.props.uid,tag:label,state});
+        console.log("添加标签url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("添加标签的响应状态：",res.status);
+            console.log("添加标签响应：",res.status);
             if(+res.status < 400){
                 return res.text();
             }else {

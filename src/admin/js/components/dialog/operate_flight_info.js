@@ -27,8 +27,9 @@
         let returningdate=this.fdate||this.props.fdate;
         let url=this.props.url+"?";
         url+=queryStr.stringify({serialnumber,returningflight,returningdate,sendmsg});
+        console.log("修改返程航班url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("修改返程航班响应状态："+res.status);
+            console.log("修改返程航班响应："+res.status);
             if(+res.status < 400){
                 return res.text();
             }else {

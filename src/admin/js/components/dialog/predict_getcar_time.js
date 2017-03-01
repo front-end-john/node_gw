@@ -26,8 +26,9 @@
         let flightlandingtime=this.fdate||this.props.time;
         let url=this.props.url+"?";
         url+=queryStr.stringify({order_id,flightlandingtime});
+        console.log("修改取车时间url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("修改返程航班响应状态："+res.status);
+            console.log("修改取车时间响应："+res.status);
             if(+res.status < 400){
                 return res.text();
             }else {

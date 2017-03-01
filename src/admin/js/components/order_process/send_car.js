@@ -10,28 +10,25 @@ let SendCar=React.createClass({
             this.setState({status:1});
         }
     },
-    assignDriver(oid){
+    assignDriver(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<AssignDriver url="/admin/api/orders/remark.js" order_id={oid} type="returning"
-                                      updateName={this.updateDriverName} number={this.props.number}/>, mask);
+        let {driverName}=this.props.data||{driverName:null};
+        ReactDOM.render(<AssignDriver order_id={this.props.order_id} type="returning"
+                                      driver_name={driverName} reload={this.props.reload}/>, mask);
     },
-    updateDriverName(name){
-        this.setState({driverName:name});
-    },
+
     render(){
         let status=this.state.status,html=null;
         if(status==0){
-            html=(<p className="pre-send-car">分配送车司机</p>);
+            html=(<p className="pre-send-car" onClick={()=>this.assignDriver()}>分配送车司机</p>);
         }else if(status==-1){
             html=(<p className="cancel-take-car">分配送车司机</p>);
         }else{
-            let {driverName,assignTime,startTime,finishTime,totalfee,description,paymentmoney,orderId}=this.props.data;
-            let name=this.state.driverName||driverName;
-
+            let {driverName,assignTime,startTime,finishTime,totalfee,description,paymentmoney}=this.props.data;
             html=(<div className="take-car">
                     <section className="up-part">
-                        <p><label>接车司机：</label><span>{name}&emsp;</span>
-                            <em style={{color:"#1A9FE5"}} onClick={()=>this.assignDriver(orderId)}>重新分配</em></p>
+                        <p><label>接车司机：</label><span>{driverName}&emsp;</span>
+                            <em style={{color:"#1A9FE5"}} onClick={()=>this.assignDriver()}>重新分配</em></p>
                         <p><label>分配时间：</label><span>{assignTime}</span></p>
                     </section>
                     <section className="down-part">

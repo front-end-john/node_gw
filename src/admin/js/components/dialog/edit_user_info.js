@@ -6,6 +6,15 @@
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
     },
+    showWarnTip(msg){
+        let mask=document.getElementById("dialogContainer");
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else{
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
     cancel(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<i/>, mask);
@@ -14,37 +23,28 @@
     ensure(){
         let gender=this.genderSel.value,stars=this.starSel.value,remark=this.remarkArea.value;
         let url=this.props.url+"?"+queryStr.stringify({remark,phoneno:this.props.tel,stars,gender});
-        console.log(url);
+        console.log("修改用户url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("修改用户的响应状态：",res.status);
+            console.log("修改用户响应：",res.status);
             if(+res.status < 400){
                 return res.text();
             }else {
                 throw new Error("服务异常");
             }
         }).then((str)=>{
-            console.log("修改用户的响应内容",str);
             let obj=JSON.parse(str);
             if(obj.code==0){
                 this.props.reload();
                 this.cancel();
             }else {
-                this.showWarnTip("修改用户信息失败！");
+                this.showWarnTip(obj.msg);
             }
         }).catch((e)=>{
             this.showWarnTip("网络请求异常！");
             console.trace('错误:', e);
         });
     },
-    showWarnTip(msg){
-        let mask=document.getElementById("dialogContainer");
-        if(msg===null){
-            ReactDOM.render(<i/>, mask);
-            mask.style.display="none";
-        }else {
-            ReactDOM.render(<WarnTip msg={msg}/>, mask);
-        }
-    },
+
     render(){
         return(
             <div className="dialog">

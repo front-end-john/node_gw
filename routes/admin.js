@@ -288,6 +288,13 @@ router.get('/api/orders/remark', function(req, res, next){
 });
 
 /**
+ * admin 电话确认
+ */
+router.get('/api/orders/confirmed', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
  * 修改预约接车时间
  */
 router.get('/api/orders/edit_bookingtime', function(req, res, next){

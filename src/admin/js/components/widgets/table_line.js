@@ -42,10 +42,11 @@ export default React.createClass({
         let show=is==0?1:0;
         this.setState({show});
     },
-    handleTelEnsure(){
+    handleTelEnsure(oid){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
-        ReactDOM.render(<Ensure title="电话确认" content="亲！是否已电话和客户确认过订单信息？"/>, mask);
+        ReactDOM.render(<Ensure title="电话确认" serialnumber={oid} url="/admin/api/orders/confirmed"
+                                reload={this.props.updateList} content="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
     handleAssignDriver(type,aid,oid,did){
         let mask=document.getElementById("dialogContainer");
@@ -238,7 +239,7 @@ export default React.createClass({
             }else if(item.fieldName=='ReturnTicket'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.back_flight}<br/>{item.back_time}</p>
+                        <p>{item.back_flight?<span>{item.back_flight}<br/></span>:""}{item.back_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='RemainTakeCarTime'){
@@ -249,7 +250,7 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='MoreService'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}} className={item.is_end?"list-end":""}>
                         <p>{item.wash}<br/>{item.oil}</p>
                     </li>
                 );
@@ -308,15 +309,10 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightStatus'){
-                let html=null;
-                if(item.start_time){
-                    html=( <p><span style={{color:"red"}}>{item.status}</span><br/>{item.start_time}</p>);
-                }else {
-                    html=( <p style={{color:"red"}}>{item.status}</p>);
-                }
+
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        {html}
+                        <p>{item.status?<span style={{color:"red"}}>{item.status}<br/></span>:""}{item.post_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightLandStatus'){
@@ -379,7 +375,7 @@ export default React.createClass({
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#DB8800",cursor:"pointer"}}>
-                            <em onClick={this.handleTelEnsure}>电话确认</em></p>
+                            <em onClick={()=>this.handleTelEnsure(item.oid)}>电话确认</em></p>
                     </li>
                 );
             }else if(item.fieldName=='AssignTakeDriverOperation'){
@@ -387,6 +383,13 @@ export default React.createClass({
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#DB8800",cursor:"pointer"}}>
                             <em  onClick={()=>this.handleAssignDriver("parking",item.aid,item.oid,null)}>分配接车司机</em></p>
+                    </li>
+                );
+            }else if(item.fieldName=='AssignSendDriverOperation'){
+                return(
+                    <li key={index} style={{width:widths[index]}} className="list-end">
+                        <p style={{color:"#1A9FE5",cursor:"pointer"}}>
+                            <em  onClick={()=>this.handleAssignDriver("returning",item.aid,item.oid,null)}>分配送车司机</em></p>
                     </li>
                 );
             }

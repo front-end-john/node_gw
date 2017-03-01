@@ -4,6 +4,7 @@ import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
 import TableLine from '../widgets/table_line';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
 export default React.createClass({
@@ -12,7 +13,7 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 120,    110,  110,    110,   110,  110,   120,      110,      120,       130,         130,    120],
+            initWidths:[ 150,    100,  110,    110,   110,  110,   120,      110,      120,       130,        130,    120],
             titles:    ['订单号','用户','标签','订单来源','车辆','机场','返程航班','航班状态','回程航站楼','预约取车时间','更多服务','操作']
         };
     },
@@ -23,6 +24,15 @@ export default React.createClass({
             mask.style.display="none";
         }else {
             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
         }
     },
     handleChange(e){
@@ -38,9 +48,11 @@ export default React.createClass({
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'returningassigning',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        console.log("订单查询url",url);
+        console.log("待分配送车订单url",url);
+        this.switchLoading(true);
         fetch(url).then((res)=>{
-            console.log("查询订单列表响应状态："+res.status);
+            console.log("待分配送车订单响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -94,18 +106,28 @@ export default React.createClass({
         });
         document.getElementById("appContainer").style.width=200+sumWidth+'px';
         let list=this.state.orderData.map((item,index)=>{
+            let moreService=item.serviceorders||[];
+            let type1=(moreService[0]||{}).servicetype,type2=(moreService[1]||{}).servicetype;
+            let wash=moreService[0]||{},oil=moreService[1]||{};
+            if(type1==10) oil=moreService[0];
+            if(type2==1) wash=moreService[1];
+
+            let washConfig=wash.config,oilConfig=oil.config;
+            let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
+            let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
+
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
-                {airport:'广州白云',fieldName:'Airport'},
-                {back_flight:"hu4564",back_time:"2017-1-21",fieldName:'ReturnTicket'},
-                {status:'落地',start_time:"已过去10分钟",fieldName:'ReturnFlightLandStatus'},
-                {terminal:'白云T1',fieldName:'ReturnTerminal'},
-                {order_fetch_time:"2016-8-9 15:14",fieldName:'OrderFetchTime'},
-                {wash:'下雨也洗车',oil:'汽油、92#、100元',fieldName:'MoreService'},
-                {op_items:["分配送车司机"],dialogs:[1],color:"#1A9FE5",fieldName:'Operation'}];
+                {airport:item.terminalname,fieldName:'Airport'},
+                {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
+                {status:item.flightstatus,post_time:item.posttime,fieldName:'ReturnFlightLandStatus'},
+                {terminal:item.terminalname,fieldName:'ReturnTerminal'},
+                {order_fetch_time:item.bookingtime,fieldName:'OrderFetchTime'},
+                {wash:washCar,oil:addOil,fieldName:'MoreService'},
+                {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignSendDriverOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
 

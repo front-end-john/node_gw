@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
 import TextInput from '../widgets/text_input';
 import SelectInput from '../widgets/select_input';
 import TableHead from '../widgets/table_head';
@@ -9,6 +8,7 @@ import TableLine from '../widgets/table_line';
 import DateSelect from '../widgets/date_select';
 import Page from '../widgets/page';
 import WarnTip from '../dialog/warn_tip';
+import Loading from "../dialog/loading";
 import {getStateInfo,maxNumber} from '../../util';
 let OrderQuery=React.createClass({
     getInitialState(){
@@ -17,18 +17,37 @@ let OrderQuery=React.createClass({
             orderData:[],
             pageObj:{},
 
-            initWidths:[ 150,    110,    120,    128,  160,   190,       90,       130,         90,      130,    100],
+            initWidths:[ 150,    110,    120,    128,  160,   190,       90,       130,         90,     130,    100],
             titles:    ['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态']
         };
     },
-    handlePageQuery(page,pageSize){
+    showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
+        if(msg===null){
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }else {
+            ReactDOM.render(<WarnTip msg={msg}/>, mask);
+        }
+    },
+    switchLoading(bl){
+        let mask=document.getElementById("dialogContainer");
+        if(bl){
+            ReactDOM.render(<Loading />, mask);
+        }else {
+            ReactDOM.render(<i/>, mask);
+            mask.style.display="none";
+        }
+    },
+    handlePageQuery(page,pageSize){
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'all',page:page,pagesize:pageSize});
         url+="&"+queryStr.stringify(this.state.queryCondition);
-        console.log("订单查询url",url);
-        fetch(url).then(function(res){
-            console.log("查询订单列表响应状态："+res.status);
+        console.log("全部订单查询url",url);
+        this.switchLoading(true);
+        fetch(url).then((res)=>{
+            console.log("全部订单查询响应："+res.status);
+            this.switchLoading(false);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -40,11 +59,11 @@ let OrderQuery=React.createClass({
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
-                ReactDOM.render(<WarnTip msg="订单列表数据异常！"/>, mask);
+                this.showWarnTip(obj.msg);
             }
-        }).catch(function(e) {
+        }).catch((e)=>{
+            this.showWarnTip("网络请求异常！");
             console.trace('错误:', e);
-            ReactDOM.render(<WarnTip msg="网络请求异常！"/>, mask);
         });
     },
     handleTextInputChange(e){

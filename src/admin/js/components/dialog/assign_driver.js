@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import WarnTip from '../dialog/warn_tip';
 export default React.createClass({
     getInitialState(){
-        return {driverId:this.props.driver_id,driverData:[]}
+        return {driverId:this.props.driver_id,driverName:this.props.driver_name,driverData:[]}
     },
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
 
         let url="/admin/api/drivers/list_by_airport?airportid="+(this.props.aid||1);
+        console.log("分配司机url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("请求司机列表响应："+res.status);
             if(+res.status < 400){
@@ -42,13 +43,12 @@ export default React.createClass({
     },
     ensure(){
         let driver=this.state.driverData[this.dataIndex]||{};
-        //console.log("driver:",driver);
-
         let order_id=this.props.order_id;
         let assign_type=this.props.type;
         let driver_id=driver.driverid||this.state.driverId;
         let url="/admin/api/orders/assign_parking_driver?";
         url+=queryStr.stringify({order_id,assign_type,driver_id});
+        console.log("指派司机url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("分配司机响应："+res.status);
             if(+res.status < 400){
@@ -61,8 +61,6 @@ export default React.createClass({
                 let obj=JSON.parse(str);
                 if(obj.code==0){
                     this.props.reload && this.props.reload();
-                    let update=this.props.updateName;
-                    update && update(driver.name);
                     this.cancel();
                 }else {
                     this.showWarnTip(obj.msg);

@@ -4,9 +4,6 @@ export default React.createClass({
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
-        /*mask.addEventListener('click',()=>{
-            mask.style.display="none";
-        });*/
     },
     componentDidMount(){
         let mask=document.getElementById("dialogContainer");

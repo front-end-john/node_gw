@@ -21,6 +21,7 @@
         let showpublic=this.state.show===undefined?this.props.public_show:this.state.show;
         let content=this.reply.value;
         let url=this.props.url+"?order_id="+order_id+"&showpublic="+showpublic+"&content="+content;
+        console.log("回复评论url",url);
         fetch(url,{credentials: 'include'}).then(function(res){
             console.log("客服回复响应状态："+res.status);
             if(+res.status < 400){

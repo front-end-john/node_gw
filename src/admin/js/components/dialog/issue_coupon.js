@@ -38,6 +38,7 @@
          let remark=this.remark.value;
          let url="/admin/api/coupons/createcoupon?";
          url+=queryStr.stringify({phoneno,comefrom,coupontype,days,money,discount,expiretime,remark});
+         console.log("发放优惠券url",url);
          fetch(url,{credentials: 'include'}).then((res)=>{
              if(+res.status < 400){
                  return res.text();
