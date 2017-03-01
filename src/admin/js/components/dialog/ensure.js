@@ -114,7 +114,7 @@ let Ensure=React.createClass({
         }
         let option=this.props.option;
         if(option=="logout"){
-            sessionStorage.removeItem("AdminInfo");
+            localStorage.removeItem("AdminInfo");
             location.reload();
         }
     },

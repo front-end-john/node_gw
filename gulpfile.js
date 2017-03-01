@@ -85,26 +85,26 @@ gulp.task('compiled-css-upload',function () {
  * 监听编译后的js的改变，并上传服务器
  */
 gulp.task('watch-compiled-react-upload',function () {
+    let admin_js_path='./public/admin/dist/*.js';
+    let jsj_js_path='./public/mobile/jsj/dist/*.js';
 
-    gulp.watch('./public/admin/dist/*.js').on('change', ()=>{
-        gulp.src('./public/admin/dist/*.js')
-            .pipe(sftp({
-                host: 'dev.feibotong.com',
-                user: 'ubuntu',
-                keyLocation: "./utils/dev",
-                remotePath:"/var/code/fronts/public/admin/dist/"
-            }));
-    });
+    gulp.src(admin_js_path)
+        .pipe(watch(admin_js_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/admin/dist/"
+        }));
+    gulp.src(jsj_js_path)
+        .pipe(watch(jsj_js_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/mobile/jsj/dist/"
+        }));
 
-    gulp.watch('./public/mobile/jsj/dist/*.js').on('change', ()=>{
-        gulp.src('./public/mobile/jsj/dist/*.js')
-            .pipe(sftp({
-                host: 'dev.feibotong.com',
-                user: 'ubuntu',
-                keyLocation: "./utils/dev",
-                remotePath:"/var/code/fronts/public/mobile/jsj/dist/"
-            }));
-    });
 });
 
 function getJsonObj(file) {

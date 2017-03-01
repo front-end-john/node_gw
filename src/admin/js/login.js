@@ -7,8 +7,13 @@ let Login=React.createClass({
         return {code:null};
     },
     componentDidMount(){
-        if(sessionStorage.getItem("AdminInfo")){
-            ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
+        let expires=localStorage.getItem("AdminInfo_expires");
+        if(expires && new Date().getTime()- parseInt(expires)>2*24*60*60000){
+            localStorage.removeItem("AdminInfo");
+        }else if(expires){
+            if(localStorage.getItem("AdminInfo")){
+                ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
+            }
         }
     },
     handleLogin(e){
@@ -21,7 +26,8 @@ let Login=React.createClass({
         }).then((json)=>{
             console.log(' json', json);
             if(json.code==0){
-                sessionStorage.setItem("AdminInfo",JSON.stringify(json));
+                localStorage.setItem("AdminInfo",JSON.stringify(json));
+                localStorage.setItem("AdminInfo_expires",new Date().getTime());
                 ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
             }else {
                 this.loginTip.className="warning";

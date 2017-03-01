@@ -1,7 +1,6 @@
 let express = require('express');
 let fetch = require('node-fetch');
 let log=require('../utils/mylog');
-let FormData = require('form-data');
 let router = express.Router();
 let http = require("http");
 const fs = require('fs');
@@ -12,6 +11,7 @@ const fs = require('fs');
 router.get('/local_cache', function(req, res, next) {
     let text=fs.readFileSync("public/local-cache.json","utf-8");
     if(text){
+        console.log(text);
         res.json(JSON.parse(text));
     }else {
         res.status(305).end();
@@ -262,7 +262,7 @@ router.get('/api/users/clear_stars', function(req, res, next){
 /**
  * 获取司机列表
  */
-router.get('/api/drivers/list', function(req, res, next){
+router.get('/api/drivers/list_by_airport', function(req, res, next){
     proxy(req,res);
 });
 

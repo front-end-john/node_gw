@@ -166,7 +166,7 @@ let OrderDetail=React.createClass({
         let order=this.state.orderDetail||{};
         let take=order.parkingdrivername?{driverName:order.parkingdrivername,
                 assignTime:order.parkingassignedtime, startTime:order.parkingstartedtime,
-            finishTime:order.parkingfinishedtime}:null;
+            finishTime:order.parkingfinishedtime,orderId:order.serialnumber}:null;
 
         let move=order.movingdrivername?{driverName:order.movingdrivername,
                  bufferTime:order.bufferparkedtime,moveTime:order.movingstartedtime,
@@ -179,7 +179,7 @@ let OrderDetail=React.createClass({
         let pay=order.payment||{};
         let send=order.returningdrivername?{driverName:order.returningdrivername,
                 assignTime:order.returningassignedtime, startTime:order.returningstartedtime,
-                finishTime:order.returningfinishedtime,
+                finishTime:order.returningfinishedtime,orderId:order.serialnumber,
                 totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney}:null;
         let payment=pay.totalfee?{
             takeTime:order.parkingstartedtime,sendTime:order.returningfinishedtime,

@@ -3,16 +3,16 @@ import ReactDOM from 'react-dom';
 import AssignDriver from "../dialog/assign_driver";
 let SendCar=React.createClass({
     getInitialState(){
-        return{status:1};
+        return{status:0};
     },
     componentWillMount(){
         if(this.props.data){
             this.setState({status:1});
         }
     },
-    assignDriver(){
+    assignDriver(oid){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<AssignDriver url="/admin/api/orders/remark.js"
+        ReactDOM.render(<AssignDriver url="/admin/api/orders/remark.js" order_id={oid} type="returning"
                                       updateName={this.updateDriverName} number={this.props.number}/>, mask);
     },
     updateDriverName(name){
@@ -25,13 +25,13 @@ let SendCar=React.createClass({
         }else if(status==-1){
             html=(<p className="cancel-take-car">分配送车司机</p>);
         }else{
-            let {driverName,assignTime,startTime,finishTime,totalfee,description,paymentmoney}=this.props.data;
+            let {driverName,assignTime,startTime,finishTime,totalfee,description,paymentmoney,orderId}=this.props.data;
             let name=this.state.driverName||driverName;
 
             html=(<div className="take-car">
                     <section className="up-part">
                         <p><label>接车司机：</label><span>{name}&emsp;</span>
-                            <em style={{color:"#1A9FE5"}} onClick={this.assignDriver}>重新分配</em></p>
+                            <em style={{color:"#1A9FE5"}} onClick={()=>this.assignDriver(orderId)}>重新分配</em></p>
                         <p><label>分配时间：</label><span>{assignTime}</span></p>
                     </section>
                     <section className="down-part">

@@ -15,7 +15,8 @@ if(os.platform()=='linux'){
 }
 
 let app = express();
-app.set('env', 'production');
+//app.set('env', 'production');
+app.set('env', 'development');
 // view engine setup
 let engine = require('express-dot-engine');
 app.engine('dot', engine.__express);

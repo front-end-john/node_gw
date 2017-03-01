@@ -21,7 +21,7 @@
              ReactDOM.render(<WarnTip msg={msg}/>, mask);
          }
      },
-    ensure(){
+     ensure(){
         let order_id=this.props.oid;
         let bookingtime=this.bookingtime;
         let url="/admin/api/orders/edit_bookingtime?";

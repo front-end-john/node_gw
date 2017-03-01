@@ -9,7 +9,7 @@ export default React.createClass({
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
 
-        let url="/admin/api/drivers/list?airportid="+(this.props.aid||1);
+        let url="/admin/api/drivers/list_by_airport?airportid="+(this.props.aid||1);
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("请求司机列表响应："+res.status);
             if(+res.status < 400){
@@ -43,8 +43,6 @@ export default React.createClass({
     ensure(){
         let driver=this.state.driverData[this.dataIndex]||{};
         //console.log("driver:",driver);
-        let update=this.props.updateName;
-        update && update(driver.name);
 
         let order_id=this.props.order_id;
         let assign_type=this.props.type;
@@ -62,7 +60,9 @@ export default React.createClass({
             try {
                 let obj=JSON.parse(str);
                 if(obj.code==0){
-                    this.props.reload();
+                    this.props.reload && this.props.reload();
+                    let update=this.props.updateName;
+                    update && update(driver.name);
                     this.cancel();
                 }else {
                     this.showWarnTip(obj.msg);
@@ -77,28 +77,14 @@ export default React.createClass({
     },
     render(){
         let did=this.state.driverId;
-        /*this.driverData=[{name:"张三",status:"15分钟后出发接车",color:"urgent",pos:"梧桐岛"},
-                        {name:"李四",status:"正在送车",color:"sending",pos:"梧桐岛"},
-                        {name:"王五",status:"正在接车",color:"taking",pos:"梧桐岛"},
-                        {name:"李阳",status:"空闲",color:"",pos:"梧桐岛"},
-                        {name:"小虎",status:"正在接车",color:"taking",pos:"梧桐岛"},
-                        {name:"赵六",status:"空闲",color:"",pos:"梧桐岛"},
-                        {name:"李四1",status:"正在送车",color:"sending",pos:"梧桐岛"},
-                        {name:"王五1",status:"正在接车",color:"taking",pos:"梧桐岛"},
-                        {name:"李阳1",status:"空闲",color:"",pos:"梧桐岛"},
-                        {name:"小虎1",status:"正在接车",color:"taking",pos:"梧桐岛"},
-                        {name:"赵六1",status:"空闲",color:"",pos:"梧桐岛"},
-                        {name:"李四2",status:"正在送车",color:"sending",pos:"梧桐岛"},
-                        {name:"李阳2",status:"空闲",color:"",pos:"梧桐岛"},
-                        {name:"小虎2",status:"正在接车",color:"taking",pos:"梧桐岛"},
-                        {name:"赵六2",status:"空闲",color:"",pos:"梧桐岛"},];*/
+        //color:"sending" color:"taking"
         let list=this.state.driverData.map((item,index)=>{
-            return(<li key={index} className={item.driverid==did?"selected":""}
+            return(<li key={index} className={item.id==did?"selected":""}
                        onClick={()=>{
-                           this.setState({driverId:item.driverid});
+                           this.setState({driverId:item.id});
                            this.dataIndex=index;
                        }}>
-                <p>{item.realname}</p><p className={"taking"}>{item.onlinestatus}</p><p>{"梧桐岛"}</p></li>)
+                <p>{item.realname}</p><p className={"taking"}>{item.statusdesc}</p><p>{item.location}</p></li>)
         });
         return(
             <div className="dialog">
