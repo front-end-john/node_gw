@@ -16,9 +16,8 @@ let OrderQuery=React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-
             initWidths:[ 150,    110,    120,    128,  160,   190,       90,       130,         90,     130,    100],
-            titles:    ['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','送车时间','状态']
+            titles:    ['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','出库/送还时间','状态']
         };
     },
     showWarnTip(msg){
@@ -88,6 +87,18 @@ let OrderQuery=React.createClass({
     exportData(){
         console.log("导出数据");
     },
+    clearCondition(){
+        this.setState({queryCondition:{}});
+        this.comefrom.reset();
+        this.status.reset();
+        this.airport.reset();
+        this.timetype.reset();
+        this.orderNo.reset();
+        this.phoneNo.reset();
+        this.carNo.reset();
+        this.startTime.reset();
+        this.endTime.reset();
+    },
     adaptScreen(){
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
@@ -144,31 +155,40 @@ let OrderQuery=React.createClass({
             <section className="data-section" style={{width:sumWidth+20}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleTextInputChange} pdl="0"
-                                 name="order_source"  />
-                    <SelectInput title="订单状态：" change={this.handleTextInputChange} name="order_status" />
-                    <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
+                                 name="order_source" ref={(c)=>this.comefrom=c} />
+                    <SelectInput title="订单状态：" change={this.handleTextInputChange}
+                                 ref={(c)=>this.status=c} name="order_status" />
+                    <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>} ref={(c)=>this.airport=c}
                                  change={this.handleTextInputChange} name="airport" />
                     <hr/>
                     <TextInput title={<span>订&ensp;单&ensp;号：</span>} change={this.handleTextInputChange} pdl="0"
-                               enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号" />
+                               enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号"
+                               ref={(c)=>this.orderNo=c}/>
                     <TextInput title={<span>用户手机：</span>} change={this.handleTextInputChange}
-                               enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"/>
+                               enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"
+                               ref={(c)=>this.phoneNo=c}/>
                     <TextInput title={<span>&emsp;&emsp;车牌号码：</span>} change={this.handleTextInputChange}
-                               enter={()=>this.handlePageQuery(1,10)} name="car_no" holdText="请输入车牌号" />
+                               enter={()=>this.handlePageQuery(1,10)} name="car_no" holdText="请输入车牌号"
+                               ref={(c)=>this.carNo=c}/>
                     <hr/>
                     <SelectInput title="筛选时间：" change={this.handleTextInputChange} pdl="0"
-                                 name="time_type" defaultName="选择筛选的时间"/>
-                    <DateSelect title="开始时间：" change={(date)=>this.state.queryCondition.starttime=date} />
-                    <DateSelect title="结束时间：" change={(date)=>this.state.queryCondition.endtime=date}  />
+                                 name="time_type" defaultName="选择筛选的时间" ref={(c)=>this.timetype=c} />
+                    <DateSelect title="开始时间：" change={(date)=>this.state.queryCondition.starttime=date}
+                                ref={(c)=>this.startTime=c} />
+                    <DateSelect title="结束时间：" change={(date)=>this.state.queryCondition.endtime=date}
+                                ref={(c)=>this.endTime=c} />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout" onClick={this.exportData}>导出</button>
-                    <button className="reset" onClick={this.exportData}>清空查询条件</button>
+                    <button className="reset" onClick={this.clearCondition}>清空查询条件</button>
                 </div>
-                <div className="data-list">
-                    <TableHead data={headData} />
-                    {list}
-                    <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
-                </div>
+                {list.length>0?(<div className="data-list">
+                        <TableHead data={headData} />
+                        {list}
+                        <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                    </div>):(<div className="data-none">
+                        <TableHead data={headData} />
+                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                    </div>)}
             </section>
         );
     }

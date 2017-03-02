@@ -2,9 +2,7 @@ import React from 'react';
 
 export default React.createClass({
     getInitialState(){
-        return {
-            list:[]
-        }
+        return {list:[]}
     },
     componentWillMount(){
         let dataList=[];
@@ -22,8 +20,7 @@ export default React.createClass({
                 {name:"开始送车时间",value:"returningstartedtime"},{name:"完成送车时间",value:"returningfinishedtime"}];
         }else if(type=="service_star" || type=="parking_star" || type=="sending_star"){
             dataList=[{name:"全部",value:''},{name:"五星",value:"5"},{name:"四星及以上",value:"4"},
-                {name:"三星及以下",value:"3"}, {name:"二星及以下",value:"2"},
-                {name:"一星",value:"0"}];
+                {name:"三星及以下",value:"3"}, {name:"二星及以下",value:"2"}, {name:"一星",value:"0"}];
         }else if(type=="show_status"){
             dataList=[{name:"全部",value:''},{name:"未回复",value:"0"},{name:"已回复且全部用户可见",value:"11"},
                 {name:"已回复且仅此用户可见",value:"10"}];
@@ -35,11 +32,12 @@ export default React.createClass({
     componentDidMount(){
         if(this.props.name=="airport") {
             let url = "/admin/api/areas/airports";
+            console.log("机场列表url",url);
             fetch(url).then(function (res) {
-                console.log("获取机场列表响应状态：" + res.status);
+                console.log("机场列表响应：" + res.status);
                 if (+res.status < 400) {
                     return res.text();
-                } else {
+                }else{
                     throw new Error("服务异常");
                 }
             }).then((str) => {
@@ -53,8 +51,9 @@ export default React.createClass({
             });
         }else if(this.props.name=="order_source") {
             let url = "/admin/api/orders/get_comefroms";
+            console.log("订单来源列表url",url);
             fetch(url).then((res)=>{
-                //console.log("获取机场列表响应状态：" + res.status);
+                console.log("订单来源列表响应：" + res.status);
                 if (+res.status < 400) {
                     return res.text();
                 } else {
@@ -77,6 +76,7 @@ export default React.createClass({
             });
         }
     },
+    reset(){ this.select.value="";},
     render(){
         let list=this.state.list.map(function (item,index) {
             return(
@@ -86,7 +86,7 @@ export default React.createClass({
         return(
             <p className="input-item select-item">
                 <label style={{paddingLeft:this.props.pdl||20}}>{this.props.title}</label>
-                <select id={this.props.name}  onChange={this.props.change} >
+                <select id={this.props.name} ref={(c)=>this.select=c}  onChange={this.props.change} >
                     {list}
                 </select>
             </p>

@@ -123,7 +123,7 @@ export default React.createClass({
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" />
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
-                                 change={this.handleTextInputChange} name="airport" />
+                                 change={this.handleChange} name="airport" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
                 {list.length>0?(<div className="data-list">

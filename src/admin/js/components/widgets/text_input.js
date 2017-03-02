@@ -4,6 +4,7 @@ export default React.createClass({
         let search=this.props.enter;
         if(key==13) search && search();
     },
+    reset(){ this.textIn.value="";},
     render(){
         return(
             <p className="input-item">

@@ -141,15 +141,18 @@ export default React.createClass({
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
-                                 change={this.handleTextInputChange} name="airport" />
+                                 change={this.handleChange} name="airport" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <button className="checkout" onClick={this.handleCreateOrder}>下单</button>
                 </div>
-                <div className="data-list">
-                    <TableHead data={headData} />
-                    {list}
-                    <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
-                </div>
+                {list.length>0?(<div className="data-list">
+                        <TableHead data={headData} />
+                        {list}
+                        <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                    </div>):(<div className="data-none">
+                        <TableHead data={headData} />
+                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                    </div>)}
             </section>
         );
     }

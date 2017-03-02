@@ -16,9 +16,10 @@ import EditFlightInfo from "../dialog/operate_flight_info";
 import PredictTime from "../dialog/predict_getcar_time";
 import WashService from "../dialog/wash_service";
 import OilService from "../dialog/oil_service";
-import {getStateInfo,getFormatDate} from '../../util'
+import SendMsg from "../dialog/send_message";
+import {getStateInfo,getFormatDate,optState} from '../../util'
 
-let OrderDetail=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{p_item:'p1',first:true, blocks:[],orderDetail:{}};
     },
@@ -33,8 +34,9 @@ let OrderDetail=React.createClass({
     },
     loadOrderDetail(){
         let url="/admin/api/orders/orderdetails?serialnumber="+this.props.number;
+        console.log("订单详情url",url);
         fetch(url).then((res)=>{
-            console.log("查询订单详情响应状态："+res.status);
+            console.log("订单详情响应："+res.status);
             if(+res.status < 400){
                 return res.text();
             }else {
@@ -48,23 +50,14 @@ let OrderDetail=React.createClass({
                 this.showWarnTip(obj.msg);
             }
         }).catch((e)=>{
-            this.showWarnTip("网络请求异常！");
+            this.showWarnTip("请求异常！");
             console.trace('错误:', e);
         });
     },
     componentWillMount(){
         this.loadOrderDetail();
     },
-    componentDidUpdate(prevProps, prevState){
-        let order=this.state.orderDetail;
-        let parkDriverName=order.parkingdrivername;
-        let returnDriverName=order.returningdrivername;
-        if(parkDriverName && parkDriverName!=prevState.orderDetail.parkingdrivername){
-            this.handleSwitch("pro_1");
-        }else if(returnDriverName && returnDriverName!=prevState.orderDetail.returningdrivername){
-            this.handleSwitch("pro_4");
-        }
-    },
+
     addRemark(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<AddRemark reload={this.loadOrderDetail} type="admin"
@@ -169,8 +162,22 @@ let OrderDetail=React.createClass({
             console.trace('请求错误:', e);
         });
     },
+    handleSenMsg(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<SendMsg number={this.props.number}/>, mask);
+    },
+    componentDidUpdate(prevProps, prevState){
+        let order=this.state.orderDetail;
+        let parkDriverName=order.parkingdrivername;
+        let returnDriverName=order.returningdrivername;
+        if(parkDriverName!=prevState.orderDetail.parkingdrivername){
+            this.handleSwitch("pro_1");
+        }else if(returnDriverName!=prevState.orderDetail.returningdrivername){
+            this.handleSwitch("pro_4");
+        }
+    },
     handleSwitch(item){
-        let order=this.state.orderDetail||{};
+        let order=this.state.orderDetail||{},s=order.status;
         let take=order.parkingdrivername?{driverName:order.parkingdrivername,
                 assignTime:order.parkingassignedtime, startTime:order.parkingstartedtime,
             finishTime:order.parkingfinishedtime}:null;
@@ -196,21 +203,21 @@ let OrderDetail=React.createClass({
             }:null;
         if (item == "pro_1") {
             this.setState({p_item:'p1'});
-            ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber}
+            ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber} order_status={s}
                                       reload={this.loadOrderDetail}/> , this.process);
         } else if (item == "pro_2") {
             this.setState({p_item:'p2'});
-            ReactDOM.render(<MoveCar data={move}/> , this.process);
+            ReactDOM.render(<MoveCar data={move}  /> , this.process);
         } else if (item == "pro_3") {
             this.setState({p_item:'p3'});
-            ReactDOM.render(<InGarage data={garage}/> , this.process);
+            ReactDOM.render(<InGarage data={garage} /> , this.process);
         } else if (item == "pro_4") {
             this.setState({p_item:'p4'});
-            ReactDOM.render(<SendCar data={send} order_id={order.serialnumber}
+            ReactDOM.render(<SendCar data={send} order_id={order.serialnumber} order_status={s}
                                      reload={this.loadOrderDetail} /> , this.process);
         } else if (item == "pro_5") {
             this.setState({p_item:'p5'});
-            ReactDOM.render(<Pay data={payment} /> , this.process);
+            ReactDOM.render(<Pay data={payment}  /> , this.process);
         } else if (item == "pro_6") {
             this.setState({p_item:'p6'});
             ReactDOM.render(<Evaluation /> , this.process);
@@ -283,15 +290,20 @@ let OrderDetail=React.createClass({
         let userTags=(user.tags||[]).map((item,index)=>{
             return(<span key={index} style={{color:"#323232"}}>{item}&ensp;</span>)
         });
-        let states=getStateInfo(o.status);
+        let s=o.status;
+        let states=getStateInfo(s);
         return(
             <section className="detail-section">
                 <p className="order-brief">
-                    <label style={{paddingLeft:'20px'}}>订单号：</label><span>{o.serialnumber||''}</span>
-                    <label style={{paddingLeft:'20px'}}>下单时间：</label><span>{o.createtime||''}</span>
-                    <label style={{paddingLeft:'20px'}}>来源：</label><span>{o.comefrom||''}</span>
+                    <label style={{paddingLeft:'20px'}}>订单号：</label><span>{o.serialnumber}</span>
+                    <label style={{paddingLeft:'20px'}}>下单时间：</label><span>{o.createtime}</span>
+                    <label style={{paddingLeft:'20px'}}>来源：</label><span>{o.comefrom}</span>
                     <label style={{paddingLeft:'20px'}}>状态：</label>
                     <span style={{color:states[1]}}>{states[0]}</span>
+                    {s==-1?<label style={{paddingLeft:'20px'}}>取消者：<span>{o.canceler}</span></label>:""}
+                    {s==-1?<label style={{paddingLeft:'20px'}}>取消时间：<span>{o.cancelingtime}</span></label>:""}
+                    <label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
+                       onClick={this.handleSenMsg}>发送短信</label>
                 </p>
                 <div className="order-main">
                     <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >
@@ -322,34 +334,33 @@ let OrderDetail=React.createClass({
                         <h2>预约信息</h2>
                         <div className="up-section">
                             <p><label>车辆信息：</label>
-                                <span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                      onClick={()=>this.editCarInfo(car)}>
+                                <span className="enable" onClick={()=>this.editCarInfo(car)}>
                                     {(car.carno||"")}&emsp;{(car.color||"")+(car.brand||"")}</span></p>
                             <p><label>预约接车时间：</label>
-                                <span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                <span className={optState(1,s)?"enable":"disabled"}
                                       onClick={()=>this.editBookingTime(o.serialnumber,o.bookingtime)}>
                                     {o.bookingtime||""}</span></p>
                             <p><label>去程航站楼：</label>
                                 <span>{o.parkingterminalname||""}</span></p>
                         </div>
                         <div className="down-section">
-                            <p><label>用户更新时间：</label>
-                                <span>{getFormatDate("yyyy-mm-dd hh:ii",user.updatetime)}</span></p>
+                            <p><label>航班更新时间：</label>
+                                <span>{getFormatDate("yyyy-mm-dd hh:ii",o.updatereturningtime)}</span></p>
                             <p className="back-flight">
                                 <label>返程航班：</label>
-                                {o.returningflight?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                {o.returningflight?(<span className={optState(2,s)?"enable":"disabled"}
                                     onClick={()=>this.editFlightInfo("mod",o.returningflight,o.returningdate)}>
                                     {(o.returningflight||"")+" "+(o.returningdate||"")}</span>):
-                                    (<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                    (<span className={optState(2,s)?"enable":"disabled"}
                                            onClick={()=>this.editFlightInfo("add",o.returningflight,o.returningdate)}>添加</span>)}
 
                                {<img src="/admin/img/icon/10_1.png" />}
                             </p>
                             <p><label>预约取车时间：</label>
-                                {o.returningtime?(<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                {o.returningtime?(<span className={optState(3,s)?"enable":"disabled"}
                                                           onClick={()=>this.editPredictGetCarTime("mod",o.returningtime)}>
                                         {o.returningtime||""}</span>):
-                                    (<span style={{color:"#1AA0E5",cursor:"pointer"}}
+                                    (<span className={optState(3,s)?"enable":"disabled"}
                                            onClick={()=>this.editPredictGetCarTime("add",'')}>添加</span>)}</p>
                             <p><label>回程航站楼：</label><span>{o.returningterminalname||""}</span></p>
                             <p className="note-field"><label>渠道备注：</label>
@@ -360,15 +371,18 @@ let OrderDetail=React.createClass({
                         <h2>更多服务</h2>
                         <div className="extra-service">
                             <p><label>洗车：</label><span>{washCar}</span>
-                                {washConfig?(<em><i onClick={
+                                {washConfig?(<em className={optState(5,s)?"enable":"disabled"}><i onClick={
                                     ()=>this.editWashService("mod","/admin/api/serviceorder/edit_washing")}>编辑</i>&ensp;
                                         <i onClick={()=>this.cancelExtraService(wash.serviceorderid)}>取消</i></em>):
-                                    (<em onClick={()=>this.editWashService("add","/admin/api/serviceorder/add_washing")}>添加</em>)}
+                                    (<em className={optState(5,s)?"enable":"disabled"}
+                                         onClick={()=>this.editWashService("add","/admin/api/serviceorder/add_washing")}>添加</em>)}
                             </p>
                             <p><label>加油：</label><span>{addOil}</span>
-                                {oilConfig?(<em><i onClick={()=>this.editOilService("mod","/admin/api/serviceorder/edit_oil")}>编辑</i>&ensp;
+                                {oilConfig?(<em className={optState(4,s)?"enable":"disabled"}>
+                                        <i onClick={()=>this.editOilService("mod","/admin/api/serviceorder/edit_oil")}>编辑</i>&ensp;
                                         <i onClick={()=>this.cancelExtraService(oil.serviceorderid)}>取消</i></em>):
-                                    (<em onClick={()=>this.editOilService("add","/admin/api/serviceorder/add_oil")}>添加</em>)}
+                                    (<em className={optState(4,s)?"enable":"disabled"}
+                                         onClick={()=>this.editOilService("add","/admin/api/serviceorder/add_oil")}>添加</em>)}
                             </p>
                         </div>
                         <p className="note-field"><label>用户备注：</label><span>{o.userremark||""}</span></p>
@@ -404,5 +418,3 @@ let OrderDetail=React.createClass({
         );
     }
 });
-
-export default OrderDetail;

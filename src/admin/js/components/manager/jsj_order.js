@@ -157,11 +157,15 @@ let JSJOrder=React.createClass({
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入订单号" />
                     <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                 </div>
-                <div className="data-list">
-                    <TableHead data={headData} />
-                    {list}
-                    <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
-                </div>
+
+                {list.length>0?(<div className="data-list">
+                        <TableHead data={headData} />
+                        {list}
+                        <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
+                    </div>):(<div className="data-none">
+                        <TableHead data={headData} />
+                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                    </div>)}
             </section>
         );
     }

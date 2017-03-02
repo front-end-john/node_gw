@@ -571,6 +571,9 @@ html,body{
   &>span{
     color: #323232;
   }
+  &>label>span{
+    color: #323232;
+  }
 }
 .order-main{
   @include center;
@@ -578,9 +581,8 @@ html,body{
   border-top: 1px solid #CDE3F6;
   min-width: 1400px;
   width: 100%;
+
   &>div{
-    /*@include span(3/14);
-    &:nth-of-type(4){@include span(5/14);}*/
     &>h2{
       height: 36px;
       line-height: 36px;
@@ -667,7 +669,16 @@ html,body{
     }
     &>div>p{
       margin-bottom: 10px;
-      &>span{color: #323232;}
+      span{color: #323232;}
+      .disabled{
+        cursor:not-allowed;
+        color:#c9c9c9;
+        pointer-events: none;
+      }
+      .enable{
+        color:#1AA0E5;
+        cursor:pointer;
+      }
     }
   }
   &>.service-info{
@@ -685,13 +696,20 @@ html,body{
         overflow: hidden;
         height: auto;
         padding-right: 20px;
-        &>em{
+        em{
           float: right;
-          color: #1AA0E5;
-          cursor: pointer;
           &:nth-of-type(2){
             margin-right: 10px;
           }
+        }
+        .disabled{
+          cursor:not-allowed;
+          color:#c9c9c9;
+          pointer-events: none;
+        }
+        .enable{
+          color:#1AA0E5;
+          cursor:pointer;
         }
       }
     }
@@ -741,13 +759,22 @@ html,body{
         padding-top: 18px;
         &>.up-part{
           float: left;
+          .disabled{
+            cursor:not-allowed;
+            color:#c9c9c9;
+            pointer-events: none;
+          }
+          .enable{
+            color:#DB8800;
+            cursor:pointer;
+          }
         }
         &>.down-part{
           float: right;
         }
         &>section>p {
           &>span { color: #323232; }
-          &>em { color: #DB8800;cursor: pointer; }
+          em { color: #DB8800;cursor: pointer; }
           margin-bottom: 10px;
         }
         .service-fee{
@@ -781,6 +808,7 @@ html,body{
       .cancel-take-car{
         @extend .pre-take-car;
         background-color: #C8C8C8;
+        pointer-events: none;
         &:hover{
           background-color: #C8C8C8;
         }
@@ -1152,6 +1180,18 @@ $dialogHeadHeight:48px;
       }
     }
   }
+  &>.msg-type{
+    &>span{
+      padding-left: 24px;
+      &:nth-of-type(2) {
+        float: none;
+        margin-left: 60px;
+      }
+      &:nth-of-type(3) {
+        float: right;
+      }
+    }
+  }
 }
 
 .select-arrow{
@@ -1345,7 +1385,8 @@ $dialogHeadHeight:48px;
     color:#fff;
     border:none;
     &:hover{
-     color: #646464;
+      background-color: #202E43;
+      color:#fff;
     }
   }
 }
@@ -1371,8 +1412,6 @@ $dialogHeadHeight:48px;
       &:hover{
         background-color: #202E43;
         p{color: #fff;}
-        /*background-color: #f5f5f5;
-        p{color: inherit}*/
       }
     }
     &:hover{

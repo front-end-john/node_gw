@@ -47,6 +47,9 @@ export default React.createClass({
         let assign_type=this.props.type;
         let driver_id=driver.driverid||this.state.driverId;
         let url="/admin/api/orders/assign_parking_driver?";
+        if(assign_type == "returning"){
+            url="/admin/api/orders/assign_returning_driver?";
+        }
         url+=queryStr.stringify({order_id,assign_type,driver_id});
         console.log("指派司机url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{

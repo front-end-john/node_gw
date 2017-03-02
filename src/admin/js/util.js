@@ -80,4 +80,31 @@ export let getStateInfo=(number)=>{
         default:return ["",""];
     }
 };
-
+/**
+ * @param type
+ *  修改预约接车时间:1
+ *     添加返程航班:2
+ *  修改预约取车时间:3
+ *   添加或取消加油:4
+ *   添加或取消洗车:5
+ *     分配接车司机:6
+ *     分配送车司机:7
+ * @param s
+ */
+export let optState=(type,s)=>{
+    if(type==1){
+        return s>=0 && s<10
+    }else if(type==2 || type==3){
+        return s>=0 && s<30
+    }else if(type==4){
+        return s>=0 && s<15
+    }else if(type==5){
+        return s>=0 && s<=16
+    }else if(type==6){
+        return s>=0 && s<=5
+    }else if(type==7){
+        return s>=16 && s<=25
+    }else {
+        return false;
+    }
+};

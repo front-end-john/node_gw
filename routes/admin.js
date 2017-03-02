@@ -274,6 +274,13 @@ router.get('/api/orders/assign_parking_driver', function(req, res, next){
 });
 
 /**
+ * 分配送车司机
+ */
+router.get('/api/orders/assign_returning_driver', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
  * admin登陆 暂无用
  */
 /*router.get('/api/login', function(req, res, next){
@@ -298,6 +305,13 @@ router.get('/api/orders/confirmed', function(req, res, next){
  * 修改预约接车时间
  */
 router.get('/api/orders/edit_bookingtime', function(req, res, next){
+    proxy(req,res);
+});
+
+/**
+ * 发送短信
+ */
+router.get('/api/orders/send_sms', function(req, res, next){
     proxy(req,res);
 });
 

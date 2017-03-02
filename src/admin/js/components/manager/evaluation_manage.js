@@ -139,11 +139,11 @@ let EvaluationManage=React.createClass({
                 <div className="query-condition">
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
                     <SelectInput title="展现状态：" change={this.handleChange} name="show_status" />
-                    <SelectInput title="泊车司机：" change={this.handleChange} name="parking_driver" />
+                    <SelectInput title="接车司机：" change={this.handleChange} name="parking_driver" />
                     <SelectInput title="送车司机：" change={this.handleChange} name="sending_driver" />
                     <hr/>
                     <SelectInput title="服务打星：" change={this.handleChange} pdl="0" name="service_star" />
-                    <SelectInput title="泊车打星：" change={this.handleChange} name="parking_star" />
+                    <SelectInput title="接车打星：" change={this.handleChange} name="parking_star" />
                     <SelectInput title="送车打星：" change={this.handleChange} name="sending_star" />
                     <button className="query-btn" onClick={()=>this.handleQuery(1,10)}>查询</button>
                 </div>
