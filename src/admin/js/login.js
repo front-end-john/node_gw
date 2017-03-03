@@ -18,18 +18,25 @@ let Login=React.createClass({
     },
     handleLogin(e){
         e.preventDefault();
+        let host=location.hostname;
+        if(host.indexOf("119.23.141.46")!=-1){
+            host="admin.feibotong.com";
+        }
         let username=this.acountIn.value,password=this.passwdIn.value;
-        let url="http://"+location.hostname+"/admin/api/login.js?";
+        let url="http://"+host+"/admin/api/login.js?";
         url+=queryStr.stringify({username,password,callback:"login_success"});
+        console.log("登陆url",url);
         fetchJsonp(url,{credentials: 'include'}).then((res)=>{
-                return res.json();
+            console.log("登陆响应状态",res.status);
+            return res.json();
         }).then((json)=>{
-            console.log(' json', json);
             if(json.code==0){
-                localStorage.setItem("AdminInfo",JSON.stringify(json));
+                console.log('管理员信息', json);
+                localStorage.setItem("AdminInfo",JSON.stringify(json.admin));
                 localStorage.setItem("AdminInfo_expires",new Date().getTime());
                 ReactDOM.render( AppRoute ,document.getElementById("appContainer"));
             }else {
+                console.log('异常信息', json);
                 this.loginTip.className="warning";
             }
         }).catch((e)=>{

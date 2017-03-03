@@ -70,7 +70,7 @@ module.exports=[{
     plugins: [
         //文件压缩插件
         new webpack.DefinePlugin({
-            'process.env': { NODE_ENV: JSON.stringify('production') }
+            'process.env': { NODE_ENV:'production' }
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},

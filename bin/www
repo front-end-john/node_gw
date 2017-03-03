@@ -40,8 +40,7 @@ if(cluster.isMaster){
     /**
      * Get port from environment and store in Express.
      */
-    let port = normalizePort(process.env.PORT || 8180);
-    app.set('port', port);
+    let port = normalizePort(process.env.PORT || app.get("port"));
 
     /**
      * Create HTTP server.

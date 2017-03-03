@@ -114,7 +114,7 @@ export default React.createClass({
                 {terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
                 {move_driver:item.movingdrivername,color:"#DB8800",fieldName:'MoveDriver'},
-                {airport_park_time_long:"4小时25分钟",fieldName:'AirportParkTimeLong'},
+                {airport_park_time_long:item.timelong,fieldName:'AirportParkTimeLong'},
                 {start_move_time:item.movingstartedtime,fieldName:'StartMoveTime'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });

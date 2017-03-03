@@ -19,8 +19,8 @@ if(os.platform()=='linux'){
         global.admin_url="http://dev.feibotong.com";
     }else if(hostType=="production"){
         env="production";
-        global.wx_jsj_url="http://dev.feibotong.com";
-        global.admin_url="http://dev.feibotong.com";
+        global.wx_jsj_url="http://admin.feibotong.com";
+        global.admin_url="http://admin.feibotong.com";
     }
 }else {
     global.wx_jsj_url="http://192.168.1.181:8080/txj-jsj";
@@ -29,6 +29,11 @@ if(os.platform()=='linux'){
 
 let app = express();
 app.set('env', env);
+if(env=="production"){
+    app.set('port', 19000);
+}else {
+    app.set('port', 8180);
+}
 // view engine setup
 let engine = require('express-dot-engine');
 app.engine('dot', engine.__express);

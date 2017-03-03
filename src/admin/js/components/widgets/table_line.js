@@ -365,12 +365,15 @@ export default React.createClass({
                 let isReply=this.state.isReply===undefined?!!item.reply:this.state.isReply;
                 let replyClr=isReply?"#c9c9c9":"#1AA0E5";
                 let event=isReply?"none":"auto";
+                let csr=isReply?"default":"pointer";
                 let publicShow=this.state.show===undefined?item.show:this.state.show;
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
-                        <p style={{color:"#1AA0E5",cursor:"pointer"}}>
-                            <em onClick={()=>this.handleHideAndShow(item.order_id,publicShow)}>{publicShow==0?"展现":"关闭"}</em>
-                            <em style={{color:replyClr,pointerEvents:event}}
+                        <p>
+                            <em style={{color:"#1AA0E5",cursor:"pointer"}}
+                                onClick={()=>this.handleHideAndShow(item.order_id,publicShow)}>
+                                {publicShow==0?"展现":"关闭"}</em>
+                            <em style={{color:replyClr,pointerEvents:event,cursor:csr}}
                                 onClick={()=>this.handleReply(item.order_id,publicShow)}>&ensp;回复</em>
                         </p>
                     </li>

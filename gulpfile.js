@@ -155,17 +155,17 @@ gulp.task("update local-cache.json",()=>{
 /**
  * 上传到测试服务器
  */
-gulp.task("development",()=>{
-    let files=[ {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
-                {src:"./public/**/*",   dest:"/var/code/fronts/public/"},
-                {src:"./routes/*",      dest:"/var/code/fronts/routes/"},
-                {src:"./utils/*",       dest:"/var/code/fronts/utils/"},
-                {src:"./views/**/*",    dest:"/var/code/fronts/views/"},
-                {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
-                {src:"./app.js",        dest:"/var/code/fronts/"},
-                {src:"./package.json",  dest:"/var/code/fronts/"},
-                {src:"./log4js.json",  dest:"/var/code/fronts/"},
-                {src:"./ecosystem.config.js",  dest:"/var/code/fronts/"},
+gulp.task("test-host",()=>{
+    let files=[
+                {src:"./public/**/*",           dest:"/var/code/fronts/public/"},
+                {src:"./routes/*",              dest:"/var/code/fronts/routes/"},
+                {src:"./utils/*",               dest:"/var/code/fronts/utils/"},
+                {src:"./views/**/*",            dest:"/var/code/fronts/views/"},
+                {src:"./bin/*",                 dest:"/var/code/fronts/bin/"},
+                {src:"./app.js",                dest:"/var/code/fronts/"},
+                {src:"./package.json",          dest:"/var/code/fronts/"},
+                {src:"./log4js.json",           dest:"/var/code/fronts/"},
+                {src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},
     ];
     files.forEach((item)=>{
         gulp.src(item.src)
@@ -184,17 +184,17 @@ gulp.task("development",()=>{
 /**
  * 上传到生产服务器
  */
-gulp.task("production",()=>{
-    let files=[ {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
-        {src:"./public/**/*",   dest:"/var/code/fronts/public/"},
-        {src:"./routes/*",      dest:"/var/code/fronts/routes/"},
-        {src:"./utils/*",       dest:"/var/code/fronts/utils/"},
-        {src:"./views/**/*",    dest:"/var/code/fronts/views/"},
-        {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
-        {src:"./app.js",        dest:"/var/code/fronts/"},
-        {src:"./package.json",  dest:"/var/code/fronts/"},
-        {src:"./log4js.json",  dest:"/var/code/fronts/"},
-        {src:"./ecosystem.config.js",  dest:"/var/code/fronts/"},
+gulp.task("production-host",()=>{
+    let files=[
+        {src:"./public/**/*",           dest:"/var/code/fronts/public/"},
+        {src:"./routes/*",              dest:"/var/code/fronts/routes/"},
+        {src:"./utils/*",               dest:"/var/code/fronts/utils/"},
+        {src:"./views/**/*",            dest:"/var/code/fronts/views/"},
+        {src:"./bin/*",                 dest:"/var/code/fronts/bin/"},
+        {src:"./app.js",                dest:"/var/code/fronts/"},
+        {src:"./package.json",          dest:"/var/code/fronts/"},
+        {src:"./log4js.json",           dest:"/var/code/fronts/"},
+        {src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},
     ];
     files.forEach((item)=>{
         gulp.src(item.src)
