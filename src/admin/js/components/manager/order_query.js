@@ -81,7 +81,7 @@ let OrderQuery=React.createClass({
         }else if(key==="airport"){
             this.state.queryCondition.airportid=val;
         }else if(key==="order_status"){
-            this.state.queryCondition.status=val;
+            this.state.queryCondition.orderstatus=val;
         }
     },
     exportData(){

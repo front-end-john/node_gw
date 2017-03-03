@@ -155,10 +155,8 @@ gulp.task("update local-cache.json",()=>{
 /**
  * 上传到测试服务器
  */
-gulp.task("upload-test-env",()=>{
+gulp.task("development",()=>{
     let files=[ {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
-                {src:"./config/*",      dest:"/var/code/fronts/config/"},
-                {src:"./logs/*",        dest:"/var/code/fronts/logs/"},
                 {src:"./public/**/*",   dest:"/var/code/fronts/public/"},
                 {src:"./routes/*",      dest:"/var/code/fronts/routes/"},
                 {src:"./utils/*",       dest:"/var/code/fronts/utils/"},
@@ -166,6 +164,7 @@ gulp.task("upload-test-env",()=>{
                 {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
                 {src:"./app.js",        dest:"/var/code/fronts/"},
                 {src:"./package.json",  dest:"/var/code/fronts/"},
+                {src:"./log4js.json",  dest:"/var/code/fronts/"},
                 {src:"./ecosystem.config.js",  dest:"/var/code/fronts/"},
     ];
     files.forEach((item)=>{
@@ -176,6 +175,34 @@ gulp.task("upload-test-env",()=>{
                 user: 'feiche',
                 port:18899,
                 keyLocation: "./utils/test",
+                remotePath:item.dest
+            }));
+    });
+
+});
+
+/**
+ * 上传到生产服务器
+ */
+gulp.task("production",()=>{
+    let files=[ {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
+        {src:"./public/**/*",   dest:"/var/code/fronts/public/"},
+        {src:"./routes/*",      dest:"/var/code/fronts/routes/"},
+        {src:"./utils/*",       dest:"/var/code/fronts/utils/"},
+        {src:"./views/**/*",    dest:"/var/code/fronts/views/"},
+        {src:"./bin/*",         dest:"/var/code/fronts/bin/"},
+        {src:"./app.js",        dest:"/var/code/fronts/"},
+        {src:"./package.json",  dest:"/var/code/fronts/"},
+        {src:"./log4js.json",  dest:"/var/code/fronts/"},
+        {src:"./ecosystem.config.js",  dest:"/var/code/fronts/"},
+    ];
+    files.forEach((item)=>{
+        gulp.src(item.src)
+            .pipe(watch(item.src))
+            .pipe(sftp({
+                host: '119.23.141.46',
+                user: 'ubuntu',
+                pass: 'txj2017sz',
                 remotePath:item.dest
             }));
     });

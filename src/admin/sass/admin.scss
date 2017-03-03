@@ -1026,7 +1026,10 @@ $dialogHeadHeight:48px;
       }
     }
   }
-
+  &>.msg-template{
+    padding: 0 20px 20px;
+    font-size: 14px;
+  }
   &>.btn{
     height: 80px;
     line-height: 80px;
@@ -1177,18 +1180,6 @@ $dialogHeadHeight:48px;
           left: ($radioSize - 5)/2 ;top: ($radioSize - 5)/2;
           z-index: 3;
         }
-      }
-    }
-  }
-  &>.msg-type{
-    &>span{
-      padding-left: 24px;
-      &:nth-of-type(2) {
-        float: none;
-        margin-left: 60px;
-      }
-      &:nth-of-type(3) {
-        float: right;
       }
     }
   }
@@ -1388,6 +1379,10 @@ $dialogHeadHeight:48px;
       background-color: #202E43;
       color:#fff;
     }
+  }
+  &>.empty-label{
+    border:none;
+    @include opacity(0);
   }
 }
 .dialog-place-order{

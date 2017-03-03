@@ -19,7 +19,6 @@ export default React.createClass({
             title="关闭评论及回复";
             content="确定要关闭评论及回复吗？";
         }
-
         ReactDOM.render(<Ensure url="/admin/api/orders/switchcommentshow"
                                 title={title} content={content}
                                 change={this.switchHide}
@@ -34,6 +33,7 @@ export default React.createClass({
                                order_id={id} />, mask);
 
     },
+
     cancelReply(){
         this.setState({isReply:true});
     },
@@ -74,6 +74,10 @@ export default React.createClass({
     componentWillReceiveProps(nextProps){
         let t1=this.props.type,t2=nextProps.type;
         if(t1 && t2 && t1!=t2){
+            ReactDOM.render(<Empty />,this.detailArea);
+            this.setState({isExpand:false});
+        }
+        if(this.props.data[0].order_no != nextProps.data[0].order_no){
             ReactDOM.render(<Empty />,this.detailArea);
             this.setState({isExpand:false});
         }

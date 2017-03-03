@@ -201,6 +201,13 @@ export default React.createClass({
                 parkLong:"",totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney,
                 payTime:pay.paymenttime
             }:null;
+        let comm=order.comment;
+        let comment=comm?{
+                serviceSatr:comm.servicescore,parkingStar:comm.parkingscore,retruningStar:comm.returningscore,
+                commTime:comm.commenttime,commContent:comm.commentcontent,showPublic:comm.showpublic,
+                response:comm.response
+            }:null;
+
         if (item == "pro_1") {
             this.setState({p_item:'p1'});
             ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber} order_status={s}
@@ -220,9 +227,8 @@ export default React.createClass({
             ReactDOM.render(<Pay data={payment}  /> , this.process);
         } else if (item == "pro_6") {
             this.setState({p_item:'p6'});
-            ReactDOM.render(<Evaluation /> , this.process);
+            ReactDOM.render(<Evaluation data={comment} order_id={order.serialnumber} /> , this.process);
         }
-
     },
     componentDidMount(){
         setTimeout(()=>{

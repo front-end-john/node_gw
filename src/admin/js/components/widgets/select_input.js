@@ -8,12 +8,9 @@ export default React.createClass({
         let dataList=[];
         let type=this.props.name;
         if(type=="order_status"){
-            dataList=[{name:"全部",value:''},{name:"已取消",value:-1},{name:"预约接车单生成",value:0}, {name:"客服已确认",value:1},
-                {name:"调度司机中",value:3},{name:"司机已分配",value:5},{name:"司机已就位",value:8},
-                {name:"已接车",value:10},{name:"已泊车",value:15},{name:"钥匙交出",value:16},
-                {name:"立即送车单生成",value:20},{name:"调度司机中",value:23},{name:"司机已分配",value:25},
-                {name:"已出发",value:30},{name:"已交车",value:35},{name:"用户确认已交车",value:36},
-                {name:"已支付",value:38},{name:"订单完成",value:50}];
+            dataList=[{name:"全部",value:'all'},{name:"已预约",value:"booking"},
+                {name:"在库",value:"parkingparked"}, {name:" 已送还",value:"returningfinished"},
+                {name:"待支付",value:"needtopay"},{name:"已取消",value:"canceled"}];
         }else if(type=="time_type"){
             dataList=[{name:"全部",value:''},{name:"预约接车时间",value:"bookingtime"},{name:"接车时间",value:"parkingstartedtime"},
                 {name:"停车入库时间",value:"parkingfinishedtime"}, {name:"预约送车时间",value:"WUHANSHENGYI"},

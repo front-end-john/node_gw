@@ -7,6 +7,7 @@ let bodyParser = require('body-parser');
 let session = require('express-session');
 let os = require('os');
 const fs = require('fs');
+let env="development";
 if(os.platform()=='linux'){
     let text=fs.readFileSync("host.tag","utf-8");
     hostType=text.trim();
@@ -16,6 +17,10 @@ if(os.platform()=='linux'){
     }else if(hostType=="dev"){
         global.wx_jsj_url="http://dev.feibotong.com";
         global.admin_url="http://dev.feibotong.com";
+    }else if(hostType=="production"){
+        env="production";
+        global.wx_jsj_url="http://dev.feibotong.com";
+        global.admin_url="http://dev.feibotong.com";
     }
 }else {
     global.wx_jsj_url="http://192.168.1.181:8080/txj-jsj";
@@ -23,8 +28,7 @@ if(os.platform()=='linux'){
 }
 
 let app = express();
-//app.set('env', 'production');
-app.set('env', 'development');
+app.set('env', env);
 // view engine setup
 let engine = require('express-dot-engine');
 app.engine('dot', engine.__express);
@@ -32,10 +36,9 @@ app.set('view engine', 'dot');
 
 app.set('views', path.join(__dirname, 'views'));
 
-//uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-log4js.configure('./config/log4js.json',{ reloadSecs: 300 });
+log4js.configure('./log4js.json',{ reloadSecs: 300 });
 let logger = log4js.getLogger('app');
 logger.setLevel(log4js.levels.INFO);
 app.use(log4js.connectLogger(logger));
