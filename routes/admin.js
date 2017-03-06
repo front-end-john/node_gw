@@ -18,24 +18,16 @@ router.get('/local_cache', function(req, res, next) {
     }
 });
 
-/**
- * 后台首页
- */
-router.get('/',function (req, res, next) {
-    fs.readFile("views/admin/index.html",(err, data)=>{
-        if(err){
-            res.status(500).end("未找到该页面！");
-        } else{
-            res.set('Content-Type', 'text/html');
-            res.send(data);
-        }
-    })
-});
+
 
 let proxy=function(proxyReq, proxyRes) {
     let url=admin_url+proxyReq.originalUrl;
-    log.info(url,__filename);
-    fetch(url,{headers:proxyReq.headers}).then((res)=>{
+    log.info("url:"+url);
+    proxyReq.headers["host"]=undefined;
+    proxyReq.headers["referer"]=undefined;
+    let header=proxyReq.headers;
+    //console.dir(header);
+    fetch(url,{headers:header}).then((res)=>{
         log.info("响应状态："+res.status);
         proxyRes.status(res.status);
         return res.text();

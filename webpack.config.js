@@ -20,16 +20,13 @@ module.exports=[{
         path:'./public/mobile/jsj/dist'
     },
     module:{
-        loaders:[
+        rules:[
             //babel编译jsx和es6
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel', // 'babel-loader' is also a legal name to reference
-                query: {
-                    presets:  ['es2015','react']
-                }
-            },{ test: /\.css$/, loader: "style-loader!css-loader" }
+                use: 'babel-loader',
+            },
+            { test: /\.css$/, use:['style-loader','css-loader'] }
         ]
     },
     plugins: [
@@ -54,23 +51,19 @@ module.exports=[{
         path:'./public/admin/dist'
     },
     module:{
-        loaders:[
+        rules:[
             //babel编译jsx和es6
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel', // 'babel-loader' is also a legal name to reference
-                query: {
-                    presets:  ['es2015','react']
-                }
+                use: 'babel-loader',
             },
-            { test: /\.css$/, loader: "style-loader!css-loader" }
+            { test: /\.css$/, use:['style-loader','css-loader'] }
         ]
     },
     plugins: [
         //文件压缩插件
         new webpack.DefinePlugin({
-            'process.env': { NODE_ENV:'production' }
+            'process.env': { NODE_ENV:JSON.stringify('production') }
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},

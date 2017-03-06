@@ -170,6 +170,8 @@ let OrderQuery=React.createClass({
                     <TextInput title={<span>&emsp;&emsp;车牌号码：</span>} change={this.handleTextInputChange}
                                enter={()=>this.handlePageQuery(1,10)} name="car_no" holdText="请输入车牌号"
                                ref={(c)=>this.carNo=c}/>
+                    <button className="query-btn" style={{width:260}}
+                            onClick={()=>this.handlePageQuery(1,10)}>查询</button>
                     <hr/>
                     <SelectInput title="筛选时间：" change={this.handleTextInputChange} pdl="0"
                                  name="time_type" defaultName="选择筛选的时间" ref={(c)=>this.timetype=c} />
@@ -177,8 +179,7 @@ let OrderQuery=React.createClass({
                                 ref={(c)=>this.startTime=c} />
                     <DateSelect title="结束时间：" change={(date)=>this.state.queryCondition.endtime=date}
                                 ref={(c)=>this.endTime=c} />
-                    <button className="query-btn" onClick={()=>this.handlePageQuery(1,10)}>查询</button>
-                    <button className="checkout" onClick={this.exportData}>导出</button>
+                    <button className="checkout" style={{marginLeft:18}} onClick={this.exportData}>导出</button>
                     <button className="reset" onClick={this.clearCondition}>清空查询条件</button>
                 </div>
                 {list.length>0?(<div className="data-list">

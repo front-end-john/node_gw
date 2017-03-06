@@ -10,7 +10,7 @@ let local_js_key="jsj_index_js";
 let local_css_key="jsj_common_css";
 let config_url="/mobile/jsj/local_cache?t="+new Date().getTime();
 
-if(href.indexOf("admin")>-1){
+if(href.indexOf("duck")>-1){
     local_js_key="admin_index_js";
     local_css_key="admin_index_css";
     config_url="/admin/local_cache?t="+new Date().getTime();
