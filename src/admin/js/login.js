@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AppRoute from "./routes/app_route";
 
-let Login=React.createClass({
+export default React.createClass({
     getInitialState(){
         return {code:null};
     },
@@ -19,7 +19,7 @@ let Login=React.createClass({
     handleLogin(e){
         e.preventDefault();
         let host=location.hostname;
-        if(host.indexOf("119.23.141.46")!=-1){
+        if(host.includes("119.23.141.46") || host.includes("admin.feibotong.com")){
             host="admin.feibotong.com";
         }
         let username=this.acountIn.value,password=this.passwdIn.value;
@@ -52,7 +52,7 @@ let Login=React.createClass({
                     <p>Fei Bo Tong Customer Service Management System</p>
                 </div>
                 <div className="login-block">
-                    <p className="login-logo"><img src="/admin/img/Logo.png" /></p>
+                    <p className="login-logo"><img src="/duck/img/Logo.png" /></p>
                     <form className="login-form">
                         <input ref={(c)=>this.acountIn=c } type="text" placeholder="请输入您的账号" />
                         <input ref={(c)=>this.passwdIn=c } type="password" placeholder="请输入密码" />
@@ -66,4 +66,3 @@ let Login=React.createClass({
     }
 });
 
-export default Login;

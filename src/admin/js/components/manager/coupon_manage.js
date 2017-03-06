@@ -145,7 +145,7 @@ export default React.createClass({
                         <Page {...this.state.pageObj} paging={this.handlePageQuery}/>
                     </div>):(<div className="data-none">
                         <TableHead data={headData} />
-                        <p><img src="/admin/img/icon/06.png" />暂时没有订单记录</p>
+                        <p><img src="/duck/img/icon/06.png" />暂时没有订单记录</p>
                     </div>)}
             </section>
         );

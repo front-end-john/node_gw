@@ -48,7 +48,7 @@ module.exports=[{
     },
     output:{
         filename:'[name].js',
-        path:'./public/admin/dist'
+        path:'./public/duck/dist'
     },
     module:{
         rules:[

@@ -5,8 +5,24 @@ let router = express.Router();
 let http = require("http");
 const fs = require('fs');
 
+
 /**
- * admin加载缓存配置
+ * 后台首页
+ */
+router.get('/',function (req, res, next) {
+    console.log("duck");
+    fs.readFile("views/admin/index.html",(err, data)=>{
+        if(err){
+            res.status(500).end("未找到该页面！");
+        } else{
+            res.set('Content-Type', 'text/html');
+            res.send(data);
+        }
+    })
+});
+
+/**
+ * 加载缓存配置
  */
 router.get('/local_cache', function(req, res, next) {
     let text=fs.readFileSync("public/local-cache.json","utf-8");
@@ -17,8 +33,6 @@ router.get('/local_cache', function(req, res, next) {
         res.status(305).end();
     }
 });
-
-
 
 let proxy=function(proxyReq, proxyRes) {
     let url=admin_url+proxyReq.originalUrl;

@@ -315,7 +315,7 @@ export default React.createClass({
                     <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >
                         <h2>用户信息</h2>
                         <figure className="user-basic">
-                            <img src={user.avatar||"/admin/img/userheadimg.png"}/>
+                            <img src={user.avatar||"/duck/img/userheadimg.png"}/>
                             <figcaption>
                                 <p>姓名：<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                              onClick={()=>this.editUserInfo()}>{user.realname||''}</span></p>
@@ -360,7 +360,7 @@ export default React.createClass({
                                     (<span className={optState(2,s)?"enable":"disabled"}
                                            onClick={()=>this.editFlightInfo("add",o.returningflight,o.returningdate)}>添加</span>)}
 
-                               {<img src="/admin/img/icon/10_1.png" />}
+                               {<img src="/duck/img/icon/10_1.png" />}
                             </p>
                             <p><label>预约取车时间：</label>
                                 {o.returningtime?(<span className={optState(3,s)?"enable":"disabled"}
@@ -411,7 +411,7 @@ export default React.createClass({
                         <div ref={(c)=>this.process=c} className="process-area" />
                     </div>
                     <div className="service-note">
-                        <p><label>客服备注：</label><img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
+                        <p><label>客服备注：</label><img src="/duck/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {serviceRemark}
                     </div>

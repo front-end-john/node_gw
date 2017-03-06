@@ -71,7 +71,7 @@ let jsjAdmin=require('./routes/jsj_admin');
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/admin', admin);
+app.use('/duck', admin);
 app.use('/mobile/jsj', jsj);
 app.use('/jsj', jsjAdmin);
 

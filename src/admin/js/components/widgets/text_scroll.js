@@ -33,7 +33,7 @@ export default React.createClass({
     },
     componentWillMount(){
         this.flashRushOrder();
-        this.flashTimer=setInterval(this.flashRushOrder,60000);
+        this.flashTimer=setInterval(this.flashRushOrder,60060);
     },
     componentWillUnmount(){
         clearInterval(this.flashTimer);

@@ -61,19 +61,5 @@ router.get('/price(.html)?',function (req, res, next) {
     res.render('gw/mobile/price', {});
 });
 
-/**
- * 后台首页
- */
-router.get('/duck',function (req, res, next) {
-    console.log("duck");
-    fs.readFile("views/admin/index.html",(err, data)=>{
-        if(err){
-            res.status(500).end("未找到该页面！");
-        } else{
-            res.set('Content-Type', 'text/html');
-            res.send(data);
-        }
-    })
-});
 
 module.exports = router;

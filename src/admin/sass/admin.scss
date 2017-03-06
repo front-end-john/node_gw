@@ -21,7 +21,7 @@ html,body{
   width: 100%;
   padding-bottom: 80px;
   padding-top: 170px;
-  background: url("/admin/img/login-bg.png") no-repeat;
+  background: url("/duck/img/login-bg.png") no-repeat;
   @include background-size(cover);
   &>h2{
     font-size: 38px;
@@ -205,7 +205,7 @@ html,body{
       margin-right: 10px;
       width: 16px;height: 16px;
       left: 20px;top:17px;
-      background: url("/admin/img/icon/icon.png") no-repeat -2px -2px;
+      background: url("/duck/img/icon/icon.png") no-repeat -2px -2px;
     }
     &:hover{
       background-color: #202E43;
@@ -237,7 +237,7 @@ html,body{
   padding-bottom: 10px;
   &>h2{
     &>.item-icon{
-      background: url("/admin/img/icon/icon1.png") no-repeat -20px -20px;
+      background: url("/duck/img/icon/icon1.png") no-repeat -20px -20px;
     }
     cursor: default;
     color: #0E1F38;
@@ -257,7 +257,7 @@ html,body{
     &>.item-icon{
       width: 14px;height: 8px;
       left: 21px;top:22px;
-      background: url("/admin/img/icon/icon1.png") no-repeat -20px -39px;
+      background: url("/duck/img/icon/icon1.png") no-repeat -20px -39px;
     }
     cursor: default;
     color: #0E1F38;

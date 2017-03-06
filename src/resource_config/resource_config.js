@@ -13,7 +13,7 @@ let config_url="/mobile/jsj/local_cache?t="+new Date().getTime();
 if(href.indexOf("duck")>-1){
     local_js_key="admin_index_js";
     local_css_key="admin_index_css";
-    config_url="/admin/local_cache?t="+new Date().getTime();
+    config_url="/duck/local_cache?t="+new Date().getTime();
 }else if(href.indexOf("main")>-1){
     local_js_key="jsj_main_js";
 }else if(href.indexOf("more_service")>-1){

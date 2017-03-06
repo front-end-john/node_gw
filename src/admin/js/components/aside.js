@@ -138,14 +138,14 @@ let Aside = React.createClass({
         return(
             <aside ref={(c)=>this.nav=c}>
                 <div id="manager">
-                    <div><img src="/admin/img/managerimg.png" /></div>
+                    <div><img src="/duck/img/managerimg.png" /></div>
                     <div>
                         <p>客服人员</p>
                         <section onClick={()=>{
                             let dom=this.refs.sysOpt,h=dom.style.height;
                             h=='80px'?dom.style.height=0:dom.style.height='80px';
                         }}>
-                            系统管理员<img className="arrow" src="/admin/img/icon/07.png"/>
+                            系统管理员<img className="arrow" src="/duck/img/icon/07.png"/>
                             <ul ref='sysOpt'>
                                 <li onClick={this.handlePasswordModify}>修改密码</li>
                                 <li onClick={this.handleLogout}>退出系统</li>

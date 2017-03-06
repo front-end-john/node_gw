@@ -35,7 +35,7 @@ gulp.task('compass', function() {
         gulp.src('./src/admin/sass/admin.scss')
             .pipe(compass({
                 config_file: './config/admin.rb',
-                css: 'public/admin/css',
+                css: 'public/duck/css',
                 sass: 'src/admin/sass'
             })).pipe(gulp.dest('./public/admin/css/'));
     });
@@ -56,36 +56,37 @@ gulp.task('compass', function() {
  * 编译后的css 上传服务器
  */
 gulp.task('compiled-css-upload',function () {
-    let admin_css=gulp.src('./public/admin/css/*.css')
+    let admin_css_path='./public/duck/css/*.css';
+    gulp.src(admin_css_path)
         /**
-         * 文件改变才上传
+         * 监听文件改变并上传
          */
-        .pipe(watch('./public/admin/css/*.css'))
+        .pipe(watch(admin_css_path))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/admin/css/"
+            remotePath:"/var/code/fronts/public/duck/css/"
     }));
-    let jsj_css=gulp.src('./public/mobile/jsj/css/*.css')
+    let jsj_css_path='./public/mobile/jsj/css/*.css';
+    gulp.src(jsj_css_path)
         /**
          * 文件改变才上传
          */
-        .pipe(watch('./public/mobile/jsj/css/*.css'))
+        .pipe(watch(jsj_css_path))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
             remotePath:"/var/code/fronts/public/mobile/jsj/css/"
         }));
-    return merge(admin_css,jsj_css);
 });
 
 /**
  * 监听编译后的js的改变，并上传服务器
  */
 gulp.task('watch-compiled-react-upload',function () {
-    let admin_js_path='./public/admin/dist/*.js';
+    let admin_js_path='./public/duck/dist/*.js';
     let jsj_js_path='./public/mobile/jsj/dist/*.js';
 
     gulp.src(admin_js_path)
@@ -94,7 +95,7 @@ gulp.task('watch-compiled-react-upload',function () {
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/admin/dist/"
+            remotePath:"/var/code/fronts/public/duck/dist/"
         }));
     gulp.src(jsj_js_path)
         .pipe(watch(jsj_js_path))
