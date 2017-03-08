@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AssignDriver from "../dialog/assign_driver";
 import {optState} from '../../util';
-let SendCar=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{status:0};
     },
@@ -50,4 +50,3 @@ let SendCar=React.createClass({
     }
 });
 
-export default SendCar;

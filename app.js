@@ -41,7 +41,6 @@ app.set('view engine', 'dot');
 
 app.set('views', path.join(__dirname, 'views'));
 
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 log4js.configure('./log4js.json',{ reloadSecs: 300 });
 let logger = log4js.getLogger('app');

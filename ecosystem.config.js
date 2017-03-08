@@ -10,6 +10,8 @@ module.exports = {
       name      : "admin",
       script    : "./bin/www",
       watch     :["routes","bin","app.js"],
+      instances  : 0,
+      exec_mode  : "cluster",
       env: {
         COMMON_VARIABLE: "true",
         NODE_ENV: "development"

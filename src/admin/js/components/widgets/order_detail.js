@@ -303,6 +303,20 @@ export default React.createClass({
         });
         let s=o.status;
         let states=getStateInfo(s);
+        let flightState=o.flightstatus,status_img="";
+        if(flightState=="计划"){
+            status_img="order_flight_plan.png";
+        }else if(flightState=="起飞"){
+            status_img="order_flight_takeoff.png";
+        }else if(flightState=="到达"){
+            status_img="order_flight_arrived.png";
+        }else if(flightState=="延误"){
+            status_img="order_flight_delay.png"
+        }else if(flightState=="取消"){
+            status_img="order_flight_canceled.png";
+        }else if(flightState=="备降"){
+            status_img="order_flight_alternate.png";
+        }
         return(
             <section className="detail-section">
                 <p className="order-brief">
@@ -323,22 +337,22 @@ export default React.createClass({
                             <img src={user.avatar||"/duck/img/userheadimg.png"}/>
                             <figcaption>
                                 <p>姓名：<span style={{color:"#1AA0E5",cursor:"pointer"}}
-                                             onClick={()=>this.editUserInfo()}>{user.realname||''}</span></p>
+                                             onClick={()=>this.editUserInfo()}>{user.realname}</span></p>
                                 <p>性别：<span>{user.sex==1?"男":"女"}</span></p>
-                                <p>手机：<span>{user.phoneno||''}</span></p>
+                                <p>手机：<span>{user.phoneno}</span></p>
                             </figcaption>
                         </figure>
                         <div className="user-other">
                             <p><label>重要等级：</label>{level}</p>
-                            <p><label>使用次数：</label><span>{user.bookcount||''}</span></p>
-                            <p><label>用户来源：</label><span>{user.comefrom||''}</span></p>
+                            <p><label>使用次数：</label><span>{user.bookcount}</span></p>
+                            <p><label>用户来源：</label><span>{user.comefrom}</span></p>
                             <p><label>注册时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime)}</span></p>
                             <p><label>标&#8195;&#8195;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>{userTags.length>0?"编辑":"添加"}</span></em></p>
                             <p className="note-field"><label>备&#8195;&#8195;注：</label>
-                                <span>{user.remark||''}</span></p>
+                                <span>{user.remark}</span></p>
                         </div>
                     </div>
                     <div className="order-info" ref={(c)=>this.state.blocks[1]=c}>
@@ -346,13 +360,13 @@ export default React.createClass({
                         <div className="up-section">
                             <p><label>车辆信息：</label>
                                 <span className="enable" onClick={()=>this.editCarInfo(car)}>
-                                    {(car.carno||"")}&emsp;{(car.color||"")+(car.brand||"")}</span></p>
+                                    {car.carno}&emsp;{car.color}{car.brand}</span></p>
                             <p><label>预约接车时间：</label>
                                 <span className={optState(1,s)?"enable":"disabled"}
                                       onClick={()=>this.editBookingTime(o.serialnumber,o.bookingtime)}>
-                                    {o.bookingtime||""}</span></p>
+                                    {o.bookingtime}</span></p>
                             <p><label>去程航站楼：</label>
-                                <span>{o.parkingterminalname||""}</span></p>
+                                <span>{o.parkingterminalname}</span></p>
                         </div>
                         <div className="down-section">
                             <p><label>航班更新时间：</label>
@@ -364,8 +378,7 @@ export default React.createClass({
                                     {(o.returningflight||"")+" "+(o.returningdate||"")}</span>):
                                     (<span className={optState(2,s)?"enable":"disabled"}
                                            onClick={()=>this.editFlightInfo("add",o.returningflight,o.returningdate)}>添加</span>)}
-
-                               {<img src="/duck/img/icon/10_1.png" />}
+                               {flightState?<img src={"/duck/img/flight_status/"+status_img} />:""}
                             </p>
                             <p><label>预约取车时间：</label>
                                 {o.returningtime?(<span className={optState(3,s)?"enable":"disabled"}
@@ -373,7 +386,7 @@ export default React.createClass({
                                         {o.returningtime||""}</span>):
                                     (<span className={optState(3,s)?"enable":"disabled"}
                                            onClick={()=>this.editPredictGetCarTime("add",'')}>添加</span>)}</p>
-                            <p><label>回程航站楼：</label><span>{o.returningterminalname||""}</span></p>
+                            <p><label>回程航站楼：</label><span>{o.returningterminalname}</span></p>
                             <p className="note-field"><label>渠道备注：</label>
                                 <span>{""}</span></p>
                         </div>
@@ -402,7 +415,7 @@ export default React.createClass({
                                          onClick={()=>this.editOilService("add","/admin/api/serviceorder/add_oil")}>添加</em>)}
                             </p>
                         </div>
-                        <p className="note-field"><label>用户备注：</label><span>{o.userremark||""}</span></p>
+                        <p className="note-field"><label>用户备注：</label><span>{o.userremark}</span></p>
                     </div>
                     <div className="process-info" ref={(c)=>this.state.blocks[3]=c} >
                         <ul>

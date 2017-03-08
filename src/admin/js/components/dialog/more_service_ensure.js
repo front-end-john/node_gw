@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WarnTip from '../dialog/warn_tip';
-let Ensure=React.createClass({
+export default React.createClass({
     getInitialState(){return {};},
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
@@ -52,7 +52,7 @@ let Ensure=React.createClass({
             <div className="dialog">
                 <h2 className="title">{serviceIntro}<i onClick={this.cancel}/></h2>
                 <p className="dialog-ensure">
-                    "{name}({tel})"<span style={{color:"red"}}>{intro}&ensp;</span>是否已完成？
+                    "{name}（{tel}）"<span style={{color:"red"}}>&ensp;{intro}&ensp;</span>是否已完成？
                 </p>
                 <section className="btn">
                     <button onClick={()=>this.ensure(sid,0)}>否</button>
@@ -63,4 +63,3 @@ let Ensure=React.createClass({
     }
 });
 
-export default Ensure;

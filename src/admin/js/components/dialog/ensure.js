@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WarnTip from '../dialog/warn_tip';
-let Ensure=React.createClass({
+export default React.createClass({
     getInitialState(){return {};},
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
@@ -163,5 +163,3 @@ let Ensure=React.createClass({
         );
     }
 });
-
-export default Ensure;
