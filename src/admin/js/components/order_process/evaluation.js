@@ -63,7 +63,7 @@ export default React.createClass({
                 list[i]=listItem;
             }
             let isReply=this.state.isReply===undefined?!!response:this.state.isReply;
-            let replyClr=isReply?"#c9c9c9":"#1AA0E5";
+            let replyClr=isReply?"#323232":"#1AA0E5";
             let event=isReply?"none":"auto";
 
             let publicShow=this.state.show===undefined?showPublic:this.state.show;

@@ -17,6 +17,7 @@ import PredictTime from "../dialog/predict_getcar_time";
 import WashService from "../dialog/wash_service";
 import OilService from "../dialog/oil_service";
 import SendMsg from "../dialog/send_message";
+import ServiceEnsure from "../dialog/more_service_ensure";
 import {getStateInfo,getFormatDate,optState} from '../../util'
 
 export default React.createClass({
@@ -176,6 +177,10 @@ export default React.createClass({
             this.handleSwitch("pro_4");
         }
     },
+    ensureWash(type,name,tel,sid,intro){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<ServiceEnsure  type={type} data={{name,tel,sid,intro}}/>, mask);
+    },
     handleSwitch(item){
         let order=this.state.orderDetail||{},s=order.status;
         let take=order.parkingdrivername?{driverName:order.parkingdrivername,
@@ -210,8 +215,8 @@ export default React.createClass({
 
         if (item == "pro_1") {
             this.setState({p_item:'p1'});
-            ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber} order_status={s}
-                                      reload={this.loadOrderDetail}/> , this.process);
+            ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber} airport_id={order.airportid}
+                                      order_status={s} reload={this.loadOrderDetail}/> , this.process);
         } else if (item == "pro_2") {
             this.setState({p_item:'p2'});
             ReactDOM.render(<MoveCar data={move}  /> , this.process);
@@ -220,8 +225,8 @@ export default React.createClass({
             ReactDOM.render(<InGarage data={garage} /> , this.process);
         } else if (item == "pro_4") {
             this.setState({p_item:'p4'});
-            ReactDOM.render(<SendCar data={send} order_id={order.serialnumber} order_status={s}
-                                     reload={this.loadOrderDetail} /> , this.process);
+            ReactDOM.render(<SendCar data={send} order_id={order.serialnumber} airport_id={order.airportid}
+                                     order_status={s} reload={this.loadOrderDetail} /> , this.process);
         } else if (item == "pro_5") {
             this.setState({p_item:'p5'});
             ReactDOM.render(<Pay data={payment}  /> , this.process);
@@ -282,8 +287,8 @@ export default React.createClass({
         if(type2==1) wash=moreService[1];
 
         let washConfig=wash.config,oilConfig=oil.config;
-        let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
-        let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
+        let washIntro=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
+        let oilIntro=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
         let serviceRemark=(o.remark||[]).map((item,index)=>{
             return (<p key={index}>{item.time}&emsp;{item.admin_name}&emsp;{item.remark}</p>);
         });
@@ -376,14 +381,20 @@ export default React.createClass({
                     <div className="service-info" ref={(c)=>this.state.blocks[2]=c}>
                         <h2>更多服务</h2>
                         <div className="extra-service">
-                            <p><label>洗车：</label><span>{washCar}</span>
+                            <p><label>洗车：</label>
+                                {washConfig?<span className={optState(7,s)?"enable":"disabled"}
+                                        onClick={()=>this.ensureWash("wash",user.realname,user.phoneno,wash.serviceorderid,washIntro)}>
+                                        {washIntro}</span>:<span>{washIntro}</span>}
                                 {washConfig?(<em className={optState(5,s)?"enable":"disabled"}><i onClick={
                                     ()=>this.editWashService("mod","/admin/api/serviceorder/edit_washing")}>编辑</i>&ensp;
                                         <i onClick={()=>this.cancelExtraService(wash.serviceorderid)}>取消</i></em>):
                                     (<em className={optState(5,s)?"enable":"disabled"}
                                          onClick={()=>this.editWashService("add","/admin/api/serviceorder/add_washing")}>添加</em>)}
                             </p>
-                            <p><label>加油：</label><span>{addOil}</span>
+                            <p><label>加油：</label>
+                                {oilConfig?<span className={optState(7,s)?"enable":"disabled"}
+                                                  onClick={()=>this.ensureWash("oil",user.realname,user.phoneno,oil.serviceorderid,oilIntro)}>
+                                        {oilIntro}</span>:<span>{oilIntro}</span>}
                                 {oilConfig?(<em className={optState(4,s)?"enable":"disabled"}>
                                         <i onClick={()=>this.editOilService("mod","/admin/api/serviceorder/edit_oil")}>编辑</i>&ensp;
                                         <i onClick={()=>this.cancelExtraService(oil.serviceorderid)}>取消</i></em>):

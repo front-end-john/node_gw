@@ -363,7 +363,7 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='CommentOperation'){
                 let isReply=this.state.isReply===undefined?!!item.reply:this.state.isReply;
-                let replyClr=isReply?"#c9c9c9":"#1AA0E5";
+                let replyClr=isReply?"#323232":"#1AA0E5";
                 let event=isReply?"none":"auto";
                 let csr=isReply?"default":"pointer";
                 let publicShow=this.state.show===undefined?item.show:this.state.show;

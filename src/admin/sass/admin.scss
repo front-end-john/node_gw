@@ -672,7 +672,7 @@ html,body{
       span{color: #323232;}
       .disabled{
         cursor:not-allowed;
-        color:#c9c9c9;
+        color:#323232;
         pointer-events: none;
       }
       .enable{
@@ -704,7 +704,7 @@ html,body{
         }
         .disabled{
           cursor:not-allowed;
-          color:#c9c9c9;
+          color:#323232;
           pointer-events: none;
         }
         .enable{
@@ -761,7 +761,7 @@ html,body{
           float: left;
           .disabled{
             cursor:not-allowed;
-            color:#c9c9c9;
+            color:#323232;
             pointer-events: none;
           }
           .enable{

@@ -72,7 +72,7 @@ export let getStateInfo=(number)=>{
         case 25:return ["已分配送车司机","#1a9fe5"];
 
         case 30:return ["预约成功","#1a9fe5"];
-        case 35:return ["预约成功","#1a9fe5"];
+        case 35:return ["车辆已送还","#323232"];
         case 36:return ["预约成功","#1a9fe5"];
 
         case 38:return ["已支付","#323232"];

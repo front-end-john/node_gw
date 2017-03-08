@@ -21,7 +21,6 @@ module.exports=[{
     },
     module:{
         rules:[
-            //babel编译jsx和es6
             {
                 test: /\.jsx?$/,
                 use: 'babel-loader',
@@ -30,7 +29,6 @@ module.exports=[{
         ]
     },
     plugins: [
-        //文件压缩插件
         new webpack.DefinePlugin({
             'process.env': { NODE_ENV: JSON.stringify('production') }
         }),
@@ -42,9 +40,8 @@ module.exports=[{
 },{
     name:"admin",
     entry:{
-        //jquery_family:['jquery','jquery-touch-events'],
-        admin:"./src/admin/js/index.js",
-        resource_config:"./src/resource_config/resource_config.js",
+        depend_lib:['react-date-picker'],
+        admin:"./src/admin/js/index.js"
     },
     output:{
         filename:'[name].js',
@@ -52,7 +49,6 @@ module.exports=[{
     },
     module:{
         rules:[
-            //babel编译jsx和es6
             {
                 test: /\.jsx?$/,
                 use: 'babel-loader',
@@ -61,18 +57,20 @@ module.exports=[{
         ]
     },
     plugins: [
-        //文件压缩插件
+        /**
+         *  文件压缩插件
+         */
         new webpack.DefinePlugin({
             'process.env': { NODE_ENV:JSON.stringify('production') }
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},
             output: { comments: false}
-        })
-        /*new webpack.optimize.CommonsChunkPlugin({
-         name:['jquery_family'],
-         minChunks: Infinity
-         })*/
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+             name:"depend_lib",
+             minChunks: Infinity
+         })
     ]
 }];
 //监听编译

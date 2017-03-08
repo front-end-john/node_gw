@@ -13,6 +13,7 @@ let SendCar=React.createClass({
         let mask=document.getElementById("dialogContainer");
         let {driverName}=this.props.data||{driverName:null};
         ReactDOM.render(<AssignDriver order_id={this.props.order_id} type="returning"
+                                      aid={this.props.airport_id}
                                       driver_name={driverName} reload={this.props.reload}/>, mask);
     },
 
@@ -28,7 +29,7 @@ let SendCar=React.createClass({
             html=(<div className="take-car">
                     <section className="up-part">
                         <p><label>接车司机：</label><span>{driverName}&emsp;</span>
-                            <em style={optState(7,s)?{color:"#1A9FE5"}:{color:"#c9c9c9",pointerEvents:"none"}}
+                            <em style={optState(7,s)?{color:"#1A9FE5"}:{color:"#323232",pointerEvents:"none"}}
                                 onClick={()=>this.assignDriver()}>重新分配</em></p>
                         <p><label>分配时间：</label><span>{assignTime}</span></p>
                     </section>

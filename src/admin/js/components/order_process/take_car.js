@@ -15,7 +15,7 @@ export default React.createClass({
         let {driverName}=this.props.data||{driverName:null};
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<AssignDriver order_id={this.props.order_id} type="parking"
-                                      driver_name={driverName}
+                                      driver_name={driverName} aid={this.props.airport_id}
                                       reload={this.props.reload} />, mask);
     },
     render(){

@@ -10,7 +10,6 @@ const fs = require('fs');
  * 后台首页
  */
 router.get('/',function (req, res, next) {
-    console.log("duck");
     fs.readFile("views/admin/index.html",(err, data)=>{
         if(err){
             res.status(500).end("未找到该页面！");
@@ -21,24 +20,12 @@ router.get('/',function (req, res, next) {
     })
 });
 
-/**
- * 加载缓存配置
- */
-router.get('/local_cache', function(req, res, next) {
-    let text=fs.readFileSync("public/local-cache.json","utf-8");
-    if(text){
-        console.log(text);
-        res.json(JSON.parse(text));
-    }else {
-        res.status(305).end();
-    }
-});
 
 let proxy=function(proxyReq, proxyRes) {
     let url=admin_url+proxyReq.originalUrl;
     log.info("url:"+url);
-    proxyReq.headers["host"]=undefined;
-    proxyReq.headers["referer"]=undefined;
+    //proxyReq.headers["host"]=undefined;
+    //proxyReq.headers["referer"]=undefined;
     let header=proxyReq.headers;
     //console.dir(header);
     fetch(url,{headers:header}).then((res)=>{

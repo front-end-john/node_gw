@@ -18,8 +18,8 @@ gulp.task('browser-sync', function() {
     browserSync.init({
         proxy: "127.0.0.1:8180"
     });
-    gulp.watch('./public/admin/css/*.css').on('change', reload);
-    //gulp.watch('./public/admin/dist/*.js').on('change', reload);
+    gulp.watch('./public/duck/css/*.css').on('change', reload);
+    //gulp.watch('./public/duck/dist/*.js').on('change', reload);
     gulp.watch('./public/mobile/jsj/css/*.css').on('change', reload);
     gulp.watch('./public/mobile/jsj/dist/*.js').on('change', reload);
 });
@@ -37,7 +37,7 @@ gulp.task('compass', function() {
                 config_file: './config/admin.rb',
                 css: 'public/duck/css',
                 sass: 'src/admin/sass'
-            })).pipe(gulp.dest('./public/admin/css/'));
+            })).pipe(gulp.dest('./public/duck/css/'));
     });
     /**
      * jsj scss文件改变才编译
