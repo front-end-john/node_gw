@@ -136,13 +136,7 @@
           */
          let cars=this.state.cars||[];
          let carnos=cars.map((item,index)=>{
-             let attachData={color:item.color,brand:item.brand,carid:item.carid};
-             return ( <option key={index} value={item.carno} data-car={JSON.stringify(attachData)}
-                              onClick={(e)=>{
-                                  let data=e.target.getAttribute("data-car");
-                                  let obj=JSON.parse(data);
-                                  this.setState({car:obj});
-                              }}>{item.carno}</option>);
+             return ( <option key={index} value={index}>{item.carno}</option>);
          });
          /**
           * 首个车牌默认选项
@@ -180,12 +174,13 @@
                             <option value="0" >女</option>
                         </select><i className="select-arrow"/>
                     </p>
-                    <p>
+                    <p className="car-no">
                         <em>车牌号码：</em>
-                        <select className="user-gender" ref={(c)=>this.carNo=c} value={car.carno||""}>
-                            <option value="" onClick={()=>this.setState({car:{}})}>车牌号</option>
+                        <input type="text" placeholder="车牌号" value={car.carno} ref={(c)=>this.carNo=c}/>
+                        <select className="user-gender"  value={car.carno}
+                                onChange={(e)=>this.setState({car:cars[e.target.value]})}>
                             {carnos}
-                    </select><i className="select-arrow"/>
+                        </select><i className="select-arrow"/>
                         <input type="text" placeholder="颜色（选填）" value={ car.color||""} ref={(c)=>this.carColor=c}
                                className="username" style={{marginLeft:"-13px"}}/>
                         <input type="text" placeholder="车型（选填）" value={ car.brand ||""} ref={(c)=>this.carBrand=c}
@@ -197,6 +192,7 @@
                             <option value="">请选择城市</option>
                             {cityOptions}
                         </select><i className="select-arrow"/>
+
                         <select style={{marginLeft:"-12px",marginRight:"10px",width:"210px"}} ref={(c)=>this.terminal=c}>
                             <option value="">请选择航站楼</option>
                             {terminalOptions}

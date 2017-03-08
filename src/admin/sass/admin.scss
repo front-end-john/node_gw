@@ -1389,6 +1389,15 @@ $dialogHeadHeight:48px;
   @extend .dialog-important-user;
   padding: 40px 0 30px 54px;
   &>.date-select>em{font-size: 14px;}
+  &>.car-no{
+    position: relative;
+    &>input:nth-of-type(1){
+      position: absolute;
+      left: 70px;top:0;
+      width: 75px;
+
+    }
+  }
 }
 .dialog-assign-driver{
   height: 360px;

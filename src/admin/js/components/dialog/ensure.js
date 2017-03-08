@@ -144,6 +144,34 @@ export default React.createClass({
                 console.trace('错误:', e);
             });
         }
+        let orderNumber=this.props.number;
+        if(orderNumber){
+            url+="?order_id="+orderNumber;
+            console.log("取消订单url",url);
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                console.log("取消订单响应："+res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务异常");
+                }
+            }).then((str)=>{
+                //console.log(str);
+                try {
+                    let obj=JSON.parse(str);
+                    if(obj.code==0){
+                        this.showWarnTip("订单取消成功！");
+                    }else {
+                        this.showWarnTip(obj.msg);
+                    }
+                }catch(e){
+                    this.showWarnTip("数据异常");
+                }
+            }).catch((e)=>{
+                this.showWarnTip("请求异常");
+                console.trace('错误:', e);
+            });
+        }
         let option=this.props.option;
         if(option=="logout"){
             localStorage.removeItem("AdminInfo");

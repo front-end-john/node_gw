@@ -18,6 +18,7 @@ import WashService from "../dialog/wash_service";
 import OilService from "../dialog/oil_service";
 import SendMsg from "../dialog/send_message";
 import ServiceEnsure from "../dialog/more_service_ensure";
+import Ensure from "../dialog/ensure";
 import {getStateInfo,getFormatDate,optState} from '../../util'
 
 export default React.createClass({
@@ -163,9 +164,17 @@ export default React.createClass({
             console.trace('请求错误:', e);
         });
     },
-    handleSenMsg(){
+    handleSendMsg(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<SendMsg number={this.props.number}/>, mask);
+    },
+    handleCancelOrder(){
+        let mask=document.getElementById("dialogContainer");
+        let id=this.props.number;
+        let title="取消订单";
+        let content="确认取消订单（"+id+"）吗？";
+        ReactDOM.render(<Ensure title={title} content={content} url="/admin/api/orders/cancel"
+                                number={id}/>, mask);
     },
     componentDidUpdate(prevProps, prevState){
         let order=this.state.orderDetail;
@@ -200,10 +209,11 @@ export default React.createClass({
         let send=order.returningdrivername?{driverName:order.returningdrivername,
                 assignTime:order.returningassignedtime, startTime:order.returningstartedtime,
                 finishTime:order.returningfinishedtime,
-                totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney}:null;
+                totalfee:pay.totalfee,description:pay.description,money:pay.paymentmoney}:null;
         let payment=pay.totalfee?{
             takeTime:order.parkingstartedtime,sendTime:order.returningfinishedtime,
-                parkLong:"",totalfee:pay.totalfee,description:pay.description,paymentmoney:pay.paymentmoney,
+                parkLong:order.parkingtime,totalfee:pay.totalfee,type:pay.paymenttype,
+                money:pay.paymentmoney,status:pay.paymentstatus,description:pay.description,
                 payTime:pay.paymenttime
             }:null;
         let comm=order.comment;
@@ -328,7 +338,9 @@ export default React.createClass({
                     {s==-1?<label style={{paddingLeft:'20px'}}>取消者：<span>{o.canceler}</span></label>:""}
                     {s==-1?<label style={{paddingLeft:'20px'}}>取消时间：<span>{o.cancelingtime}</span></label>:""}
                     <label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
-                       onClick={this.handleSenMsg}>发送短信</label>
+                       onClick={this.handleSendMsg}>发送短信</label>
+                    <label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
+                       onClick={this.handleCancelOrder}>取消订单</label>
                 </p>
                 <div className="order-main">
                     <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >
@@ -347,7 +359,7 @@ export default React.createClass({
                             <p><label>使用次数：</label><span>{user.bookcount}</span></p>
                             <p><label>用户来源：</label><span>{user.comefrom}</span></p>
                             <p><label>注册时间：</label>
-                                <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime)}</span></p>
+                                <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime*1000)}</span></p>
                             <p><label>标&#8195;&#8195;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>{userTags.length>0?"编辑":"添加"}</span></em></p>

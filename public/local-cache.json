@@ -48,7 +48,11 @@
     "loadUrl": "/mobile/jsj/dist/order_list.js"
   },
   "admin_index_js": {
-    "update": 1488959140297,
+    "update": 1488968625353,
     "loadUrl": "/duck/dist/admin.js"
+  },
+  "admin_index_css": {
+    "update": 1488967600603,
+    "loadUrl": "/duck/css/admin.css"
   }
 }

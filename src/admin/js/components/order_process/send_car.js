@@ -25,7 +25,7 @@ export default React.createClass({
             html=(<p className={optState(7,s)?"pre-send-car":"cancel-take-car"}
                      onClick={()=>this.assignDriver()}>分配送车司机</p>);
         }else{
-            let {driverName,assignTime,startTime,finishTime,totalfee,description,paymentmoney}=this.props.data;
+            let {driverName,assignTime,startTime,finishTime,totalfee,description}=this.props.data;
             html=(<div className="take-car">
                     <section className="up-part">
                         <p><label>接车司机：</label><span>{driverName}&emsp;</span>
@@ -39,9 +39,9 @@ export default React.createClass({
                         <p><label>结束时间：</label><span>{finishTime}</span></p>
                     </section>
                     <div className="service-fee">
-                        <p><label>费用总计预估：</label><span>{totalfee}元({description})</span></p>
-                        <p><label>优惠金额：</label><span>{paymentmoney}元</span></p>
-                        <p><label>支付金额预估：</label><span>{paymentmoney}元</span></p>
+                        <p><label>预估费用：</label><span>{totalfee}元({description})</span></p>
+                       {/* <p><label>实际支付：</label><span>{paymentmoney}元</span></p>
+                        <p><label>支付金额预估：</label><span>{paymentmoney}元</span></p>*/}
                     </div>
                 </div>);
         }

@@ -13,7 +13,11 @@ export default React.createClass({
         if(status==0){
             html=(<p className="cancel-take-car">暂无支付信息</p>);
         }else {
-            let {takeTime,sendTime,parkLong,totalfee,description,paymentmoney,payTime}=this.props.data;
+            let {takeTime,sendTime,parkLong,totalfee,description,money,payTime,type,status}=this.props.data;
+            let payState;
+            if(status==10){
+                payState=<span style={{color:"#f00"}}>已支付</span>;
+            }else payState=<span style={{color:"#f00"}}>未支付</span>;
             html=(<div className="take-car">
                 <section className="up-part">
                     <p><label>接车时间：</label><span>{takeTime}</span></p>
@@ -22,9 +26,9 @@ export default React.createClass({
                 </section>
                 <section className="service-fee" style={{paddingTop:25}}>
                     <p><label>费用总计：</label><span>{totalfee}元({description})</span></p>
-                    <p><label>优惠金额：</label><span>{paymentmoney}元</span></p>
-                    <p><label>优惠金额：</label><span>{paymentmoney}元</span></p>
-                    <p><label>支付状态：</label><span style={{color:"#f00"}}>未支付</span></p>
+                    <p><label>实际支付：</label><span>{money}元</span></p>
+                    <p><label>支付方式：</label><span>{type}</span></p>
+                    <p><label>支付状态：</label>{payState}</p>
                     <p><label>支付时间：</label><span>{payTime}</span></p>
                 </section>
             </div>);
