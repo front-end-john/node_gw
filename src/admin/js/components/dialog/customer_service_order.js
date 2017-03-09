@@ -5,7 +5,7 @@
  import {addUniqueEle} from '../../util';
  export default React.createClass({
      getInitialState(){
-         return{}
+         return{submitLock:false}
      },
      componentWillMount(){
          let mask=document.getElementById("dialogContainer");
@@ -73,7 +73,10 @@
      },
      handlePhoneChange(e){
          let val=e.target.value;
-         if(/^1\d{10}$/.test(val)){
+         if(val.length>11){
+             this.phone.value=val.trim().substr(0,11);
+         }
+         if(/^1[0-9]{10}$/.test(val)){
              let url="/admin/api/users/userinfo?phoneno="+val;
              this.handleFetch(url,(obj)=>{
                  //console.log("user:",obj);
@@ -85,12 +88,11 @@
                     this.setState({cars:obj.cars},()=>{
                         let car=obj.cars[0]||{};
                         this.carNo.value=car.carno||"";
-                        this.carColor.value=car.carcolor||"";
-                        this.carBrand.value=car.carbrand||"";
+                        this.carColor.value=car.color||"";
+                        this.carBrand.value=car.brand||"";
                         this.selectCar.value=0;
                         this.setState({carId:car.carid});
                     });
-
                  },(obj)=>{
                      console.log("问题数据：",obj);
                  });
@@ -109,10 +111,13 @@
              return true;
          }else if(!val){
              this.showWarnTip(msg[0],2);
+             return false;
          }else if(reg && !reg.test(val)){
              this.showWarnTip(msg[1],2);
+             return false;
+         }else {
+             return true;
          }
-         return false;
      },
      ensure(){
         let phoneno=this.phone.value.trim();
@@ -120,7 +125,7 @@
         let realname=this.username.value.trim();
         if(!this.validValue(realname,null,["姓名不能为空！"])) return 0;
         let gender=this.gender.value;
-        let carid=this.state.carId||"";
+        let carid=this.state.carId;
         let carno=this.carNo.value.trim();
         let carNoReg=/^[\u4E00-\u9FA5][A-Z][\da-zA-Z]{5,6}$/;
         if(!this.validValue(carno,carNoReg,["车牌号不能为空！","车牌号不合法！"])) return 0;
@@ -132,36 +137,42 @@
         if(!this.validValue(bookingtime,null,["预约时间不能为空！"])) return 0;
         let url="/admin/api/orders/neworder?";
         url+=queryStr.stringify({phoneno,realname,gender,carid,carno,carbrand,carcolor,terminalid,bookingtime});
-        fetch(url,{credentials: 'include'}).then((res)=>{
-             if(+res.status < 400){
-                 return res.text();
-             }else {
-                 throw new Error("服务端异常");
-             }
-        }).then((str)=>{
-             try{
-                 let obj=JSON.parse(str);
-                 if(obj.code==0){
-                    this.props.updateList();
-                    this.cancel();
-                 }else {
-                    this.showWarnTip(obj.msg);
-                 }
-             }catch(e){
-                 console.error("json数据异常：",e);
-                 console.log("异常数据为：",str);
-             }
-        }).catch((e)=>{
-             console.trace('请求错误:', e);
-        });
+        if(!this.state.submitLock){
+            this.setState({submitLock:true});
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务端异常");
+                }
+            }).then((str)=>{
+                try{
+                    let obj=JSON.parse(str);
+                    if(obj.code==0){
+                        this.props.updateList();
+                        this.cancel();
+                    }else {
+                        this.showWarnTip(obj.msg);
+                    }
+                }catch(e){
+                    console.error("json数据异常：",e);
+                    console.log("异常数据为：",str);
+                }
+                this.setState({submitLock:false});
+            }).catch((e)=>{
+                this.setState({submitLock:false});
+                console.trace('请求错误:', e);
+            });
+        }
+
      },
      handleSelectCarNo(e){
          let index=e.target.value;
          let cars=this.state.cars||[];
          let car=cars[index]||{};
          this.carNo.value=car.carno||"";
-         this.carColor.value=car.carcolor||"";
-         this.carBrand.value=car.carbrand||"";
+         this.carColor.value=car.color||"";
+         this.carBrand.value=car.brand||"";
          this.selectCar.value=index;
          this.setState({carId:car.carid});
      },
