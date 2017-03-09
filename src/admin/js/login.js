@@ -26,7 +26,7 @@ export default React.createClass({
         let url="http://"+host+"/admin/api/login.js?";
         url+=queryStr.stringify({username,password,callback:"login_success"});
         console.log("登陆url",url);
-        fetchJsonp(url,{credentials: 'include'}).then((res)=>{
+        fetchJsonp(url,{credentials:'include'}).then((res)=>{
             console.log("登陆响应状态",res.status);
             return res.json();
         }).then((json)=>{

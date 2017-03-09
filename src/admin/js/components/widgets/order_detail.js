@@ -339,8 +339,8 @@ export default React.createClass({
                     {s==-1?<label style={{paddingLeft:'20px'}}>取消时间：<span>{o.cancelingtime}</span></label>:""}
                     <label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
                        onClick={this.handleSendMsg}>发送短信</label>
-                    <label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
-                       onClick={this.handleCancelOrder}>取消订单</label>
+                    {optState(1,s)?<label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
+                       onClick={this.handleCancelOrder}>取消订单</label>:""}
                 </p>
                 <div className="order-main">
                     <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >

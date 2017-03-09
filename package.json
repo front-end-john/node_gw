@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "webpack": "webpack --watch",
-    "test": "jest"
+    "test map": "jest map.test",
+    "test promise": "jest es6promise.test"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -45,6 +46,7 @@
     "react-date-picker": "^5.3.28",
     "react-dom": "^15.4.2",
     "react-router": "^3.0.0",
+    "regenerator-runtime": "^0.10.3",
     "sprity": "^1.0.8",
     "sprity-sass": "^1.0.4",
     "style-loader": "^0.13.1",

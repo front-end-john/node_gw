@@ -37,13 +37,15 @@
              console.trace('异常:', e);
          });
      },
-     showWarnTip(msg){
-         let mask=document.getElementById("dialogContainer");
+     showWarnTip(msg,floor=1){
+         let dialogContainer="dialogContainer";
+         if(floor==2) dialogContainer="secDialogContainer";
+         let mask=document.getElementById(dialogContainer);
          if(msg===null){
              ReactDOM.render(<i/>, mask);
              mask.style.display="none";
          }else {
-             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+             ReactDOM.render(<WarnTip dc={dialogContainer} msg={msg}/>, mask);
          }
      },
      handleFetch(url,ok,err){
@@ -80,7 +82,15 @@
                  url="/admin/api/cars/list_by_userid?userid="+obj.user.userid;
                  this.handleFetch(url,(obj)=>{
                     //console.log("cars:",obj);
-                    this.setState({cars:obj.cars,car:obj.cars[0]||{}});
+                    this.setState({cars:obj.cars},()=>{
+                        let car=obj.cars[0]||{};
+                        this.carNo.value=car.carno||"";
+                        this.carColor.value=car.carcolor||"";
+                        this.carBrand.value=car.carbrand||"";
+                        this.selectCar.value=0;
+                        this.setState({carId:car.carid});
+                    });
+
                  },(obj)=>{
                      console.log("问题数据：",obj);
                  });
@@ -94,16 +104,32 @@
          ReactDOM.render(<i/>, mask);
          mask.style.display="none";
      },
+     validValue(val,reg,msg){
+         if(val===0){
+             return true;
+         }else if(!val){
+             this.showWarnTip(msg[0],2);
+         }else if(reg && !reg.test(val)){
+             this.showWarnTip(msg[1],2);
+         }
+         return false;
+     },
      ensure(){
         let phoneno=this.phone.value.trim();
+        if(!this.validValue(phoneno,/^1[0-9]{10}$/,["手机号不能为空！","手机号不合法！"])) return 0;
         let realname=this.username.value.trim();
+        if(!this.validValue(realname,null,["姓名不能为空！"])) return 0;
         let gender=this.gender.value;
-        let carid=(this.state.car||{}).carid||"";
+        let carid=this.state.carId||"";
         let carno=this.carNo.value.trim();
+        let carNoReg=/^[\u4E00-\u9FA5][A-Z][\da-zA-Z]{5,6}$/;
+        if(!this.validValue(carno,carNoReg,["车牌号不能为空！","车牌号不合法！"])) return 0;
         let carbrand=this.carBrand.value.trim();
         let carcolor=this.carColor.value.trim();
         let terminalid=this.terminal.value;
+        if(!this.validValue(terminalid,null,["航站楼不能为空！"])) return 0;
         let bookingtime=this.bookingtime;
+        if(!this.validValue(bookingtime,null,["预约时间不能为空！"])) return 0;
         let url="/admin/api/orders/neworder?";
         url+=queryStr.stringify({phoneno,realname,gender,carid,carno,carbrand,carcolor,terminalid,bookingtime});
         fetch(url,{credentials: 'include'}).then((res)=>{
@@ -116,8 +142,8 @@
              try{
                  let obj=JSON.parse(str);
                  if(obj.code==0){
-                    this.cancel();
                     this.props.updateList();
+                    this.cancel();
                  }else {
                     this.showWarnTip(obj.msg);
                  }
@@ -129,8 +155,17 @@
              console.trace('请求错误:', e);
         });
      },
+     handleSelectCarNo(e){
+         let index=e.target.value;
+         let cars=this.state.cars||[];
+         let car=cars[index]||{};
+         this.carNo.value=car.carno||"";
+         this.carColor.value=car.carcolor||"";
+         this.carBrand.value=car.carbrand||"";
+         this.selectCar.value=index;
+         this.setState({carId:car.carid});
+     },
      render(){
-         let cities=this.state.cities||{};
          /**
           * 车牌选项
           */
@@ -139,12 +174,9 @@
              return ( <option key={index} value={index}>{item.carno}</option>);
          });
          /**
-          * 首个车牌默认选项
-          */
-         let car=this.state.car||{};
-         /**
           *城市列表
           */
+         let cities=this.state.cities||{};
          let properties=Object.getOwnPropertyNames(cities);
          /**
           *接车城市选项
@@ -168,7 +200,8 @@
                 <div className="dialog-place-order">
                     <p><em>用户手机：</em><input type="text" placeholder="请输入手机号"
                                             ref={(c)=>this.phone=c} onChange={this.handlePhoneChange}/></p>
-                    <p><em>用户姓名：</em><input type="text" placeholder="请输入姓名" className="username" ref={(c)=>this.username=c}/>
+                    <p><em>用户姓名：</em><input type="text" placeholder="请输入姓名"
+                                            className="username" ref={(c)=>this.username=c}/>
                         <select className="user-gender" ref={(c)=>this.gender=c} >
                             <option value="1" >男</option>
                             <option value="0" >女</option>
@@ -176,14 +209,14 @@
                     </p>
                     <p className="car-no">
                         <em>车牌号码：</em>
-                        <input type="text" placeholder="车牌号" value={car.carno} ref={(c)=>this.carNo=c}/>
-                        <select className="user-gender"  value={car.carno}
-                                onChange={(e)=>this.setState({car:cars[e.target.value]})}>
+                        <input type="text" placeholder="车牌号" ref={(c)=>this.carNo=c}/>
+                        <select className="user-gender"  ref={(c)=>this.selectCar=c}
+                                onChange={this.handleSelectCarNo}>
                             {carnos}
                         </select><i className="select-arrow"/>
-                        <input type="text" placeholder="颜色（选填）" value={ car.color||""} ref={(c)=>this.carColor=c}
+                        <input type="text" placeholder="颜色（选填）"  ref={(c)=>this.carColor=c}
                                className="username" style={{marginLeft:"-13px"}}/>
-                        <input type="text" placeholder="车型（选填）" value={ car.brand ||""} ref={(c)=>this.carBrand=c}
+                        <input type="text" placeholder="车型（选填）"  ref={(c)=>this.carBrand=c}
                                className="username"/>
                     </p>
                     <p><em>接车地点：</em>

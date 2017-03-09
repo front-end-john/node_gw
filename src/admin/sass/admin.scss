@@ -973,6 +973,15 @@ html,body{
   display: none;
 }
 
+#secDialogContainer{
+  position: fixed;
+  top:0;left: 0;
+  bottom: 0;right: 0;
+  z-index: 40;
+  background-color: rgba(20,20,20,0.3);
+  display: none;
+}
+
 $dialogWidth:500px;
 $dialogHeadHeight:48px;
 .dialog{

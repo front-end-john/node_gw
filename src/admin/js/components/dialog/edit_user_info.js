@@ -6,15 +6,27 @@
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
     },
-    showWarnTip(msg){
-        let mask=document.getElementById("dialogContainer");
-        if(msg===null){
-            ReactDOM.render(<i/>, mask);
-            mask.style.display="none";
-        }else{
-            ReactDOM.render(<WarnTip msg={msg}/>, mask);
-        }
-    },
+     showWarnTip(msg,floor=1){
+         let dialogContainer="dialogContainer";
+         if(floor==2) dialogContainer="secDialogContainer";
+         let mask=document.getElementById(dialogContainer);
+         if(msg===null){
+             ReactDOM.render(<i/>, mask);
+             mask.style.display="none";
+         }else {
+             ReactDOM.render(<WarnTip dc={dialogContainer} msg={msg}/>, mask);
+         }
+     },
+     validValue(val,reg,msg){
+         if(val===0){
+             return true;
+         }else if(!val){
+             this.showWarnTip(msg[0],2);
+         }else if(reg && !reg.test(val)){
+             this.showWarnTip(msg[1],2);
+         }
+         return false;
+     },
     cancel(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<i/>, mask);
