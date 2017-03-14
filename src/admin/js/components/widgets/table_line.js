@@ -260,7 +260,8 @@ export default React.createClass({
             }else if(item.fieldName=='MoreService'){
                 return(
                     <li key={index} style={{width:widths[index]}} className={item.is_end?"list-end":""}>
-                        <p>{item.wash}<br/>{item.oil}</p>
+                        <p><span style={{color:item.colors[0]}}>{item.wash}</span><br/>
+                            <span style={{color:item.colors[1]}}>{item.oil}</span></p>
                     </li>
                 );
             }else if(item.fieldName=='AdvanceTime'){

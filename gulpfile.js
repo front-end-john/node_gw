@@ -215,14 +215,11 @@ gulp.task("production-host",()=>{
  */
 
 gulp.task('sprites', function () {
-     let sprite=sprity.src({
+     return sprity.src({
             src: './__tests__/imgs/*.{png,jpg}',
-            style: './adminIcon.scss',
-            name:"adminIcon",
+            style: './admin_icon.sass',
+            name:"icon",
             processor: 'sass'
         }).pipe(gulpif('*.png', gulp.dest('./__tests__/dist/img/'), gulp.dest('./__tests__/dist/css/')));
 
-    sprite.on("error",(e)=>{
-        console.trace(e);
-    });
 });

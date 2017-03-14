@@ -107,11 +107,14 @@ export default React.createClass({
         document.getElementById("appContainer").style.width=200+sumWidth+'px';
         let list=this.state.orderData.map((item,index)=>{
             let moreService=item.serviceorders||[];
-            let type1=(moreService[0]||{}).servicetype,type2=(moreService[1]||{}).servicetype;
+            let type1=(moreService[0]||{}).servicetype;
             let wash=moreService[0]||{},oil=moreService[1]||{};
-            if(type1==10) oil=moreService[0];
-            if(type2==1) wash=moreService[1];
-
+            if(type1==10) {
+                oil=moreService[0]||{};
+                wash=moreService[1]||{};
+            }
+            let wColor=(wash.status || wash.status===0)?(wash.status==0?"#f00":"#1AA0E5"):"#323232";
+            let oColor=(oil.status || oil.status===0)?(oil.status==0?"#f00":"#1AA0E5"):"#323232";
             let washConfig=wash.config,oilConfig=oil.config;
             let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
             let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
@@ -126,7 +129,7 @@ export default React.createClass({
                 {status:item.flightstatus,post_time:item.returningtime,date:item.returningdate,
                     number:item.returningflight,fieldName:'ReturnFlightStatus'},
                 {terminal:item.terminalname,fieldName:'ReturnTerminal'},
-                {wash:washCar,oil:addOil,fieldName:'MoreService'},
+                {wash:washCar,oil:addOil,colors:[wColor,oColor],fieldName:'MoreService'},
                 {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignSendDriverOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });

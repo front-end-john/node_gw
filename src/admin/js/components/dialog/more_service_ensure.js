@@ -28,10 +28,11 @@ export default React.createClass({
                 throw new Error("服务异常");
             }
         }).then((str)=>{
-            console.log(str);
+            //console.log(str);
             try {
                 let obj=JSON.parse(str);
                 if(obj.code==0){
+                    this.props.reload();
                     this.cancel();
                 }else {
                     this.showWarnTip(obj.msg);

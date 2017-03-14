@@ -169,9 +169,10 @@ export default React.createClass({
             this.handleSwitch("pro_4");
         }
     },
-    ensureWash(type,name,tel,sid,intro){
+    ensureExtraService(type,name,tel,sid,intro){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<ServiceEnsure  type={type} data={{name,tel,sid,intro}}/>, mask);
+        ReactDOM.render(<ServiceEnsure  type={type} reload={this.loadOrderDetail}
+                                        data={{name,tel,sid,intro}}/>, mask);
     },
     handleTelEnsure(oid){
         let mask=document.getElementById("dialogContainer");
@@ -301,11 +302,14 @@ export default React.createClass({
         for(let i=0;i<user.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
         }
-        let type1=(moreService[0]||{}).servicetype,type2=(moreService[1]||{}).servicetype;
+        let type1=(moreService[0]||{}).servicetype;
         let wash=moreService[0]||{},oil=moreService[1]||{};
-        if(type1==10) oil=moreService[0];
-        if(type2==1) wash=moreService[1];
-
+        if(type1==10) {
+            oil=moreService[0]||{};
+            wash=moreService[1]||{};
+        }
+        let wColor=(wash.status || wash.status===0)?(wash.status==0?"#f00":"#1AA0E5"):"#323232";
+        let oColor=(oil.status || oil.status===0)?(oil.status==0?"#f00":"#1AA0E5"):"#323232";
         let washConfig=wash.config,oilConfig=oil.config;
         let washIntro=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
         let oilIntro=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
@@ -445,9 +449,9 @@ export default React.createClass({
                         <h2>更多服务</h2>
                         <div className="extra-service">
                             <p><label>洗车：</label>
-                                {washConfig?<span className={optState(7,s)?"enable":"disabled"}
-                                        onClick={()=>this.ensureWash("wash",user.realname,user.phoneno,wash.serviceorderid,washIntro)}>
-                                        {washIntro}</span>:<span>{washIntro}</span>}
+                                {washConfig?<span className={optState(7,s)?"enable":"disabled"} style={{color:wColor}}
+                                        onClick={()=>this.ensureExtraService("wash",user.realname,user.phoneno,wash.serviceorderid,washIntro)}>
+                                        {washIntro}</span>:<span style={{color:wColor}}>{washIntro}</span>}
                                 {washConfig?(<em className={optState(5,s)?"enable":"disabled"}><i onClick={
                                     ()=>this.editWashService("mod","/admin/api/serviceorder/edit_washing")}>编辑</i>&ensp;
                                         <i onClick={()=>this.cancelExtraService(wash.serviceorderid)}>取消</i></em>):
@@ -455,9 +459,9 @@ export default React.createClass({
                                          onClick={()=>this.editWashService("add","/admin/api/serviceorder/add_washing")}>添加</em>)}
                             </p>
                             <p><label>加油：</label>
-                                {oilConfig?<span className={optState(7,s)?"enable":"disabled"}
-                                                  onClick={()=>this.ensureWash("oil",user.realname,user.phoneno,oil.serviceorderid,oilIntro)}>
-                                        {oilIntro}</span>:<span>{oilIntro}</span>}
+                                {oilConfig?<span className={optState(7,s)?"enable":"disabled"} style={{color:oColor}}
+                                                  onClick={()=>this.ensureExtraService("oil",user.realname,user.phoneno,oil.serviceorderid,oilIntro)}>
+                                        {oilIntro}</span>:<span style={{color:oColor}}>{oilIntro}</span>}
                                 {oilConfig?(<em className={optState(4,s)?"enable":"disabled"}>
                                         <i onClick={()=>this.editOilService("mod","/admin/api/serviceorder/edit_oil")}>编辑</i>&ensp;
                                         <i onClick={()=>this.cancelExtraService(oil.serviceorderid,"oil")}>取消</i></em>):
