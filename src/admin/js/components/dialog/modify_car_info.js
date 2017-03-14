@@ -27,10 +27,13 @@
              return true;
          }else if(!val){
              this.showWarnTip(msg[0],2);
+             return false;
          }else if(reg && !reg.test(val)){
              this.showWarnTip(msg[1],2);
+             return false;
+         }else {
+             return true;
          }
-         return false;
     },
     ensure(){
         let reg=/^[\u4E00-\u9FA5][A-Z][\da-zA-Z]{5,6}$/;

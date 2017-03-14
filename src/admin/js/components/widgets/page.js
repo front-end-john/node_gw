@@ -2,10 +2,17 @@ import React from "react"
 
 export default React.createClass({
     getInitialState(){
-        return {pageIndex:0}
+        return {currIndex:1}
+    },
+    handlePage(pgIndex){
+        let {pageCount,pageSize,paging}=this.props;
+        if(pgIndex>=1 && pgIndex<=pageCount){
+            paging(pgIndex,pageSize);
+            this.setState({currIndex:pgIndex});
+        }
     },
     render(){
-        let {page,pageCount,pageSize,paging}=this.props;
+        let {page,pageCount}=this.props;
         let pages=[];
         if(pageCount<=6){
             for(let i=0;i<pageCount;i++){
@@ -21,15 +28,18 @@ export default React.createClass({
         let list=pages.map((item,index)=> {
             return (
                 <em key={index} onClick={()=>{
-                        if(item!="···") paging(item,pageSize);}}
+                        if(item!="···") this.handlePage(item);}}
                     className={page==item?"curr-page":''}>{item}</em>
             );
         });
+        let currIndex=this.state.currIndex;
         return(
             <p className="paging">
-                <em className="start-end" onClick={()=>paging(1,pageSize)}>首页</em>
+                <em className="start-end" onClick={()=>this.handlePage(1)}>首页</em>
+                <em className="start-end" onClick={()=>this.handlePage(currIndex-1)}>上一页</em>
                 {list}
-                <em className="start-end" onClick={()=>paging(pageCount,pageSize)}>尾页</em>
+                <em className="start-end" onClick={()=>this.handlePage(currIndex+1)}>下一页</em>
+                <em className="start-end" onClick={()=>this.handlePage(pageCount)}>尾页</em>
                 <label>共{pageCount}页</label>
             </p>
         );

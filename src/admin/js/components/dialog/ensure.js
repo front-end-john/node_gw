@@ -155,7 +155,6 @@ export default React.createClass({
                     throw new Error("服务异常");
                 }
             }).then((str)=>{
-                //console.log(str);
                 try {
                     let obj=JSON.parse(str);
                     if(obj.code==0){
@@ -169,6 +168,36 @@ export default React.createClass({
             }).catch((e)=>{
                 this.showWarnTip("请求异常");
                 console.trace('错误:', e);
+            });
+        }
+        let serviceId=this.props.serviceorderid;
+        if(serviceId){
+            url+="?serviceorderid="+serviceId;
+            console.log("取消洗车加油url",url);
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                console.log("取消洗车加油响应",res.status);
+                if(+res.status < 400){
+                    return res.text();
+                }else {
+                    throw new Error("服务端异常");
+                }
+            }).then((str)=>{
+                try{
+                    let obj=JSON.parse(str);
+                    if(obj.code==0){
+                        this.props.reload();
+                        this.cancel();
+                    }else {
+                        this.showWarnTip(obj.msg);
+                    }
+                }catch(e){
+                    this.showWarnTip("数据异常");
+                    console.error("json数据异常：",e);
+                    console.log("异常数据为：",str);
+                }
+            }).catch((e)=>{
+                this.showWarnTip("请求异常");
+                console.trace('请求错误:', e);
             });
         }
         let option=this.props.option;

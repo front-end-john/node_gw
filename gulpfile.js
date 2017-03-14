@@ -215,12 +215,14 @@ gulp.task("production-host",()=>{
  */
 
 gulp.task('sprites', function () {
-    return sprity.src({
+     let sprite=sprity.src({
             src: './__tests__/imgs/*.{png,jpg}',
-            style: './sprite.scss',
-            name:"icon",
-            base64: true,
-            processor: 'sass',
-        })
-        .pipe(gulpif('*.png', gulp.dest('./__tests__/dist/img/'), gulp.dest('./__tests__/dist/css/')))
+            style: './adminIcon.scss',
+            name:"adminIcon",
+            processor: 'sass'
+        }).pipe(gulpif('*.png', gulp.dest('./__tests__/dist/img/'), gulp.dest('./__tests__/dist/css/')));
+
+    sprite.on("error",(e)=>{
+        console.trace(e);
+    });
 });

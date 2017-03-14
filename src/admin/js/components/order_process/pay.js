@@ -11,7 +11,7 @@ export default React.createClass({
     render(){
         let status=this.state.status,html=null;
         if(status==0){
-            html=(<p className="cancel-take-car">暂无支付信息</p>);
+            html=(<p className="none-msg">暂无支付信息</p>);
         }else {
             let {takeTime,sendTime,parkLong,totalfee,description,money,payTime,type,status}=this.props.data;
             let payState;

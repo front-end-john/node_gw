@@ -46,7 +46,7 @@ export default React.createClass({
     render(){
         let status=this.state.status,html=null;
         if(status==0){
-            html=(<p className="cancel-take-car">暂无评论信息</p>);
+            html=(<p className="none-msg">暂无评论信息</p>);
         }else {
             let {serviceSatr,parkingStar,retruningStar,commTime,commContent,showPublic,response}=this.props.data;
             let list=[];

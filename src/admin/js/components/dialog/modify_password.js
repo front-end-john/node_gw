@@ -6,13 +6,15 @@
          let mask=document.getElementById("dialogContainer");
          mask.style.display="block";
      },
-     showWarnTip(msg){
-         let mask=document.getElementById("dialogContainer");
+     showWarnTip(msg,floor=1){
+         let dialogContainer="dialogContainer";
+         if(floor==2) dialogContainer="secDialogContainer";
+         let mask=document.getElementById(dialogContainer);
          if(msg===null){
              ReactDOM.render(<i/>, mask);
              mask.style.display="none";
          }else {
-             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+             ReactDOM.render(<WarnTip dc={dialogContainer} msg={msg}/>, mask);
          }
      },
      cancel(){
@@ -20,12 +22,20 @@
          ReactDOM.render(<i/>, mask);
          mask.style.display="none";
      },
-    ensure(){
+     ensure(){
          let old=this.old.value;
          let fresh=this.fresh.value;
          let repeat=this.repeat.value;
+         if(!old){
+             this.showWarnTip("旧密码不不能为空！",2);
+             return 0;
+         }
+         if(!fresh){
+             this.showWarnTip("新密码不不能为空！",2);
+             return 0;
+         }
          if(fresh!=repeat){
-             this.showWarnTip("两次输入的密码不匹配！");
+             this.showWarnTip("两次输入的密码不匹配！",2);
              return 0;
          }
          let url="admin/api/modifypassword?oldpassword="+old+"&newpassword="+fresh;

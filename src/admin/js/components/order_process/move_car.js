@@ -12,7 +12,7 @@ export default React.createClass({
     render(){
         let status=this.state.status,html=null;
         if(status==0){
-            html=(<p className="cancel-take-car">暂无挪车信息</p>);
+            html=(<p className="none-msg">暂无挪车信息</p>);
         }else {
             let {driverName,bufferTime,moveTime,moveRemark,pictures}=this.props.data;
             let list=(moveRemark||[]).map((item,index)=>{
@@ -22,9 +22,9 @@ export default React.createClass({
             html=(<div className="move-car">
                 <ImgScroll imgs={pictures} />
                 <section className="move-car-msg">
-                    <p><label>&emsp;&emsp;挪车司机：</label><span>{driverName}</span></p>
                     <p><label>停放开始时间：</label><span>{bufferTime}</span></p>
                     <p><label>挪车开始时间：</label><span>{moveTime}</span></p>
+                    <p><label>&emsp;&emsp;挪车司机：</label><span>{driverName}</span></p>
                     <p><label>备注：</label>{list}</p>
                 </section>
             </div>);

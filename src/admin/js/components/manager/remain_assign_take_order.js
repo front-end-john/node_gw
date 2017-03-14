@@ -14,7 +14,7 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  130,   120,  130,    120,    130,  130,     130,      130,      120],
+            initWidths:[  140,   100,  100,    100,    110,  130,     120,      120,      100],
             titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','剩余接车时间','操作']
         };
     },
@@ -51,7 +51,7 @@ export default React.createClass({
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("待分配接车订单url",url);
         this.switchLoading(true);
-        fetch(url).then((res)=>{
+        fetch(url,{credentials:'include'}).then((res)=>{
             console.log("待分配接车订单响应："+res.status);
             this.switchLoading(false);
             if(+res.status < 400){
@@ -76,9 +76,9 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=260;
+        let offsetWidth=220;
         //允许的最小宽度
-        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let minWidth=1340+offsetWidth,len=initWidths.length;
         let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
@@ -86,7 +86,7 @@ export default React.createClass({
         let incre=(actulWidth-offsetWidth-initSumWidth)/len;
         widths=initWidths.map((item)=>item+incre);
         sumWidth=widths.reduce((x,y)=>x+y);
-        this.setState({sumWidth:sumWidth+40,widths});
+        this.setState({sumWidth:sumWidth,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -119,7 +119,7 @@ export default React.createClass({
             return (<TableLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)}/>);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+20}}>
+            <section className="data-section" style={{width:sumWidth+40}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" />
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}

@@ -16,8 +16,8 @@ let OrderQuery=React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 150,    110,    120,    128,  160,   190,       90,       130,         90,     130,    100],
-            titles:    ['订单号','用户','订单来源','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','出库/送还时间','状态']
+            initWidths:[ 140,    90,    100,     80,   110,  160,   120,       80,       130,         80,     130,  ],
+            titles:    ['订单号','用户','订单来源','状态','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','出库/送还时间']
         };
     },
     showWarnTip(msg){
@@ -44,7 +44,7 @@ let OrderQuery=React.createClass({
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("全部订单查询url",url);
         this.switchLoading(true);
-        fetch(url).then((res)=>{
+        fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("全部订单查询响应："+res.status);
             this.switchLoading(false);
             if(+res.status < 400){
@@ -103,9 +103,9 @@ let OrderQuery=React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=260;
+        let offsetWidth=220;
         //允许的最小宽度
-        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let minWidth=1340+offsetWidth,len=initWidths.length;
         let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
@@ -113,7 +113,7 @@ let OrderQuery=React.createClass({
         let incre=(actulWidth-offsetWidth-initSumWidth)/len;
         widths=initWidths.map((item)=>item+incre);
         sumWidth=widths.reduce((x,y)=>x+y);
-        this.setState({sumWidth:sumWidth+40,widths});
+        this.setState({sumWidth:sumWidth,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -139,6 +139,7 @@ let OrderQuery=React.createClass({
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
+                {pay_status:states[0],color:states[1],fieldName:'PayStatus'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
                 {order_time:item.bookingtime,
@@ -147,16 +148,15 @@ let OrderQuery=React.createClass({
                 {take_car_at:item.parkingstartedtime,in_garage_at:item.parkingfinishedtime,fieldName:'TakeCarStatus'},
                 {send_driver:item.returningdrivername,fieldName:'SendDriver'},
                 {send_car_start:item.returningstartedtime,
-                    send_car_end:item.returningfinishedtime,fieldName:'SendCarStatus'}
-                ,{pay_status:states[0],color:states[1],fieldName:'PayStatus'}];
+                    send_car_end:item.returningfinishedtime,fieldName:'SendCarStatus'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+20}}>
+            <section className="data-section" style={{width:sumWidth+40}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleTextInputChange} pdl="0"
                                  name="order_source" ref={(c)=>this.comefrom=c} />
-                    <SelectInput title="订单状态：" change={this.handleTextInputChange}
+                    <SelectInput title={<span>&emsp;&emsp;订单状态：</span>} change={this.handleTextInputChange}
                                  ref={(c)=>this.status=c} name="order_status" />
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>} ref={(c)=>this.airport=c}
                                  change={this.handleTextInputChange} name="airport" />
@@ -164,7 +164,7 @@ let OrderQuery=React.createClass({
                     <TextInput title={<span>订&ensp;单&ensp;号：</span>} change={this.handleTextInputChange} pdl="0"
                                enter={()=>this.handlePageQuery(1,10)} name="order_no" holdText="请输入订单号"
                                ref={(c)=>this.orderNo=c}/>
-                    <TextInput title={<span>用户手机：</span>} change={this.handleTextInputChange}
+                    <TextInput title={<span>&emsp;&emsp;用户手机：</span>} change={this.handleTextInputChange}
                                enter={()=>this.handlePageQuery(1,10)} name="phone_no" holdText="请输入手机号"
                                ref={(c)=>this.phoneNo=c}/>
                     <TextInput title={<span>&emsp;&emsp;车牌号码：</span>} change={this.handleTextInputChange}
@@ -175,11 +175,13 @@ let OrderQuery=React.createClass({
                     <hr/>
                     <SelectInput title="筛选时间：" change={this.handleTextInputChange} pdl="0"
                                  name="time_type" defaultName="选择筛选的时间" ref={(c)=>this.timetype=c} />
-                    <DateSelect title="开始时间：" change={(date)=>this.state.queryCondition.starttime=date}
+                    <DateSelect title={<span>&emsp;&emsp;开始时间：</span>}
+                                change={(date)=>this.state.queryCondition.starttime=date}
                                 ref={(c)=>this.startTime=c} />
-                    <DateSelect title="结束时间：" change={(date)=>this.state.queryCondition.endtime=date}
+                    <DateSelect title={<span>&emsp;&emsp;结束时间：</span>}
+                                change={(date)=>this.state.queryCondition.endtime=date}
                                 ref={(c)=>this.endTime=c} />
-                    <button className="checkout" style={{marginLeft:18}} onClick={this.exportData}>导出</button>
+                    <button className="checkout" style={{marginLeft:50}} onClick={this.exportData}>导出</button>
                     <button className="reset" onClick={this.clearCondition}>清空查询条件</button>
                 </div>
                 {list.length>0?(<div className="data-list">

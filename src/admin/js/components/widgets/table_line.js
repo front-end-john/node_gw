@@ -5,6 +5,7 @@ import OrderDetail from './order_detail';
 import JSJOrderDetail from './jsj_order_detail';
 import Empty from './empty';
 import AssignDriver from "../dialog/assign_driver";
+import FlightStatus from "../dialog/show_flight_status";
 import Reply from "../dialog/customer_service_reply";
 export default React.createClass({
     getInitialState(){return {};},
@@ -33,7 +34,6 @@ export default React.createClass({
                                order_id={id} />, mask);
 
     },
-
     cancelReply(){
         this.setState({isReply:true});
     },
@@ -57,6 +57,11 @@ export default React.createClass({
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
         ReactDOM.render(<Ensure title="更多标签" ensureContent={tags.join(" ")}/>, mask);
+    },
+    showFlightStatus(date,number){
+        let mask=document.getElementById("dialogContainer");
+        mask.style.display="block";
+        ReactDOM.render(<FlightStatus  date={date} number={number}/>, mask);
     },
     expandDetail(orderNo){
         let sumWidth=this.props.widths.reduce((x,y)=>x+y);
@@ -272,7 +277,7 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='MoveDriver'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]} } className="list-end">
                         <p style={{color:item.color||"inherit"}}>{item.move_driver}</p>
                     </li>
                 );
@@ -302,45 +307,21 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='SendCarStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]} } className="list-end">
                         <p>{item.send_car_start}<br/>{item.send_car_end}</p>
                     </li>
                 );
             }else if(item.fieldName=='PayStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]} } >
                         <p  style={{color:item.color}} >{item.pay_status}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightStatus'){
-
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        <p>{item.status?<span style={{color:"red"}}>{item.status}<br/></span>:""}{item.post_time}</p>
-                    </li>
-                );
-            }else if(item.fieldName=='ReturnFlightLandStatus'){
-                let html=null;
-                if(item.start_time){
-                    html=( <p><span style={{color:"#1A9FE5"}}>{item.status}</span><br/>{item.start_time}</p>);
-                }else {
-                    html=( <p style={{color:"#1A9FE5"}}>{item.status}</p>);
-                }
-                return(
-                    <li key={index} style={{width:widths[index]} }>
-                        {html}
-                    </li>
-                );
-            }else if(item.fieldName=='ReturnFlightLaunchStatus'){
-                let html=null;
-                if(item.start_time){
-                    html=( <p><span style={{color:"red"}}>{item.status}</span><br/>{item.start_time}</p>);
-                }else {
-                    html=( <p style={{color:"red"}}>{item.status}</p>);
-                }
-                return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
-                        {html}
+                        <p onClick={()=>this.showFlightStatus(item.date,item.number)} style={{cursor:"pointer"}}>
+                            {item.status?<span style={{color:"red"}}>{item.status}<br/></span>:""}{item.post_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='StartTakeTime'){
@@ -357,7 +338,7 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='StartMoveTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]} } >
                         <p>{item.start_move_time}</p>
                     </li>
                 );

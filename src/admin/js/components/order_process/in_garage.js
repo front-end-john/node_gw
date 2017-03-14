@@ -1,6 +1,6 @@
 import React from 'react';
 import ImgScroll from '../widgets/img_scroll';
-let InGarage=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{ status:0};
     },
@@ -12,7 +12,7 @@ let InGarage=React.createClass({
     render(){
         let status=this.state.status,html=null;
         if(status==0){
-            html=(<p className="cancel-take-car">暂无车辆信息</p>);
+            html=(<p className="none-msg">暂无车辆信息</p>);
         }else {
             let {parkingspot,keyspot,mileage,inTime,pictures}=this.props.data;
             html=(<div className="move-car">
@@ -29,4 +29,3 @@ let InGarage=React.createClass({
     }
 });
 
-export default InGarage;

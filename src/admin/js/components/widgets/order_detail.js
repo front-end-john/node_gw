@@ -23,7 +23,7 @@ import {getStateInfo,getFormatDate,optState} from '../../util'
 
 export default React.createClass({
     getInitialState(){
-        return{p_item:'p1',first:true, blocks:[],orderDetail:{}};
+        return{first:true, blocks:[],orderDetail:{}};
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -37,7 +37,7 @@ export default React.createClass({
     loadOrderDetail(){
         let url="/admin/api/orders/orderdetails?serialnumber="+this.props.number;
         console.log("订单详情url",url);
-        fetch(url).then((res)=>{
+        fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("订单详情响应："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -46,6 +46,7 @@ export default React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
+            //console.dir(obj.order);
             if(obj.code==0){
                 this.setState({orderDetail:obj.order});
             }else {
@@ -138,31 +139,13 @@ export default React.createClass({
                                       number={this.props.number}
                                       reload={this.loadOrderDetail}  />, mask);
     },
-    cancelExtraService(id){
-        let url="/admin/api/serviceorder/cancel?serviceorderid="+id;
-        fetch(url,{credentials: 'include'}).then((res)=>{
-            if(+res.status < 400){
-                return res.text();
-            }else {
-                throw new Error("服务端异常");
-            }
-        }).then((str)=>{
-            try{
-                let obj=JSON.parse(str);
-                if(obj.code==0){
-                    this.loadOrderDetail();
-                }else {
-                    this.showWarnTip(obj.msg);
-                }
-            }catch(e){
-                this.showWarnTip("数据异常");
-                console.error("json数据异常：",e);
-                console.log("异常数据为：",str);
-            }
-        }).catch((e)=>{
-            this.showWarnTip("请求错误");
-            console.trace('请求错误:', e);
-        });
+    cancelExtraService(id,type="wash"){
+        let title="取消洗车/加油服务",content="确认取消洗车服务吗？";
+        if(type=="oil") content="确认取消加油服务吗？";
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<Ensure title={title} content={content}
+                                serviceorderid={id} reload={this.loadOrderDetail}
+                                url="/admin/api/serviceorder/cancel" />,mask);
     },
     handleSendMsg(){
         let mask=document.getElementById("dialogContainer");
@@ -189,6 +172,14 @@ export default React.createClass({
     ensureWash(type,name,tel,sid,intro){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<ServiceEnsure  type={type} data={{name,tel,sid,intro}}/>, mask);
+    },
+    handleTelEnsure(oid){
+        let mask=document.getElementById("dialogContainer");
+        mask.style.display="block";
+        ReactDOM.render(<Ensure title="电话确认" serialnumber={oid}
+                                url="/admin/api/orders/confirmed"
+                                reload={this.props.updateList}
+                                content="亲！是否已电话和客户确认过订单信息？"/>, mask);
     },
     handleSwitch(item){
         let order=this.state.orderDetail||{},s=order.status;
@@ -247,7 +238,18 @@ export default React.createClass({
     },
     componentDidMount(){
         setTimeout(()=>{
-            this.handleSwitch("pro_1");
+            let order=this.state.orderDetail||{},s=order.status;
+            if(s<=10){
+                this.handleSwitch("pro_1");
+            }else if(s>10 && s<15){
+                this.handleSwitch("pro_2");
+            }else if(s>=15 && s<=16){
+                this.handleSwitch("pro_3");
+            }else if(s>16 && s<35){
+                this.handleSwitch("pro_4");
+            }else if(s>=35){
+                this.handleSwitch("pro_5");
+            }
         },500);
         this.adjustWidth();
         window.addEventListener("resize",this.adjustWidth,false);
@@ -256,22 +258,30 @@ export default React.createClass({
         window.removeEventListener("resize",this.adjustWidth);
     },
     adjustWidth(){
-        let sumWidth=document.body.clientWidth-260;
+        let sumWidth=document.body.clientWidth-210;
         let bs=this.state.blocks;
-
         if(this.state.first){
             sumWidth=this.props.width;
             this.setState({first:false});
         }
-        let helArr=[],ws=[300,300,300,494];
-        let edgeValue=1400;
+        let helArr=[],ws=[280,280,280,490];
+        let edgeValue=1340;
         if(sumWidth>edgeValue){
             let incre=(sumWidth-edgeValue)/4;
             for(let i=0;i<4;i++) {
                 ws[i]+=incre;
                 let block=bs[i];
                 block.style.width=ws[i]+'px';
-                if (i == 0) this.userTag.style.width= ws[i]-101+'px';
+                if (i == 0){
+                    this.userTag.style.width= ws[i]-101+'px';
+                    this.uRemark.style.width= ws[i]-101+'px';
+                }else if(i==1){
+                    this.comeRemark.style.width= ws[i]-101+'px';
+                }else if(i==2){
+                    this.suRemark.style.width= ws[i]-101+'px';
+                    this.swRemark.style.width= ws[i]-101+'px';
+                    this.soRemark.style.width= ws[i]-101+'px';
+                }
                 helArr[i] = parseFloat(getComputedStyle(block).height);
             }
         }
@@ -287,7 +297,7 @@ export default React.createClass({
         let moreService=o.serviceorders||[];
         let driverNote=o.drivernote||[];
 
-        let level=[],driverRemark;
+        let level=[];
         for(let i=0;i<user.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
         }
@@ -299,12 +309,36 @@ export default React.createClass({
         let washConfig=wash.config,oilConfig=oil.config;
         let washIntro=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
         let oilIntro=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
+        /**
+         * 客服 洗车备注
+         */
+        let washRemark=(wash.serviceremark||[]).map((item,index)=>{
+            return (<i key={index}>{item.time}&ensp;{item.admin_name}&ensp;{item.remark}<br/></i>)
+        });
+        /**
+         * 客服 加油备注
+         */
+        let oilRemark=(oil.serviceremark||[]).map((item,index)=>{
+            return (<i key={index}>{item.time}&ensp;{item.admin_name}&ensp;{item.remark}<br/></i>)
+        });
+        /**
+         * 客服 订单备注
+         */
         let serviceRemark=(o.remark||[]).map((item,index)=>{
             return (<p key={index}>{item.time}&emsp;{item.admin_name}&emsp;{item.remark}</p>);
         });
-        driverRemark=driverNote.map((item,index)=>{
+        /**
+         *司机备注
+         */
+        let driverRemark=driverNote.map((item,index)=>{
             return (<p key={index}>{item.time}&ensp;
                 <span style={{color:'#DB8800'}}>{item.driver_name}:&ensp;</span>{item.remark}</p>);
+        });
+        /**
+         *渠道备注
+         */
+        let comeRemark=(o.distributornote||[]).map((item,index)=>{
+            return (<i key={index}>{item.time}&ensp;{item.name}&ensp;{item.remark}<br/></i>);
         });
         this.tags=user.tags||[];
         this.serialnumber=o.serialnumber;
@@ -327,6 +361,7 @@ export default React.createClass({
         }else if(flightState=="备降"){
             status_img="order_flight_alternate.png";
         }
+        let pItem=this.state.p_item;
         return(
             <section className="detail-section">
                 <p className="order-brief">
@@ -334,13 +369,16 @@ export default React.createClass({
                     <label style={{paddingLeft:'20px'}}>下单时间：</label><span>{o.createtime}</span>
                     <label style={{paddingLeft:'20px'}}>来源：</label><span>{o.comefrom}</span>
                     <label style={{paddingLeft:'20px'}}>状态：</label>
-                    <span style={{color:states[1]}}>{states[0]}</span>
+                    <span style={{color:"#f00"}}>{states[0]}</span>
                     {s==-1?<label style={{paddingLeft:'20px'}}>取消者：<span>{o.canceler}</span></label>:""}
                     {s==-1?<label style={{paddingLeft:'20px'}}>取消时间：<span>{o.cancelingtime}</span></label>:""}
-                    <label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
+
+                    <label style={{paddingLeft:'80px',color:"#1AA0E5",cursor:"pointer"}}
                        onClick={this.handleSendMsg}>发送短信</label>
                     {optState(1,s)?<label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
                        onClick={this.handleCancelOrder}>取消订单</label>:""}
+                    {s==0?<label style={{paddingLeft:'20px',color:"#DB8800",cursor:"pointer"}}
+                       onClick={()=>this.handleTelEnsure(o.serialnumber)}>电话确认</label>:""}
                 </p>
                 <div className="order-main">
                     <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >
@@ -364,7 +402,7 @@ export default React.createClass({
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(user.userid)}>{userTags.length>0?"编辑":"添加"}</span></em></p>
                             <p className="note-field"><label>备&#8195;&#8195;注：</label>
-                                <span>{user.remark}</span></p>
+                                <span ref={(c)=>this.uRemark=c}>{user.remark}</span></p>
                         </div>
                     </div>
                     <div className="order-info" ref={(c)=>this.state.blocks[1]=c}>
@@ -400,7 +438,7 @@ export default React.createClass({
                                            onClick={()=>this.editPredictGetCarTime("add",'')}>添加</span>)}</p>
                             <p><label>回程航站楼：</label><span>{o.returningterminalname}</span></p>
                             <p className="note-field"><label>渠道备注：</label>
-                                <span>{""}</span></p>
+                                <span ref={(c)=>this.comeRemark=c}>{comeRemark}</span></p>
                         </div>
                     </div>
                     <div className="service-info" ref={(c)=>this.state.blocks[2]=c}>
@@ -422,33 +460,40 @@ export default React.createClass({
                                         {oilIntro}</span>:<span>{oilIntro}</span>}
                                 {oilConfig?(<em className={optState(4,s)?"enable":"disabled"}>
                                         <i onClick={()=>this.editOilService("mod","/admin/api/serviceorder/edit_oil")}>编辑</i>&ensp;
-                                        <i onClick={()=>this.cancelExtraService(oil.serviceorderid)}>取消</i></em>):
+                                        <i onClick={()=>this.cancelExtraService(oil.serviceorderid,"oil")}>取消</i></em>):
                                     (<em className={optState(4,s)?"enable":"disabled"}
                                          onClick={()=>this.editOilService("add","/admin/api/serviceorder/add_oil")}>添加</em>)}
                             </p>
                         </div>
-                        <p className="note-field"><label>用户备注：</label><span>{o.userremark}</span></p>
+                        <p className="note-field"><label>用户备注：</label>
+                            <span ref={(c)=>this.suRemark=c}>{o.userremark}</span></p>
+                        <p className="note-field"><label>洗车备注：</label>
+                            <span ref={(c)=>this.swRemark=c}>{washRemark}</span></p>
+                        <p className="note-field"><label>加油备注：</label>
+                            <span ref={(c)=>this.soRemark=c}>{oilRemark}</span></p>
                     </div>
                     <div className="process-info" ref={(c)=>this.state.blocks[3]=c} >
                         <ul>
-                            <li className={this.state.p_item=='p1'?"show-item":''}
+                            <li className={pItem=='p1'?"show-item":''}
                                 onClick={()=>this.handleSwitch("pro_1")}>接车</li>
-                            <li className={this.state.p_item=='p2'?"show-item":''}
+                            <li className={pItem=='p2'?"show-item":''}
                                 onClick={()=>this.handleSwitch("pro_2")}>挪车</li>
-                            <li className={this.state.p_item=='p3'?"show-item":''}
+                            <li className={pItem=='p3'?"show-item":''}
                                 onClick={()=>this.handleSwitch("pro_3")}>在库</li>
-                            <li className={this.state.p_item=='p4'?"show-item":''}
+                            <li className={pItem=='p4'?"show-item":''}
                                 onClick={()=>this.handleSwitch("pro_4")}>送车</li>
-                            <li className={this.state.p_item=='p5'?"show-item":''}
+                            <li className={pItem=='p5'?"show-item":''}
                                 onClick={()=>this.handleSwitch("pro_5")}>支付</li>
-                            <li className={this.state.p_item=='p6'?"show-item":''}
+                            <li className={pItem=='p6'?"show-item":''}
                                 onClick={()=>this.handleSwitch("pro_6")}>评价</li>
                         </ul>
                         <div ref={(c)=>this.process=c} className="process-area" />
                     </div>
+                </div>
+                <div className="notes">
                     <div className="service-note">
                         <p><label>客服备注：</label><img src="/duck/img/icon/13_1.png" onClick={this.addRemark}
-                                     style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
+                                                    style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {serviceRemark}
                     </div>
                     <div className="driver-note">

@@ -28,7 +28,7 @@ export default React.createClass({
             let {driverName,assignTime,startTime,finishTime,totalfee,description}=this.props.data;
             html=(<div className="take-car">
                     <section className="up-part">
-                        <p><label>接车司机：</label><span>{driverName}&emsp;</span>
+                        <p><label>送车司机：</label><span>{driverName}&emsp;</span>
                             <em style={optState(7,s)?{color:"#1A9FE5"}:{color:"#323232",pointerEvents:"none"}}
                                 onClick={()=>this.assignDriver()}>重新分配</em></p>
                         <p><label>分配时间：</label><span>{assignTime}</span></p>
@@ -40,12 +40,9 @@ export default React.createClass({
                     </section>
                     <div className="service-fee">
                         <p><label>预估费用：</label><span>{totalfee}元({description})</span></p>
-                       {/* <p><label>实际支付：</label><span>{paymentmoney}元</span></p>
-                        <p><label>支付金额预估：</label><span>{paymentmoney}元</span></p>*/}
                     </div>
                 </div>);
         }
-
         return html;
     }
 });

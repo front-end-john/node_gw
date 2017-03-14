@@ -41,6 +41,7 @@
     "iconv": "^2.2.1",
     "iconv-lite": "^0.4.15",
     "jest": "^18.1.0",
+    "lwip": "0.0.9",
     "merge-stream": "^1.0.1",
     "react": "^15.4.2",
     "react-date-picker": "^5.3.28",

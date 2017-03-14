@@ -13,8 +13,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 150,    100,  110,    110,   110,  110,   120,      110,      120,       130,        130,    120],
-            titles:    ['订单号','用户','标签','订单来源','车辆','机场','返程航班','航班状态','回程航站楼','预约取车时间','更多服务','操作']
+            initWidths:[ 140,    100,  110,    110,   110,  110,   120,      120,      120,      120,    120],
+            titles:    ['订单号','用户','标签','订单来源','车辆','机场','返程航班','航班状态','回程航站楼','更多服务','操作']
         };
     },
     showWarnTip(msg){
@@ -50,7 +50,7 @@ export default React.createClass({
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("待分配送车订单url",url);
         this.switchLoading(true);
-        fetch(url).then((res)=>{
+        fetch(url,{credentials:'include'}).then((res)=>{
             console.log("待分配送车订单响应："+res.status);
             this.switchLoading(false);
             if(+res.status < 400){
@@ -75,9 +75,9 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=260;
+        let offsetWidth=220;
         //允许的最小宽度
-        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let minWidth=1340+offsetWidth,len=initWidths.length;
         let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
@@ -85,7 +85,7 @@ export default React.createClass({
         let incre=(actulWidth-offsetWidth-initSumWidth)/len;
         widths=initWidths.map((item)=>item+incre);
         sumWidth=widths.reduce((x,y)=>x+y);
-        this.setState({sumWidth:sumWidth+40,widths});
+        this.setState({sumWidth:sumWidth,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -123,16 +123,15 @@ export default React.createClass({
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
                 {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
-                {status:item.flightstatus,post_time:item.posttime,fieldName:'ReturnFlightLandStatus'},
+                {status:item.flightstatus,post_time:item.returningtime,date:item.returningdate,
+                    number:item.returningflight,fieldName:'ReturnFlightStatus'},
                 {terminal:item.terminalname,fieldName:'ReturnTerminal'},
-                {order_fetch_time:item.bookingtime,fieldName:'OrderFetchTime'},
                 {wash:washCar,oil:addOil,fieldName:'MoreService'},
                 {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignSendDriverOperation'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
-
         return(
-            <section className="data-section" style={{width:sumWidth+20}}>
+            <section className="data-section" style={{width:sumWidth+40}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}

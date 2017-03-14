@@ -64,7 +64,7 @@ export default React.createClass({
     },
     render(){
         let list=this.state.rushOrder.map((item,index)=>{
-            let clr=item.indexOf("送车")==-1?'#DB8800':'#35BAFF';
+            let clr=item.indexOf("送车")==-1?'#f00':'#281AE5';
             return (<span key={index} style={{color:clr}}>{item}&emsp;&emsp;</span>);
         });
         return(

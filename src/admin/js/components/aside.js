@@ -5,7 +5,7 @@ import Ensure from './dialog/ensure';
 import {maxNumber} from '../util';
 import PrimaryItem from './widgets/nav_item';
 
-let Aside = React.createClass({
+export default React.createClass({
     getInitialState(){
         return {
             currItem:"order_query",
@@ -13,21 +13,45 @@ let Aside = React.createClass({
             jsjCount:{}
         };
     },
-    componentWillMount(){
+    freshOrderCount(){
         let url="/jsj/system/runningordernumber";
-        fetch(url).then(function(res){
-            console.log("查询订单列表响应状态："+res.status);
+        console.log("jsj各订单数量url："+url);
+        fetch(url,{credentials:'include'}).then(function(res){
+            console.log("jsj各订单数量响应："+res.status);
             if(+res.status < 400){
-                return res.text();
+                return res.json();
             }else{
                 throw new Error("服务异常");
             }
-        }).then((str)=>{
-            let obj=JSON.parse(str);
+        }).then((obj)=>{
             this.setState({jsjCount:obj.record||{}});
         }).catch(function(e){
             console.trace('错误:', e);
         });
+        url="/admin/api/orders/ordersummary";
+        console.log("admin各订单数量url："+url);
+        fetch(url,{credentials:'include'}).then(function(res){
+            console.log("admin各订单数量响应："+res.status);
+            if(+res.status < 400){
+                return res.json();
+            }else{
+                throw new Error("服务异常");
+            }
+        }).then((obj)=>{
+            if(obj.code==0){
+                this.setState({adminCount:obj.result});
+            }else {
+                console.warn(obj.msg);
+            }
+        }).catch(function(e){
+            console.trace('错误:', e);
+        });
+    },
+    componentWillMount(){
+        this.freshOrderCount();
+        setInterval(()=>{
+            this.freshOrderCount();
+        },10000);
     },
     handlePasswordModify(){
         let mask=document.getElementById("dialogContainer");
@@ -127,14 +151,22 @@ let Aside = React.createClass({
             }
         }
     },
+    handleLeaveHide(){
+        this.opt.className=""
+    },
     render(){
-        let jsjCount=this.state.jsjCount;
-        let orderManager=[{name:'待联系订单',newCount:15}, {name:'待分配接车单',newCount:15},
-            {name:'进行中的接车订单',newCount:115},{name:'机场临时停放',newCount:15},
-            {name:'在库车辆',newCount:15},{name:'待分配送车单',newCount:15},
-            {name:'进行中的送车单',newCount:115}];
-        let jsjOrder=[{name:'接机订单',newCount:jsjCount.pickupnumber||0},
-            {name:'送机订单',newCount:jsjCount.pickoffnumber||0}];
+        let jsj=this.state.jsjCount;
+        let admin=this.state.adminCount||{};
+        let orderManager=[
+            {name:'待联系订单',newCount:admin.booking||0},
+            {name:'待分配接车单',newCount:admin.parkingassigning||0},
+            {name:'进行的接车单',newCount:admin.parkinggoing||0},
+            {name:'机场临时停放',newCount:admin.parkingbuffer||0},
+            {name:'在库车辆',newCount:admin.parkingparked||0},
+            {name:'待分配送车单',newCount:admin.returningassigning||0},
+            {name:'进行的送车单',newCount:admin.returninggoing||0}];
+        let jsjOrder=[{name:'接机订单',newCount:jsj.pickupnumber||0},
+            {name:'送机订单',newCount:jsj.pickoffnumber||0}];
         return(
             <aside ref={(c)=>this.nav=c}>
                 <div id="manager">
@@ -142,11 +174,11 @@ let Aside = React.createClass({
                     <div>
                         <p>客服人员</p>
                         <section onClick={()=>{
-                            let dom=this.refs.sysOpt,h=dom.style.height;
-                            h=='80px'?dom.style.height=0:dom.style.height='80px';
+                            let cn=this.opt.className;
+                            cn=='expand'?this.opt.className="":this.opt.className="expand";
                         }}>
                             系统管理员<img className="arrow" src="/duck/img/icon/07.png"/>
-                            <ul ref='sysOpt'>
+                            <ul ref={(c)=>this.opt=c} onMouseLeave={this.handleLeaveHide}>
                                 <li onClick={this.handlePasswordModify}>修改密码</li>
                                 <li onClick={this.handleLogout}>退出系统</li>
                             </ul>
@@ -177,5 +209,3 @@ let Aside = React.createClass({
         );
     }
 });
-
-export default Aside;

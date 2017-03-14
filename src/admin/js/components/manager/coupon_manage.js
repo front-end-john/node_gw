@@ -14,7 +14,7 @@ export default React.createClass({
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[ 150, 120,   100,  100,   120,    130,     130,      120,   120],
+            initWidths:[ 140, 110,   100,  100,   120,    130,     130,      120,   110],
             titles:    ['ID','手机号','类型','状态','金额','领取时间','截止时间','活动来源','操作']
         };
     },
@@ -81,9 +81,9 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=260;
+        let offsetWidth=220;
         //允许的最小宽度
-        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let minWidth=1340+offsetWidth,len=initWidths.length;
         let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
@@ -91,7 +91,7 @@ export default React.createClass({
         let incre=(actulWidth-offsetWidth-initSumWidth)/len;
         widths=initWidths.map((item)=>item+incre);
         sumWidth=widths.reduce((x,y)=>x+y);
-        this.setState({sumWidth:sumWidth+40,widths});
+        this.setState({sumWidth:sumWidth,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -130,7 +130,7 @@ export default React.createClass({
         });
 
         return(
-            <section className="data-section"  style={{width:sumWidth+20}}>
+            <section className="data-section"  style={{width:sumWidth+40}}>
                 <div className="query-condition">
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no"
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入手机号"/>

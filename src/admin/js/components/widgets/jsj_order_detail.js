@@ -8,7 +8,7 @@ import {getFormatDate} from '../../util';
 
 export default React.createClass({
     getInitialState(){
-        return{p_item:'p1',first:true};
+        return{p_item:'p1',blocks:[],first:true};
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -29,7 +29,7 @@ export default React.createClass({
     },
     loadOrderDetail(){
         let url="/jsj/system/orderdetail?serialnumber="+this.props.number;
-        fetch(url).then(function(res){
+        fetch(url,{credentials: 'include'}).then(function(res){
             console.log("查询订单详情响应状态："+res.status);
             if(+res.status < 400){
                 return res.text();
@@ -64,29 +64,28 @@ export default React.createClass({
                                    url="/jsj/system/addremark" number={this.props.number}/>, mask);
     },
     adjustWidth(){
-        let sumWidth=document.body.clientWidth-260;
-        //console.log("sumWidth",sumWidth);
+        let sumWidth=document.body.clientWidth-210;
         if(this.state.first){
             sumWidth=this.props.width;
             this.setState({first:false});
         }
+        let bs=this.state.blocks;
         let helArr=[];
-        let edgeValue=1400;
+        let edgeValue=1340;
         if(sumWidth>edgeValue){
             let incre=(sumWidth-edgeValue)/4;
             for(let i=1;i<5;i++){
-                let dom=this["block"+i];
-                let width=300+incre;
+                let dom=bs[i-1];
+                let width=280+incre;
                 if (i == 1) this.userTag.style.width=width-101+'px';
-                if(i==4) width=494+incre;
+                if(i==4) width=490+incre;
                 dom.style.width=width+"px";
                 helArr[i-1] = parseFloat(getComputedStyle(dom).height);
             }
         }
         let maxHel=helArr.sort()[3];
         for(let i=1;i<5;i++) {
-            let dom = this["block" + i];
-            dom.style.height = maxHel + "px";
+            bs[i-1].style.height = maxHel + "px";
         }
     },
     render(){
@@ -122,10 +121,10 @@ export default React.createClass({
                     <span>{getFormatDate("yyyy-mm-dd hh:ii",o.canceltime)}</span>
                 </p>
                 <div className="order-main">
-                    <div className="user-info" ref={(c)=>this.block1=c}>
+                    <div className="user-info" ref={(c)=>this.state.blocks[0]=c}>
                         <h2>用户信息</h2>
                         <figure className="user-basic">
-                            <img src={user.avater||"/admin/img/userheadimg.png"}/>
+                            <img src={user.avater||"/duck/img/userheadimg.png"}/>
                             <figcaption>
                                 <p>姓名：<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                              onClick={()=>this.editUserInfo()}>
@@ -146,7 +145,7 @@ export default React.createClass({
                                 <span>{user.remark||""}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" ref={(c)=>this.block2=c}>
+                    <div className="order-info" ref={(c)=>this.state.blocks[1]=c}>
                         <h2>{this.props.type=="1"?"接机信息":"送机信息"}</h2>
                         <div className="up-section">
                             <p><label>{this.props.type=="1"?"接机司机":"送机司机"}：</label>
@@ -164,7 +163,7 @@ export default React.createClass({
                             <p><label>服务完成时间：</label><span>{getFormatDate("yyyy-mm-dd hh:ii",o.finishtime)}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" ref={(c)=>this.block3=c}>
+                    <div className="order-info" ref={(c)=>this.state.blocks[2]=c}>
                         <h2>支付&评价</h2>
                         <div className="up-section">
                             <p><label>支付金额：</label>
@@ -181,7 +180,7 @@ export default React.createClass({
                             <p><label>评价内容：</label><span>{cmt.content||""}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" style={{width:494}} ref={(c)=>this.block4=c}>
+                    <div className="order-info" style={{width:490}} ref={(c)=>this.state.blocks[3]=c}>
                         <h2>发票信息</h2>
                         <div className="up-section">
                             <p><label>开票金额：</label>
@@ -198,8 +197,10 @@ export default React.createClass({
                             <p><label>收件地址：</label><span>{rece.address||""}</span></p>
                         </div>
                     </div>
-                    <div className="service-note" style={{width:"100%",borderRightWidth:0}}>
-                        <p>客服备注：<img src="/admin/img/icon/13_1.png" onClick={this.addRemark}
+                </div>
+                <div className="notes">
+                    <div className="service-note" style={{width:"100%"}}>
+                        <p>客服备注：<img src="/duck/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {serviceRemark}
                     </div>

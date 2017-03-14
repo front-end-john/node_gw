@@ -15,7 +15,7 @@ let JSJOrder=React.createClass({
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[  140,   120,  110,  130,  120,    120,     130,      130,        120,     100],
+            initWidths:[  140,   100,  110,   130,     100,    100,     130,    130,   120,     100],
             titles:    ['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态']
         };
     },
@@ -66,9 +66,9 @@ let JSJOrder=React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=260;
+        let offsetWidth=220;
         //允许的最小宽度
-        let minWidth=1400+offsetWidth,len=initWidths.length;
+        let minWidth=1340+offsetWidth,len=initWidths.length;
         let screenWidth=document.body.clientWidth;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
@@ -76,7 +76,7 @@ let JSJOrder=React.createClass({
         let incre=(actulWidth-offsetWidth-initSumWidth)/len;
         widths=initWidths.map((item)=>item+incre);
         sumWidth=widths.reduce((x,y)=>x+y);
-        this.setState({sumWidth:sumWidth+40,widths});
+        this.setState({sumWidth:sumWidth,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -96,7 +96,7 @@ let JSJOrder=React.createClass({
         url+="&"+queryStr.stringify(this.state.queryCondition);
         console.log("jsj订单列表url",url);
         this.switchLoading(true);
-        fetch(url).then((res)=>{
+        fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("jsj订单列表响应："+res.status);
             this.switchLoading(false);
             if(+res.status < 400){
@@ -145,9 +145,8 @@ let JSJOrder=React.createClass({
             return (<TableLine key={index} widths={widths} data={data} section="jsj"
                                type={type}  />);
         });
-
         return(
-            <section className="data-section" style={{width:sumWidth+20}}>
+            <section className="data-section" style={{width:sumWidth+40}}>
                 <div className="query-condition">
                     <TextInput title="用户姓名：" ref={(c)=>this.name=c} change={this.handleChange} pdl="0" name="user_name"
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入用户姓名" />

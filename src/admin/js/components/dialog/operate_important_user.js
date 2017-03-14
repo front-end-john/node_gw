@@ -21,7 +21,6 @@
          mask.style.display="none";
      },
      ensure(){
-
          let stars=this.star.value;
          let phoneno=this.phone.value.trim();
          let remark=this.remark.value.trim();

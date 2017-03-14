@@ -6,7 +6,7 @@ import Ensure from "../dialog/ensure";
 export default React.createClass({
     handleCancelStar(uid,name,phone){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<Ensure title="取消用户星级"  content={"确定要取消“"+name+"（"+phone+"）”的星际吗？"}
+        ReactDOM.render(<Ensure title="取消用户星级"  content={"确定要取消“"+name+"（"+phone+"）”的星级吗？"}
                                 url="/admin/api/users/clear_stars" user_id={uid}
                             reload={this.props.updateList} />, mask);
     },

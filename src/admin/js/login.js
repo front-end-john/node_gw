@@ -57,7 +57,7 @@ export default React.createClass({
                         <input ref={(c)=>this.acountIn=c } type="text" placeholder="请输入您的账号" />
                         <input ref={(c)=>this.passwdIn=c } type="password" placeholder="请输入密码" />
                         <p ref={(c)=>this.loginTip=c } className="warning hide-warning">账号或密码错误</p>
-                        <button onClick={this.handleLogin}>登陆</button>
+                        <button onClick={this.handleLogin}>登录</button>
                     </form>
                 </div>
                 <div className="copy-right">Copyright © 2016 深圳市天行家科技有限公司 粤ICP备15105149号</div>
