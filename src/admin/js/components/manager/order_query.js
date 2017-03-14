@@ -136,20 +136,21 @@ let OrderQuery=React.createClass({
         document.getElementById("appContainer").style.width=sumWidth+200+"px";
         let list=this.state.orderData.map((item,index)=>{
             let states=getStateInfo(item.status);
+            let cancelBg=item.status==-1?"#dcdcdc":"#fff";
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {pay_status:states[0],color:states[1],fieldName:'PayStatus'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
-                {order_time:item.bookingtime,
-                    back_time:(item.returningflight||"")+" "+(item.returningdate||""),fieldName:'AdvanceTime'},
+                {order_time:item.bookingtime,fieldName:'AdvanceTime',
+                    back_time:(item.returningflight||"")+" "+(item.returningdate||"")},
                 {take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
                 {take_car_at:item.parkingstartedtime,in_garage_at:item.parkingfinishedtime,fieldName:'TakeCarStatus'},
                 {send_driver:item.returningdrivername,fieldName:'SendDriver'},
                 {send_car_start:item.returningstartedtime,
                     send_car_end:item.returningfinishedtime,fieldName:'SendCarStatus'}];
-            return (<TableLine key={index} widths={widths} data={data} />);
+            return (<TableLine background={cancelBg} key={index} widths={widths} data={data} />);
         });
         return(
             <section className="data-section" style={{width:sumWidth+40}}>

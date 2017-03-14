@@ -384,7 +384,7 @@ export default React.createClass({
             }
         });
         return(
-            <ul className="table-line">
+            <ul className="table-line" style={{backgroundColor:this.props.background||"#fff"}}>
                 {list}
                 <li ref={(c)=>this.detailArea=c} style={{overflow: "hidden"}}/>
             </ul>
