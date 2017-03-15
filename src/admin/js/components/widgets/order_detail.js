@@ -206,7 +206,8 @@ export default React.createClass({
             takeTime:order.parkingstartedtime,sendTime:order.returningfinishedtime,
                 parkLong:order.parkingtime,totalfee:pay.totalfee,type:pay.paymenttype,
                 money:pay.paymentmoney,status:pay.paymentstatus,description:pay.description,
-                payTime:pay.paymenttime
+                payTime:pay.paymenttime,timeout:pay.parkingtimeouttime,comefrom:order.comefrom,
+                offlinemoney:pay.offlinemoney,timeouttotalfee:pay.timeouttotalfee
             }:null;
         let comm=order.comment;
         let comment=comm?{

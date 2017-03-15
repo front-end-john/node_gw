@@ -10,7 +10,7 @@ import Page from '../widgets/page';
 import WarnTip from '../dialog/warn_tip';
 import Loading from "../dialog/loading";
 import {getStateInfo,maxNumber} from '../../util';
-let OrderQuery=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             queryCondition:{},
@@ -136,7 +136,7 @@ let OrderQuery=React.createClass({
         document.getElementById("appContainer").style.width=sumWidth+200+"px";
         let list=this.state.orderData.map((item,index)=>{
             let states=getStateInfo(item.status);
-            let cancelBg=item.status==-1?"#dcdcdc":"#fff";
+            let cancelBg=item.status==-1?"#d5d5d5":"#fff";
             let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
                 {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
@@ -197,5 +197,3 @@ let OrderQuery=React.createClass({
         );
     }
 });
-
-export default OrderQuery;

@@ -27,18 +27,18 @@
          let fresh=this.fresh.value;
          let repeat=this.repeat.value;
          if(!old){
-             this.showWarnTip("旧密码不不能为空！",2);
+             this.showWarnTip("旧密码不能为空！",2);
              return 0;
          }
          if(!fresh){
-             this.showWarnTip("新密码不不能为空！",2);
+             this.showWarnTip("新密码不能为空！",2);
              return 0;
          }
          if(fresh!=repeat){
              this.showWarnTip("两次输入的密码不匹配！",2);
              return 0;
          }
-         let url="admin/api/modifypassword?oldpassword="+old+"&newpassword="+fresh;
+         let url="/admin/api/modifypassword?oldpassword="+old+"&newpassword="+fresh;
          console.log("修改密码url",url);
          fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("修改密码响应："+res.status);
@@ -48,13 +48,13 @@
                 throw new Error("服务异常");
             }
          }).then((str)=>{
-            //console.log(str);
             try {
                 let obj=JSON.parse(str);
+                //console.log(obj);
                 if(obj.code==0){
                     this.showWarnTip("修改成功,请重新登陆！");
                 }else {
-                    this.showWarnTip(obj.msg);
+                    this.showWarnTip(obj.message);
                 }
             }catch(e){
                 this.showWarnTip("数据异常");

@@ -4,8 +4,6 @@ let compass = require('gulp-compass');
 let merge = require('merge-stream');
 let watch = require('gulp-watch');
 
-let gulpif = require('gulp-if');
-let sprity = require('sprity');
 
 const fs = require('fs');
 let log=require("./utils/mylog");
@@ -207,19 +205,5 @@ gulp.task("production-host",()=>{
                 remotePath:item.dest
             }));
     });
-
-});
-
-/**
- * sprites test
- */
-
-gulp.task('sprites', function () {
-     return sprity.src({
-            src: './__tests__/imgs/*.{png,jpg}',
-            style: './admin_icon.sass',
-            name:"icon",
-            processor: 'sass'
-        }).pipe(gulpif('*.png', gulp.dest('./__tests__/dist/img/'), gulp.dest('./__tests__/dist/css/')));
 
 });

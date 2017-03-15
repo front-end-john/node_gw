@@ -7,7 +7,8 @@ css_dir = "public/duck/css"
 sass_dir = "src/admin/sass"
 #images_dir = "images"
 #javascripts_dir = "javascripts"
-
+#set compile environment (:development or :production)
+environment = :production
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed
   output_style = :compressed
@@ -15,7 +16,7 @@ sass_dir = "src/admin/sass"
 # relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
- line_comments = false
+# line_comments = false
 
 
 # If you prefer the indented syntax, you might want to regenerate this

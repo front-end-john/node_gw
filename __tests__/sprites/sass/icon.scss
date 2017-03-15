@@ -1,0 +1,10 @@
+@import "compass/utilities/sprites";
+//default:vertical,other  horizontal or diagonal or smart,
+$icon-layout:smart;
+@import "icon/*.png";
+
+@include all-icon-sprites();
+
+.my-icon{
+  @include icon-sprites("icon_1");
+}

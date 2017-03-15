@@ -8,7 +8,7 @@ export default React.createClass({
         let dataList=[];
         let type=this.props.name;
         if(type=="order_status"){
-            dataList=[{name:"全部",value:'all'},{name:"已预约",value:"booking"},
+            dataList=[{name:"全部",value:''},{name:"已预约",value:"booking"},
                 {name:"在库",value:"parkingparked"}, {name:" 已送还",value:"returningfinished"},
                 {name:"待支付",value:"needtopay"},{name:"已取消",value:"canceled"}];
         }else if(type=="time_type"){
