@@ -8,13 +8,13 @@ import WarnTip from '../dialog/warn_tip';
 import Loading from "../dialog/loading";
 import Page from '../widgets/page';
 import {maxNumber} from '../../util';
-let EvaluationManage=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[ 140,   110,  110,   130,    130,     130,      150,     110,   120],
+            initWidths:[ 140,   90,  100,   130,    120,     100,      130,     100,   100],
             titles:    ['订单号','用户','车辆','机场','评价时间','评价星级','客服回复','展现状态','操作']
         };
     },
@@ -159,5 +159,3 @@ let EvaluationManage=React.createClass({
         );
     }
 });
-
-export default EvaluationManage;

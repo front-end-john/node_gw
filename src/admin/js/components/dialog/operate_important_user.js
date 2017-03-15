@@ -50,7 +50,9 @@
                      let obj=JSON.parse(str);
                      if(obj.code==0){
                          this.setState({exists:true,user:obj.user});
-                         //console.dir(obj);
+                         this.star.value=obj.user.stars||"";
+                         this.remark.value=obj.user.remark;
+                         console.dir(obj);
                      }else {
                          console.dir(obj);
                      }
