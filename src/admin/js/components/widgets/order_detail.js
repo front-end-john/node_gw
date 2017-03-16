@@ -19,6 +19,7 @@ import OilService from "../dialog/oil_service";
 import SendMsg from "../dialog/send_message";
 import ServiceEnsure from "../dialog/more_service_ensure";
 import Ensure from "../dialog/ensure";
+import ShowCoupon from "../dialog/show_coupon";
 import {getStateInfo,getFormatDate,optState} from '../../util'
 
 export default React.createClass({
@@ -176,11 +177,14 @@ export default React.createClass({
     },
     handleTelEnsure(oid){
         let mask=document.getElementById("dialogContainer");
-        mask.style.display="block";
         ReactDOM.render(<Ensure title="电话确认" serialnumber={oid}
                                 url="/admin/api/orders/confirmed"
-                                reload={this.props.updateList}
+                                reload={this.props.number}
                                 content="亲！是否已电话和客户确认过订单信息？"/>, mask);
+    },
+    handleShowCoupon(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<ShowCoupon  number={this.props.number} />, mask);
     },
     handleSwitch(item){
         let order=this.state.orderDetail||{},s=order.status;
@@ -400,6 +404,8 @@ export default React.createClass({
                         <div className="user-other">
                             <p><label>重要等级：</label>{level}</p>
                             <p><label>使用次数：</label><span>{user.bookcount}</span></p>
+                            <p><label>停车券数：</label><span onClick={this.handleShowCoupon}
+                                         className={user.couponcount?"enable":"disabled"}>{user.couponcount}</span></p>
                             <p><label>用户来源：</label><span>{user.comefrom}</span></p>
                             <p><label>注册时间：</label>
                                 <span>{getFormatDate("yyyy-mm-dd hh:ii",user.registertime*1000)}</span></p>

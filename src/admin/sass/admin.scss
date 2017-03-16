@@ -579,6 +579,15 @@ html,body{
         &>label{width: 60px;display: inline-block;vertical-align: top;}
         &>span{color: #323232;}
       }
+      .disabled{
+        cursor:not-allowed;
+        color:#323232;
+        pointer-events: none;
+      }
+      .enable{
+        color:#1AA0E5;
+        cursor:pointer;
+      }
     }
   }
   .note-field{
@@ -1518,6 +1527,20 @@ $dialogHeadHeight:48px;
         @include flex(2 0);
         text-align: right;
       }
+    }
+  }
+}
+.dialog-show-coupon{
+  margin: 20px;
+  &>ul>li{
+    width: 100%;
+    @include center();
+    margin-bottom: 10px;
+    &>p{
+      @include span(1/4);
+      height: 26px;
+      line-height: 26px;
+      text-align: center;
     }
   }
 }

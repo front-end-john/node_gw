@@ -14,7 +14,7 @@ export default React.createClass({
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[ 140, 110,   100,  100,   120,    130,     130,      120,   110],
+            initWidths:[ 100, 110,   100,  100,   100,    120,     120,      100,   60],
             titles:    ['ID','手机号','类型','状态','金额','领取时间','截止时间','活动来源','操作']
         };
     },
@@ -85,13 +85,12 @@ export default React.createClass({
         //允许的最小宽度
         let minWidth=1340+offsetWidth,len=initWidths.length;
         let screenWidth=document.body.clientWidth;
-        let sumWidth=initSumWidth,widths=initWidths;
+        let sumWidth=initSumWidth;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
-
         let incre=(actulWidth-offsetWidth-initSumWidth)/len;
-        widths=initWidths.map((item)=>item+incre);
+        let widths=initWidths.map((item)=>item+incre);
         sumWidth=widths.reduce((x,y)=>x+y);
-        this.setState({sumWidth:sumWidth,widths});
+        this.setState({sumWidth,widths});
     },
     componentWillMount(){
         this.adaptScreen();
@@ -109,11 +108,12 @@ export default React.createClass({
         ReactDOM.render(<IssueCoupon  updateList={()=>this.handlePageQuery(1,10)} />, mask);
     },
     render(){
+        let initWidths=this.state.initWidths;
         let sumWidth=this.state.sumWidth;
-        let widths=this.state.widths;
+        //let widths=this.state.widths;
         let titles=this.state.titles;
         let headData = titles.map((item,index)=>{
-            return {name:item,width:widths[index]+'px'};
+            return {name:item,width:initWidths[index]+'px'};
         });
         document.getElementById("appContainer").style.width= 200+sumWidth+'px';
         let list=this.state.orderData.map((item,index)=>{
@@ -126,7 +126,7 @@ export default React.createClass({
                 {deadline_time:item.endtime,fieldName:'DeadlineTime'},
                 {source:item.comefrom,fieldName:'ActivitySource'},
                 {coupon_id:item.couponid,fieldName:'Operation'}];
-            return (<CouponLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)} />);
+            return (<CouponLine key={index} widths={initWidths} data={data} updateList={()=>this.handlePageQuery(1,10)} />);
         });
 
         return(

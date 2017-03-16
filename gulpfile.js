@@ -1,7 +1,6 @@
 let gulp = require('gulp');
 let sftp = require('gulp-sftp');
 let compass = require('gulp-compass');
-let merge = require('merge-stream');
 let watch = require('gulp-watch');
 
 

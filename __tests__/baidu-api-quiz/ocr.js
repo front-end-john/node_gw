@@ -45,9 +45,7 @@ fetch(url, {
 });*/
 url="https://aip.baidubce.com/rpc/2.0/nlp/v1/wordpos?access_token="+ access_token;
 
-let Iconv=require("iconv").Iconv;
-let gu = new Iconv('GBK', 'UTF-8');
-let ug = new Iconv('UTF-8','GBK');
+
 let query="返回两个词的相似度";
 
 fetch(url, {
@@ -60,7 +58,7 @@ fetch(url, {
     let arr=json.result_out;
     console.log(arr);
     for(let i=0,len=arr.length;i<len;i++){
-        let str=gu.convert(new Buffer(arr[i].word));
+        let str=new Buffer(arr[i].word);
         console.log(str.toString());
     }
 }).catch((e)=>{

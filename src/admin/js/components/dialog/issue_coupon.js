@@ -4,19 +4,34 @@
  import { DateField } from 'react-date-picker';
  export default React.createClass({
      getInitialState(){
-         return {couponType:"3"};
+         return {couponType:0};
      },
      componentWillMount(){
          let mask=document.getElementById("dialogContainer");
          mask.style.display="block";
      },
-     showWarnTip(msg){
-         let mask=document.getElementById("dialogContainer");
+     showWarnTip(msg,floor=1){
+         let dialogContainer="dialogContainer";
+         if(floor==2) dialogContainer="secDialogContainer";
+         let mask=document.getElementById(dialogContainer);
          if(msg===null){
              ReactDOM.render(<i/>, mask);
              mask.style.display="none";
          }else {
-             ReactDOM.render(<WarnTip msg={msg}/>, mask);
+             ReactDOM.render(<WarnTip dc={dialogContainer} msg={msg}/>, mask);
+         }
+     },
+     validValue(val,reg,msg){
+         if(val===0){
+             return true;
+         }else if(!val){
+             this.showWarnTip(msg[0],2);
+             return false;
+         }else if(reg && !reg.test(val)){
+             this.showWarnTip(msg[1],2);
+             return false;
+         }else {
+             return true;
          }
      },
      cancel(){
@@ -31,11 +46,23 @@
          let phoneno=this.phone.value.trim();
          let comefrom=this.comefrom.value;
          let coupontype=this.state.couponType;
-         let days=this.long?this.long.value:"";
-         let money=this.money?this.money.value:"";
-         let discount=this.discount?this.discount.value:"";
+         let ctype=parseInt(coupontype);
+         let days="",money="",discount="";
+         let amount=this.amount.value;
+         let tip="优惠时长不能为空！";
+         if(ctype===3){
+             days=amount;
+         }else if(ctype===1){
+             money=amount;tip="优惠金额不能为空！";
+         }else if(ctype===0){
+             discount=amount;tip="优惠折扣不能为空！";
+         }
          let expiretime=this.deadline;
          let remark=this.remark.value;
+         if(!this.validValue(phoneno,/^1[0-9]{10}$/,["手机号不能为空！","手机号不合法！"])) return 0;
+         if(!this.validValue(amount,null,[tip])) return 0;
+         if(!this.validValue(expiretime,null,["截止时间不能为空！"])) return 0;
+         if(!this.validValue(remark,null,["备注不能为空！"])) return 0;
          let url="/admin/api/coupons/createcoupon?";
          url+=queryStr.stringify({phoneno,comefrom,coupontype,days,money,discount,expiretime,remark});
          console.log("发放优惠券url",url);
@@ -92,16 +119,12 @@
          }
      },
      render(){
-        let type=this.state.couponType,couponValue;
-        if(type==3){
-            couponValue=(<p><em>优惠时长：</em><input placeholder="请输入天数" type="number"
-                                                 ref={(c)=>this.long=c}/></p>);
-        }else if(type==1){
-            couponValue=(<p><em>优惠金额：</em><input placeholder="请输入金额" type="number"
-                                                 ref={(c)=>this.money=c}/></p>);
+        let type=this.state.couponType;
+        let label="优惠时长",holder="请输入天数";
+        if(type==1){
+            label="优惠金额";holder="请输入金额";
         }else if(type==0){
-            couponValue=(<p><em>优惠折扣：</em><input placeholder="请输入折扣" type="number"
-                                                 ref={(c)=>this.discount=c}/></p>);
+            label="优惠折扣";holder="请输入折扣";
         }
         return(
             <div className="dialog">
@@ -115,11 +138,11 @@
                         </select><i className="select-arrow"/>
                     </p>
                     <p className="group-radio"><em>优惠类型：</em>
-                        <span><input onClick={this.handleRadio} type="radio" value="3" name="coupontype"/>按天数</span>
+                        <span><input onClick={this.handleRadio} type="radio" defaultChecked value="3" name="coupontype"/>按天数</span>
                         <span><input onClick={this.handleRadio} type="radio" value="1" name="coupontype"/>按金额</span>
                         <span><input onClick={this.handleRadio} type="radio" value="0" name="coupontype"/>按折扣</span>
                     </p>
-                    {couponValue}
+                    <p><em>{label}：</em><input placeholder={holder} type="number" ref={(c)=>this.amount=c}/></p>
                     <div className="date-select"><em>截止时间：</em>
                         <DateField onChange={(date)=>this.deadline=date } dateFormat="YYYY-MM-DD"
                                    style={{borderColor:"#ddd",width:"220px",height:"36px",borderRadius:2}} /></div>
