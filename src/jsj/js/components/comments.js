@@ -39,7 +39,7 @@ export default React.createClass({
         let serialnumber = sessionStorage.getItem("OrderSerialNumber");
         let url=jsj_api_path+"/user/comment";
         url+="?"+queryStr.stringify({serialnumber,score,content});
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
             if(+res.status < 400){
                 return res.text();

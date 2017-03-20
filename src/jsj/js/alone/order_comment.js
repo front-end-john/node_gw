@@ -38,7 +38,7 @@ let Comment=React.createClass({
         let url=jsj_api_path+"/user/detail";
         url+="?serialnumber="+serialnumber;
         console.log("获取订单详情url",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){
@@ -84,7 +84,7 @@ let Comment=React.createClass({
         let serialnumber = sessionStorage.getItem("OrderSerialNumber");
         let url=jsj_api_path+"/user/comment";
         url+="?"+queryStr.stringify({serialnumber,score,content});
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("订单评价响应状态：",res.status);
             if(+res.status < 400){
                 return res.text();

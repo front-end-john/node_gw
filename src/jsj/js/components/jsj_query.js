@@ -58,7 +58,7 @@ export default React.createClass({
         let url=jsj_api_path+"/user/querycartype";
         url+="?"+queryStr.stringify(paramsObj);
         console.log("查询车型url：",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("查询车型响应状态："+res.status);
             dom.style.display="none";
             if(+res.status < 400){

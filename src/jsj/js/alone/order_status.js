@@ -56,7 +56,7 @@ const OrderStatus=React.createClass({
         let url=jsj_api_path+"/user/detail";
         url+="?serialnumber="+serialnumber;
         console.log("获取订单详情url",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){
@@ -93,7 +93,7 @@ const OrderStatus=React.createClass({
 
         let url=jsj_api_path+"/user/cancel";
         url+="?serialnumber="+sessionStorage.getItem("OrderSerialNumber");
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("取消订单响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){

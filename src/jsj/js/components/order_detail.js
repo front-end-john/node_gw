@@ -96,7 +96,7 @@ export default React.createClass({
          */
         let openid=this.props.location.query.openid;
         let url=jsj_api_path+"/user/wechat/payconfig?"+queryStr.stringify({serialnumber,openid});
-        fetch(url).then((res)=>{
+        fetch(url,{credentials:'include'}).then((res)=>{
             console.log("请求微信支付参数响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){

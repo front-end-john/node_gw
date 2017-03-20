@@ -78,7 +78,6 @@ export default React.createClass({
     },
     render(){
         let did=this.state.driverId;
-        //color:"sending" color:"taking"
         let list=this.state.driverData.map((item,index)=>{
             return(<li key={index} className={item.id==did?"selected":""}
                        onClick={()=>{

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Loading from '../widgets/loading';
-//import SelectDate from '../widgets/select_date';
+
 import PulldownTip from '../widgets/pulldown_tip';
 import {decDatetime} from '../util';
 export default React.createClass({
@@ -48,7 +48,7 @@ export default React.createClass({
         let url=jsj_api_path+"/user/queryflight";
         url+="?"+queryStr.stringify({flightdate,flightnumber});
         console.log("接机查询航班url：",url);
-        fetch(url).then(function(res) {
+        fetch(url,{credentials:'include'}).then(function(res) {
             console.log("查询航班响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){

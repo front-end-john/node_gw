@@ -28,7 +28,7 @@ export default React.createClass({
         dom.style.display="block";
 
         let url=jsj_api_path+"/user/runninglist";
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("获取进行中订单的响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){
@@ -65,7 +65,7 @@ export default React.createClass({
             ReactDOM.render(<Loading />,dom);
             dom.style.display="block";
             let url=jsj_api_path+"/user/historylist";
-            fetch(url).then(function(res){
+            fetch(url,{credentials:'include'}).then(function(res){
                 console.log("获取进行中订单的响应状态：",res.status);
                 dom.style.display="none";
                 if(+res.status < 400){

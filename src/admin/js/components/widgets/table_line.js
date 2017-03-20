@@ -269,13 +269,17 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='TakeDriver'){
-                let s=item.os;
-                if(!optState(6,s)) item.color=null;
+                let s=item.os,driverName=item.take_driver;
+                if(optState(6,s)) {
+                    driverName=driverName||"分配接车司机";
+                }else {
+                    item.color=null;
+                }
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p  className={optState(6,s)?"enable":"disabled"}
                             onClick={()=>this.handleAssignDriver("parking",item.aid,item.oid,item.did)}
-                            style={{color:item.color||"inherit"}}>{item.take_driver}</p>
+                            style={{color:item.color||"inherit"}}>{driverName}</p>
                     </li>
                 );
             }else if(item.fieldName=='MoveDriver'){
@@ -303,13 +307,17 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='SendDriver'){
-                let s=item.os;
-                if(!optState(6,s)) item.color=null;
+                let s=item.os,driverName=item.send_driver;
+                if(optState(7,s)) {
+                    driverName=driverName||"分配送车司机";
+                }else {
+                    item.color=null;
+                }
                 return(
                     <li key={index} style={{width:widths[index]}}>
-                        <p  className={optState(6,s)?"enable":"disabled"}
+                        <p  className={optState(7,s)?"enable":"disabled"}
                             onClick={()=>this.handleAssignDriver("returning",item.aid,item.oid,item.did)}
-                            style={{color:item.color||"inherit"}}>{item.send_driver}</p>
+                            style={{color:item.color||"inherit"}}>{driverName}</p>
                     </li>
                 );
             }else if(item.fieldName=='SendCarStatus'){

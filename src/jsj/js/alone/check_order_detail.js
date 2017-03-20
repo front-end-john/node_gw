@@ -36,7 +36,7 @@ let Detail=React.createClass({
         let url=jsj_api_path+"/user/detail";
         url+="?serialnumber="+serialnumber;
         console.log("获取订单详情url",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){

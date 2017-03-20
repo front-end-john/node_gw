@@ -38,7 +38,7 @@ let OrderPay=React.createClass({
         let url=jsj_api_path+"/user/detail";
         url+="?serialnumber="+serialnumber;
         console.log("获取订单详情url",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("查询订单详情响应状态：",res.status);
             dom.style.display="none";
             if(+res.status < 400){
@@ -101,7 +101,7 @@ let OrderPay=React.createClass({
         let openid=sessionStorage.getItem("OpenId");
         let url=jsj_api_path+"/user/wechat/payconfig?serialnumber="+serialnumber+"&openid="+openid;
         //console.log(url);
-        fetch(url).then((res)=>{
+        fetch(url,{credentials:'include'}).then((res)=>{
             console.log("请求微信支付参数响应状态：",res.status);
             dom.style.display="none";
             console.log(res);
@@ -145,7 +145,7 @@ let OrderPay=React.createClass({
                              */
                             url=jsj_api_path+"/user/wechatpaysuccess?"+
                                 queryStr.stringify({serialnumber,actualname,actualphone,userremark});
-                            fetch(url).then(function(res){
+                            fetch(url,{credentials:'include'}).then(function(res){
                                 console.log("订单更新响应状态：",res.status);
                                 dom.style.display="none";
                                 if(+res.status < 400){

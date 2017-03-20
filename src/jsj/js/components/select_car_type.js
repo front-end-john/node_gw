@@ -28,7 +28,7 @@ export default React.createClass({
              */
             let url=jsj_api_path+"/user/queryuser";
             console.log("查询航班url：",url);
-            fetch(url).then(function(res) {
+            fetch(url,{credentials:'include'}).then(function(res) {
                 console.log("查询航班响应状态：",res.status);
                 if(+res.status < 400){
                     return res.text();
@@ -73,7 +73,7 @@ export default React.createClass({
         url+="?"+queryStr.stringify(paramsObj);
 
         console.info("创建订单url：",url);
-        fetch(url).then(function(res){
+        fetch(url,{credentials:'include'}).then(function(res){
             console.log("创建订单响应状态：",res.status);
             if(+res.status < 400){
                 return res.text();

@@ -15,7 +15,7 @@ let JSJOrder=React.createClass({
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[  140,   100,  110,   130,     100,    100,     130,    130,   120,     100],
+            initWidths:[  160,   100,  110,   130,     100,    100,     110,    130,   120,     100],
             titles:    ['订单号','用户','标签','下单时间','出发地','目的地','航班号','预约时间','预约车型','订单状态']
         };
     },
