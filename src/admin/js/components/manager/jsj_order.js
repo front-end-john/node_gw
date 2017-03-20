@@ -66,10 +66,10 @@ let JSJOrder=React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth-40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -146,7 +146,7 @@ let JSJOrder=React.createClass({
                                type={type}  />);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <TextInput title="用户姓名：" ref={(c)=>this.name=c} change={this.handleChange} pdl="0" name="user_name"
                                enter={()=>this.handlePageQuery(1,10)} holdText="请输入用户姓名" />

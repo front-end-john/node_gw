@@ -13,8 +13,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  140,   100,  110,  110,  140,    120,     130,       100,       130],
-            titles:    ['订单号','用户','标签','车辆','机场','返程航班','航班状态','送车司机','开始送车时间']
+            initWidths:[ 100,  110,  110,  140,    120,     130,       100,       130],
+            titles:    ['用户','标签','车辆','预约机场','返程航班','航班状态','送车司机','开始送车时间']
         };
     },
     showWarnTip(msg){
@@ -75,10 +75,10 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth -40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -106,21 +106,22 @@ export default React.createClass({
         });
         document.getElementById("appContainer").style.width= 200+sumWidth+'px';
         let list=this.state.orderData.map((item,index)=>{
-            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
-                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+            let data=[
+                {username:item.username,order_no:item.serialnumber,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
                 {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
                 {status:item.flightstatus,post_time:item.returningtime,date:item.returningdate,
                     number:item.returningflight,fieldName:'ReturnFlightStatus'},
-                {send_driver:item.returningdrivername, color:"#1A9FE5",fieldName:'SendDriver'},
+                {oid:item.serialnumber,aid:item.airportid,did:item.returningdriverid,os:item.status,
+                    send_driver:item.returningdrivername, color:"#1A9FE5",fieldName:'SendDriver'},
                 {start_send_time:item.returningtime,fieldName:'StartSendTime'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
 
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source" />
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}

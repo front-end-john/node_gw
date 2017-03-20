@@ -14,8 +14,8 @@ export default React.createClass({
             orderData:[],
             pageObj:{},
             queryCondition:{},
-            initWidths:[ 140,   90,  100,   130,    120,     100,      130,     100,   100],
-            titles:    ['订单号','用户','车辆','机场','评价时间','评价星级','客服回复','展现状态','操作']
+            initWidths:[ 100,  100,   130,    120,     100,      130,     100,   100],
+            titles:    ['用户','车辆','机场','评价时间','评价星级','客服回复','展现状态','操作']
         };
     },
     showWarnTip(msg){
@@ -91,10 +91,10 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth-40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -122,8 +122,8 @@ export default React.createClass({
         });
         document.getElementById("appContainer").style.width=sumWidth+200+'px';
         let list=this.state.orderData.map((item,index)=>{
-            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
-                {username:item.username,phone_no:item.phoneno,fieldName:'User'},
+            let data=[
+                {username:item.username,order_no:item.serialnumber,phone_no:item.phoneno,fieldName:'User'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
                 {evaluate_time:item.commentcreatetime,fieldName:'EvaluateTime'},
@@ -135,7 +135,7 @@ export default React.createClass({
         });
 
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <TextInput title="用户手机：" change={this.handleChange} pdl="0" name="phone_no" holdText="请输入手机号"/>
                     <SelectInput title="展现状态：" change={this.handleChange} name="show_status" />

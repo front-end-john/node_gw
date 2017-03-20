@@ -21,7 +21,7 @@ export default React.createClass({
                     <p><label>车位：</label><span>{parkingspot}</span></p>
                     <p><label>钥匙位：</label><span>{keyspot}</span></p>
                     <p><label>里程数：</label><span>{mileage}</span></p>
-                    <p><label>入库时间：</label><span>{inTime}</span></p>
+                    <p><label>入库时间：</label><br/><span>{inTime}</span></p>
                 </section>
             </div>);
         }

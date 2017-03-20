@@ -7,6 +7,7 @@ import Empty from './empty';
 import AssignDriver from "../dialog/assign_driver";
 import FlightStatus from "../dialog/show_flight_status";
 import Reply from "../dialog/customer_service_reply";
+import {optState} from '../../util';
 export default React.createClass({
     getInitialState(){return {};},
     handleHideAndShow(id,show){
@@ -98,14 +99,11 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='User'){
-                this.driverName=item.username;
-                let content=(<p>{item.phone_no}</p>);
-                if(item.username!="null"&&item.username){
-                    content=(<p>{item.username}<br/>{item.phone_no}</p>);
-                }
                 return(
                     <li key={index} style={{width:widths[index]} }>
-                        {content}
+                        <p style={{color:"#1A9FE5",cursor:"pointer"}}
+                           onClick={()=>this.expandDetail(item.order_no)}
+                        >{item.username}<br/>{item.phone_no}</p>
                     </li>
                 );
             }else if(item.fieldName=='Label'){
@@ -198,62 +196,62 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='OrderStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:item.color||"inherit",cursor:"default"}}>
                             {item.status}</p>
                     </li>
                 );
             }else if(item.fieldName=='Airport'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index],paddingRight:20}}>
                         <p>{item.airport}</p>
                     </li>
                 );
             }else if(item.fieldName=='OnwardTerminal'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index],paddingRight:20}}>
                         <p>{item.terminal}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnTerminal'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.terminal}</p>
                     </li>
                 );
             }else if(item.fieldName=='Session'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.session}</p>
                     </li>
                 );
             }else if(item.fieldName=='OrderFetchTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.order_fetch_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='InGarageTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.in_garage_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='ParkTimeLong'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.park_time_long}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnTicket'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.back_flight?<span>{item.back_flight}<br/></span>:""}{item.back_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='RemainTakeCarTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.remain_time}</p>
                     </li>
                 );
@@ -266,80 +264,88 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='AdvanceTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.order_time}<br/>{item.back_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='TakeDriver'){
+                let s=item.os;
+                if(!optState(6,s)) item.color=null;
                 return(
-                    <li key={index} style={{width:widths[index]} }>
-                        <p style={{color:item.color||"inherit"}}>{item.take_driver}</p>
+                    <li key={index} style={{width:widths[index]}}>
+                        <p  className={optState(6,s)?"enable":"disabled"}
+                            onClick={()=>this.handleAssignDriver("parking",item.aid,item.oid,item.did)}
+                            style={{color:item.color||"inherit"}}>{item.take_driver}</p>
                     </li>
                 );
             }else if(item.fieldName=='MoveDriver'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:item.color||"inherit"}}>{item.move_driver}</p>
                     </li>
                 );
             }else if(item.fieldName=='AssignTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.assign_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='AirportParkTimeLong'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.airport_park_time_long}</p>
                     </li>
                 );
             }else if(item.fieldName=='TakeCarStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p>{item.take_car_at}<br/>{item.in_garage_at}</p>
                     </li>
                 );
             }else if(item.fieldName=='SendDriver'){
+                let s=item.os;
+                if(!optState(6,s)) item.color=null;
                 return(
-                    <li key={index} style={{width:widths[index]} }>
-                        <p style={{color:item.color||"inherit"}}>{item.send_driver}</p>
+                    <li key={index} style={{width:widths[index]}}>
+                        <p  className={optState(6,s)?"enable":"disabled"}
+                            onClick={()=>this.handleAssignDriver("returning",item.aid,item.oid,item.did)}
+                            style={{color:item.color||"inherit"}}>{item.send_driver}</p>
                     </li>
                 );
             }else if(item.fieldName=='SendCarStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]}} className="list-end">
                         <p>{item.send_car_start}<br/>{item.send_car_end}</p>
                     </li>
                 );
             }else if(item.fieldName=='PayStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} } >
+                    <li key={index} style={{width:widths[index]}} >
                         <p  style={{color:item.color}} >{item.pay_status}</p>
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightStatus'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]}}>
                         <p onClick={()=>this.showFlightStatus(item.date,item.number)} style={{cursor:"pointer"}}>
                             {item.status?<span style={{color:"red"}}>{item.status}<br/></span>:""}{item.post_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='StartTakeTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]}} className="list-end">
                         <p>{item.start_take_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='StartSendTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} } className="list-end">
+                    <li key={index} style={{width:widths[index]}} className="list-end">
                         <p>{item.start_send_time}</p>
                     </li>
                 );
             }else if(item.fieldName=='StartMoveTime'){
                 return(
-                    <li key={index} style={{width:widths[index]} } >
+                    <li key={index} style={{width:widths[index]}} >
                         <p>{item.start_move_time}</p>
                     </li>
                 );

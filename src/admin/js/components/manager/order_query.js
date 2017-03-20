@@ -16,8 +16,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 140,    90,    100,     80,   110,  160,   120,       80,       130,         80,     130,  ],
-            titles:    ['订单号','用户','订单来源','状态','车辆','机场','预约时间','接车司机','接车/入库时间','送车司机','出库/送还时间']
+            initWidths:[  100,   80,     80,  100,   130,     130,       80,       130,         80,     130,  ],
+            titles:    ['用户','订单来源','状态','车辆','预约机场','预约时间','接车司机','接车/入库时间','送车司机','出库/送还时间']
         };
     },
     showWarnTip(msg){
@@ -103,10 +103,10 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth -40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -136,24 +136,26 @@ export default React.createClass({
         document.getElementById("appContainer").style.width=sumWidth+200+"px";
         let list=this.state.orderData.map((item,index)=>{
             let states=getStateInfo(item.status);
-            let cancelBg=item.status==-1?"#d5d5d5":"#fff";
-            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
-                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+            let cancelBg=item.status==-1?"#f5f5f5":"#fff";
+            let data=[
+                {username:item.username,order_no:item.serialnumber,phone_no:item.userphoneno,fieldName:'User'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {pay_status:states[0],color:states[1],fieldName:'PayStatus'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
                 {order_time:item.bookingtime,fieldName:'AdvanceTime',
                     back_time:(item.returningflight||"")+" "+(item.returningdate||"")},
-                {take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
+                {oid:item.serialnumber,aid:item.airportid,did:item.parkingdriverid, os:item.status,
+                    color:"#DB8800",take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
                 {take_car_at:item.parkingstartedtime,in_garage_at:item.parkingfinishedtime,fieldName:'TakeCarStatus'},
-                {send_driver:item.returningdrivername,fieldName:'SendDriver'},
+                {oid:item.serialnumber,aid:item.airportid,did:item.returningdriverid,os:item.status,
+                    color:"#1A9FE5",send_driver:item.returningdrivername,fieldName:'SendDriver'},
                 {send_car_start:item.returningstartedtime,
                     send_car_end:item.returningfinishedtime,fieldName:'SendCarStatus'}];
             return (<TableLine background={cancelBg} key={index} widths={widths} data={data} />);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleTextInputChange} pdl="0"
                                  name="order_source" ref={(c)=>this.comefrom=c} />

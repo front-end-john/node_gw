@@ -264,36 +264,28 @@ export default React.createClass({
         window.removeEventListener("resize",this.adjustWidth);
     },
     adjustWidth(){
-        let sumWidth=document.body.clientWidth-210;
+        let sumWidth=document.body.clientWidth-220;
         let bs=this.state.blocks;
         if(this.state.first){
             sumWidth=this.props.width;
             this.setState({first:false});
         }
-        let helArr=[],ws=[280,280,280,490];
-        let edgeValue=1340;
+        let edgeValue=1240;
+        let labelWidth=105;
         if(sumWidth>edgeValue){
-            let incre=(sumWidth-edgeValue)/4;
             for(let i=0;i<4;i++) {
-                ws[i]+=incre;
-                let block=bs[i];
-                block.style.width=ws[i]+'px';
+                let currWidth=parseFloat(getComputedStyle(bs[i]).width);
                 if (i == 0){
-                    this.userTag.style.width= ws[i]-101+'px';
-                    this.uRemark.style.width= ws[i]-101+'px';
+                    this.userTag.style.width= currWidth-labelWidth+'px';
+                    this.uRemark.style.width= currWidth-labelWidth+'px';
                 }else if(i==1){
-                    this.comeRemark.style.width= ws[i]-101+'px';
+                    this.comeRemark.style.width= currWidth-labelWidth+'px';
                 }else if(i==2){
-                    this.suRemark.style.width= ws[i]-101+'px';
-                    this.swRemark.style.width= ws[i]-101+'px';
-                    this.soRemark.style.width= ws[i]-101+'px';
+                    this.suRemark.style.width= currWidth-labelWidth+'px';
+                    this.swRemark.style.width= currWidth-labelWidth+'px';
+                    this.soRemark.style.width= currWidth-labelWidth+'px';
                 }
-                helArr[i] = parseFloat(getComputedStyle(block).height);
             }
-        }
-        let maxHel=helArr.sort()[3];
-        for(let i=0;i<4;i++) {
-            bs[i].style.height = maxHel + "px";
         }
     },
     render(){
@@ -403,8 +395,8 @@ export default React.createClass({
                         </figure>
                         <div className="user-other">
                             <p><label>重要等级：</label>{level}</p>
-                            <p><label>使用次数：</label><span>{user.bookcount}</span></p>
-                            <p><label>停车券数：</label><span onClick={this.handleShowCoupon}
+                            <p><label>使用次数：</label><span>{user.bookcount}</span>&emsp;
+                                <label>停车券数：</label><span onClick={this.handleShowCoupon}
                                          className={user.couponcount?"enable":"disabled"}>{user.couponcount}</span></p>
                             <p><label>用户来源：</label><span>{user.comefrom}</span></p>
                             <p><label>注册时间：</label>

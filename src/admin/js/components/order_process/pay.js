@@ -15,28 +15,27 @@ export default React.createClass({
         }else {
             let {takeTime,sendTime,parkLong,totalfee,description,money,payTime,type,status,
                 timeout,comefrom,offlinemoney,timeouttotalfee}=this.props.data;
-            let padTop=25,display="none";
-            //console.log("comefrom",comefrom);
+            let style={display:"block",position:"absolute",top:38,right:10};
             if(comefrom == "携程" || comefrom =="同程"){
-                padTop=0; display="block";
+                style.display="block";
             }
             let payState=<span style={{color:"#f00"}}>未支付</span>;
             if(status==10){
                 payState=<span style={{color:"#f00"}}>已支付</span>;
             }
             html=(<div className="take-car">
-                <section className="up-part">
+                <section className="up-part" style={{paddingBottom:22}}>
                     <p><label>接车时间：</label><span>{takeTime}</span></p>
                     <p><label>送车时间：</label><span>{sendTime}</span></p>
                     <p><label>停车时长：</label><span>{parkLong}</span></p>
                 </section>
-                <section className="down-part" style={{display:display}}>
+                <section className="down-part" style={style}>
                     <p><label>超时时长：</label><span>{timeout}</span></p>
                     <p><label>超时费用：</label><span>{timeouttotalfee||0}元</span></p>
                     <p><label>实收费用：</label><span>{offlinemoney}元</span></p>
                     <p><label>收取方式：</label><span>---</span></p>
                 </section>
-                <section className="service-fee" style={{paddingTop:padTop}}>
+                <section className="service-fee" >
                     <p><label>费用总计：</label><span>{totalfee}元({description})</span></p>
                     <p><label>实际支付：</label><span>{money}元</span></p>
                     <p><label>支付方式：</label><span>{type}</span></p>

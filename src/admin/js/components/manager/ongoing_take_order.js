@@ -13,8 +13,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  140,   100,  100,  100,     110,    130,    120,     100,      120,      120],
-            titles:    ['订单号','用户','标签','订单来源','车辆','航站楼','预约时间','接车司机','分配时间','开始接车时间']
+            initWidths:[ 100,  100,  100,     110,    130,    120,     100,      120,      120],
+            titles:    ['用户','标签','订单来源','车辆','预约机场','预约时间','接车司机','分配时间','开始接车时间']
         };
     },
     showWarnTip(msg){
@@ -75,10 +75,10 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth-40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -106,20 +106,21 @@ export default React.createClass({
         });
         document.getElementById("appContainer").style.width=200+sumWidth+"px";
         let list=this.state.orderData.map((item,index)=>{
-            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
-                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+            let data=[
+                {username:item.username,order_no:item.serialnumber,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
-                {take_driver:item.parkingdrivername,color:"#DB8800",fieldName:'TakeDriver'},
+                {oid:item.serialnumber,aid:item.airportid,did:item.parkingdriverid,os:item.status,
+                    take_driver:item.parkingdrivername,color:"#DB8800",fieldName:'TakeDriver'},
                 {assign_time:item.parkingassignedtime,fieldName:'AssignTime'},
                 {start_take_time:item.parkingstartedtime,fieldName:'StartTakeTime'}];
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}

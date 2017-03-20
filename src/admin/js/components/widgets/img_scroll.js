@@ -58,7 +58,7 @@ export default React.createClass({
         return(
             <div className="scroll-container" onMouseDown={this.handleMouseDown}
                  onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}
-                 onDoubleClick={this.showOriginImg}>
+                 onClick={this.showOriginImg}>
                 <ul className="img-scroll"  ref={(c)=>this.wrap=c}>
                     {list}
                 </ul>

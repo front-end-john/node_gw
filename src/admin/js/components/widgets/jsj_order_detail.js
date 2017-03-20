@@ -64,28 +64,18 @@ export default React.createClass({
                                    url="/jsj/system/addremark" number={this.props.number}/>, mask);
     },
     adjustWidth(){
-        let sumWidth=document.body.clientWidth-210;
+        let sumWidth=document.body.clientWidth-220;
         if(this.state.first){
             sumWidth=this.props.width;
             this.setState({first:false});
         }
         let bs=this.state.blocks;
-        let helArr=[];
-        let edgeValue=1340;
+        let edgeValue=1240;
         if(sumWidth>edgeValue){
-            let incre=(sumWidth-edgeValue)/4;
-            for(let i=1;i<5;i++){
-                let dom=bs[i-1];
-                let width=280+incre;
-                if (i == 1) this.userTag.style.width=width-101+'px';
-                if(i==4) width=490+incre;
-                dom.style.width=width+"px";
-                helArr[i-1] = parseFloat(getComputedStyle(dom).height);
+            for(let i=0;i<4;i++){
+                let width=parseFloat(getComputedStyle(bs[i]).width);
+                if (i == 0) this.userTag.style.width=width-105+'px';
             }
-        }
-        let maxHel=helArr.sort()[3];
-        for(let i=1;i<5;i++) {
-            bs[i-1].style.height = maxHel + "px";
         }
     },
     render(){
@@ -109,7 +99,7 @@ export default React.createClass({
             return(<span key={index} style={{color:"#323232"}}>{item}&ensp;</span>)
         });
         return(
-            <section className="detail-section">
+            <section className="detail-section jsj-detail">
                 <p className="order-brief">
                     <label style={{paddingLeft:'20px'}}>订单号：</label><span>{o.serialnumber||''}</span>
                     <label style={{paddingLeft:'20px'}}>下单时间：</label>
@@ -180,7 +170,7 @@ export default React.createClass({
                             <p><label>评价内容：</label><span>{cmt.content||""}</span></p>
                         </div>
                     </div>
-                    <div className="order-info" style={{width:490}} ref={(c)=>this.state.blocks[3]=c}>
+                    <div className="order-info"  ref={(c)=>this.state.blocks[3]=c}>
                         <h2>发票信息</h2>
                         <div className="up-section">
                             <p><label>开票金额：</label>

@@ -22,9 +22,9 @@ export default React.createClass({
             html=(<div className="move-car">
                 <ImgScroll imgs={pictures} />
                 <section className="move-car-msg">
-                    <p><label>停放开始时间：</label><span>{bufferTime}</span></p>
-                    <p><label>挪车开始时间：</label><span>{moveTime}</span></p>
-                    <p><label>&emsp;&emsp;挪车司机：</label><span>{driverName}</span></p>
+                    <p><label>停放开始时间：</label><br/><span>{bufferTime}</span></p>
+                    <p><label>挪车开始时间：</label><br/><span>{moveTime}</span></p>
+                    <p><label>挪车司机：</label><span>{driverName}</span></p>
                     <p><label>备注：</label>{list}</p>
                 </section>
             </div>);

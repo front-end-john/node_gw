@@ -5,10 +5,7 @@
 $jeet: (gutter: 0, max-width: 4000px);
 html,body{
   height: 100%;
-  background-color: #E8E9EE;
-}
-#appContainer{
-  min-height: 100%;
+  background-color: #fff;
 }
 // login page style
 .login{
@@ -103,22 +100,23 @@ html,body{
   background-color: #F6F6F6;
   position: relative;
   height: 100%;
+  width: 100%;
   &>aside{
     height:860px;
     width: 180px;
     position: absolute;
     z-index: 20;
     left: 0;top:0;bottom: 0;
-    background-color: #fff;
+    background-color: #EAEDF1;
     color: #323232;
     font-size: 14px;
     @include box-sizing(border-box);
   }
   &>.data-section{
     margin-left: 180px;
-    background-color: #E8E9EE;
+    background-color: #fff;
     &>.data-list{
-      padding:0 10px;
+      padding:0 20px;
       height: 718px;
       overflow-y: auto;
     }
@@ -214,15 +212,15 @@ html,body{
     }
   }
   &>.selected{
-    background-color: #E8E9EE;
+    background-color: #fff;
     position: relative;
     &:after{
       content: "";
       width: 4px;
-      height: 59px;
+      height: 61px;
       background-color:#202E43;
       position: absolute;
-      left: 0;top:0;
+      left: 0;top:-1px;
     }
   }
 }
@@ -239,7 +237,7 @@ html,body{
     color: #969696;
   }
   &>.selected{
-    background-color:#fff;
+    background-color:#EAEDF1;
     &:after{  width: 0;  }
   }
 }
@@ -256,7 +254,7 @@ html,body{
     color: #969696;
   }
   &>.selected{
-    background-color: #fff;
+    background-color: #EAEDF1;
     &:after{  width: 0;  }
   }
 }
@@ -295,15 +293,20 @@ html,body{
       text-align: center;
       font-size: 12px;line-height: 16px;
       @include border-radius(8px);
-      background-color: #E8E9EE;
-      color:#1A9FE5;
+      background-color: #42485B;
+      color:#fff;
       margin-right: 6px;
       margin-top: 2px;
+      vertical-align: middle;
     }
   }
   &>.highlight{
-    background-color: #E8E9EE;
+    background-color: #fff;
     position: relative;
+    &>span{
+      background-color: #fff;
+      color:#42485B;
+    }
     &:after{
       content: "";
       width: 4px;
@@ -317,17 +320,38 @@ html,body{
 
 .scroll-text{
   @include box-sizing(border-box);
+  border-bottom: 1px solid rgb(220,220,220);
   background-color: #fff;
   height: 48px;
   @include center;
   padding-top: 16px;
   font-size: 12px;
-  @include translateX(20px);
+  $scaleWidth:2;
+  @include translateX(60px - $scaleWidth);
   &>em{
     @include column();
-    width: 160px;
+    width: 120px + $scaleWidth;
     height:20px;
   }
+  &:after{
+    content: "";
+    width: 2px;
+    height: 12px;
+    background-color: #42485B;
+    position: absolute;
+    margin-left: 140px + $scaleWidth;
+    margin-top: 3px;
+  }
+  &:before{
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    position: absolute;
+    margin-left: 120px +$scaleWidth;
+    margin-top: 20px;
+  }
+
   &>label{
     @include column();
     width: 70px;
@@ -420,21 +444,22 @@ html,body{
 }
 .table-head{
   @include center;
-  background-color: #314055;
+  background-color: #F5F6FA;
+  border: 1px solid rgb(220,220,220);
   &>li{
     @include span();
     height: 48px;
     line-height: 48px;
     font-size: 14px;
-    color: #fff;
+    color: #323232;
     &:nth-of-type(1){
       @include box-sizing(border-box);
-      padding-left: 10px;
+      padding-left: 20px;
     }
     &:nth-last-of-type(1){
       text-align: right;
       @include box-sizing(border-box);
-      padding-right: 10px;
+      padding-right: 20px;
     }
   }
 }
@@ -442,8 +467,9 @@ html,body{
 .table-line{
   background-color: #fff;
   @include center;
-  font-size: 12px;
-  border-bottom: 1px solid #ddd;
+  font-size: 13px;
+  border: 1px solid rgb(220,220,220);
+  border-top-width: 0;
   &>li{
     @include span();
     @include box-sizing(border-box);
@@ -454,9 +480,18 @@ html,body{
       @include translateY(-50%);
       cursor: default;
     }
+    .disabled{
+      cursor:not-allowed;
+      color:#323232;
+      pointer-events: none;
+    }
+    .enable{
+      color:#1AA0E5;
+      cursor:pointer;
+    }
     &:nth-of-type(1){
       @include box-sizing(border-box);
-      padding-left: 10px;
+      padding-left: 20px;
     }
     &:nth-last-of-type(1){
       height: auto;
@@ -466,24 +501,36 @@ html,body{
   &>.list-end{
     text-align: right;
     @include box-sizing(border-box);
-    padding-right: 10px;
+    padding-right: 20px;
     &>p{cursor: default;}
   }
 }
 // order detail
 .detail-section{
-  background-color: #F5F5F5;
+  background-color: #F5F6FA;
   color: #969696;
-  min-width: 1394px;
+  width: 100%;
+}
+.jsj-detail{
+  &>.order-main{
+    &>div{
+      @include column(3/13);
+      &:nth-of-type(4){
+        @include column(4/13);
+        border-right-width: 0;
+      }
+    }
+  }
 }
 .paging{
-  height: 60px;
+  //height: 60px;
   background-color: #fff;
   text-align: right;
-  padding-right: 40px;
-  font-size: 12px;
+  padding: 40px 20px;
+  font-size: 14px;
   @include box-sizing(border-box);
-  padding-top: 22px;
+  border: 1px solid rgb(220,220,220);
+  border-top-width: 0;
   &>em{
     display: inline-block;
     height: 16px;
@@ -522,10 +569,9 @@ html,body{
   }
 }
 .order-main{
-  @include center;
+  @include center();
   div,p,li,h2{@include box-sizing(border-box);}
   border-top: 1px solid #DCDCDC;
-  min-width: 1400px;
   width: 100%;
   overflow: hidden;
   &>div{
@@ -537,11 +583,11 @@ html,body{
       border-bottom:1px solid #DCDCDC;
       color: #202E43;
     }
+    padding-bottom: 300px;
+    margin-bottom: -300px;
   }
   &>.user-info{
-    @include column();
-    width: 300px;
-    min-height: 350px;
+    @include column(26/124);
     border-right:1px solid #DCDCDC;
     &>.user-basic{
       margin: 20px;
@@ -576,7 +622,7 @@ html,body{
           }
         }
         margin-bottom: 10px;
-        &>label{width: 60px;display: inline-block;vertical-align: top;}
+        &>label{width: 70px;display: inline-block;vertical-align: top;}
         &>span{color: #323232;}
       }
       .disabled{
@@ -594,7 +640,7 @@ html,body{
     @include center;
     &>label{
       @include span();
-      width: 60px;
+      width: 70px;
     }
     &>span{
       @include span();
@@ -603,9 +649,7 @@ html,body{
     }
   }
   &>.order-info{
-    @include column();
-    width: 300px;
-    min-height: 350px;
+    @include column(29/124);
     border-right:1px solid #DCDCDC;
     &>.up-section{
       margin: 20px 0 35px 20px;
@@ -636,9 +680,7 @@ html,body{
     }
   }
   &>.service-info{
-    @include column();
-    width: 300px;
-    min-height: 350px;
+    @include column(27/124);
     border-right:1px solid #DCDCDC;
     &>.extra-service{
       margin: 20px 0 61px 20px;
@@ -671,9 +713,7 @@ html,body{
     }
   }
   &>.process-info{
-    @include column();
-    width: 494px;
-    min-height: 350px;
+    @include column(42/124);
     &>ul{
       @include center;
       position: relative;
@@ -710,7 +750,7 @@ html,body{
         overflow: hidden;
         padding-top: 18px;
         &>.up-part{
-          float: left;
+          padding-bottom: 50px;
           .disabled{
             cursor:not-allowed;
             color:#323232;
@@ -722,7 +762,7 @@ html,body{
           }
         }
         &>.down-part{
-          float: right;
+          padding-bottom: 20px;
         }
         &>section>p {
           &>span { color: #323232; }
@@ -730,7 +770,6 @@ html,body{
           margin-bottom: 10px;
         }
         .service-fee{
-          padding-top: 51px;
           clear: both;
           &>p {
             margin-bottom: 10px;
@@ -788,7 +827,7 @@ html,body{
         padding-top: 18px;
         &>.scroll-container{
           @include column();
-          $img-w:180px;
+          $img-w:160px;
           width: $img-w;
           height: auto;
           overflow: hidden;
@@ -835,9 +874,8 @@ html,body{
         }
         &>.move-car-msg{
           @include column();
-          width: 254px;
-          height: 264px;
-          @include translateX(40px);
+          padding-left: 18px;
+          width: calc(100% - 200px);
           &>p{
             margin-bottom: 10px;
             &:nth-last-of-type(1){
@@ -849,11 +887,9 @@ html,body{
           }
         }
         &>.in-garage{
-          padding-top: 18px;
+          padding-left: 18px;
           @include column();
-          width: 254px;
-          height: 264px;
-          @include translateX(40px);
+          width: calc(100% - 200px);
           overflow: hidden;
           &>p{
             margin-bottom: 10px;

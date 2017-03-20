@@ -13,8 +13,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 140,    100,  110,    110,   110,  110,   120,      120,      120,      120,    120],
-            titles:    ['订单号','用户','标签','订单来源','车辆','机场','返程航班','航班状态','回程航站楼','更多服务','操作']
+            initWidths:[ 100,  110,    110,   110,  110,   120,      120,      120,      120,    120],
+            titles:    ['用户','标签','订单来源','车辆','预约机场','返程航班','航班状态','回程航站楼','更多服务','操作']
         };
     },
     showWarnTip(msg){
@@ -75,10 +75,10 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth -40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -119,8 +119,8 @@ export default React.createClass({
             let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
             let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
 
-            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
-                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+            let data=[
+                {username:item.username,order_no:item.serialnumber,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
@@ -134,7 +134,7 @@ export default React.createClass({
             return (<TableLine key={index} widths={widths} data={data} />);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}

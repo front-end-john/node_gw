@@ -14,8 +14,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  140,    90,   90,   100,      120,    100,     150,     130,      120,     100,    80],
-            titles:    ['订单号','用户','标签','订单来源','下单时间','车辆','去程航站楼','预约时间','返程信息','更多服务','操作']
+            initWidths:[  90,   90,   100,    100,     120,     120,      120,     100,    80],
+            titles:    [ '用户','标签','订单来源','车辆', '预约机场','预约时间','返程信息','更多服务','操作']
         };
     },
     showWarnTip(msg){
@@ -80,10 +80,10 @@ export default React.createClass({
         let initWidths=this.state.initWidths;
         let initSumWidth = initWidths.reduce((x,y)=>x+y);
         //补偿宽度
-        let offsetWidth=220;
+        let offsetWidth=225;
         //允许的最小宽度
-        let minWidth=1340+offsetWidth,len=initWidths.length;
-        let screenWidth=document.body.clientWidth;
+        let minWidth=1240+offsetWidth,len=initWidths.length;
+        let screenWidth=document.body.clientWidth-40;
         let sumWidth=initSumWidth,widths=initWidths;
         let actulWidth=maxNumber(minWidth,screenWidth,sumWidth+offsetWidth);
 
@@ -127,11 +127,11 @@ export default React.createClass({
             let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"";
             let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"";
 
-            let data=[{order_no:item.serialnumber,fieldName:'OrderNo'},
-                {username:item.username,phone_no:item.userphoneno,fieldName:'User'},
+            let data=[/*{order_no:item.serialnumber,fieldName:'OrderNo'},*/
+                {username:item.username,phone_no:item.userphoneno,order_no:item.serialnumber,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},
-                {order_time:item.createtime,fieldName:'OrderTime'},
+              /*  {order_time:item.createtime,fieldName:'OrderTime'},*/
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {terminal:item.terminalname,fieldName:'OnwardTerminal'},
                 {session:item.bookingtime,fieldName:'Session'},
@@ -141,7 +141,7 @@ export default React.createClass({
             return (<TableLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)}/>);
         });
         return(
-            <section className="data-section" style={{width:sumWidth+40}}>
+            <section className="data-section" style={{width:sumWidth+60}}>
                 <div className="query-condition">
                     <SelectInput title="订单来源：" change={this.handleChange} pdl="0" name="order_source"/>
                     <SelectInput title={<span>&emsp;&emsp;机&emsp;&emsp;场：</span>}
