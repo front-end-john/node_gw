@@ -112,7 +112,7 @@ export default React.createClass({
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
-                {session:item.bookingtime,fieldName:'Session'},
+                {session:item.bookingtime,os:item.status,fieldName:'Session'},
                 {oid:item.serialnumber,aid:item.airportid,did:item.parkingdriverid,os:item.status,
                     take_driver:item.parkingdrivername,color:"#DB8800",fieldName:'TakeDriver'},
                 {assign_time:item.parkingassignedtime,fieldName:'AssignTime'},

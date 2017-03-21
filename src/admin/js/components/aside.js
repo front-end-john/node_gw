@@ -61,12 +61,7 @@ export default React.createClass({
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<Ensure title="退出系统" content="确认退出系统吗？" option="logout" />, mask);
     },
-    adaptHeight(){
-        let appHel=getComputedStyle(document.getElementsByClassName("app")[0]).height;
-        appHel=parseFloat(appHel)+20;
-        let sHel=document.body.clientHeight;
-        this.nav.style.height=maxNumber(appHel,sHel,860)+"px";
-    },
+
     componentDidMount(){
         let hash=location.hash;
         hash=hash.substr(2).split("?");
@@ -98,11 +93,6 @@ export default React.createClass({
                 this.setState({currItem:"order_query",secondItem:""});
             }
         }
-        this.adaptHeight();
-        window.addEventListener("resize",this.adaptHeight,false);
-    },
-    componentWillUnmount(){
-        window.removeEventListener("resize",this.adaptHeight);
     },
     handClick(id){
         if(id==="order_query"){

@@ -102,7 +102,6 @@ html,body{
   height: 100%;
   width: 100%;
   &>aside{
-    height:860px;
     width: 180px;
     position: absolute;
     z-index: 20;
@@ -115,9 +114,10 @@ html,body{
   &>.data-section{
     margin-left: 180px;
     background-color: #fff;
+    padding-bottom: 20px;
     &>.data-list{
       padding:0 20px;
-      height: 718px;
+      height: 800px;
       overflow-y: auto;
     }
     &>.data-none{
@@ -479,6 +479,7 @@ html,body{
       top:50%;
       @include translateY(-50%);
       cursor: default;
+      line-height: 20px;
     }
     .disabled{
       cursor:not-allowed;
@@ -618,7 +619,7 @@ html,body{
           em{
             vertical-align: top;
             display: inline-block;
-            width: 200px;
+            width: auto;
           }
         }
         margin-bottom: 10px;

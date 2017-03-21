@@ -112,7 +112,7 @@ export default React.createClass({
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {terminal:item.terminalname,fieldName:'OnwardTerminal'},
-                {session:item.bookingtime,fieldName:'Session'},
+                {session:item.bookingtime,os:item.status,fieldName:'Session'},
                 {airport_park_time_long:item.bufferparkedtime,fieldName:'AirportParkTimeLong'},
                 {start_move_time:item.movingstartedtime,fieldName:'StartMoveTime'},
                 {move_driver:item.movingdrivername,color:"#DB8800",fieldName:'MoveDriver'}];

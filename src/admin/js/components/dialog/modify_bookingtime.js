@@ -30,9 +30,12 @@
         fetch(url,{credentials: 'include'}).then((res)=>{
             return res.json();
         }).then((json)=>{
-            console.log('json', json);
-            if(json.code==0){
-                this.props.reload();
+            //console.log('json', json);
+            if(json.code===0){
+                let reload=this.props.reload;
+                reload && reload();
+                let update=this.props.updateTime;
+                update && update(bookingtime);
                 this.cancel();
             }else {
                 this.showWarnTip(json.msg);

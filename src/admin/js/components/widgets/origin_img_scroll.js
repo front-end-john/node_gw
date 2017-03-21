@@ -25,10 +25,11 @@ export default React.createClass({
             e.stopPropagation();
             e.preventDefault();
         },false);
-        mask.addEventListener("click",()=>{
-            this.cancel();
-        },false);
-
+        mask.addEventListener("click",this.cancel,false);
+    },
+    componentWillUnmount(){
+        let mask=document.getElementById("dialogContainer");
+        mask.removeEventListener("click",this.cancel);
     },
     handleMouseDown(e){
         e.stopPropagation();
@@ -71,7 +72,7 @@ export default React.createClass({
         return(
             <div className="o-scroll-container" ref={c=>this.container=c} onMouseDown={this.handleMouseDown}
                  onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}>
-                <h2 className="title">车辆照片<i onClick={this.cancel}/></h2>
+                <h2 className="title">车辆照片</h2>
                 <ul className="o-img-scroll" ref={(c)=>this.wrap=c}>
                     {list}
                 </ul>

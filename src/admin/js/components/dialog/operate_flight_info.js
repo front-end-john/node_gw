@@ -38,9 +38,12 @@
         }).then((str)=>{
             try{
                 let obj=JSON.parse(str);
-                if(obj.code==0){
-                    this.showWarnTip(null);
-                    this.props.reload();
+                if(obj.code===0){
+                    let reload=this.props.reload;
+                    reload && reload();
+                    let update=this.props.updateFlight;
+                    update && update(returningflight,returningdate);
+                    this.cancel();
                 }else {
                     this.showWarnTip(obj.msg);
                 }

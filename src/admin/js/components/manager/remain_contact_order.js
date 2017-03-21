@@ -134,7 +134,7 @@ export default React.createClass({
               /*  {order_time:item.createtime,fieldName:'OrderTime'},*/
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {terminal:item.terminalname,fieldName:'OnwardTerminal'},
-                {session:item.bookingtime,fieldName:'Session'},
+                {session:item.bookingtime,os:item.status,fieldName:'Session'},
                 {back_flight:flight,back_time:returnDate,fieldName:'ReturnTicket'},
                 {wash:washCar,oil:addOil,colors:[wColor,oColor],fieldName:'MoreService'},
                 {oid:item.serialnumber,fieldName:'TelEnsureOperation'}];

@@ -13,8 +13,8 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[ 100,  110,    110,   110,  110,   120,      120,      120,      120,    120],
-            titles:    ['用户','标签','订单来源','车辆','预约机场','返程航班','航班状态','回程航站楼','更多服务','操作']
+            initWidths:[ 100,  110,    110,   110,   110,      120,      120,     120,    120],
+            titles:    ['用户','标签','订单来源','车辆','预约机场','返程航班','航班状态','更多服务','操作']
         };
     },
     showWarnTip(msg){
@@ -113,10 +113,10 @@ export default React.createClass({
                 oil=moreService[0]||{};
                 wash=moreService[1]||{};
             }
-            let wColor=(wash.status || wash.status===0)?(wash.status==0?"#f00":"#1AA0E5"):"#323232";
-            let oColor=(oil.status || oil.status===0)?(oil.status==0?"#f00":"#1AA0E5"):"#323232";
+            let wColor=(wash.status || wash.status===0)?(wash.status===0?"#f00":"#1AA0E5"):"#323232";
+            let oColor=(oil.status || oil.status===0)?(oil.status===0?"#f00":"#1AA0E5"):"#323232";
             let washConfig=wash.config,oilConfig=oil.config;
-            let washCar=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
+            let washCar=washConfig?(washConfig.rainwashing==1?"下雨也洗车":"下雨不洗车"):"无";
             let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
 
             let data=[
@@ -125,13 +125,13 @@ export default React.createClass({
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
-                {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
-                {status:item.flightstatus,post_time:item.returningtime,date:item.returningdate,
+                {os:item.status,back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
+                {status:item.flightstatus,fetch_time:item.returningtime,date:item.returningdate,os:item.status,
                     number:item.returningflight,fieldName:'ReturnFlightStatus'},
-                {terminal:item.terminalname,fieldName:'ReturnTerminal'},
+               /* {terminal:item.terminalname,fieldName:'ReturnTerminal'},*/
                 {wash:washCar,oil:addOil,colors:[wColor,oColor],fieldName:'MoreService'},
                 {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignSendDriverOperation'}];
-            return (<TableLine key={index} widths={widths} data={data} />);
+            return (<TableLine key={index}  widths={widths} data={data} />);
         });
         return(
             <section className="data-section" style={{width:sumWidth+60}}>

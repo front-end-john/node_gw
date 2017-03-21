@@ -113,7 +113,7 @@ export default React.createClass({
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {city:'',terminal:item.terminalname,fieldName:'OnwardTerminal'},
-                {session:item.bookingtime,fieldName:'Session'},
+                {session:item.bookingtime,os:item.status,fieldName:'Session'},
                 {remain_time:item.timeleft,fieldName:'RemainTakeCarTime'},
                 {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignTakeDriverOperation'}];
             return (<TableLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)}/>);

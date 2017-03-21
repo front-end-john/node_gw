@@ -7,6 +7,10 @@ import Empty from './empty';
 import AssignDriver from "../dialog/assign_driver";
 import FlightStatus from "../dialog/show_flight_status";
 import Reply from "../dialog/customer_service_reply";
+import PredictTime from "../dialog/predict_getcar_time";
+import EditBook from "../dialog/modify_bookingtime";
+import EditFlightInfo from "../dialog/operate_flight_info";
+import ServiceEnsure from "../dialog/more_service_ensure";
 import {optState} from '../../util';
 export default React.createClass({
     getInitialState(){return {};},
@@ -40,7 +44,7 @@ export default React.createClass({
     },
     switchHide(){
         let is=this.state.show;
-        let show=is==0?1:0;
+        let show=is===0?1:0;
         this.setState({show});
     },
     handleTelEnsure(oid){
@@ -79,26 +83,59 @@ export default React.createClass({
     },
     componentWillReceiveProps(nextProps){
         let t1=this.props.type,t2=nextProps.type;
-        if(t1 && t2 && t1!=t2){
+        if(t1 && t2 && t1!==t2){
             ReactDOM.render(<Empty />,this.detailArea);
             this.setState({isExpand:false});
         }
-        if(this.props.data[0].order_no != nextProps.data[0].order_no){
+        if(this.props.data[0].order_no !== nextProps.data[0].order_no){
             ReactDOM.render(<Empty />,this.detailArea);
             this.setState({isExpand:false});
         }
     },
+    editPredictGetCarTime(type,time){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<PredictTime  type={type} url="/admin/api/orders/set_flight_landing_time"
+                                      number={this.serialnumber} time={time}
+                                      updateTime={this.updateFetchTime}  />, mask);
+    },
+    editBookingTime(id,time){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<EditBook oid={id} bookingtime={time}
+                                  updateTime={this.updateBookTime} />, mask);
+    },
+    editFlightInfo(type,fno,fdate){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<EditFlightInfo  type={type} url="/admin/api/orders/edit_returning_info"
+                                         number={this.serialnumber} fno={fno} fdate={fdate}
+                                         updateFlight={this.updateReturnFlight}  />, mask);
+    },
+    ensureExtraService(type,name,tel,sid,intro){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<ServiceEnsure  type={type} reload={this.props.updateList}
+                                        data={{name,tel,sid,intro}}/>, mask);
+    },
+    updateFetchTime(time){
+        this.setState({fetchTime:time});
+    },
+    updateBookTime(time){
+        this.setState({bookingTime:time});
+    },
+    updateReturnFlight(flight,time){
+        this.setState({returnFlight:flight,returnTime:time});
+    },
     render(){
         let widths=this.props.widths;
         let list=this.props.data.map((item,index) =>{
-            if(item.fieldName=='OrderNo'){
+            /*if(item.fieldName=='OrderNo'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p onClick={()=>this.expandDetail(item.order_no)}
                            style={{color:"#1A9FE5",cursor:"pointer"}}>{item.order_no}</p>
                     </li>
                 );
-            }else if(item.fieldName=='User'){
+            }else */
+            if(item.fieldName=='User'){
+                this.serialnumber=item.order_no;
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p style={{color:"#1A9FE5",cursor:"pointer"}}
@@ -220,9 +257,11 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='Session'){
+                let time=this.state.bookingTime||item.session;
                 return(
                     <li key={index} style={{width:widths[index]}}>
-                        <p>{item.session}</p>
+                        <p className={optState(1,item.os)?"enable":"disabled"}
+                           onClick={()=>this.editBookingTime(this.serialnumber,time)}>{time}</p>
                     </li>
                 );
             }else if(item.fieldName=='OrderFetchTime'){
@@ -244,9 +283,13 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='ReturnTicket'){
+                let flight=this.state.returnFlight||item.back_flight;
+                let time=this.state.returnTime||item.back_time;
                 return(
                     <li key={index} style={{width:widths[index]}}>
-                        <p>{item.back_flight?<span>{item.back_flight}<br/></span>:""}{item.back_time}</p>
+                        <p className={optState(2,item.os)?"enable":"disabled"}
+                           onClick={()=>this.editFlightInfo("mod",flight,time)}>
+                            {flight?<span>{flight}<br/></span>:""}{time}</p>
                     </li>
                 );
             }else if(item.fieldName=='RemainTakeCarTime'){
@@ -256,10 +299,16 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='MoreService'){
+
                 return(
                     <li key={index} style={{width:widths[index]}} className={item.is_end?"list-end":""}>
-                        <p><span style={{color:item.colors[0]}}>{item.wash}</span><br/>
-                            <span style={{color:item.colors[1]}}>{item.oil}</span></p>
+                        <p><span className={optState(7,item.os)?"enable":"disabled"}
+                                 onClick={()=>this.ensureExtraService("wash",item.name,item.phone,item.ids[0],item.wash)}
+                            style={{color:item.colors[0]}}>{item.wash}</span><br/>
+                            <span style={{color:item.colors[1]}}
+                                  className={optState(7,item.os)?"enable":"disabled"}
+                                  onClick={()=>this.ensureExtraService("oil",item.name,item.phone,item.ids[1],item.oil)}
+                            >{item.oil}</span></p>
                     </li>
                 );
             }else if(item.fieldName=='AdvanceTime'){
@@ -333,10 +382,15 @@ export default React.createClass({
                     </li>
                 );
             }else if(item.fieldName=='ReturnFlightStatus'){
+                let time=this.state.fetchTime||item.fetch_time;
                 return(
                     <li key={index} style={{width:widths[index]}}>
-                        <p onClick={()=>this.showFlightStatus(item.date,item.number)} style={{cursor:"pointer"}}>
-                            {item.status?<span style={{color:"red"}}>{item.status}<br/></span>:""}{item.post_time}</p>
+                        <p>{item.status?<span onClick={()=>this.showFlightStatus(item.date,item.number)}
+                                             style={{color:"red",cursor:"pointer"}}>
+                            {item.status}<br/></span>:""}
+                            <span className={optState(3,item.os)?"enable":"disabled"}
+                                  onClick={()=>this.editPredictGetCarTime("mod",time)}>{time}</span>
+                        </p>
                     </li>
                 );
             }else if(item.fieldName=='StartTakeTime'){

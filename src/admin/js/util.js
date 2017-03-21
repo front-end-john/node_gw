@@ -93,17 +93,17 @@ export let getStateInfo=(number)=>{
  * @param s
  */
 export let optState=(type,s)=>{
-    if(type==1){
+    if(type===1){
         return s>=0 && s<10
-    }else if(type==2 || type==3){
+    }else if(type===2 || type===3){
         return s>=0 && s<30
-    }else if(type==4){
+    }else if(type===4){
         return s>=0 && s<15
-    }else if(type==5){
+    }else if(type===5){
         return s>=0 && s<=16
-    }else if(type==6){
+    }else if(type===6){
         return s>=0 && s<=5
-    }else if(type==7){
+    }else if(type===7){
         return s>=16 && s<=25
     }else {
         return false;

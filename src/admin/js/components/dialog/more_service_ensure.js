@@ -23,22 +23,17 @@ export default React.createClass({
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("洗车或加油服务确认响应："+res.status);
             if(+res.status < 400){
-                return res.text();
+                return res.json();
             }else {
                 throw new Error("服务异常");
             }
-        }).then((str)=>{
-            //console.log(str);
-            try {
-                let obj=JSON.parse(str);
-                if(obj.code==0){
-                    this.props.reload();
-                    this.cancel();
-                }else {
-                    this.showWarnTip(obj.msg);
-                }
-            }catch(e){
-                this.showWarnTip("数据异常");
+        }).then((obj)=>{
+            //console.dir(obj);
+            if(obj.code===0){
+                this.props.reload();
+                this.cancel();
+            }else {
+                this.showWarnTip(obj.msg);
             }
         }).catch((e)=>{
             this.showWarnTip("请求异常");

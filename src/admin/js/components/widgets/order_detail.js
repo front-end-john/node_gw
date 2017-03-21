@@ -257,8 +257,8 @@ export default React.createClass({
                 this.handleSwitch("pro_5");
             }
         },500);
-        this.adjustWidth();
         window.addEventListener("resize",this.adjustWidth,false);
+        this.adjustWidth();
     },
     componentWillUnmount(){
         window.removeEventListener("resize",this.adjustWidth);
@@ -275,12 +275,12 @@ export default React.createClass({
         if(sumWidth>edgeValue){
             for(let i=0;i<4;i++) {
                 let currWidth=parseFloat(getComputedStyle(bs[i]).width);
-                if (i == 0){
+                if (i ===0){
                     this.userTag.style.width= currWidth-labelWidth+'px';
                     this.uRemark.style.width= currWidth-labelWidth+'px';
-                }else if(i==1){
+                }else if(i===1){
                     this.comeRemark.style.width= currWidth-labelWidth+'px';
-                }else if(i==2){
+                }else if(i===2){
                     this.suRemark.style.width= currWidth-labelWidth+'px';
                     this.swRemark.style.width= currWidth-labelWidth+'px';
                     this.soRemark.style.width= currWidth-labelWidth+'px';
@@ -294,7 +294,7 @@ export default React.createClass({
         let car=o.car||{};
         let moreService=o.serviceorders||[];
         let driverNote=o.drivernote||[];
-
+        let carInfo=car.carno?<i>{car.carno}&emsp;{car.color}{car.brand}</i>:"添加";
         let level=[];
         for(let i=0;i<user.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
@@ -305,10 +305,10 @@ export default React.createClass({
             oil=moreService[0]||{};
             wash=moreService[1]||{};
         }
-        let wColor=(wash.status || wash.status===0)?(wash.status==0?"#f00":"#1AA0E5"):"#323232";
-        let oColor=(oil.status || oil.status===0)?(oil.status==0?"#f00":"#1AA0E5"):"#323232";
+        let wColor=(wash.status || wash.status===0)?(wash.status===0?"#f00":"#0f0"):"#323232";
+        let oColor=(oil.status || oil.status===0)?(oil.status===0?"#f00":"#0f0"):"#323232";
         let washConfig=wash.config,oilConfig=oil.config;
-        let washIntro=washConfig?(washConfig.rainwashing=="1"?"下雨也洗车":"下雨不洗车"):"无";
+        let washIntro=washConfig?(washConfig.rainwashing==1?"下雨也洗车":"下雨不洗车"):"无";
         let oilIntro=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
         /**
          * 客服 洗车备注
@@ -371,14 +371,14 @@ export default React.createClass({
                     <label style={{paddingLeft:'20px'}}>来源：</label><span>{o.comefrom}</span>
                     <label style={{paddingLeft:'20px'}}>状态：</label>
                     <span style={{color:"#f00"}}>{states[0]}</span>
-                    {s==-1?<label style={{paddingLeft:'20px'}}>取消者：<span>{o.canceler}</span></label>:""}
-                    {s==-1?<label style={{paddingLeft:'20px'}}>取消时间：<span>{o.cancelingtime}</span></label>:""}
+                    {s===-1?<label style={{paddingLeft:'20px'}}>取消者：<span>{o.canceler}</span></label>:""}
+                    {s===-1?<label style={{paddingLeft:'20px'}}>取消时间：<span>{o.cancelingtime}</span></label>:""}
 
                     <label style={{paddingLeft:'80px',color:"#1AA0E5",cursor:"pointer"}}
                        onClick={this.handleSendMsg}>发送短信</label>
                     {optState(1,s)?<label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
                        onClick={this.handleCancelOrder}>取消订单</label>:""}
-                    {s==0?<label style={{paddingLeft:'20px',color:"#DB8800",cursor:"pointer"}}
+                    {s===0?<label style={{paddingLeft:'20px',color:"#DB8800",cursor:"pointer"}}
                        onClick={()=>this.handleTelEnsure(o.serialnumber)}>电话确认</label>:""}
                 </p>
                 <div className="order-main">
@@ -389,7 +389,7 @@ export default React.createClass({
                             <figcaption>
                                 <p>姓名：<span style={{color:"#1AA0E5",cursor:"pointer"}}
                                              onClick={()=>this.editUserInfo()}>{user.realname}</span></p>
-                                <p>性别：<span>{user.sex==1?"男":"女"}</span></p>
+                                <p>性别：<span>{+user.sex===1?"男":"女"}</span></p>
                                 <p>手机：<span>{user.phoneno}</span></p>
                             </figcaption>
                         </figure>
@@ -413,7 +413,7 @@ export default React.createClass({
                         <div className="up-section">
                             <p><label>车辆信息：</label>
                                 <span className="enable" onClick={()=>this.editCarInfo(car)}>
-                                    {car.carno}&emsp;{car.color}{car.brand}</span></p>
+                                    {carInfo}</span></p>
                             <p><label>预约接车时间：</label>
                                 <span className={optState(1,s)?"enable":"disabled"}
                                       onClick={()=>this.editBookingTime(o.serialnumber,o.bookingtime)}>
