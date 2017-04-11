@@ -11,6 +11,7 @@ import PredictTime from "../dialog/predict_getcar_time";
 import EditBook from "../dialog/modify_bookingtime";
 import EditFlightInfo from "../dialog/operate_flight_info";
 import ServiceEnsure from "../dialog/more_service_ensure";
+import TakeAfterDetail from "./take_after_detail";
 import {optState} from '../../util';
 export default React.createClass({
     getInitialState(){return {};},
@@ -18,7 +19,7 @@ export default React.createClass({
         let mask=document.getElementById("dialogContainer");
         let title="",content="";
         this.setState({show:show});
-        if(show==0){
+        if(show===0){
             title="展现评论及回复";
             content="确定要展现评论及回复吗？";
         }else {
@@ -28,7 +29,7 @@ export default React.createClass({
         ReactDOM.render(<Ensure url="/admin/api/orders/switchcommentshow"
                                 title={title} content={content}
                                 change={this.switchHide}
-                                public_show={show==0?1:0}
+                                public_show={show===0?1:0}
                                 order_id={id}/>, mask);
     },
     handleReply(id,show){
@@ -56,7 +57,9 @@ export default React.createClass({
     handleAssignDriver(type,aid,oid,did){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
-        ReactDOM.render(<AssignDriver reload={this.props.updateList} type={type} airport_id={aid} order_id={oid} driver_id={did} />, mask);
+        ReactDOM.render(<AssignDriver reload={this.props.updateList} type={type}
+                                      airport_id={aid}
+                                      order_id={oid} driver_id={did} />, mask);
     },
     showMoreTags(tags){
         let mask=document.getElementById("dialogContainer");
@@ -73,8 +76,10 @@ export default React.createClass({
         if(this.state.isExpand){
             ReactDOM.render(<Empty />,this.detailArea);
         }else {
-            if(this.props.section=="jsj"){
+            if(this.props.section==="jsj"){
                 ReactDOM.render(<JSJOrderDetail width={sumWidth} type={this.props.type} number={orderNo}/>,this.detailArea);
+            }else if(this.props.section==="take_after"){
+                ReactDOM.render(<TakeAfterDetail width={sumWidth} number={orderNo}/>,this.detailArea);
             }else {
                 ReactDOM.render(<OrderDetail width={sumWidth} number={orderNo}/>,this.detailArea);
             }
@@ -172,6 +177,24 @@ export default React.createClass({
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.create_order_time}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='MaintainStatus'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.status}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='DriverRecommend'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.refer}</p>
+                    </li>
+                );
+            }else if(item.fieldName=='CarMileage'){
+                return(
+                    <li key={index} style={{width:widths[index]} }>
+                        <p>{item.miles}</p>
                     </li>
                 );
             }else if(item.fieldName=='EvaluateStarLevel'){
@@ -435,14 +458,14 @@ export default React.createClass({
                             <em onClick={()=>this.handleTelEnsure(item.oid)}>电话确认</em></p>
                     </li>
                 );
-            }else if(item.fieldName=='AssignTakeDriverOperation'){
+            }else if(item.fieldName==='AssignTakeDriverOperation'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#DB8800",cursor:"pointer"}}>
                             <em  onClick={()=>this.handleAssignDriver("parking",item.aid,item.oid,null)}>分配接车司机</em></p>
                     </li>
                 );
-            }else if(item.fieldName=='AssignSendDriverOperation'){
+            }else if(item.fieldName==='AssignSendDriverOperation'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#1A9FE5",cursor:"pointer"}}>

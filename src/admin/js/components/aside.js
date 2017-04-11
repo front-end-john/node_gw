@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ModPasswd from './dialog/modify_password';
 import Ensure from './dialog/ensure';
-import {maxNumber} from '../util';
 import PrimaryItem from './widgets/nav_item';
 
 export default React.createClass({
@@ -14,7 +13,7 @@ export default React.createClass({
         };
     },
     freshOrderCount(){
-        let url="/jsj/system/runningordernumber";
+        /*let url="/jsj/system/runningordernumber";
         console.log("jsj各订单数量url："+url);
         fetch(url,{credentials:'include'}).then(function(res){
             console.log("jsj各订单数量响应："+res.status);
@@ -27,8 +26,8 @@ export default React.createClass({
             this.setState({jsjCount:obj.record||{}});
         }).catch(function(e){
             console.trace('错误:', e);
-        });
-        url="/admin/api/orders/ordersummary";
+        });*/
+        let url="/admin/api/orders/ordersummary";
         console.log("admin各订单数量url："+url);
         fetch(url,{credentials:'include'}).then(function(res){
             console.log("admin各订单数量响应："+res.status);
@@ -38,7 +37,7 @@ export default React.createClass({
                 throw new Error("服务异常");
             }
         }).then((obj)=>{
-            if(obj.code==0){
+            if(obj.code===0){
                 this.setState({adminCount:obj.result});
             }else {
                 console.warn(obj.msg);
@@ -98,8 +97,9 @@ export default React.createClass({
         if(id==="order_query"){
             location.href="#/order_query";
             this.setState({secondItem:"",currItem:id});
-        }else if(id==="order_manager"){
-
+        }else if(id==="take_after_service"){
+            location.href="#/take_after_service";
+            this.setState({secondItem:"",currItem:id});
         }else if(id==="jsj_order"){
 
         }else if(id==="user_manager"){
@@ -164,8 +164,8 @@ export default React.createClass({
                     <div>
                         <p>客服人员</p>
                         <section onClick={()=>{
-                            let cn=this.opt.className;
-                            cn=='expand'?this.opt.className="":this.opt.className="expand";
+                            let clazz=this.opt.className;
+                            clazz==='expand'?this.opt.className="":this.opt.className="expand";
                         }}>
                             系统管理员<img className="arrow" src="/duck/img/icon/07.png"/>
                             <ul ref={(c)=>this.opt=c} onMouseLeave={this.handleLeaveHide}>
@@ -178,17 +178,24 @@ export default React.createClass({
                 <PrimaryItem  id='order_query' itemName="订单查询" currItem={this.state.currItem}
                               click={this.handClick}/>
 
-                <PrimaryItem id='order_manager' childItems={orderManager} itemName="订单管理"
-                             secondItem={this.state.secondItem} currItem={this.state.currItem}
+                <PrimaryItem id='order_manager' itemName="订单管理"
+                             childItems={orderManager}
+                             secondItem={this.state.secondItem}
+                             currItem={this.state.currItem}
                              click={this.handClick}
                              secondClick={this.handleSecondClick}
                              prefix="order_manager_"/>
+
+                <PrimaryItem id='take_after_service' itemName="车后服务" currItem={this.state.currItem}
+                             click={this.handClick} />
+
                 <PrimaryItem id='jsj_order' itemName="接送机订单"
                              childItems={jsjOrder}
                              currItem={this.state.currItem}
                              secondItem={this.state.secondItem}
                              click={this.handClick}
-                             secondClick={this.handleSecondClick} prefix="jsj_order_" />
+                             secondClick={this.handleSecondClick}
+                             prefix="jsj_order_" />
                 <PrimaryItem id='user_manager' itemName="用户管理" currItem={this.state.currItem}
                              click={this.handClick} />
                 <PrimaryItem id='comment_manager' itemName="评价管理" currItem={this.state.currItem}

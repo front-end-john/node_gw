@@ -30,7 +30,7 @@ export default React.createClass({
             console.log("登陆响应状态",res.status);
             return res.json();
         }).then((json)=>{
-            if(json.code==0){
+            if(json.code===0){
                 console.log('管理员信息', json);
                 localStorage.setItem("AdminInfo",JSON.stringify(json.admin));
                 localStorage.setItem("AdminInfo_expires",new Date().getTime());

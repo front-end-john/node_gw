@@ -60,7 +60,7 @@ export default React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            if(obj.code==0){
+            if(obj.code===0){
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
@@ -118,7 +118,7 @@ export default React.createClass({
             let washConfig=wash.config,oilConfig=oil.config;
             let washCar=washConfig?(washConfig.rainwashing==1?"下雨也洗车":"下雨不洗车"):"无";
             let addOil=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
-
+            let bgColor=item.status===23?"#fcf8e3":null;
             let data=[
                 {username:item.username,order_no:item.serialnumber,phone_no:item.userphoneno,fieldName:'User'},
                 {tags:item.usertags,fieldName:'Label'},
@@ -128,10 +128,11 @@ export default React.createClass({
                 {os:item.status,back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
                 {status:item.flightstatus,fetch_time:item.returningtime,date:item.returningdate,os:item.status,
                     number:item.returningflight,fieldName:'ReturnFlightStatus'},
-               /* {terminal:item.terminalname,fieldName:'ReturnTerminal'},*/
-                {wash:washCar,oil:addOil,colors:[wColor,oColor],fieldName:'MoreService'},
+                {wash:washCar,oil:addOil,colors:[wColor,oColor],ids:[wash.serviceorderid,oil.serviceorderid],
+                    os:item.status, name:item.username, phone:item.userphoneno,fieldName:'MoreService'},
                 {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignSendDriverOperation'}];
-            return (<TableLine key={index}  widths={widths} data={data} />);
+
+            return (<TableLine key={index}  widths={widths} data={data} background={bgColor} />);
         });
         return(
             <section className="data-section" style={{width:sumWidth+60}}>

@@ -11,7 +11,7 @@ export default React.createClass({
     },
     render(){
         let status=this.state.status,html=null;
-        if(status==0){
+        if(status===0){
             html=(<p className="none-msg">暂无车辆信息</p>);
         }else {
             let {parkingspot,keyspot,mileage,inTime,pictures}=this.props.data;

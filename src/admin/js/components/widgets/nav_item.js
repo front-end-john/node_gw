@@ -12,9 +12,7 @@ export default React.createClass({
                         {item.name} <span>{item.newCount}</span></li>
                 );
             });
-            childLevel = (<ul className="primary-list">
-                {list}
-            </ul>);
+            childLevel = (<ul className="primary-list">{list}</ul>);
         }
 
         return (

@@ -103,6 +103,7 @@ html,body{
   width: 100%;
   &>aside{
     width: 180px;
+    min-height: 940px;
     position: absolute;
     z-index: 20;
     left: 0;top:0;bottom: 0;
@@ -121,7 +122,7 @@ html,body{
       overflow-y: auto;
     }
     &>.data-none{
-      padding:0 10px;
+      padding:0 20px;
       &>p{
         text-align: center;
         padding-top:40px;
@@ -132,6 +133,21 @@ html,body{
           position: relative;
           top:-2px;
         }
+      }
+    }
+    &>.tab-options{
+      overflow: hidden;
+      border-top: 1px solid #dcdcdc;
+      border-left: 1px solid #dcdcdc;
+      margin-left: 20px;
+      display: inline-block;
+      vertical-align: bottom;
+      &>li{
+        cursor: pointer;
+        font-size: 16px;
+        float: left;
+        padding: 15px 20px;
+        border-right: 1px solid #dcdcdc;
       }
     }
   }
@@ -242,6 +258,13 @@ html,body{
   }
 }
 .primary-item:nth-of-type(3){
+  &>h2{
+    &>.item-icon{
+      background-position:-14px -0px;
+    }
+  }
+}
+.primary-item:nth-of-type(4){
   padding-bottom: 10px;
   &>h2{
     padding-bottom: 10px;
@@ -258,21 +281,21 @@ html,body{
     &:after{  width: 0;  }
   }
 }
-.primary-item:nth-of-type(4){
+.primary-item:nth-of-type(5){
   &>h2{
     &>.item-icon{
       background-position:-14px -0px;
     }
   }
 }
-.primary-item:nth-of-type(5){
+.primary-item:nth-of-type(6){
   &>h2{
     &>.item-icon{
       background-position: -56px -0px;
     }
   }
 }
-.primary-item:nth-of-type(6){
+.primary-item:nth-of-type(7){
   &>h2{
     &>.item-icon{
       height: 16px;
@@ -523,6 +546,99 @@ html,body{
     }
   }
 }
+.take-after-detail{
+  &>.order-main{
+    &>div{
+      @include column(3/13);
+      &:nth-of-type(2){
+        @include column(4/13);
+      }
+    }
+  }
+}
+.car-retain-info{
+  &>div{
+    padding: 20px 0 0 20px;
+  }
+  &>.move-car{
+    @include center;
+    padding-top: 18px;
+    &>.scroll-container{
+      @include column();
+      $img-w:160px;
+      width: $img-w;
+      height: auto;
+      overflow: hidden;
+      position: relative;
+      .img-scroll{
+        position: relative;
+        white-space:nowrap;
+        @include transition(all 0.1s ease);
+        &>li{
+          display: inline-block;
+          vertical-align: middle;
+          &>img{
+            vertical-align: middle;
+            width: $img-w;
+            max-height: 280px;
+          }
+        }
+      }
+      .offset_1{left:0;}
+      .offset_2{left:-$img-w;}
+      .offset_3{left:-2 * $img-w;}
+      .offset_4{left:-3 * $img-w;}
+      .offset_5{left:-4 * $img-w;}
+      .offset_6{left:-5 * $img-w;}
+      .offset_7{left:-6 * $img-w;}
+      .offset_8{left:-7 * $img-w;}
+
+      &>.dot{
+        position: absolute;
+        width: 100%;height: 13px;
+        background-color: rgba(#000000,0.6);
+        bottom: 0;left: 0;
+        text-align: center;
+        &>em{
+          display: inline-block;
+          margin: 0 5px 4px;
+          width: 5px;
+          height: 5px;
+          background-color: #fff;
+          @include border-radius(50%);
+        }
+        .dot_red{background-color: #f00;}
+      }
+    }
+    &>.move-car-msg{
+      @include column();
+      padding-left: 18px;
+      width: calc(100% - 200px);
+      &>p{
+        margin-bottom: 10px;
+        &:nth-last-of-type(1){
+          margin-top: 36px;
+        }
+        &>span{
+          color: #323232;
+        }
+      }
+    }
+    &>.in-garage{
+      padding-left: 18px;
+      @include column();
+      width: calc(100% - 200px);
+      overflow: hidden;
+      &>p{
+        margin-bottom: 10px;
+        &>span{
+          color: #323232;
+        }
+      }
+    }
+  }
+}
+
 .paging{
   //height: 60px;
   background-color: #fff;

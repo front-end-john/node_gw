@@ -61,7 +61,7 @@ export default React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            if(obj.code==0){
+            if(obj.code===0){
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {

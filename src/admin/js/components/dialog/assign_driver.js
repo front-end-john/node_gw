@@ -9,7 +9,7 @@ export default React.createClass({
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
 
-        let url="/admin/api/drivers/list_by_airport?airportid="+(this.props.aid||1);
+        let url="/admin/api/drivers/list_by_airport?airportid="+(this.props.airport_id||1);
         console.log("分配司机url",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
             console.log("请求司机列表响应："+res.status);
@@ -47,7 +47,7 @@ export default React.createClass({
         let assign_type=this.props.type;
         let driver_id=driver.driverid||this.state.driverId;
         let url="/admin/api/orders/assign_parking_driver?";
-        if(assign_type == "returning"){
+        if(assign_type==="returning"){
             url="/admin/api/orders/assign_returning_driver?";
         }
         url+=queryStr.stringify({order_id,assign_type,driver_id});

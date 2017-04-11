@@ -1,4 +1,5 @@
 let webpack = require("webpack");
+let path=require("path");
 module.exports=[{
     name:"jsj",
     entry:{
@@ -17,7 +18,10 @@ module.exports=[{
     },
     output:{
         filename:'[name].js',
-        path:'./public/mobile/jsj/dist'
+        path:path.resolve(__dirname,'public/mobile/jsj/dist')
+    },
+    resolve: {
+        modules: [ path.resolve(__dirname, "src"),"node_modules",]
     },
     module:{
         rules:[
@@ -45,7 +49,10 @@ module.exports=[{
     },
     output:{
         filename:'[name].js',
-        path:'./public/duck/dist'
+        path:path.resolve(__dirname,'public/duck/dist')
+    },
+    resolve: {
+        modules: [ path.resolve(__dirname, "src"),"node_modules",]
     },
     module:{
         rules:[

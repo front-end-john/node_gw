@@ -184,15 +184,16 @@ gulp.task("test-host",()=>{
  */
 gulp.task("production-host",()=>{
     let files=[
-        {src:"./public/**/*",           dest:"/var/code/fronts/public/"},
-        {src:"./routes/*",              dest:"/var/code/fronts/routes/"},
-        {src:"./utils/*",               dest:"/var/code/fronts/utils/"},
-        {src:"./views/**/*",            dest:"/var/code/fronts/views/"},
-        {src:"./bin/*",                 dest:"/var/code/fronts/bin/"},
+        {src:"./public/duck/dist/*",           dest:"/var/code/fronts/public/duck/dist/"},
+        {src:"./public/duck/css/*",           dest:"/var/code/fronts/public/duck/css/"},
+        /*{src:"./routes/!*",              dest:"/var/code/fronts/routes/"},
+        {src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
+        {src:"./views/!**!/!*",            dest:"/var/code/fronts/views/"},
+        {src:"./bin/!*",                 dest:"/var/code/fronts/bin/"},
         {src:"./app.js",                dest:"/var/code/fronts/"},
         {src:"./package.json",          dest:"/var/code/fronts/"},
         {src:"./log4js.json",           dest:"/var/code/fronts/"},
-        {src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},
+        {src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},*/
     ];
     files.forEach((item)=>{
         gulp.src(item.src)

@@ -13,8 +13,10 @@ export default React.createClass({
             queryCondition:{},
             orderData:[],
             pageObj:{},
-            initWidths:[  100,   100,   110,    110,  140,  100,       130,     120,      120,     120,  ],
-            titles:    [ '用户','标签','订单来源','车辆','预约机场','接车司机','入库时间','停车时长','返程航班','更多服务']
+            initWidths:[ 100,  110,    110,   110,   110,      120,      120,     120,    120],
+            titles:    ['用户','标签','订单来源','车辆','预约机场','返程航班','航班状态','更多服务','操作']
+            /*initWidths:[  100,   100,   110,    110,  140,  100,       130,     120,      120,     120,  ],
+            titles:    [ '用户','标签','订单来源','车辆','预约机场','接车司机','入库时间','停车时长','返程航班','更多服务']*/
         };
     },
     showWarnTip(msg){
@@ -132,12 +134,18 @@ export default React.createClass({
                 {order_source:item.comefrom,fieldName:'OrderSource'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
                 {airport:item.terminalname,fieldName:'Airport'},
-                {take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
+                {os:item.status,back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
+                {status:item.flightstatus,fetch_time:item.returningtime,date:item.returningdate,os:item.status,
+                    number:item.returningflight,fieldName:'ReturnFlightStatus'},
+                {wash:washCar,oil:addOil,colors:[wColor,oColor],ids:[wash.serviceorderid,oil.serviceorderid],
+                    os:item.status, name:item.username, phone:item.userphoneno,fieldName:'MoreService'},
+                {aid:item.airportid,oid:item.serialnumber,fieldName:'AssignSendDriverOperation'}];
+                /*{take_driver:item.parkingdrivername,fieldName:'TakeDriver'},
                 {in_garage_time:item.parkingfinishedtime,fieldName:'InGarageTime'},
                 {park_time_long:item.parkingtime,fieldName:'ParkTimeLong'},
                 {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
                 {wash:washCar,oil:addOil,colors:[wColor,oColor],ids:[wash.serviceorderid,oil.serviceorderid],
-                    os:item.status, name:item.username, phone:item.userphoneno,is_end:1,fieldName:'MoreService'}];
+                    os:item.status, name:item.username, phone:item.userphoneno,is_end:1,fieldName:'MoreService'}];*/
             return (<TableLine key={index} widths={widths} data={data} updateList={()=>this.handlePageQuery(1,10)} />);
         });
         return(

@@ -14,6 +14,7 @@ import UserManager from "../components/manager/user_manage";
 import EvaluationManage from "../components/manager/evaluation_manage";
 import CouponManage from "../components/manager/coupon_manage";
 import JsjOrder from "../components/manager/jsj_order";
+import TakeAfterService from "../components/manager/takeafter_service";
 import TextScroll from '../components/widgets/text_scroll';
 
 
@@ -43,6 +44,7 @@ let routes = (<Route path="/" component={App} >
     <Route path="evaluation_manage" component={EvaluationManage}/>
     <Route path="coupon_manage" component={CouponManage}/>
     <Route path="jsj_order" component={JsjOrder}/>
+    <Route path="take_after_service" component={TakeAfterService}/>
 </Route>);
 
 let AppRoute= <Router history={hashHistory}  routes={routes}  />;

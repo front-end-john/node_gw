@@ -54,7 +54,7 @@ export default React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            if(obj.code==0){
+            if(obj.code===0){
                 this.setState({orderData:obj.result});
                 this.setState({pageObj:{page:obj.page,pageCount:obj.pagecount,pageSize:obj.pagesize}});
             }else {
@@ -136,7 +136,7 @@ export default React.createClass({
         document.getElementById("appContainer").style.width=sumWidth+200+"px";
         let list=this.state.orderData.map((item,index)=>{
             let states=getStateInfo(item.status);
-            let cancelBg=item.status==-1?"#f5f5f5":"#fff";
+            let cancelBg=+item.status===-1?"#f5f5f5":"#fff";
             let data=[
                 {username:item.username,order_no:item.serialnumber,phone_no:item.userphoneno,fieldName:'User'},
                 {order_source:item.comefrom,fieldName:'OrderSource'},

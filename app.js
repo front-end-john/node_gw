@@ -11,13 +11,13 @@ let env="development";
 if(os.platform()=='linux'){
     let text=fs.readFileSync("host.tag","utf-8");
     hostType=text.trim();
-    if(hostType=="test"){
+    if(hostType==="test"){
         global.wx_jsj_url="http://test.feibotong.com";
         global.admin_url="http://test.feibotong.com";
-    }else if(hostType=="dev"){
+    }else if(hostType==="dev"){
         global.wx_jsj_url="http://dev.feibotong.com";
         global.admin_url="http://dev.feibotong.com";
-    }else if(hostType=="production"){
+    }else if(hostType==="production"){
         env="production";
         global.wx_jsj_url="http://admin.feibotong.com";
         global.admin_url="http://admin.feibotong.com";
@@ -61,15 +61,10 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-let index = require('./routes/index');
-let users = require('./routes/users');
 let admin = require('./routes/admin');
 let jsj=require('./routes/jsj');
 let jsjAdmin=require('./routes/jsj_admin');
 
-
-app.use('/', index);
-app.use('/users', users);
 app.use('/duck', admin);
 app.use('/mobile/jsj', jsj);
 app.use('/jsj', jsjAdmin);

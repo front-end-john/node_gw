@@ -14,7 +14,7 @@ export default React.createClass({
         this["standout"+id].style.backgroundColor="#F9BE00";
         let flight=this.flightList[id];
         let timestamp=new Date().getTime();
-        if(+orderType==1){
+        if(+orderType===1){
             if(flight <= timestamp){
                 ReactDOM.render(<PulldownTip msg="该航班已降落，无法预约！" />,dom);
                 return 0;
