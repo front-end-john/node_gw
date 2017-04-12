@@ -5,7 +5,8 @@
   "scripts": {
     "webpack": "webpack --watch",
     "test map": "jest map.test",
-    "test promise": "jest es6promise.test"
+    "test promise": "jest es6promise.test",
+    "test randomjson": "jest json.test"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -37,7 +38,9 @@
     "gulp-compass": "^2.1.0",
     "gulp-sftp": "^0.1.5",
     "gulp-watch": "^4.3.11",
+    "html-webpack-plugin": "^2.28.0",
     "jest": "^18.1.0",
+    "randomjson": "^1.0.5",
     "react": "^15.4.2",
     "react-date-picker": "^5.3.28",
     "react-dom": "^15.4.2",

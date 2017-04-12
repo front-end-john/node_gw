@@ -8,7 +8,7 @@ let session = require('express-session');
 let os = require('os');
 const fs = require('fs');
 let env="development";
-if(os.platform()=='linux'){
+if(os.platform()==='linux'){
     let text=fs.readFileSync("host.tag","utf-8");
     hostType=text.trim();
     if(hostType==="test"){
@@ -29,18 +29,11 @@ if(os.platform()=='linux'){
 
 let app = express();
 app.set('env', env);
-if(env=="production"){
+if(env==="production"){
     app.set('port', 19000);
 }else {
     app.set('port', 8180);
 }
-// view engine setup
-let engine = require('express-dot-engine');
-app.engine('dot', engine.__express);
-app.set('view engine', 'dot');
-
-app.set('views', path.join(__dirname, 'views'));
-
 
 log4js.configure('./log4js.json',{ reloadSecs: 300 });
 let logger = log4js.getLogger('app');
@@ -65,9 +58,11 @@ let admin = require('./routes/admin');
 let jsj=require('./routes/jsj');
 let jsjAdmin=require('./routes/jsj_admin');
 
+
 app.use('/duck', admin);
 app.use('/mobile/jsj', jsj);
 app.use('/jsj', jsjAdmin);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

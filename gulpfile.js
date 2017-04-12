@@ -11,7 +11,7 @@ let reload = browserSync.reload;
 /**
  * 监听资源文件改变，自动同步刷新浏览器
  */
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync',function(){
     browserSync.init({
         proxy: "127.0.0.1:8180"
     });
@@ -47,6 +47,17 @@ gulp.task('compass', function() {
                 sass: 'src/jsj/sass'
             })).pipe(gulp.dest('./public/mobile/jsj/css/'));
     });
+    /**
+     * additional scss文件改变才编译
+     */
+    gulp.watch('./src/additional/sass/*.scss').on('change', ()=>{
+        gulp.src('./src/additional/sass/*.scss')
+            .pipe(compass({
+                config_file: './config/additional.rb',
+                css: 'public/duck/additional/css',
+                sass: 'src/additional/sass'
+            })).pipe(gulp.dest('./public/duck/additional/css/'));
+    });
 });
 
 /**
@@ -77,6 +88,18 @@ gulp.task('compiled-css-upload',function () {
             keyLocation: "./utils/dev",
             remotePath:"/var/code/fronts/public/mobile/jsj/css/"
         }));
+    let additional_css_path='./public/duck/additional/css/*.css';
+    gulp.src(additional_css_path)
+        /**
+         * 文件改变才上传
+         */
+        .pipe(watch(additional_css_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/duck/additional/css/"
+        }));
 });
 
 /**
@@ -84,7 +107,11 @@ gulp.task('compiled-css-upload',function () {
  */
 gulp.task('watch-compiled-react-upload',function () {
     let admin_js_path='./public/duck/dist/*.js';
-    let jsj_js_path='./public/mobile/jsj/dist/*.js';
+    let admin_html_path='./public/duck/www/*.html';
+    let jsj_js_path='./public/mobile/jsj/js/*.js';
+    let jsj_html_path='./public/mobile/jsj/www/*.html';
+    let additional_js_path='./public/duck/additional/dist/*.js';
+    let additional_html_path='./public/duck/additional/www/*.html';
 
     gulp.src(admin_js_path)
         .pipe(watch(admin_js_path))
@@ -94,13 +121,47 @@ gulp.task('watch-compiled-react-upload',function () {
             keyLocation: "./utils/dev",
             remotePath:"/var/code/fronts/public/duck/dist/"
         }));
+    gulp.src(admin_html_path)
+        .pipe(watch(admin_html_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/duck/www/"
+        }));
+
     gulp.src(jsj_js_path)
         .pipe(watch(jsj_js_path))
         .pipe(sftp({
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/mobile/jsj/dist/"
+            remotePath:"/var/code/fronts/public/mobile/jsj/js/"
+        }));
+    gulp.src(jsj_html_path)
+        .pipe(watch(jsj_html_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/mobile/jsj/www/"
+        }));
+
+    gulp.src(additional_js_path)
+        .pipe(watch(additional_js_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/duck/additional/dist/"
+        }));
+    gulp.src(additional_html_path)
+        .pipe(watch(additional_html_path))
+        .pipe(sftp({
+            host: 'dev.feibotong.com',
+            user: 'ubuntu',
+            keyLocation: "./utils/dev",
+            remotePath:"/var/code/fronts/public/duck/additional/www/"
         }));
 
 });
@@ -184,16 +245,16 @@ gulp.task("test-host",()=>{
  */
 gulp.task("production-host",()=>{
     let files=[
-        {src:"./public/duck/dist/*",           dest:"/var/code/fronts/public/duck/dist/"},
-        {src:"./public/duck/css/*",           dest:"/var/code/fronts/public/duck/css/"},
-        /*{src:"./routes/!*",              dest:"/var/code/fronts/routes/"},
-        {src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
-        {src:"./views/!**!/!*",            dest:"/var/code/fronts/views/"},
-        {src:"./bin/!*",                 dest:"/var/code/fronts/bin/"},
+        {src:"./public/**/*",           dest:"/var/code/fronts/public/"},
+        {src:"./public/*.html",         dest:"/var/code/fronts/public/"},
+        {src:"./routes/*",              dest:"/var/code/fronts/routes/"},
+        //{src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
+        //{src:"./views/**/*",            dest:"/var/code/fronts/views/"},
+        //{src:"./bin/!*",                 dest:"/var/code/fronts/bin/"},
         {src:"./app.js",                dest:"/var/code/fronts/"},
-        {src:"./package.json",          dest:"/var/code/fronts/"},
-        {src:"./log4js.json",           dest:"/var/code/fronts/"},
-        {src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},*/
+        //{src:"./package.json",          dest:"/var/code/fronts/"},
+        //{src:"./log4js.json",           dest:"/var/code/fronts/"},
+        //{src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},
     ];
     files.forEach((item)=>{
         gulp.src(item.src)

@@ -83,7 +83,7 @@ export default React.createClass({
         }).then((str)=>{
             let obj=JSON.parse(str);
             console.log(obj);
-            if(obj.code == 0){
+            if(obj.code === 0){
                 let serialnumber=obj.record.serialnumber;
                 sessionStorage.setItem("OrderSerialNumber",serialnumber);
                 location.href="http://m.feiche51.com/pages/weixin_code?redirect_url=http://dev.feibotong.com/mobile/jsj/order_pay?serialnumber="+serialnumber;

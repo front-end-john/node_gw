@@ -1,47 +1,18 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>飞泊通客服管理系统</title>
+        <title><%= htmlWebpackPlugin.options.title %></title>
         <link rel="icon" href="/duck/favicon.ico" sizes="20x20">
     </head>
     <script>
-        /**
-         * requestAnimationFrame兼容脚本
-         */
-        (function() {
-            var lastTime = 0;
-            var vendors = ['webkit', 'moz'];
-            for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-                window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-                window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] ||
-                    window[vendors[x] + 'CancelRequestAnimationFrame'];
-            }
-
-            if (!window.requestAnimationFrame) {
-                window.requestAnimationFrame = function(callback, element) {
-                    var currTime = new Date().getTime();
-                    var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
-                    var id = window.setTimeout(function() {
-                        callback(currTime + timeToCall);
-                    }, timeToCall);
-                    lastTime = currTime + timeToCall;
-                    return id;
-                };
-            }
-            if (!window.cancelAnimationFrame) {
-                window.cancelAnimationFrame = function(id) {
-                    clearTimeout(id);
-                };
-            }
-        }());
+        (function(){var b=0;var c=["webkit","moz"];for(var a=0;a<c.length&&!window.requestAnimationFrame;++a){window.requestAnimationFrame=window[c[a]+"RequestAnimationFrame"];window.cancelAnimationFrame=window[c[a]+"CancelAnimationFrame"]||window[c[a]+"CancelRequestAnimationFrame"]}if(!window.requestAnimationFrame){window.requestAnimationFrame=function(h,e){var d=new Date().getTime();var f=Math.max(0,16.7-(d-b));var g=window.setTimeout(function(){h(d+f)},f);b=d+f;return g}}if(!window.cancelAnimationFrame){window.cancelAnimationFrame=function(d){clearTimeout(d)
+        }}}());
     </script>
     <link rel="stylesheet" href="/duck/css/admin.css"/>
     <body>
         <div id="appContainer"> </div>
         <div id="dialogContainer"> </div>
         <div id="secDialogContainer"> </div>
-       <script src="/duck/dist/depend_lib.js" ></script>
-       <script defer src="/duck/dist/admin.js" ></script>
     </body>
 </html>

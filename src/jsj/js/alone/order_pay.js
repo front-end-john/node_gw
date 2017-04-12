@@ -49,7 +49,7 @@ let OrderPay=React.createClass({
         }).then((str)=>{
             let obj=JSON.parse(str);
             console.log("订单详细数据：",obj);
-            if(obj.code==0){
+            if(obj.code===0){
                 this.setState({detail:obj.record});
                 sessionStorage.setItem("TravelDetailInfo",JSON.stringify(obj.record));
             }else {

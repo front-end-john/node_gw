@@ -4,33 +4,29 @@ let fetch = require('node-fetch');
 let log=require('../utils/mylog');
 const fs = require('fs');
 
-
 /**
- * jsj加载缓存配置
+ * 微信接送机_页面
  */
-router.get('/local_cache', function(req, res, next) {
-    let text=fs.readFileSync("public/local-cache.json","utf-8");
-    if(text){
-        res.json(JSON.parse(text));
-    }else {
-        res.status(305).end();
+router.get('/:page', function(req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.set('Content-Type', 'text/html');
+    let pg=req.params.page;
+    let filePath="public/mobile/jsj/www/"+pg+".html";
+    if(pg==="customer_pay") {
+        filePath="public/duck/additional/www/"+pg+".html";
     }
-});
-
-/**
- * 微信接送机_首页
- */
-router.get('/main', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/main', {});
-});
-
-/**
- * 微信接送机_更多服务
- */
-router.get('/more_service', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/more_service', {});
+    console.log(filePath);
+    if(fs.existsSync(filePath)){
+        let html=fs.readFileSync(filePath,"utf-8");
+        if(html){
+            res.end(html);
+        }else {
+            res.status(500).end();
+        }
+    }else {
+        res.status(404);
+        res.end(fs.readFileSync("public/404.html","utf-8"));
+    }
 });
 
 /**
@@ -38,73 +34,15 @@ router.get('/more_service', function(req, res, next) {
  */
 router.get('/', function(req, res, next) {
     res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/index', {});
+    res.set('Content-Type', 'text/html');
+    let html=fs.readFileSync("public/mobile/jsj/www/index.html","utf-8");
+    if(html){
+        res.end(html);
+    }else {
+        res.status(404);
+        res.end(fs.readFileSync("public/404.html","utf-8"));
+    }
 });
-
-/**
- * 微信接送机_支付订单
- */
-router.get('/order_pay', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/jsj_order_pay', {});
-});
-
-/**
- * 微信接送机_订单列表
- */
-router.get('/order_list', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/jsj_order_list', {});
-});
-
-/**
- * 微信接送机_订单状态
- */
-router.get('/order_status', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/jsj_order_status', {});
-});
-
-/**
- * 微信接送机_订单详情
- */
-router.get('/check_order_detail', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/check_order_detail', {});
-});
-
-/**
- * 微信接送机_退订须知
- */
-router.get('/cancel_order_know', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/cancel_order_know', {});
-});
-
-/**
- * 微信接送机_退订规则
- */
-router.get('/cancel_order_rule', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/cancel_order_rule', {});
-});
-
-/**
- * 微信接送机_订单评论
- */
-router.get('/order_comment', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/order_comment', {});
-});
-
-/**
- * 微信接送机_联系人修改
- */
-router.get('/modify_contact_person', function(req, res, next) {
-    res.set({"User-Agent":req.get('User-Agent')});
-    res.render('jsj/modify_contact_person', {});
-});
-
 
 let proxy=function(req, res) {
     let url=wx_jsj_url+req.originalUrl;

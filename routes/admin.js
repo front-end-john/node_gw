@@ -10,14 +10,29 @@ const fs = require('fs');
  * 后台首页
  */
 router.get('/',function (req, res, next) {
-    fs.readFile("views/admin/index.html",(err, data)=>{
+    fs.readFile("public/duck/www/index.html",(err, data)=>{
         if(err){
-            res.status(500).end("未找到该页面！");
+            res.status(404).end("未找到该页面！");
         } else{
             res.set('Content-Type', 'text/html');
-            res.send(data);
+            res.end(data);
         }
-    })
+    });
+});
+
+/**
+ * additional页面
+ */
+router.get('/additional/:page',function (req, res, next) {
+    res.set({"User-Agent":req.get('User-Agent')});
+    res.set('Content-Type', 'text/html');
+    let pn=req.params.page;
+    let html=fs.readFileSync("public/duck/additional/www/"+pn+".html","utf-8");
+    if(html){
+        res.end(html);
+    }else {
+        res.status(404).end("未找到页面");
+    }
 });
 
 
