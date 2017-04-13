@@ -5,14 +5,14 @@ require 'compass/import-once/activate'
 http_path = "/"
 css_dir = "public/mobile/additional/css"
 sass_dir = "src/additional/sass"
-#images_dir = "images"
+images_dir = "public/duck/additional/images"
 #javascripts_dir = "javascripts"
 
 #set compile environment (:development or :production)
 environment = :production
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed
-output_style = :compressed
+#output_style = :expanded
 # To enable relative paths to assets via compass helper functions. Uncomment:
 # relative_assets = true
 

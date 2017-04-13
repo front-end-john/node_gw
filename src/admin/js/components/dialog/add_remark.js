@@ -30,7 +30,7 @@
             return 0;
         }
         let url=this.props.url+"?";
-        if(this.props.type=="admin"){
+        if(this.props.type==="admin"){
             let order_id=this.props.number;
             url+=queryStr.stringify({order_id,remark:text});
             console.log("admin添加备注url:",url);
@@ -38,7 +38,7 @@
                 return res.json();
             }).then((json)=>{
                 console.log('添加备注的响应内容', json);
-                if(json.code==0){
+                if(json.code===0){
                     this.props.reload();
                     this.cancel();
                 }else {
@@ -61,7 +61,7 @@
             }).then((str)=>{
                 let obj=JSON.parse(str);
                 console.log("添加备注的响应内容",obj);
-                if(obj.code==0){
+                if(obj.code===0){
                     this.props.reload();
                     this.showWarnTip(null);
                 }else {

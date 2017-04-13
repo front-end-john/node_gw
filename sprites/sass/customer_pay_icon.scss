@@ -1,0 +1,25 @@
+@import "compass/utilities/sprites";
+//default:vertical,other  horizontal or diagonal or smart,
+$icon-layout:smart;
+@import "customer-pay/*.png";
+
+@include all-customer-pay-sprites();
+
+.tel{
+  display: inline-block;
+  @include customer-pay-sprite(tel);
+  width: customer-pay-sprite-width(tel);
+  height: customer-pay-sprite-height(tel);
+}
+.ok{
+  display: inline-block;
+  @include customer-pay-sprite(ok);
+  width: customer-pay-sprite-width(ok);
+  height: customer-pay-sprite-height(ok);
+}
+.avater{
+  display: inline-block;
+  @include customer-pay-sprite(avater);
+  width: customer-pay-sprite-width(avater);
+  height: customer-pay-sprite-height(avater);
+}

@@ -79,7 +79,7 @@ export default React.createClass({
             if(this.props.section==="jsj"){
                 ReactDOM.render(<JSJOrderDetail width={sumWidth} type={this.props.type} number={orderNo}/>,this.detailArea);
             }else if(this.props.section==="take_after"){
-                ReactDOM.render(<TakeAfterDetail width={sumWidth} number={orderNo}/>,this.detailArea);
+                ReactDOM.render(<TakeAfterDetail width={sumWidth} number={orderNo} />,this.detailArea);
             }else {
                 ReactDOM.render(<OrderDetail width={sumWidth} number={orderNo}/>,this.detailArea);
             }
@@ -157,7 +157,7 @@ export default React.createClass({
                 );
             }else if(item.fieldName=='OrderSource'){
                 return(
-                    <li key={index} style={{width:widths[index]} }>
+                    <li key={index} style={{width:widths[index]} } className={item.is_end?"list-end":""}>
                         <p>{item.order_source}</p>
                     </li>
                 );
@@ -477,7 +477,7 @@ export default React.createClass({
         return(
             <ul className="table-line" style={{backgroundColor:this.props.background||"#fff"}}>
                 {list}
-                <li ref={(c)=>this.detailArea=c} style={{overflow: "hidden"}}/>
+                <li ref={(c)=>this.detailArea=c} />
             </ul>
         );
     }

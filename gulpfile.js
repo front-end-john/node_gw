@@ -2,7 +2,7 @@ let gulp = require('gulp');
 let sftp = require('gulp-sftp');
 let compass = require('gulp-compass');
 let watch = require('gulp-watch');
-
+let gulpif = require('gulp-if');
 
 const fs = require('fs');
 let log=require("./utils/mylog");
@@ -56,7 +56,8 @@ gulp.task('compass', function() {
                 config_file: './config/additional.rb',
                 css: 'public/duck/additional/css',
                 sass: 'src/additional/sass'
-            })).pipe(gulp.dest('./public/duck/additional/css/'));
+            })).pipe(gulpif('*.png', gulp.dest('./public/duck/additional/images/'),
+              gulp.dest('./public/duck/additional/css/')));
     });
 });
 

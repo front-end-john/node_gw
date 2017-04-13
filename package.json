@@ -6,7 +6,8 @@
     "webpack": "webpack --watch",
     "test map": "jest map.test",
     "test promise": "jest es6promise.test",
-    "test randomjson": "jest json.test"
+    "test randomjson": "jest json.test",
+    "test fs": "jest fsread.test"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -36,6 +37,7 @@
     "fetch-jsonp": "^1.0.5",
     "gulp": "^3.9.1",
     "gulp-compass": "^2.1.0",
+    "gulp-if": "^2.0.2",
     "gulp-sftp": "^0.1.5",
     "gulp-watch": "^4.3.11",
     "html-webpack-plugin": "^2.28.0",

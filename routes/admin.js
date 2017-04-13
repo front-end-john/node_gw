@@ -27,10 +27,10 @@ router.get('/additional/:page',function (req, res, next) {
     res.set({"User-Agent":req.get('User-Agent')});
     res.set('Content-Type', 'text/html');
     let pn=req.params.page;
-    let html=fs.readFileSync("public/duck/additional/www/"+pn+".html","utf-8");
-    if(html){
+    try {
+        let html=fs.readFileSync("public/duck/additional/www/"+pn+".html","utf-8");
         res.end(html);
-    }else {
+    }catch(e){
         res.status(404).end("未找到页面");
     }
 });

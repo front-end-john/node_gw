@@ -20,6 +20,7 @@ import SendMsg from "../dialog/send_message";
 import ServiceEnsure from "../dialog/more_service_ensure";
 import Ensure from "../dialog/ensure";
 import ShowCoupon from "../dialog/show_coupon";
+import TakeafterCharge from "../dialog/takeafter_charge";
 import {getStateInfo,getFormatDate,optState} from '../../util'
 
 export default React.createClass({
@@ -47,8 +48,7 @@ export default React.createClass({
             }
         }).then((str)=>{
             let obj=JSON.parse(str);
-            //console.dir(obj.order);
-            if(obj.code==0){
+            if(obj.code===0){
                 this.setState({orderDetail:obj.order});
             }else {
                 this.showWarnTip(obj.msg);
@@ -105,11 +105,11 @@ export default React.createClass({
     editWashService(type,url){
         let mask=document.getElementById("dialogContainer");
         let rainwashing="",remark="",serviceorderid="";
-        if(type=="mod"){
+        if(type==="mod"){
             let moreService= this.state.orderDetail.serviceorders;
             let type1=(moreService[0]||{}).servicetype;
             let wash=moreService[0]||{};
-            if(type1==10) wash=moreService[1]||{};
+            if(type1===10) wash=moreService[1]||{};
 
             rainwashing=wash.config.rainwashing;
             remark=wash.serviceremark[0].remark;
@@ -124,11 +124,11 @@ export default React.createClass({
     editOilService(type,url){
         let mask=document.getElementById("dialogContainer");
         let oillabel="",money="",serviceorderid="",oiltype="",remark="";
-        if(type=="mod"){
+        if(type==="mod"){
             let moreService= this.state.orderDetail.serviceorders;
             let type1=(moreService[0]||{}).servicetype;
             let oil=moreService[0]||{};
-            if(type1==1) oil=moreService[1]||{};
+            if(type1===1) oil=moreService[1]||{};
             oillabel=oil.config.oillabel;
             money=oil.config.money;
             oiltype=oil.config.oiltype;
@@ -142,7 +142,7 @@ export default React.createClass({
     },
     cancelExtraService(id,type="wash"){
         let title="取消洗车/加油服务",content="确认取消洗车服务吗？";
-        if(type=="oil") content="确认取消加油服务吗？";
+        if(type==="oil") content="确认取消加油服务吗？";
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<Ensure title={title} content={content}
                                 serviceorderid={id} reload={this.loadOrderDetail}
@@ -220,24 +220,24 @@ export default React.createClass({
                 response:comm.response
             }:null;
 
-        if (item == "pro_1") {
+        if (item === "pro_1") {
             this.setState({p_item:'p1'});
             ReactDOM.render(<TakeCar  data={take} order_id={order.serialnumber} airport_id={order.airportid}
                                       order_status={s} reload={this.loadOrderDetail}/> , this.process);
-        } else if (item == "pro_2") {
+        } else if (item === "pro_2") {
             this.setState({p_item:'p2'});
             ReactDOM.render(<MoveCar data={move}  /> , this.process);
-        } else if (item == "pro_3") {
+        } else if (item === "pro_3") {
             this.setState({p_item:'p3'});
             ReactDOM.render(<InGarage data={garage} /> , this.process);
-        } else if (item == "pro_4") {
+        } else if (item === "pro_4") {
             this.setState({p_item:'p4'});
             ReactDOM.render(<SendCar data={send} order_id={order.serialnumber} airport_id={order.airportid}
                                      order_status={s} reload={this.loadOrderDetail} /> , this.process);
-        } else if (item == "pro_5") {
+        } else if (item === "pro_5") {
             this.setState({p_item:'p5'});
             ReactDOM.render(<Pay data={payment}  /> , this.process);
-        } else if (item == "pro_6") {
+        } else if (item ==="pro_6") {
             this.setState({p_item:'p6'});
             ReactDOM.render(<Evaluation data={comment} order_id={order.serialnumber} /> , this.process);
         }
@@ -262,6 +262,10 @@ export default React.createClass({
     },
     componentWillUnmount(){
         window.removeEventListener("resize",this.adjustWidth);
+    },
+    handleTakeAfterFee(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<TakeafterCharge  number={this.props.number} />, mask);
     },
     adjustWidth(){
         let sumWidth=document.body.clientWidth-220;
@@ -380,6 +384,9 @@ export default React.createClass({
                        onClick={this.handleCancelOrder}>取消订单</label>:""}
                     {s===0?<label style={{paddingLeft:'20px',color:"#DB8800",cursor:"pointer"}}
                        onClick={()=>this.handleTelEnsure(o.serialnumber)}>电话确认</label>:""}
+                    {+s>=16?<label style={{paddingLeft:'20px',color:"#1AA0E5",cursor:"pointer"}}
+                                          onClick={this.handleTakeAfterFee}>车后保养费用</label>:""}
+
                 </p>
                 <div className="order-main">
                     <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >

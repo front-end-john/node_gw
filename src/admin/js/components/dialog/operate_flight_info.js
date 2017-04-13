@@ -60,7 +60,7 @@
 
     render(){
         let btns=[];
-        if(this.props.type=="add"){
+        if(this.props.type==="add"){
             btns[0]=(<button key={0} onClick={this.cancel}>取消</button>);
             btns[1]=(<button key={1} onClick={()=>this.ensure(false)}>确认</button>);
         }else {
