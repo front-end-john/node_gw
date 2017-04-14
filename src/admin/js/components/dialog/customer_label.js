@@ -23,8 +23,8 @@ let Ensure=React.createClass({
     },
     handleSelectLabel(e){
         let ele=e.target;
-        if(ele.nodeName=="LI"){
-            if(ele.className=="selected"){
+        if(ele.nodeName==="LI"){
+            if(ele.className==="selected"){
                 ele.className="";
                 this.handleMark(ele.innerHTML,-1);
             }else {
@@ -46,7 +46,7 @@ let Ensure=React.createClass({
         }).then((str)=>{
             console.log("添加标签的响应内容",str);
             let obj=JSON.parse(str);
-            if(obj.code==0){
+            if(obj.code===0){
                 this.props.reload();
             }else {
                 this.showWarnTip("标签操作失败！");

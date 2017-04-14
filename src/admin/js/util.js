@@ -109,3 +109,25 @@ export let optState=(type,s)=>{
         return false;
     }
 };
+
+export function maintainState(s) {
+    let status="";
+    if(s===0){
+        status="待推荐";
+    }else if(s===5){
+        status="司机推荐";
+    }else if(s===10){
+        status="已推荐";
+    }else if(s===20){
+        status="用户已确认保养";
+    }else if(s===30){
+        status="保养中";
+    }else if(s===50){
+        status="保养已完成";
+    }else if(s===-1){
+        status="已取消";
+    }else if(s===-10){
+        status="无需保养";
+    }
+    return status;
+}

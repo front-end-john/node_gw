@@ -122,35 +122,35 @@ router.get('/api/orders/set_flight_landing_time', function(req, res, next){
 /**
  * 获取紧急订单
  */
-router.get('/api/orders/check_new', function(req, res, next){
+router.get('/api/orders/check_new', function(req, res){
     proxy(req, res);
 });
 
 /**
  * 获取航站楼列表
  */
-router.get('/api/areas/terminals', function(req, res, next){
+router.get('/api/areas/terminals', function(req, res){
     proxy(req, res);
 });
 
 /**
  * 获取用户信息
  */
-router.get('/api/users/userinfo', function(req, res, next){
+router.get('/api/users/userinfo', function(req, res){
     proxy(req, res);
 });
 
 /**
  * 获取用户车辆信息
  */
-router.get('/api/cars/list_by_userid', function(req, res, next){
+router.get('/api/cars/list_by_userid', function(req, res){
     proxy(req, res);
 });
 
 /**
  * 客服下单
  */
-router.get('/api/orders/neworder', function(req, res, next){
+router.get('/api/orders/neworder', function(req, res){
     proxy(req, res);
 });
 

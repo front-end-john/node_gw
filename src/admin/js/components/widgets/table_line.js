@@ -131,15 +131,8 @@ export default React.createClass({
     render(){
         let widths=this.props.widths;
         let list=this.props.data.map((item,index) =>{
-            /*if(item.fieldName=='OrderNo'){
-                return(
-                    <li key={index} style={{width:widths[index]} }>
-                        <p onClick={()=>this.expandDetail(item.order_no)}
-                           style={{color:"#1A9FE5",cursor:"pointer"}}>{item.order_no}</p>
-                    </li>
-                );
-            }else */
-            if(item.fieldName=='User'){
+
+            if(item.fieldName==='User'){
                 this.serialnumber=item.order_no;
                 return(
                     <li key={index} style={{width:widths[index]} }>
@@ -148,81 +141,81 @@ export default React.createClass({
                         >{item.username}<br/>{item.phone_no}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Label'){
+            }else if(item.fieldName==='Label'){
                 let arr=item.tags||[];
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p><span>{arr[0]}</span><br/><span>{arr[1]||""}</span></p>
                     </li>
                 );
-            }else if(item.fieldName=='OrderSource'){
+            }else if(item.fieldName==='OrderSource'){
                 return(
                     <li key={index} style={{width:widths[index]} } className={item.is_end?"list-end":""}>
                         <p>{item.order_source}</p>
                     </li>
                 );
-            }else if(item.fieldName=='OrderTime'){
+            }else if(item.fieldName==='OrderTime'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.order_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='EvaluateTime'){
+            }else if(item.fieldName==='EvaluateTime'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.evaluate_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='CreateOrderTime'){
+            }else if(item.fieldName==='CreateOrderTime'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.create_order_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='MaintainStatus'){
+            }else if(item.fieldName==='MaintainStatus'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.status}</p>
                     </li>
                 );
-            }else if(item.fieldName=='DriverRecommend'){
+            }else if(item.fieldName==='DriverRecommend'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.refer}</p>
                     </li>
                 );
-            }else if(item.fieldName=='CarMileage'){
+            }else if(item.fieldName==='CarMileage'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.miles}</p>
                     </li>
                 );
-            }else if(item.fieldName=='EvaluateStarLevel'){
+            }else if(item.fieldName==='EvaluateStarLevel'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>客服打星:{item.evaluate_star_level}星</p>
                     </li>
                 );
-            }else if(item.fieldName=='CustomerServiceReply'){
+            }else if(item.fieldName==='CustomerServiceReply'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.service_reply}</p>
                     </li>
                 );
-            }else if(item.fieldName=='ShowStatus'){
-                let msg=item.status==1?"都可见":"仅此用户可见";
+            }else if(item.fieldName==='ShowStatus'){
+                let msg=item.status===1?"都可见":"仅此用户可见";
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{msg}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Car'){
+            }else if(item.fieldName==='Car'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.car_no}<br/>{item.car_color}{item.car_brand?(<span>&ensp;{item.car_brand}</span>):""}</p>
                     </li>
                 );
-            }else if(item.fieldName=='StartAddress'){
+            }else if(item.fieldName==='StartAddress'){
                 let html=item.local?(<p>{item.local}<br/>{item.address}</p>):
                     <p style={{paddingRight:15}}>{item.address}</p>;
                 return(
@@ -230,56 +223,56 @@ export default React.createClass({
                         {html}
                     </li>
                 );
-            }else if(item.fieldName=='EndAddress'){
+            }else if(item.fieldName==='EndAddress'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p style={{paddingRight:15}}>{item.address}</p>
                     </li>
                 );
-            }else if(item.fieldName=='FlightNumber'){
+            }else if(item.fieldName==='FlightNumber'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.number}<br/>{item.launch_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='BookingTime'){
+            }else if(item.fieldName==='BookingTime'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.booking_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='CarType'){
+            }else if(item.fieldName==='CarType'){
                 return(
                     <li key={index} style={{width:widths[index]} }>
                         <p>{item.type}<br/>{item.car_brief}</p>
                     </li>
                 );
-            }else if(item.fieldName=='OrderStatus'){
+            }else if(item.fieldName==='OrderStatus'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:item.color||"inherit",cursor:"default"}}>
                             {item.status}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Airport'){
+            }else if(item.fieldName==='Airport'){
                 return(
                     <li key={index} style={{width:widths[index],paddingRight:20}}>
                         <p>{item.airport}</p>
                     </li>
                 );
-            }else if(item.fieldName=='OnwardTerminal'){
+            }else if(item.fieldName==='OnwardTerminal'){
                 return(
                     <li key={index} style={{width:widths[index],paddingRight:20}}>
                         <p>{item.terminal}</p>
                     </li>
                 );
-            }else if(item.fieldName=='ReturnTerminal'){
+            }else if(item.fieldName==='ReturnTerminal'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.terminal}</p>
                     </li>
                 );
-            }else if(item.fieldName=='Session'){
+            }else if(item.fieldName==='Session'){
                 let time=this.state.bookingTime||item.session;
                 return(
                     <li key={index} style={{width:widths[index]}}>
@@ -287,25 +280,25 @@ export default React.createClass({
                            onClick={()=>this.editBookingTime(this.serialnumber,time)}>{time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='OrderFetchTime'){
+            }else if(item.fieldName==='OrderFetchTime'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.order_fetch_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='InGarageTime'){
+            }else if(item.fieldName==='InGarageTime'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.in_garage_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='ParkTimeLong'){
+            }else if(item.fieldName==='ParkTimeLong'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.park_time_long}</p>
                     </li>
                 );
-            }else if(item.fieldName=='ReturnTicket'){
+            }else if(item.fieldName==='ReturnTicket'){
                 let flight=this.state.returnFlight||item.back_flight;
                 let time=this.state.returnTime||item.back_time;
                 return(
@@ -315,13 +308,13 @@ export default React.createClass({
                             {flight?<span>{flight}<br/></span>:""}{time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='RemainTakeCarTime'){
+            }else if(item.fieldName==='RemainTakeCarTime'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.remain_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='MoreService'){
+            }else if(item.fieldName==='MoreService'){
 
                 return(
                     <li key={index} style={{width:widths[index]}} className={item.is_end?"list-end":""}>
@@ -334,13 +327,13 @@ export default React.createClass({
                             >{item.oil}</span></p>
                     </li>
                 );
-            }else if(item.fieldName=='AdvanceTime'){
+            }else if(item.fieldName==='AdvanceTime'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.order_time}<br/>{item.back_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='TakeDriver'){
+            }else if(item.fieldName==='TakeDriver'){
                 let s=item.os,driverName=item.take_driver;
                 if(optState(6,s)) {
                     driverName=driverName||"分配接车司机";
@@ -354,31 +347,31 @@ export default React.createClass({
                             style={{color:item.color||"inherit"}}>{driverName}</p>
                     </li>
                 );
-            }else if(item.fieldName=='MoveDriver'){
+            }else if(item.fieldName==='MoveDriver'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:item.color||"inherit"}}>{item.move_driver}</p>
                     </li>
                 );
-            }else if(item.fieldName=='AssignTime'){
+            }else if(item.fieldName==='AssignTime'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.assign_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='AirportParkTimeLong'){
+            }else if(item.fieldName==='AirportParkTimeLong'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.airport_park_time_long}</p>
                     </li>
                 );
-            }else if(item.fieldName=='TakeCarStatus'){
+            }else if(item.fieldName==='TakeCarStatus'){
                 return(
                     <li key={index} style={{width:widths[index]}}>
                         <p>{item.take_car_at}<br/>{item.in_garage_at}</p>
                     </li>
                 );
-            }else if(item.fieldName=='SendDriver'){
+            }else if(item.fieldName==='SendDriver'){
                 let s=item.os,driverName=item.send_driver;
                 if(optState(7,s)) {
                     driverName=driverName||"分配送车司机";
@@ -392,19 +385,19 @@ export default React.createClass({
                             style={{color:item.color||"inherit"}}>{driverName}</p>
                     </li>
                 );
-            }else if(item.fieldName=='SendCarStatus'){
+            }else if(item.fieldName==='SendCarStatus'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p>{item.send_car_start}<br/>{item.send_car_end}</p>
                     </li>
                 );
-            }else if(item.fieldName=='PayStatus'){
+            }else if(item.fieldName==='PayStatus'){
                 return(
                     <li key={index} style={{width:widths[index]}} >
                         <p  style={{color:item.color}} >{item.pay_status}</p>
                     </li>
                 );
-            }else if(item.fieldName=='ReturnFlightStatus'){
+            }else if(item.fieldName==='ReturnFlightStatus'){
                 let time=this.state.fetchTime||item.fetch_time;
                 return(
                     <li key={index} style={{width:widths[index]}}>
@@ -416,25 +409,25 @@ export default React.createClass({
                         </p>
                     </li>
                 );
-            }else if(item.fieldName=='StartTakeTime'){
+            }else if(item.fieldName==='StartTakeTime'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p>{item.start_take_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='StartSendTime'){
+            }else if(item.fieldName==='StartSendTime'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p>{item.start_send_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='StartMoveTime'){
+            }else if(item.fieldName==='StartMoveTime'){
                 return(
                     <li key={index} style={{width:widths[index]}} >
                         <p>{item.start_move_time}</p>
                     </li>
                 );
-            }else if(item.fieldName=='CommentOperation'){
+            }else if(item.fieldName==='CommentOperation'){
                 let isReply=this.state.isReply===undefined?!!item.reply:this.state.isReply;
                 let replyClr=isReply?"#323232":"#1AA0E5";
                 let event=isReply?"none":"auto";
@@ -445,13 +438,13 @@ export default React.createClass({
                         <p>
                             <em style={{color:"#1AA0E5",cursor:"pointer"}}
                                 onClick={()=>this.handleHideAndShow(item.order_id,publicShow)}>
-                                {publicShow==0?"展现":"关闭"}</em>
+                                {publicShow===0?"展现":"关闭"}</em>
                             <em style={{color:replyClr,pointerEvents:event,cursor:csr}}
                                 onClick={()=>this.handleReply(item.order_id,publicShow)}>&ensp;回复</em>
                         </p>
                     </li>
                 );
-            }else if(item.fieldName=='TelEnsureOperation'){
+            }else if(item.fieldName==='TelEnsureOperation'){
                 return(
                     <li key={index} style={{width:widths[index]}} className="list-end">
                         <p style={{color:"#DB8800",cursor:"pointer"}}>

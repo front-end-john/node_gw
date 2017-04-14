@@ -9,12 +9,12 @@ import Loading from "../dialog/loading";
 import SelectInput from '../widgets/select_input';
 import DateSelect from '../widgets/date_select';
 import Page from '../widgets/page';
-import {decDatetime,maxNumber} from '../../util';
+import {maintainState,maxNumber} from '../../util';
 
-let JSJOrder=React.createClass({
+export default React.createClass({
     getInitialState(){
         return{
-            orderData:[{},{}],
+            orderData:[{}],
             pageObj:{},
             queryCondition:{ordertype:"all"},
             initWidths:[ 130,   100,   110,       130,        100,    130,       120,     100,  ],
@@ -108,7 +108,10 @@ let JSJOrder=React.createClass({
             console.trace('错误:', e);
         });
     },
-
+    handleChStatusSwitch(type){
+        this.state.queryCondition.ordertype=type;
+        this.handlePageQuery(1,10);
+    },
     render(){
         let sumWidth=this.state.sumWidth;
         let widths=this.state.widths;
@@ -117,23 +120,26 @@ let JSJOrder=React.createClass({
             return {name:item,width:widths[index]+'px'};
         });
         document.getElementById("appContainer").style.width= 200+sumWidth+'px';
+
         let list=this.state.orderData.map((item,index)=>{
+            let mile=item.mileage===undefined?"":item.mileage+"km";
             let data=[
-                {username:item.username,phone_no:item.userphoneno,order_no:item.serialnumber,fieldName:'User'},
+                {username:item.username,phone_no:item.userphoneno,order_no:item.chserialnumber,fieldName:'User'},
                 {car_no:item.carno,car_color:item.carcolor,car_brand:item.brand,fieldName:'Car'},
-                {status:item.chorderstatus,fieldName:'MaintainStatus'},
-                {refer:"已到保养里程",fieldName:'DriverRecommend'},
-                {miles:item.mileage+"km",fieldName:'CarMileage'},
+                {status:maintainState(item.chorderstatus),fieldName:'MaintainStatus'},
+                {refer:item.driverrecommended,fieldName:'DriverRecommend'},
+                {miles:mile,fieldName:'CarMileage'},
                 {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
                 {in_garage_time:item.parkingfinishtime,fieldName:'InGarageTime'},
                 {order_source:item.ordercomefrom,is_end:true,fieldName:'OrderSource'}];
             return (<TableLine key={index} widths={widths} data={data}  section="take_after" />);
         });
-
+        let orderType=this.state.queryCondition.ordertype;
         let tabList=[{status:"全部",value:"all"},{status:"待推荐",value:"toberecommended"},{status:"已推荐",value:"recommended"},
             {status:"用户已确认保养",value:"confirmed"},{status:"保养中",value:"inmaintainace"},{status:"保养已完成",value:"maintainacefinished"},
             {status:"已取消",value:"canceled"}, {status:"无需保养",value:"nomaintainace"},].map((item,index)=>{
-            return (<li key={index} onClick={()=>this.setState({maintain_state:item.value})}>{item.status}</li>)
+            return (<li key={index} className={orderType===item.value?"selected":""}
+                        onClick={()=>this.handleChStatusSwitch(item.value)}>{item.status}</li>)
         });
         return(
             <section className="data-section" style={{width:sumWidth+60}}>
@@ -169,5 +175,3 @@ let JSJOrder=React.createClass({
         );
     }
 });
-
-export default JSJOrder;

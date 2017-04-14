@@ -215,13 +215,13 @@ gulp.task("update local-cache.json",()=>{
 /**
  * 上传到测试服务器
  */
-gulp.task("test-host",()=>{
+/*gulp.task("test-host",()=>{
     let files=[
-                {src:"./public/**/*",           dest:"/var/code/fronts/public/"},
-                {src:"./routes/*",              dest:"/var/code/fronts/routes/"},
-                {src:"./utils/*",               dest:"/var/code/fronts/utils/"},
-                {src:"./views/**/*",            dest:"/var/code/fronts/views/"},
-                {src:"./bin/*",                 dest:"/var/code/fronts/bin/"},
+                {src:"./public/!**!/!*",           dest:"/var/code/fronts/public/"},
+                {src:"./routes/!*",              dest:"/var/code/fronts/routes/"},
+                {src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
+                {src:"./views/!**!/!*",            dest:"/var/code/fronts/views/"},
+                {src:"./bin/!*",                 dest:"/var/code/fronts/bin/"},
                 {src:"./app.js",                dest:"/var/code/fronts/"},
                 {src:"./package.json",          dest:"/var/code/fronts/"},
                 {src:"./log4js.json",           dest:"/var/code/fronts/"},
@@ -239,20 +239,20 @@ gulp.task("test-host",()=>{
             }));
     });
 
-});
+});*/
 
 /**
  * 上传到生产服务器
  */
 gulp.task("production-host",()=>{
     let files=[
-        {src:"./public/**/*",           dest:"/var/code/fronts/public/"},
-        {src:"./public/*.html",         dest:"/var/code/fronts/public/"},
-        {src:"./routes/*",              dest:"/var/code/fronts/routes/"},
+        {src:"./public/duck/**/*",           dest:"/var/code/fronts/public/duck/"},
+        /*{src:"./public/!*.html",         dest:"/var/code/fronts/public/"},*/
+        /*{src:"./routes/!*",              dest:"/var/code/fronts/routes/"},*/
         //{src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
         //{src:"./views/**/*",            dest:"/var/code/fronts/views/"},
         //{src:"./bin/!*",                 dest:"/var/code/fronts/bin/"},
-        {src:"./app.js",                dest:"/var/code/fronts/"},
+        /*{src:"./app.js",                dest:"/var/code/fronts/"},*/
         //{src:"./package.json",          dest:"/var/code/fronts/"},
         //{src:"./log4js.json",           dest:"/var/code/fronts/"},
         //{src:"./ecosystem.config.js",   dest:"/var/code/fronts/"},

@@ -164,9 +164,9 @@ export default React.createClass({
         let order=this.state.orderDetail;
         let parkDriverName=order.parkingdrivername;
         let returnDriverName=order.returningdrivername;
-        if(parkDriverName!=prevState.orderDetail.parkingdrivername){
+        if(parkDriverName!==prevState.orderDetail.parkingdrivername){
             this.handleSwitch("pro_1");
-        }else if(returnDriverName!=prevState.orderDetail.returningdrivername){
+        }else if(returnDriverName!==prevState.orderDetail.returningdrivername){
             this.handleSwitch("pro_4");
         }
     },
@@ -305,14 +305,14 @@ export default React.createClass({
         }
         let type1=(moreService[0]||{}).servicetype;
         let wash=moreService[0]||{},oil=moreService[1]||{};
-        if(type1==10) {
+        if(type1===10) {
             oil=moreService[0]||{};
             wash=moreService[1]||{};
         }
         let wColor=(wash.status || wash.status===0)?(wash.status===0?"#f00":"#0f0"):"#323232";
         let oColor=(oil.status || oil.status===0)?(oil.status===0?"#f00":"#0f0"):"#323232";
         let washConfig=wash.config,oilConfig=oil.config;
-        let washIntro=washConfig?(washConfig.rainwashing==1?"下雨也洗车":"下雨不洗车"):"无";
+        let washIntro=washConfig?(washConfig.rainwashing===1?"下雨也洗车":"下雨不洗车"):"无";
         let oilIntro=oilConfig?(oilConfig.oiltype||"")+" "+(oilConfig.oillabel||"")+" "+(oilConfig.money||""):"无";
         /**
          * 客服 洗车备注
@@ -353,17 +353,17 @@ export default React.createClass({
         let s=o.status;
         let states=getStateInfo(s);
         let flightState=o.flightstatus,status_img="";
-        if(flightState=="计划"){
+        if(flightState==="计划"){
             status_img="order_flight_plan.png";
-        }else if(flightState=="起飞"){
+        }else if(flightState==="起飞"){
             status_img="order_flight_takeoff.png";
-        }else if(flightState=="到达"){
+        }else if(flightState==="到达"){
             status_img="order_flight_arrived.png";
-        }else if(flightState=="延误"){
+        }else if(flightState==="延误"){
             status_img="order_flight_delay.png"
-        }else if(flightState=="取消"){
+        }else if(flightState==="取消"){
             status_img="order_flight_canceled.png";
-        }else if(flightState=="备降"){
+        }else if(flightState==="备降"){
             status_img="order_flight_alternate.png";
         }
         let pItem=this.state.p_item;

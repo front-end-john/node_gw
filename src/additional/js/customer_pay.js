@@ -81,7 +81,7 @@ let Page=React.createClass({
             console.log("微信支付验证参数：",obj);
             if(obj.code === 0){
                 wx.config({
-                    debug: true, // 开启调试模式,仅在pc端时才会打印。
+                    debug: false, // 开启调试模式,仅在pc端时才会打印。
                     appId: obj.record.appid, // 必填，公众号的唯一标识
                     timestamp: obj.record.timestamp, // 必填，生成签名的时间戳
                     nonceStr:  obj.record.noncstr, // 必填，生成签名的随机串
