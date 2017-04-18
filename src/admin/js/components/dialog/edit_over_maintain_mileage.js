@@ -1,7 +1,6 @@
  import React from 'react';
  import ReactDOM from 'react-dom';
  import WarnTip from '../dialog/warn_tip';
- import DateSelect from '../widgets/date_select';
  export default React.createClass({
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
@@ -25,17 +24,16 @@
     },
     ensure(){
         let chserialnumber=this.props.number;
-        let lastmaintenancetime=this.last_maintain_time;
-        if(!lastmaintenancetime){
-            this.showWarnTip("时间不能为空！");
-            return 0
+        let exceedmileage=parseFloat(this.miles||0);
+        if(exceedmileage<=0){
+            this.showWarnTip("里程数不能为空且不小于0！");return 0
         }
         let url=this.props.url+"?";
-        url+=queryStr.stringify({chserialnumber,lastmaintenancetime});
-        console.log("编辑上次保养时间url",url);
+        url+=queryStr.stringify({chserialnumber,exceedmileage});
+        console.log("编辑超出里程数接口",url);
         fetch(url,{credentials: 'include'}).then((res)=>{
-            console.log("编辑上次保养时间响应："+res.status);
-            if(res.status < 400){
+            console.log("超出里程数接口响应："+res.status);
+            if(+res.status < 400){
                 return res.json();
             }else{
                 throw new Error("服务异常");
@@ -55,14 +53,14 @@
     render(){
         return(
             <div className="dialog">
-                <h2 className="title">编辑上次保养时间<i onClick={this.cancel}/></h2>
+                <h2 className="title">编辑超出保养标准里程数<i onClick={this.cancel}/></h2>
                 <div className="dialog-flight-info">
-                    <p><DateSelect title={<span>上次保养时间：</span>}
-                                    change={(date)=>this.last_maintain_time=date}/></p>
+                    <p><em>超出保养标准里程数：</em>
+                        <input type="number"  placeholder="输入公里数" onChange={e=>this.miles=e.target.value} /></p>
                 </div>
                 <section className="btn">
                     <button onClick={this.cancel}>取消</button>
-                    <button onClick={()=>this.ensure()}>确认</button>
+                    <button onClick={this.ensure}>确认</button>
                 </section>
             </div>
         );

@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import es6 from "es6-promise";
 es6.polyfill();
 import 'whatwg-fetch';
+//import fetchJsonp from 'fetch-jsonp';
 
 import PulldownTip from '../widgets/pulldown_tip';
 import {decLocSearch} from '../util';
-
+const API_DOMAIN="";
 let Page=React.createClass({
     getInitialState(){
         return {pay_progress:"unfinished"};
@@ -20,7 +21,7 @@ let Page=React.createClass({
     componentDidMount(){
         let dom=document.getElementById("dialog");
         let chargeid=sessionStorage.getItem("ChargeId");
-        let url="/api3/chorder/chargemoney?chargeid="+chargeid;
+        let url=API_DOMAIN+"/api3/chorder/chargemoney?chargeid="+chargeid;
         fetch(url,{credentials:'include'}).then((res)=>{
             console.log("获取支付金额响应：",res.status);
             //console.log(res);
@@ -39,7 +40,7 @@ let Page=React.createClass({
             ReactDOM.render(<PulldownTip msg="获取支付金额失败！" />,dom);
             console.warn('错误', e);
         });
-        url="/api3/chorder/config";
+        url=API_DOMAIN+"/api3/chorder/config";
         fetch(url,{credentials:'include'}).then((res)=>{
             console.log("获取车管家响应：",res.status);
             //console.log(res);
@@ -67,7 +68,7 @@ let Page=React.createClass({
         let openid=sessionStorage.getItem("OpenId");
         let chargeid=sessionStorage.getItem("ChargeId");
         let myself=this;
-        let url="/api3/payment/config/wechatchehou?chargeid="+chargeid+"&openid="+openid;
+        let url=API_DOMAIN+"/api3/payment/config/wechatchehou?chargeid="+chargeid+"&openid="+openid;
         //console.log(url);
         fetch(url,{credentials:'include'}).then((res)=>{
             console.log("请求微信支付参数响应状态：",res.status);
@@ -141,7 +142,6 @@ let Page=React.createClass({
                         <p>飞泊通车管家会全程跟进您的爱车保养情况直到保养完成，保养过程中有任何问题，您可以随时联系车管家。</p>
                     </section>
                     <ul>
-                        {/*<li className="avater"/>*/}
                         <img src={manager.avatar}/>
                         <li>车管家：{manager.contactname}</li>
                         <li className="tel" onClick={()=>location.href="tel:"+manager.contactphone}/>

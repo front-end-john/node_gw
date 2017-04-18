@@ -637,6 +637,7 @@ html,body{
       color: #1A9FE5;
       @include border-radius(2px);
       margin-left: 10px;
+      cursor: pointer;
     }
     &>.scroll-container{
       display: inline-block;

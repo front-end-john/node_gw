@@ -4,11 +4,13 @@ import AddRemark from '../dialog/add_remark';
 import WarnTip from '../dialog/warn_tip';
 import Label from "../dialog/customer_label";
 import EditUser from "../dialog/edit_user_info";
-import EditMaintainContent from "../dialog/edit_maintain_bill";
-import EditLastMaintainTime from "../dialog/edit_last_maintain_time";
+import MaintainContent from "../dialog/edit_maintain_bill";
+import LastMaintainTime from "../dialog/edit_last_maintain_time";
+import OverMaintainMile from "../dialog/edit_over_maintain_mileage";
 import MaintainUnwanedReason from "../dialog/maintain_unwanted_reason";
 import MaintainCancelReason from "../dialog/maintain_cancel_reason";
-import CarReturnDarage from "../dialog/car_return_garage";
+import RecommendMaintain from "../dialog/recommend_maintain";
+import CarReturnGarage from "../dialog/car_return_garage";
 import ImgScroll from '../widgets/img_scroll';
 
 import {getFormatDate,maintainState} from '../../util';
@@ -69,33 +71,60 @@ export default React.createClass({
     },
     addRemark(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<AddRemark reload={this.loadOrderDetail}
-                                   url="/jsj/system/addremark" number={this.props.number}/>, mask);
+        ReactDOM.render(<AddRemark reload={this.loadOrderDetail} type="maintain"
+                                   url="/api5/chorders/remark" number={this.props.number}/>, mask);
     },
-    editMaintainBill(){
+    handleCustomerEnsureMaintain(){
+        let chserialnumber=this.props.number;
+        let url="/api5/chorders/confirm?chserialnumber="+chserialnumber;
+        console.log("客户确认保养接口:",url);
+        fetch(url,{credentials: 'include'}).then((res)=>{
+            return res.json();
+        }).then((obj)=>{
+            this.showWarnTip(obj.message);
+        }).catch((e)=>{
+            this.showWarnTip("网络请求异常！");
+            console.warn('异常接口：', url,"异常对象：",e);
+        });
+    },
+    handleMaintainRecommend(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<EditMaintainContent reload={this.loadOrderDetail}
-                                             url="/jsj/system/addremark" number={this.props.number}/>, mask);
+        ReactDOM.render(<RecommendMaintain reload={this.loadOrderDetail}
+                                             url="/api5/chorders/recommendToCustomers" number={this.props.number}/>, mask);
+    },
+    editMaintainBill(type){
+        let mask=document.getElementById("dialogContainer");
+        let url="/api5/chorders/editMaintainDetails";
+        if(type==="add"){
+            url="/api5/chorders/uploadMaintainDetails";
+        }
+        ReactDOM.render(<MaintainContent reload={this.loadOrderDetail} info={this.maintainInfo}
+                                         url={url} number={this.props.number}/>, mask);
     },
     editLastMaintainTime(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<EditLastMaintainTime reload={this.loadOrderDetail}
-                                             url="/api5/chorders/lastMaintainTime" number={this.props.number}/>, mask);
+        ReactDOM.render(<LastMaintainTime reload={this.loadOrderDetail}
+                                          url="/api5/chorders/lastMaintainTime" number={this.props.number}/>, mask);
+    },
+    editOverMaintainMile(){
+        let mask=document.getElementById("dialogContainer");
+        ReactDOM.render(<OverMaintainMile reload={this.loadOrderDetail}
+                                          url="/api5/chorders/exceedmileage" number={this.props.number}/>, mask);
     },
     handleMaintainUnwanedReason(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<MaintainUnwanedReason reload={this.loadOrderDetail}
-                                              url="/jsj/system/addremark" number={this.props.number}/>, mask);
+                                              url="/api5/chorders/notRecommend" number={this.props.number}/>, mask);
     },
     handleMaintainCancelReason(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<MaintainCancelReason reload={this.loadOrderDetail}
-                                              url="/jsj/system/addremark" number={this.props.number}/>, mask);
+                                              url="/api5/chorders/cancelMaintain" number={this.props.number}/>, mask);
     },
     handleCarReturnDarage(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<CarReturnDarage reload={this.loadOrderDetail}
-                                              url="/jsj/system/addremark" number={this.props.number}/>, mask);
+        ReactDOM.render(<CarReturnGarage reload={this.loadOrderDetail}
+                                         url="/api5/chorders/parkingCar" number={this.props.number}/>, mask);
     },
 
     adjustWidth(){
@@ -110,7 +139,7 @@ export default React.createClass({
         if(sumWidth>edgeValue){
             for(let i=0;i<3;i++) {
                 let currWidth=parseFloat(getComputedStyle(bs[i]).width);
-                if (i ===0){
+                if (i===0){
                     this.userTag.style.width= currWidth-labelWidth+'px';
                 }
             }
@@ -118,66 +147,68 @@ export default React.createClass({
     },
     render(){
         let o=this.state.orderDetail||{};
-
         let level=[];
         for(let i=0;i<o.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
         }
-
-        let serviceRemark=(o.customerserviceremark||[]).map((item,index)=>{
+        let serviceRemark=(o.customerserviceremarkInfo||[]).map((item,index)=>{
             return (<p key={index}><span>{item.createtime}</span>&emsp;<span>{item.adminname}</span>&emsp;{item.remark}</p>);
         });
         let maintainRemark=(o.maintainremarkinfo||[]).map((item,index)=>{
             return (<p key={index}><span>{item.createtime}</span>&emsp;<span>{item.adminname}</span>&emsp;{item.remark}</p>);
         });
-        let driverRemark=(o.driverremark||[]).map((item,index)=>{
+        let driverRemark=(o.driverremarkInfo||[]).map((item,index)=>{
             return (<p key={index}><span>{item.createtime}</span>&emsp;<span>{item.adminname}</span>&emsp;{item.remark}</p>);
         });
 
-        this.tags=o.tags||[];
+        this.tags=o.tagsinfo||[];
         let userTags=this.tags.map((item,index)=>{
             return(<span key={index} style={{color:"#323232"}}>{item}&ensp;</span>)
         });
-
+        let serviceFee=o.servicefee||0,s4Fee=o.shop4sfee||0,totalFee=serviceFee+s4Fee;
+        this.maintainInfo={shopFee:s4Fee,billPicture:o.maintainpicture};
         //保养状态
         let status=o.chorderstatus;
         let op_list=[];
         if(status===0){
-            op_list.push(<p key={1} style={{marginTop:30}}>
-                <button className="maintain-recommend-btn" onClick={this.addRemark}>向客户推荐保养</button>
+            op_list.push(<p key={1} style={{marginTop:20}}>
+                <button className="maintain-recommend-btn" onClick={this.handleMaintainRecommend}>向客户推荐保养</button>
                 <button className="maintain-nothing-btn" onClick={this.handleMaintainUnwanedReason}>无需保养</button>
             </p>);
         }else if(status===10 || status===5){
-            op_list.push(<p key={1} style={{marginTop:30}}>
-                <button className="maintain-recommend-btn" >向客户推荐保养</button>
-                <button className="maintain-ensure-btn">客户已确认保养</button>
+            op_list.push(<p key={1} style={{marginTop:20}}>
+                <button className="maintain-recommend-btn" onClick={this.handleMaintainRecommend}>向客户推荐保养</button>
+                <button className="maintain-ensure-btn" onClick={this.handleCustomerEnsureMaintain}>客户已确认保养</button>
                 <button className="maintain-nothing-btn" onClick={this.handleMaintainUnwanedReason}>无需保养</button>
             </p>);
         }else if(status===20){
-            op_list.push(<p key={1} className="maintain-detail">
-                <label>保养明细：</label>
-                <ImgScroll imgs={["https://dummyimage.com/100x100","https://dummyimage.com/100x100"]} />
-                <span className="edit_maintain">编辑保养明细</span>
-            </p>);
-            op_list.push(<p key={2}>
-                <label>费用：</label><span>2300元（4S店2100元+飞泊通服务费200元）</span>
-            </p>);
-            op_list.push(<p key={3} style={{marginTop:20}}>
-                <button className="maintain-recommend-btn" onClick={this.editMaintainBill}>上传保养明细</button>
+            let picture=o.maintainpicture;
+            if(picture){
+                op_list.push(<p key={1} className="maintain-detail">
+                    <label>保养明细：</label>
+                    <ImgScroll imgs={[picture]} />
+                    <span className="edit_maintain" onClick={()=>this.editMaintainBill("edit")}>编辑保养明细</span>
+                </p>);
+                op_list.push(<p key={2}>
+                    <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
+                </p>);
+            }
+            op_list.push(<p key={3} style={{marginTop:10}}>
+                <button className="maintain-recommend-btn" onClick={()=>this.editMaintainBill("add")}>上传保养明细</button>
                 <button className="maintain-nothing-btn" onClick={this.handleMaintainCancelReason}>取消保养</button>
             </p>);
         }else if(status===30){
             op_list.push(<p key={1} className="maintain-detail">
                 <label>保养明细：</label>
-                <ImgScroll imgs={["https://dummyimage.com/100x100","https://dummyimage.com/100x100"]} />
+                <ImgScroll imgs={[o.maintainpicture]} />
             </p>);
             op_list.push(<p key={2}>
-                <label>费用：</label><span>2300元（4S店2100元+飞泊通服务费200元）</span>
+                <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
             </p>);
             op_list.push(<p key={3}>
                 <label style={{color:"#f00"}}>客户尚未付款</label>
             </p>);
-            op_list.push(<p key={4} style={{marginTop:20}}>
+            op_list.push(<p key={4} style={{marginTop:10}}>
                 <button className="maintain-recommend-btn"
                         style={{width:90}} onClick={this.handleCarReturnDarage}>车辆回库</button>
                 <button className="maintain-nothing-btn" onClick={this.handleMaintainCancelReason}>取消保养</button>
@@ -185,24 +216,24 @@ export default React.createClass({
         }else if(status===50){
             op_list.push(<p key={1} className="maintain-detail">
                 <label>保养明细：</label>
-                <ImgScroll imgs={["https://dummyimage.com/100x100","https://dummyimage.com/100x100"]} />
+                <ImgScroll imgs={[o.maintainpicture]} />
             </p>);
             op_list.push(<p key={2}>
-                <label>费用：</label><span>2300元（4S店2100元+飞泊通服务费200元）</span>
+                <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
             </p>);
             op_list.push(<p key={3}>
                 <label style={{color:"#f00"}}>客户尚未付款</label>
             </p>);
-            op_list.push(<p key={4} style={{marginTop:20}}>
+            op_list.push(<p key={4} style={{marginTop:10}}>
                 <button className="maintain-recommend-btn" style={{width:140}}>告知客户保养完成</button>
             </p>);
         }else if(status===-1){
             op_list.push(<p key={1} className="maintain-detail">
                 <label>保养明细：</label>
-                <ImgScroll imgs={["https://dummyimage.com/100x100","https://dummyimage.com/100x100"]} />
+                <ImgScroll imgs={[o.maintainpicture]} />
             </p>);
             op_list.push(<p key={2}>
-                <label>费用：</label><span>2300元（4S店2100元+飞泊通服务费200元）</span>
+                <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
             </p>);
             op_list.push(<p key={3}>
                 <label style={{color:"#f00"}}>取消原因：客户不想保养。</label>
@@ -210,10 +241,10 @@ export default React.createClass({
         }else if(status===-10){
             op_list.push(<p key={1} className="maintain-detail">
                 <label>保养明细：</label>
-                <ImgScroll imgs={["https://dummyimage.com/100x100","https://dummyimage.com/100x100"]} />
+                <ImgScroll imgs={[o.maintainpicture]} />
             </p>);
             op_list.push(<p key={2}>
-                <label>费用：</label><span>2300元（4S店2100元+飞泊通服务费200元）</span>
+                <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
             </p>);
             op_list.push(<p key={3}>
                 <label style={{color:"#f00"}}>无需保养原因：客户一个月前已做保养。</label>
@@ -245,10 +276,10 @@ export default React.createClass({
                         </figure>
                         <div className="user-other">
                             <p><label>重要等级：</label>{level}</p>
-                            <p><label>使用次数：</label><span>{o.bookcount}</span></p>
+                            <p><label>使用次数：</label><span>{o.orderfinishcount}</span></p>
                             <p><label>用户来源：</label><span>{o.comefrom}</span></p>
                             <p><label>注册时间：</label>
-                                <span>{getFormatDate("yyyy-mm-dd hh:ii",o.registertime*1000)}</span></p>
+                                <span>{getFormatDate("yyyy-mm-dd hh:ii",o.createtime*1000)}</span></p>
                             <p><label>标&#8195;&#8195;签：</label><em ref={(c)=>this.userTag=c}>{userTags}
                                 <span style={{color:"#1AA0E5",cursor:"pointer"}}
                                       onClick={()=>this.addLabel(o.userid)}>{userTags.length>0?"编辑":"添加"}</span></em></p>
@@ -261,10 +292,10 @@ export default React.createClass({
                         <div>
                             <p><label>入库时间：</label><span>{o.parkingfinishtime}</span></p>
                             <p><label>返程信息：</label>
-                                <span>{o.returningflight}&emsp;</span></p>
+                                <span>{o.returningflight}&emsp;{o.flightlandingtime}</span></p>
                         </div>
                         <div className="move-car">
-                            <ImgScroll imgs={["https://dummyimage.com/140x140","https://dummyimage.com/140x140"]} />
+                            <ImgScroll imgs={[o.parkingpictures]} />
                             <section className="in-garage">
                                 <p><label>停车位：</label><span>{o.parkingspot}</span></p>
                                 <p><label>钥匙位：</label><span>{o.keyspot}</span></p>
@@ -276,7 +307,12 @@ export default React.createClass({
                         <h2>保养信息</h2>
                         <div className="up-section">
                             <p><label>当前里程数：</label>
-                                <span style={{color:"#323232"}}>{o.currentmileage||0}km</span></p>
+                                <span style={{color:"#323232"}}>{o.currentmileage||0}km</span>
+                                &emsp;<label>超出保养里程数：</label>
+                                <span style={{color:"#323232"}}>{o.exceedmileage||0}km</span>
+                                <span style={{color:"#1AA0E5",cursor:"pointer",marginLeft:15}}
+                                      onClick={this.editOverMaintainMile}>编辑</span>
+                            </p>
                             <p><label>司机推荐理由：</label>
                                 <span style={{color:"#323232"}}>{o.driverrecommended}</span></p>
                             <p><label>上次保养时间：</label>
@@ -289,17 +325,15 @@ export default React.createClass({
                         </div>
                     </div>
                 </div>
-                <div className="notes" ref={c=>this.note=c}>
+                <div className="notes">
                     <div className="service-note">
-                        <p>客服备注：<img src="/duck/img/icon/13_1.png" onClick={this.addRemark}
-                                     style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
+                        <p>客服备注：</p>
                         {serviceRemark}
                     </div>
                     <div className="service-note">
                         <p>保养备注：<img src="/duck/img/icon/13_1.png" onClick={this.addRemark}
                                      style={{color:"#1AA0E5",cursor:"pointer"}} /></p>
                         {maintainRemark}
-
                     </div>
                     <div className="service-note">
                         <p>司机备注：</p>

@@ -56,8 +56,8 @@ gulp.task('compass', function() {
                 config_file: './config/additional.rb',
                 css: 'public/duck/additional/css',
                 sass: 'src/additional/sass'
-            })).pipe(gulpif('*.png', gulp.dest('./public/duck/additional/images/'),
-              gulp.dest('./public/duck/additional/css/')));
+            })).pipe(gulpif('*.png', gulp.dest('./public/mobile/jsj/additional/images/'),
+              gulp.dest('./public/mobile/jsj/additional/css/')));
     });
 });
 
@@ -89,7 +89,7 @@ gulp.task('compiled-css-upload',function () {
             keyLocation: "./utils/dev",
             remotePath:"/var/code/fronts/public/mobile/jsj/css/"
         }));
-    let additional_css_path='./public/duck/additional/css/*.css';
+    let additional_css_path='./public/mobile/jsj/additional/css/*.css';
     gulp.src(additional_css_path)
         /**
          * 文件改变才上传
@@ -99,7 +99,7 @@ gulp.task('compiled-css-upload',function () {
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/duck/additional/css/"
+            remotePath:"/var/code/fronts/public/mobile/jsj/additional/css/"
         }));
 });
 
@@ -109,10 +109,12 @@ gulp.task('compiled-css-upload',function () {
 gulp.task('watch-compiled-react-upload',function () {
     let admin_js_path='./public/duck/dist/*.js';
     let admin_html_path='./public/duck/www/*.html';
+
     let jsj_js_path='./public/mobile/jsj/js/*.js';
     let jsj_html_path='./public/mobile/jsj/www/*.html';
-    let additional_js_path='./public/duck/additional/dist/*.js';
-    let additional_html_path='./public/duck/additional/www/*.html';
+
+    let additional_js_path='./public/mobile/jsj/additional/dist/*.js';
+    let additional_html_path='./public/mobile/jsj/additional/www/*.html';
 
     gulp.src(admin_js_path)
         .pipe(watch(admin_js_path))
@@ -154,7 +156,7 @@ gulp.task('watch-compiled-react-upload',function () {
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/duck/additional/dist/"
+            remotePath:"/var/code/fronts/public/mobile/jsj/additional/dist/"
         }));
     gulp.src(additional_html_path)
         .pipe(watch(additional_html_path))
@@ -162,55 +164,10 @@ gulp.task('watch-compiled-react-upload',function () {
             host: 'dev.feibotong.com',
             user: 'ubuntu',
             keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/duck/additional/www/"
+            remotePath:"/var/code/fronts/public/mobile/jsj/additional/www/"
         }));
 
 });
-
-function getJsonObj(file) {
-    let text=fs.readFileSync(file,"utf-8");
-    return JSON.parse(text);
-}
-function writeJsonFile(json,file) {
-    let text=JSON.stringify(json,null,"  ");
-    fs.writeFileSync(file,text,"utf-8");
-    log.info(file+"成功更新");
-}
-
-/**
- * 更新localStorage本地资源文件缓存配置
- */
-gulp.task("update local-cache.json",()=>{
-    let file="./public/local-cache.json";
-    let json=getJsonObj(file);
-    let names=Object.getOwnPropertyNames(json);
-    for(let i=0,len=names.length;i<len;i++){
-        let key=names[i],obj=json[key];
-        /**
-         * 监听key对应的资源，如有改变就更新相应的update
-         */
-        watch('./public'+obj.loadUrl,()=>{
-            log.info("键"+key+" 将更新");
-            json=getJsonObj(file);
-            obj.update=new Date().getTime();
-            json[key]=obj;
-            writeJsonFile(json,file);
-        });
-    }
-
-    /**
-     * 同步最新缓存配置到服务器
-     */
-    gulp.src(file)
-        .pipe(watch(file))
-        .pipe(sftp({
-            host: 'dev.feibotong.com',
-            user: 'ubuntu',
-            keyLocation: "./utils/dev",
-            remotePath:"/var/code/fronts/public/"
-        }));
-});
-
 
 /**
  * 上传到测试服务器
@@ -246,9 +203,10 @@ gulp.task("update local-cache.json",()=>{
  */
 gulp.task("production-host",()=>{
     let files=[
-        {src:"./public/duck/**/*",           dest:"/var/code/fronts/public/duck/"},
+       /* {src:"./public/duck/!**!/!*",           dest:"/var/code/fronts/public/duck/"},*/
+        {src:"./public/mobile/jsj/**/*",     dest:"/var/code/fronts/public/mobile/jsj/"},
         /*{src:"./public/!*.html",         dest:"/var/code/fronts/public/"},*/
-        /*{src:"./routes/!*",              dest:"/var/code/fronts/routes/"},*/
+       /* {src:"./routes/!*",                   dest:"/var/code/fronts/routes/"},*/
         //{src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
         //{src:"./views/**/*",            dest:"/var/code/fronts/views/"},
         //{src:"./bin/!*",                 dest:"/var/code/fronts/bin/"},

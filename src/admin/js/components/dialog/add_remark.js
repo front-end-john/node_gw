@@ -14,23 +14,26 @@
         ReactDOM.render(<i/>, mask);
         mask.style.display="none";
     },
-    showWarnTip(msg){
-        let mask=document.getElementById("dialogContainer");
-        if(msg===null){
-            ReactDOM.render(<i/>, mask);
-            mask.style.display="none";
-        }else {
-            ReactDOM.render(<WarnTip msg={msg}/>, mask);
-        }
-    },
+     showWarnTip(msg,floor=1){
+         let dialogContainer="dialogContainer";
+         if(floor===2) dialogContainer="secDialogContainer";
+         let mask=document.getElementById(dialogContainer);
+         if(msg===null){
+             ReactDOM.render(<i/>, mask);
+             mask.style.display="none";
+         }else {
+             ReactDOM.render(<WarnTip dc={dialogContainer} msg={msg}/>, mask);
+         }
+     },
     ensure(){
         let text=this.text.value.trim();
+        let remarkType=this.props.type;
         if(!text){
-            this.showWarnTip("备注不能为空！");
+            this.showWarnTip("备注不能为空！",2);
             return 0;
         }
         let url=this.props.url+"?";
-        if(this.props.type==="admin"){
+        if(remarkType==="admin"){
             let order_id=this.props.number;
             url+=queryStr.stringify({order_id,remark:text});
             console.log("admin添加备注url:",url);
@@ -47,6 +50,23 @@
             }).catch((e)=>{
                 this.showWarnTip("网络请求异常！");
                 console.trace('网络请求异常', e);
+            });
+        }else if(remarkType==="maintain"){
+            let chserialnumber=this.props.number;
+            url+=queryStr.stringify({chserialnumber,remark:text});
+            console.log("admin添加备注url:",url);
+            fetch(url,{credentials: 'include'}).then((res)=>{
+                return res.json();
+            }).then((obj)=>{
+                if(obj.code === 0){
+                    this.showWarnTip(obj.message);
+                    this.props.reload();
+                }else {
+                    this.showWarnTip(obj.message,2);
+                }
+            }).catch((e)=>{
+                this.showWarnTip("网络请求异常！",2);
+                console.warn('异常接口：', url,"异常对象：",e);
             });
         }else {
             url+=queryStr.stringify({serialnumber:this.props.number,remark:text});

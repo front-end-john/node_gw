@@ -213,8 +213,8 @@ module.exports=[{
     },
     output:{
         filename:'dist/[name].js?[hash]',
-        path:path.resolve(__dirname,'public/duck/additional'),
-        publicPath:"/duck/additional/"
+        path:path.resolve(__dirname,'public/mobile/jsj/additional'),
+        publicPath:"/mobile/jsj/additional/"
     },
     resolve: {
         modules: [ path.resolve(__dirname, "src"),"node_modules",]
@@ -242,7 +242,7 @@ module.exports=[{
             filename:"www/customer_pay.html",
             inject:"body",
             chunks:['customer_pay'],
-            cssPath:"/duck/additional/css/customer_pay.css",
+            cssPath:"/mobile/jsj/additional/css/customer_pay.css",
             wxJSSdk:"http://res.wx.qq.com/open/js/jweixin-1.0.0.js",
             minify:{
                 removeComments:true, //删除注释

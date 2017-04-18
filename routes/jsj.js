@@ -13,7 +13,7 @@ router.get('/:page', function(req, res, next) {
     let pg=req.params.page;
     let filePath="public/mobile/jsj/www/"+pg+".html";
     if(pg==="customer_pay") {
-        filePath="public/duck/additional/www/"+pg+".html";
+        filePath="public/mobile/jsj/additional/www/"+pg+".html";
     }
     console.log(filePath);
     if(fs.existsSync(filePath)){
