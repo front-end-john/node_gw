@@ -53,7 +53,7 @@
         url+=queryStr.stringify({chserialnumber,shopid});
         console.log("推荐保养接口",url);
         fetch(url,{credentials:'include'}).then((res)=>{
-            console.log("获取车管家响应：",res.status);
+            console.log("推荐保养接口响应：",res.status);
             if(+res.status < 400){
                 return res.json();
             }else {
@@ -62,6 +62,7 @@
         }).then((obj)=>{
             if(obj.code === 0){
                 this.showWarnTip(obj.message);
+                this.props.shift("recommended");
                 this.props.reload();
             }else {
                 this.showWarnTip(obj.message,2);

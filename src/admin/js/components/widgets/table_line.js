@@ -79,7 +79,7 @@ export default React.createClass({
             if(this.props.section==="jsj"){
                 ReactDOM.render(<JSJOrderDetail width={sumWidth} type={this.props.type} number={orderNo}/>,this.detailArea);
             }else if(this.props.section==="take_after"){
-                ReactDOM.render(<TakeAfterDetail width={sumWidth} number={orderNo} />,this.detailArea);
+                ReactDOM.render(<TakeAfterDetail width={sumWidth} number={orderNo} shift={this.props.shift} />,this.detailArea);
             }else {
                 ReactDOM.render(<OrderDetail width={sumWidth} number={orderNo}/>,this.detailArea);
             }

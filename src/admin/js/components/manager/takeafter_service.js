@@ -108,6 +108,10 @@ export default React.createClass({
             console.trace('错误:', e);
         });
     },
+    trackChOrderShift(type){
+        this.state.queryCondition.ordertype=type;
+        this.handlePageQuery(1,10);
+    },
     handleChStatusSwitch(type){
         this.state.queryCondition.ordertype=type;
         this.handlePageQuery(1,10);
@@ -132,7 +136,7 @@ export default React.createClass({
                 {back_flight:item.returningflight,back_time:item.returningdate,fieldName:'ReturnTicket'},
                 {in_garage_time:item.parkingfinishtime,fieldName:'InGarageTime'},
                 {order_source:item.ordercomefrom,is_end:true,fieldName:'OrderSource'}];
-            return (<TableLine key={index} widths={widths} data={data}  section="take_after" />);
+            return (<TableLine key={index} widths={widths} data={data} shift={this.trackChOrderShift} section="take_after" />);
         });
         let orderType=this.state.queryCondition.ordertype;
         let tabList=[{status:"全部",value:"all"},{status:"待推荐",value:"toberecommended"},{status:"已推荐",value:"recommended"},

@@ -50,6 +50,7 @@
         if(!file){
             this.showWarnTip("请选择钥匙位图片！",2);return 0;
         }
+        let showTip=this.showWarnTip,reload=this.props.reload;
         let data = new FormData();
         data.append('file',file);
         let uploadUrl="/api5/chorders/uploadPicture";
@@ -65,20 +66,20 @@
                     return res.json();
                 }).then((obj)=>{
                     if(obj.code === 0){
-                        this.showWarnTip(obj.message);
-                        this.props.reload();
+                        showTip(obj.message);
+                        reload && reload();
                     }else {
-                        this.showWarnTip(obj.message,2);
+                        showTip(obj.message,2);
                     }
                 }).catch((e)=>{
-                    this.showWarnTip("网络请求异常！",2);
+                    showTip("网络请求异常！",2);
                     console.warn('异常接口：', url,"异常对象：",e);
                 });
             }else {
-                this.showWarnTip(obj.message,2);
+                showTip(obj.message,2);
             }
         }).catch((e)=>{
-            this.showWarnTip("网络请求异常！",2);
+            showTip("网络请求异常！",2);
             console.warn('异常接口：', uploadUrl,"异常对象：",e);
         });
     },

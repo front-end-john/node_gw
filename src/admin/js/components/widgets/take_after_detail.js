@@ -41,11 +41,12 @@ export default React.createClass({
         fetch(url,{credentials: 'include'}).then(function(res){
             console.log("车后订单详情响应："+res.status);
             if(res.status < 400){
-                return res.json();
+                return res.text();
             }else {
                 throw new Error("服务异常");
             }
-        }).then((obj)=>{
+        }).then((text)=>{
+            let obj=JSON.parse(text);
            if(obj.code===0){
                this.setState({orderDetail:obj.record});
            }else {
@@ -82,6 +83,7 @@ export default React.createClass({
             return res.json();
         }).then((obj)=>{
             this.showWarnTip(obj.message);
+            this.props.shift("confirmed");
         }).catch((e)=>{
             this.showWarnTip("网络请求异常！");
             console.warn('异常接口：', url,"异常对象：",e);
@@ -89,7 +91,7 @@ export default React.createClass({
     },
     handleMaintainRecommend(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<RecommendMaintain reload={this.loadOrderDetail}
+        ReactDOM.render(<RecommendMaintain reload={this.loadOrderDetail} shift={this.props.shift}
                                              url="/api5/chorders/recommendToCustomers" number={this.props.number}/>, mask);
     },
     editMaintainBill(type){
@@ -121,12 +123,39 @@ export default React.createClass({
         ReactDOM.render(<MaintainCancelReason reload={this.loadOrderDetail}
                                               url="/api5/chorders/cancelMaintain" number={this.props.number}/>, mask);
     },
-    handleCarReturnDarage(){
+    handleCarReturnGarage(){
         let mask=document.getElementById("dialogContainer");
         ReactDOM.render(<CarReturnGarage reload={this.loadOrderDetail}
                                          url="/api5/chorders/parkingCar" number={this.props.number}/>, mask);
     },
-
+    pushMaintainBill(){
+        let chserialnumber=this.props.number;
+        let url="/api5/chorders/push?chserialnumber="+chserialnumber;
+        fetch(url,{credentials: 'include'}).then((res)=>{
+            return res.json();
+        }).then((obj)=>{
+            console.log(obj);
+            if(obj.code===0){
+                this.props.shift("inmaintainace");
+            }
+            this.showWarnTip(obj.message);
+        }).catch((e)=>{
+            this.showWarnTip("网络请求异常！");
+            console.warn('异常接口：', url,"异常对象：",e);
+        });
+    },
+    noticeMaintainFinish(){
+        let chserialnumber=this.props.number;
+        let url="/api5/chorders/pushfinish?chserialnumber="+chserialnumber;
+        fetch(url,{credentials: 'include'}).then((res)=>{
+            return res.json();
+        }).then((obj)=>{
+            this.showWarnTip(obj.message);
+        }).catch((e)=>{
+            this.showWarnTip("网络请求异常！");
+            console.warn('异常接口：', url,"异常对象：",e);
+        });
+    },
     adjustWidth(){
         let sumWidth=document.body.clientWidth-220;
         let bs=this.state.blocks;
@@ -151,13 +180,13 @@ export default React.createClass({
         for(let i=0;i<o.stars;i++){
             level[i]=(<span key={i} style={{color:'red'}}>&#9733;&ensp;</span>)
         }
-        let serviceRemark=(o.customerserviceremarkInfo||[]).map((item,index)=>{
+        let serviceRemark=(o.customerserviceRemarkInfo||[]).map((item,index)=>{
             return (<p key={index}><span>{item.createtime}</span>&emsp;<span>{item.adminname}</span>&emsp;{item.remark}</p>);
         });
         let maintainRemark=(o.maintainremarkinfo||[]).map((item,index)=>{
             return (<p key={index}><span>{item.createtime}</span>&emsp;<span>{item.adminname}</span>&emsp;{item.remark}</p>);
         });
-        let driverRemark=(o.driverremarkInfo||[]).map((item,index)=>{
+        let driverRemark=(o.driverRemarkInfo||[]).map((item,index)=>{
             return (<p key={index}><span>{item.createtime}</span>&emsp;<span>{item.adminname}</span>&emsp;{item.remark}</p>);
         });
 
@@ -165,7 +194,7 @@ export default React.createClass({
         let userTags=this.tags.map((item,index)=>{
             return(<span key={index} style={{color:"#323232"}}>{item}&ensp;</span>)
         });
-        let serviceFee=o.servicefee||0,s4Fee=o.shop4sfee||0,totalFee=serviceFee+s4Fee;
+        let serviceFee=o.servicefee,s4Fee=o.shop4sfee,totalFee=(serviceFee+s4Fee)||0;
         this.maintainInfo={shopFee:s4Fee,billPicture:o.maintainpicture};
         //保养状态
         let status=o.chorderstatus;
@@ -192,11 +221,17 @@ export default React.createClass({
                 op_list.push(<p key={2}>
                     <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
                 </p>);
+                op_list.push(<p key={3} style={{marginTop:10}}>
+                    <button className="maintain-recommend-btn" style={{width:150}}
+                            onClick={this.pushMaintainBill}>推送保养明细给客户</button>
+                    <button className="maintain-nothing-btn" onClick={this.handleMaintainCancelReason}>取消保养</button>
+                </p>);
+            }else {
+                op_list.push(<p key={1} style={{marginTop:10}}>
+                    <button className="maintain-recommend-btn" onClick={()=>this.editMaintainBill("add")}>上传保养明细</button>
+                    <button className="maintain-nothing-btn" onClick={this.handleMaintainCancelReason}>取消保养</button>
+                </p>);
             }
-            op_list.push(<p key={3} style={{marginTop:10}}>
-                <button className="maintain-recommend-btn" onClick={()=>this.editMaintainBill("add")}>上传保养明细</button>
-                <button className="maintain-nothing-btn" onClick={this.handleMaintainCancelReason}>取消保养</button>
-            </p>);
         }else if(status===30){
             op_list.push(<p key={1} className="maintain-detail">
                 <label>保养明细：</label>
@@ -210,7 +245,7 @@ export default React.createClass({
             </p>);
             op_list.push(<p key={4} style={{marginTop:10}}>
                 <button className="maintain-recommend-btn"
-                        style={{width:90}} onClick={this.handleCarReturnDarage}>车辆回库</button>
+                        style={{width:90}} onClick={this.handleCarReturnGarage}>车辆回库</button>
                 <button className="maintain-nothing-btn" onClick={this.handleMaintainCancelReason}>取消保养</button>
             </p>);
         }else if(status===50){
@@ -225,7 +260,8 @@ export default React.createClass({
                 <label style={{color:"#f00"}}>客户尚未付款</label>
             </p>);
             op_list.push(<p key={4} style={{marginTop:10}}>
-                <button className="maintain-recommend-btn" style={{width:140}}>告知客户保养完成</button>
+                <button className="maintain-recommend-btn" style={{width:140}}
+                 onClick={this.noticeMaintainFinish}>告知客户保养完成</button>
             </p>);
         }else if(status===-1){
             op_list.push(<p key={1} className="maintain-detail">
@@ -233,7 +269,7 @@ export default React.createClass({
                 <ImgScroll imgs={[o.maintainpicture]} />
             </p>);
             op_list.push(<p key={2}>
-                <label>费用：</label><span>{totalFee}元（4S店{s4Fee}元+飞泊通服务费{serviceFee}元）</span>
+                <label>费用：</label><span>{totalFee}元（4S店{s4Fee||0}元+飞泊通服务费{serviceFee||0}元）</span>
             </p>);
             op_list.push(<p key={3}>
                 <label style={{color:"#f00"}}>取消原因：客户不想保养。</label>
@@ -305,7 +341,7 @@ export default React.createClass({
                     </div>
                     <div className="order-info" ref={(c)=>this.state.blocks[2]=c}>
                         <h2>保养信息</h2>
-                        <div className="up-section">
+                        <div className="up-section" style={{marginBottom:20}}>
                             <p><label>当前里程数：</label>
                                 <span style={{color:"#323232"}}>{o.currentmileage||0}km</span>
                                 &emsp;<label>超出保养里程数：</label>

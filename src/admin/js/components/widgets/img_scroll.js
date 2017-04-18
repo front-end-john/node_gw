@@ -6,12 +6,9 @@ export default React.createClass({
         return{startX:0, currImg:1, imgList:[]};
     },
     componentWillMount(){
-       let imgs =this.props.imgs||[];
-       if(imgs.map){
-           this.setState({imgList:imgs});
-       }else {
-           this.setState({imgList:[imgs]});
-       }
+        let imgs =this.props.imgs;
+        imgs="string"===typeof imgs?[imgs]:imgs;
+        this.setState({imgList:imgs});
     },
     handleMouseDown(e){
         e.stopPropagation();
@@ -35,6 +32,11 @@ export default React.createClass({
             this.setState({currImg:next});
         }
     },
+    componentWillReceiveProps(nextProps){
+        if(nextProps.imgs[0]!==this.props.imgs[0]){
+            this.setState({imgList:nextProps.imgs});
+        }
+    },
     handleMouseMove(e){
         e.stopPropagation();
         e.preventDefault();
@@ -52,7 +54,7 @@ export default React.createClass({
         });
         let dots=arr.map((item,index)=>{
             return (
-                <em key={index} className={this.state.currImg==(index+1)?"dot_red":""}/>
+                <em key={index} className={this.state.currImg===(index+1)?"dot_red":""}/>
             );
         });
         return(
