@@ -16,7 +16,7 @@ import ImgScroll from '../widgets/img_scroll';
 import {getFormatDate,maintainState} from '../../util';
 export default React.createClass({
     getInitialState(){
-        return{blocks:[],first:true,chOrderStatus:0};
+        return{chOrderStatus:0};
     },
     showWarnTip(msg){
         let mask=document.getElementById("dialogContainer");
@@ -38,19 +38,19 @@ export default React.createClass({
     },
     loadOrderDetail(){
         let url="/api5/chorders/queryDetails?chserialnumber="+this.props.number;
+        console.log("车后订单详情接口",url);
         fetch(url,{credentials: 'include'}).then(function(res){
             console.log("车后订单详情响应："+res.status);
             if(res.status < 400){
-                return res.text();
+                return res.json();
             }else {
                 throw new Error("服务异常");
             }
-        }).then((text)=>{
-            let obj=JSON.parse(text);
+        }).then((obj)=>{
            if(obj.code===0){
                this.setState({orderDetail:obj.record});
            }else {
-               this.showWarnTip(obj.msg);
+               this.showWarnTip(obj.message);
            }
         }).catch((e)=>{
             this.showWarnTip("网络请求异常！");
@@ -84,6 +84,7 @@ export default React.createClass({
         }).then((obj)=>{
             this.showWarnTip(obj.message);
             this.props.shift("confirmed");
+            this.loadOrderDetail();
         }).catch((e)=>{
             this.showWarnTip("网络请求异常！");
             console.warn('异常接口：', url,"异常对象：",e);
@@ -125,7 +126,7 @@ export default React.createClass({
     },
     handleCarReturnGarage(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<CarReturnGarage reload={this.loadOrderDetail}
+        ReactDOM.render(<CarReturnGarage reload={this.loadOrderDetail} shift={this.props.shift}
                                          url="/api5/chorders/parkingCar" number={this.props.number}/>, mask);
     },
     pushMaintainBill(){
@@ -137,6 +138,7 @@ export default React.createClass({
             console.log(obj);
             if(obj.code===0){
                 this.props.shift("inmaintainace");
+                this.loadOrderDetail();
             }
             this.showWarnTip(obj.message);
         }).catch((e)=>{
@@ -158,20 +160,11 @@ export default React.createClass({
     },
     adjustWidth(){
         let sumWidth=document.body.clientWidth-220;
-        let bs=this.state.blocks;
-        if(this.state.first){
-            sumWidth=this.props.width;
-            this.setState({first:false});
-        }
         let edgeValue=1240;
         let labelWidth=105;
         if(sumWidth>edgeValue){
-            for(let i=0;i<3;i++) {
-                let currWidth=parseFloat(getComputedStyle(bs[i]).width);
-                if (i===0){
-                    this.userTag.style.width= currWidth-labelWidth+'px';
-                }
-            }
+            let currWidth=parseFloat(getComputedStyle(this.userBlock).width);
+            this.userTag.style.width= currWidth-labelWidth+'px';
         }
     },
     render(){
@@ -299,7 +292,7 @@ export default React.createClass({
                     <span>{getFormatDate("yyyy-mm-dd hh:ii",o.canceltime)}</span>
                 </p>
                 <div className="order-main">
-                    <div className="user-info" ref={(c)=>this.state.blocks[0]=c} >
+                    <div className="user-info" ref={c=>this.userBlock=c} >
                         <h2>用户信息</h2>
                         <figure className="user-basic">
                             <img src={o.useravatar||"/duck/img/userheadimg.png"}/>
@@ -323,7 +316,7 @@ export default React.createClass({
                                 <span ref={(c)=>this.uRemark=c}>{o.userremark}</span></p>
                         </div>
                     </div>
-                    <div className="car-park-info" ref={(c)=>this.state.blocks[1]=c}>
+                    <div className="car-park-info">
                         <h2>泊车信息</h2>
                         <div>
                             <p><label>入库时间：</label><span>{o.parkingfinishtime}</span></p>
@@ -339,7 +332,7 @@ export default React.createClass({
                             </section>
                         </div>
                     </div>
-                    <div className="order-info" ref={(c)=>this.state.blocks[2]=c}>
+                    <div className="order-info">
                         <h2>保养信息</h2>
                         <div className="up-section" style={{marginBottom:20}}>
                             <p><label>当前里程数：</label>

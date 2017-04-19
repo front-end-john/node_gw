@@ -30,8 +30,7 @@
         let file=node.files[0];
         let reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload=(e)=>{
-            console.log("读取完成",e.target);
+        reader.onload=()=>{
             this.showImg.src=reader.result;
         };
         reader.onerror=(e)=>{

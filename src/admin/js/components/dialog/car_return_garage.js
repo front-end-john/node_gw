@@ -28,8 +28,7 @@
          let file=node.files[0];
          let reader = new FileReader();
          reader.readAsDataURL(file);
-         reader.onload=(e)=>{
-             console.log("读取完成",e.target);
+         reader.onload=()=>{
              this.showImg.src=reader.result;
          };
          reader.onerror=(e)=>{
@@ -50,7 +49,7 @@
         if(!file){
             this.showWarnTip("请选择钥匙位图片！",2);return 0;
         }
-        let showTip=this.showWarnTip,reload=this.props.reload;
+        let showTip=this.showWarnTip,{reload,shift}=this.props;
         let data = new FormData();
         data.append('file',file);
         let uploadUrl="/api5/chorders/uploadPicture";
@@ -67,6 +66,7 @@
                 }).then((obj)=>{
                     if(obj.code === 0){
                         showTip(obj.message);
+                        shift("maintainacefinished");
                         reload && reload();
                     }else {
                         showTip(obj.message,2);
