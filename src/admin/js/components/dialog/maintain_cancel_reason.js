@@ -2,6 +2,7 @@
  import ReactDOM from 'react-dom';
  import WarnTip from '../dialog/warn_tip';
  export default React.createClass({
+    getInitialState(){return {}},
     componentWillMount(){
         let mask=document.getElementById("dialogContainer");
         mask.style.display="block";
@@ -24,20 +25,23 @@
     },
     handleIsChecked(e){
         let node=e.target;
-        console(node.checked());
+        this.state.isCharge=node.checked;
     },
     ensure(){
         let url=this.props.url+"?";
         let chserialnumber=this.props.number;
-        let cancelreason=this.cancelReason;
+        let cancelreason=this.cancelReason,chargemoney="",chargereason="";
         if(!cancelreason){
             this.showWarnTip("取消原因不能为空！",2);return 0;
         }
-
-        url+=queryStr.stringify({chserialnumber,shopid});
-        console.log("推荐保养接口",url);
+        if(this.state.isCharge){
+            chargemoney=this.cash.value;
+            chargereason=this.chargeReason.value
+        }
+        url+=queryStr.stringify({chserialnumber,cancelreason,chargemoney,chargereason});
+        console.log("取消保养接口",url);
         fetch(url,{credentials:'include'}).then((res)=>{
-            console.log("获取车管家响应：",res.status);
+            console.log("取消保养响应：",res.status);
             if(+res.status < 400){
                 return res.json();
             }else {
@@ -46,6 +50,7 @@
         }).then((obj)=>{
             if(obj.code === 0){
                 this.showWarnTip(obj.message);
+                this.props.shift("canceled");
                 this.props.reload();
             }else {
                 this.showWarnTip(obj.message,2);
@@ -68,7 +73,7 @@
                         <input type="checkbox" onChange={this.handleIsChecked}/>
                         <em>需要向客户收费</em></p>
                     <p className="maintain-cancel"><em>&emsp;&ensp;收费金额：</em>
-                        <select defaultValue={50} onChange={(c)=>this.charge=c}>
+                        <select defaultValue={50} ref={(c)=>this.cash=c}>
                         <option value="50">¥50.00</option>
                         <option value="100">¥100.00</option>
                         <option value="150">¥150.00</option>

@@ -35,6 +35,10 @@ export let addUniqueEle=(arr,e)=>{
     return arr.push(e);
 };
 
+export let genSeq=()=>{
+    let i=0; return ()=> i++;
+};
+
 export let delExitEle=(arr,e)=>{
     for(let i=0,len=arr.length;i<len;i++){
         if(arr[i]===e) {

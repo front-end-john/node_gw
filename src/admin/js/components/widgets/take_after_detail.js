@@ -116,12 +116,12 @@ export default React.createClass({
     },
     handleMaintainUnwanedReason(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<MaintainUnwanedReason reload={this.loadOrderDetail}
+        ReactDOM.render(<MaintainUnwanedReason reload={this.loadOrderDetail} shift={this.props.shift}
                                               url="/api5/chorders/notRecommend" number={this.props.number}/>, mask);
     },
     handleMaintainCancelReason(){
         let mask=document.getElementById("dialogContainer");
-        ReactDOM.render(<MaintainCancelReason reload={this.loadOrderDetail}
+        ReactDOM.render(<MaintainCancelReason reload={this.loadOrderDetail} shift={this.props.shift}
                                               url="/api5/chorders/cancelMaintain" number={this.props.number}/>, mask);
     },
     handleCarReturnGarage(){

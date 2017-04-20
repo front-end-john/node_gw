@@ -1,31 +1,24 @@
 import React from 'react';
-
-
+import {genSeq} from "../../util";
 export default React.createClass({
     getInitialState(){
-        return {rushOrder:[]}
+        return {parkings:[],returnings:[]}
     },
     flashRushOrder(){
         let url="/admin/api/orders/check_new";
         fetch(url,{credentials:'include'}).then((res)=>{
             if(+res.status < 400){
-                return res.text();
+                return res.json();
             }else {
                 throw new Error("服务异常");
             }
-        }).then((str)=>{
-            try{
-                let obj=JSON.parse(str);
-                if(obj.code==0){
-                    this.setState({rushOrder:obj.parkings},()=>{
-                        this.handleScrollOrder();
-                    });
-                }else {
-                    console.log(obj);
-                }
-            }catch(e){
-                console.error("数据异常：",e);
-                console.log("异常数据：",str);
+        }).then((obj)=>{
+            if(obj.code===0){
+                this.setState({parkings:obj.parkings||[],returnings:obj.returnings||[]},()=>{
+                    this.handleScrollOrder();
+                });
+            }else {
+                console.log(obj);
             }
         }).catch((e)=>{
             console.trace('错误:', e);
@@ -63,16 +56,19 @@ export default React.createClass({
         setTimeout(this.handleScrollOrder,1000);
     },
     render(){
-        let list=this.state.rushOrder.map((item,index)=>{
-            let clr=item.indexOf("送车")==-1?'#f00':'#281AE5';
-            return (<span key={index} style={{color:clr}}>{item}&emsp;&emsp;</span>);
+        let seq=genSeq();
+        let parkings=this.state.parkings.map((item)=>{
+            return (<span key={seq()} style={{color:"#f00"}}>{item}&emsp;&emsp;</span>);
+        });
+        let returnings=this.state.returnings.map((item)=>{
+            return (<span key={seq()} style={{color:'#281AE5'}}>{item}&emsp;&emsp;</span>);
         });
         return(
             <div className="scroll-text">
                 <em/>
                 <label>紧急订单:</label>
                 <section ref={(c)=> this.wrap=c}>
-                    <p ref={(c)=>this.scroll=c}>{list}</p>
+                    <p ref={(c)=>this.scroll=c}>{parkings}{returnings}</p>
                 </section>
             </div>
         );

@@ -8,7 +8,7 @@ export default React.createClass({
             <div className="date-select">
                 <label>{this.props.title}</label>
                 <DateField onChange={this.props.change } ref={(c)=>this.dateSelect=c}
-                           dateFormat="YYYY-MM-DD HH:mm"
+                           dateFormat={this.props.format || "YYYY-MM-DD HH:mm"}
                            style={{borderColor:"#ddd",width:"170px",height:"36px"}}>
                 <DatePicker
                     navigation={true}

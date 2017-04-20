@@ -41,6 +41,7 @@
         }).then((obj)=>{
             if(obj.code === 0){
                 this.showWarnTip(obj.message);
+                this.props.shift("nomaintainace");
                 this.props.reload();
             }else {
                 this.showWarnTip(obj.message,2);

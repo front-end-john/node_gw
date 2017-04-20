@@ -41,7 +41,12 @@ export default React.createClass({
     handlePageQuery(page,pageSize){
         let url="/admin/api/orders/query?";
         url+=queryStr.stringify({ordertype:'all',page:page,pagesize:pageSize});
-        url+="&"+queryStr.stringify(this.state.queryCondition);
+
+        let cond=this.state.queryCondition;
+        if(cond.starttime){
+            cond.timefilter=cond.timefilter||"parkingstartedtime";
+        }
+        url+="&"+queryStr.stringify(cond);
         console.log("全部订单查询url",url);
         this.switchLoading(true);
         fetch(url,{credentials: 'include'}).then((res)=>{
@@ -178,10 +183,10 @@ export default React.createClass({
                     <hr/>
                     <SelectInput title="筛选时间：" change={this.handleTextInputChange} pdl="0"
                                  name="time_type" defaultName="选择筛选的时间" ref={(c)=>this.timetype=c} />
-                    <DateSelect title={<span>&emsp;&emsp;开始时间：</span>}
+                    <DateSelect title={<span>&emsp;&emsp;开始时间：</span>} format="YYYY-MM-DD"
                                 change={(date)=>this.state.queryCondition.starttime=date}
                                 ref={(c)=>this.startTime=c} />
-                    <DateSelect title={<span>&emsp;&emsp;结束时间：</span>}
+                    <DateSelect title={<span>&emsp;&emsp;结束时间：</span>} format="YYYY-MM-DD"
                                 change={(date)=>this.state.queryCondition.endtime=date}
                                 ref={(c)=>this.endTime=c} />
                     <button className="checkout" style={{marginLeft:50}} onClick={this.exportData}>导出</button>

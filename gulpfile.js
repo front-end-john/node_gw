@@ -201,10 +201,13 @@ gulp.task('watch-compiled-react-upload',function () {
 /**
  * 上传到生产服务器
  */
-gulp.task("production-host",()=>{
+gulp.task("production-deploy",()=>{
     let files=[
-       /* {src:"./public/duck/!**!/!*",           dest:"/var/code/fronts/public/duck/"},*/
-        {src:"./public/mobile/jsj/**/*",     dest:"/var/code/fronts/public/mobile/jsj/"},
+        {src:"./public/duck/css/*",           dest:"/var/code/fronts/public/duck/css/"},
+        {src:"./public/duck/dist/*",           dest:"/var/code/fronts/public/duck/dist/"},
+        {src:"./public/duck/www/*",           dest:"/var/code/fronts/public/duck/www/"},
+
+        /*{src:"./public/mobile/jsj/!**!/!*",     dest:"/var/code/fronts/public/mobile/jsj/"},*/
         /*{src:"./public/!*.html",         dest:"/var/code/fronts/public/"},*/
        /* {src:"./routes/!*",                   dest:"/var/code/fronts/routes/"},*/
         //{src:"./utils/!*",               dest:"/var/code/fronts/utils/"},
